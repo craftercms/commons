@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.craftercms</groupId>
+	<artifactId>commons</artifactId>
+	<version>1.0.0</version>
+	<description>Crafter Commons</description>
+	<dependencies>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.6</version>
+        </dependency>
+	</dependencies>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<aggregate>true</aggregate>
+					<header><![CDATA[<a class="logo" href="http://www.craftercms.org" target="_blank">
+							<img border="0" src="http://www.craftercms.org/images/crafter_logo.gif" /></a>]]>
+					</header>
+					<footer>
+
+           <![CDATA[
+           					<script type="text/javascript">
+						var gaJsHost = (("https:" == document.location.protocol) ?
+						"https://ssl." : "http://www.");
+						document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5523908-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+           ]]>
+					</footer>
+					<stylesheetfile>/css/javadoc.css</stylesheetfile>
+					<top>TOP</top>
+					<bottom><![CDATA[ Copyright 2007-2013, <a href="http://www.craftercms.org" target="_blank">Crafter Software Corporation.</a>]]></bottom>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>
