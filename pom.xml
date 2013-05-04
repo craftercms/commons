@@ -2,46 +2,151 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.craftercms</groupId>
-	<artifactId>commons</artifactId>
-	<version>1.0.0</version>
+	<artifactId>crafter-commons</artifactId>
+	<version>2.2.0-SNAPSHOT</version>
+	<name>Crafter Commons</name>
 	<description>Crafter Commons</description>
-	<dependencies>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.6</version>
-        </dependency>
-	</dependencies>
-	<reporting>
+	<url>https://github.com/craftercms/commons</url>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	<organization>
+		<name>CrafterCMS</name>
+		<url>http://craftercms.org</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>sumerjabri</id>
+			<name>Sumer Jabri</name>
+			<email>sumer.jabri@craftercms.org</email>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:git://github.com/craftercms/commons</connection>
+		<developerConnection>scm:git:git://github.com/craftercms/commons</developerConnection>
+		<url>scm:git:git://github.com/craftercms/core</url>
+	</scm>
+	<build>
 		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+							<goal>create-timestamp</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
-					<aggregate>true</aggregate>
-					<header><![CDATA[<a class="logo" href="http://www.craftercms.org" target="_blank">
-							<img border="0" src="http://www.craftercms.org/images/crafter_logo.gif" /></a>]]>
-					</header>
-					<footer>
-
-           <![CDATA[
-           					<script type="text/javascript">
-						var gaJsHost = (("https:" == document.location.protocol) ?
-						"https://ssl." : "http://www.");
-						document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-5523908-3");
-pageTracker._trackPageview();
-} catch(err) {}</script>
-           ]]>
-					</footer>
-					<stylesheetfile>/css/javadoc.css</stylesheetfile>
-					<top>TOP</top>
-					<bottom><![CDATA[ Copyright 2007-2013, <a href="http://www.craftercms.org" target="_blank">Crafter Software Corporation.</a>]]></bottom>
+					<doCheck>false</doCheck>
+					<doUpdate>false</doUpdate>
+					<revisionOnScmFailure>unknown</revisionOnScmFailure>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+							<Build-On>${timestamp}</Build-On>
+						</manifestEntries>
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
-	</reporting>
+	</build>
+	<profiles>
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<version>2.7</version>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.4</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<dependencies>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+		</dependency>
+	</dependencies>
 </project>
