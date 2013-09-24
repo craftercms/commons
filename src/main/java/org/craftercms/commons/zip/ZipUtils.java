@@ -37,6 +37,8 @@ public class ZipUtils {
                 addFileToZip("", file, zos);
             }
         }
+
+        zos.finish();
     }
 
     /**
