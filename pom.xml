@@ -3,17 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.craftercms</groupId>
 	<artifactId>crafter-commons</artifactId>
-	<version>2.2.4-SNAPSHOT</version>
+	<version>2.3.0</version>
 	<name>Crafter Commons</name>
 	<description>Crafter Commons</description>
 	<url>https://github.com/craftercms/commons</url>
-
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
-
 	<organization>
 		<name>CrafterCMS</name>
 		<url>http://craftercms.org</url>
@@ -161,7 +159,6 @@
             <version>3.1.1.RELEASE</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
