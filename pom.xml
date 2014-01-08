@@ -3,8 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.craftercms</groupId>
 	<artifactId>crafter-commons</artifactId>
-	<version>2.4.0-SNAPSHOT</version>
-	<name>Crafter Commons</name>
+    <packaging>pom</packaging>
+    <version>2.4.0-SNAPSHOT</version>
+
+    <modules>
+        <module>utilities</module>
+        <module>security</module>
+        <module>mongo</module>
+    </modules>
+
+    <name>Crafter Commons</name>
 	<description>Crafter Commons</description>
 	<url>https://github.com/craftercms/commons</url>
 
@@ -40,6 +48,12 @@
 		<developerConnection>scm:git:git://github.com/craftercms/commons</developerConnection>
 		<url>scm:git:git://github.com/craftercms/core</url>
 	</scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Dependency Version Numbers -->
+        <spring.version>3.1.1.RELEASE</spring.version>
+    </properties>
 
 	<build>
 		<plugins>
@@ -114,6 +128,7 @@
 			</plugin>
 		</plugins>
 	</build>
+
 	<profiles>
 		<profile>
 			<id>release-sign-artifacts</id>
@@ -148,6 +163,7 @@
 			</build>
 		</profile>
 	</profiles>
+
 	<dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -155,13 +171,6 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>3.1.1.RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -193,4 +202,25 @@
             <version>1.6.6</version>
         </dependency>
 	</dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 </project>
