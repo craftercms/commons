@@ -32,9 +32,9 @@ public class PermissionServiceImpl implements PermissionService {
     public boolean allow(Object subject, String resourceUri, String action, Map<String, String> variables) {
         resourceUri = StringUtils.stripEnd(resourceUri, URI_SEPARATOR);
 
-        List<Permission> permissions = permissionRepository.findByResourceUri(resourceUri);
+        Iterable<Permission> permissions = permissionRepository.findByResourceUri(resourceUri);
 
-        if (CollectionUtils.isNotEmpty(permissions)) {
+        if (permissions != null) {
             ExpressionParser expressionParser = new SpelExpressionParser();
 
             for (Permission permission : permissions) {

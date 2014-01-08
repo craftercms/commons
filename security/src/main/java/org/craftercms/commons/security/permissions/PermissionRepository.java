@@ -1,7 +1,5 @@
 package org.craftercms.commons.security.permissions;
 
-import java.util.List;
-
 /**
  * Repository where {@link org.craftercms.commons.security.permissions.Permission}s can be queried, updated or deleted.
  *
@@ -14,22 +12,29 @@ public interface PermissionRepository {
      *
      * @param resourceUri   the resource URI of the permissions
      *
-     * @return the list of matching permissions, or null or empty if not found
+     * @return an iterable for the matching permissions, or null if not found
      */
-    List<Permission> findByResourceUri(String resourceUri);
+    Iterable<Permission> findByResourceUri(String resourceUri);
 
     /**
-     * Saves a new permission to the repository.
+     * Inserts a new permission in the repository (optional operation).
      *
-     * @param permission    the permission to save
+     * @param permission    the permission to insert
      */
-    void save(Permission permission);
+    void insert(Permission permission);
 
     /**
-     * Update a permission in the repository
+     * Updates a permission in the repository (optional operation).
      *
      * @param permission    the permission to update
      */
     void update(Permission permission);
+
+    /**
+     * Deletes the permission for the given resource URI.
+     *
+     * @param resourceUri   the resource URI of the permission to delete.
+     */
+    void delete(String resourceUri);
 
 }

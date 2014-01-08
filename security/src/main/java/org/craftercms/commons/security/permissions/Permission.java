@@ -1,5 +1,7 @@
 package org.craftercms.commons.security.permissions;
 
+import org.jongo.marshall.jackson.oid.Id;
+
 import java.util.List;
 
 /**
@@ -10,6 +12,7 @@ import java.util.List;
  */
 public class Permission {
 
+    @Id
     protected String resourceUri;
     protected String subjectCondition;
     protected List<String> allowedActions;
