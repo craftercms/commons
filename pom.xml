@@ -10,6 +10,7 @@
         <module>utilities</module>
         <module>security</module>
         <module>mongo</module>
+        <module>ebus</module>
     </modules>
 
     <name>Crafter Commons</name>
