@@ -10,6 +10,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>crafter-commons-ebus</artifactId>
+    <name>Crafter Commons Events Bus</name>
+    <description>Crafter Commons Events Bus</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectreactor</groupId>
+            <artifactId>reactor-spring</artifactId>
+            <version>1.0.0.RELEASE</version>
+        </dependency>
+    </dependencies>
 </project>
