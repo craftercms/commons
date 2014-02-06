@@ -2,19 +2,22 @@ package org.craftercms.commons.mongo;
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
+import org.apache.commons.lang3.StringUtils;
 import org.jongo.Jongo;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 /**
- * {@link org.springframework.beans.factory.FactoryBean} that creates a Jongo singleton for application wide
+ * Creates a Jongo singleton for application wide
  * use.
  *
- * @author avasquez
+ * @author Alfonso Vazquez.
  */
 public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
 
     private String dbName;
+    private String username;
+    private String password;
     private MongoClient mongoClient;
 
     @Required
@@ -27,6 +30,14 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
         this.mongoClient = mongoClient;
     }
 
+    public void setPassword(final String password) {
+        this.password = password;
+    }
+
+    public void setUsername(final String username) {
+        this.username = username;
+    }
+
     @Override
     public Class<?> getObjectType() {
         return Jongo.class;
@@ -35,7 +46,11 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
     @Override
     protected Jongo createInstance() throws Exception {
         DB db = mongoClient.getDB(dbName);
-
+        if (!StringUtils.isBlank(password)) {
+            if (!db.authenticate(username, password.toCharArray())) {
+                throw new MongoDataException("Unable to authenticate with given user/pwd");
+            }
+        }
         return new Jongo(db);
     }
 
