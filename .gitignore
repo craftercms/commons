@@ -24,4 +24,4 @@ Thumbs.db
 .idea
 
 # Maven build overlays #
-overlays
+overlaysatlassian-ide-plugin.xml
