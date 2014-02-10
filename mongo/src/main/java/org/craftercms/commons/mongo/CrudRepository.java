@@ -17,8 +17,6 @@
 
 package org.craftercms.commons.mongo;
 
-import org.bson.types.ObjectId;
-
 /**
  * @author Carlos Ortiz.
  */
@@ -32,7 +30,7 @@ public interface CrudRepository<T> {
     void save(T document) throws MongoDataException;
 
     /**
-     * Inserts in the given collection the json <i>"As Is"</i><br/>
+     * Inserts in the given collection the json <i>"As Is"</i><br>
      * Json String can contain placeholders this will allow the user to have predefine json strings<br/>
      * that will be substitute with the given queryParams.<b>Params are not Name</b> therefor if the same value is
      * needed
@@ -50,6 +48,46 @@ public interface CrudRepository<T> {
     void save(String query, Object... queryParams) throws MongoDataException;
 
     /**
+     * Updates the object with the given id with the given Object information.
+     *
+     * @param id           Id of the object to be updated.
+     * @param multi        If set to true, updates multiple documents that meet the query criteria.
+     *                     If set to false, updates one document.
+     * @param upsert       If set to true, creates a new document when no document matches the query criteria.
+     * @param updateObject Object to be use to updated.
+     * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
+     */
+    public void update(final String id, final T updateObject, final boolean multi,
+                       final boolean upsert) throws MongoDataException;
+
+    /**
+     * Updates the given
+     *
+     * @param id       Id of the object to be updated.
+     * @param modifier The modifications to apply.
+     * @param multi    If set to true, updates multiple documents that meet the query criteria.
+     *                 If set to false, updates one document.
+     * @param upsert   If set to true, creates a new document when no document matches the query criteria.
+     * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
+     */
+    public void update(final String id, final String modifier, final boolean multi,
+                       final boolean upsert) throws MongoDataException;
+
+    /**
+     * Updates the given
+     *
+     * @param id       Id of the object to be updated.
+     * @param modifier The modifications to apply.
+     * @param multi    If set to true, updates multiple documents that meet the query criteria.
+     *                 If set to false, updates one document.
+     * @param upsert   If set to true, creates a new document when no document matches the query criteria.
+     * @param params   Params of the modifier query.
+     * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
+     */
+    public void update(final String id, final boolean multi, final boolean upsert, final String modifier,
+                       final Object... params) throws MongoDataException;
+
+    /**
      * Gets all documents of a the given collection. Tries to convert them in to Instances of the given class.
      * <b>Order of the params</b> should match the same in
      * the json string.<br/>Example<br/>
@@ -59,7 +97,8 @@ public interface CrudRepository<T> {
      * </code>
      *
      * @return A Iterable Instance of all the documents.<b>This is lazy loaded</b>
-     * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping exception happen.
+     * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping
+     * exception happen.
      */
     Iterable<T> findAll() throws MongoDataException;
 
@@ -81,7 +120,8 @@ public interface CrudRepository<T> {
      *                    .<br/><b>Template
      *                    queryParams are not named, therefor they have to be send multiple times if needed</b>
      * @return A Iterable Instance of all the documents.<b>This is lazy loaded</b>
-     * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping exception happen.
+     * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping
+     * exception happen.
      */
     Iterable<T> find(String query, Object... queryParams) throws MongoDataException;
 
@@ -91,7 +131,8 @@ public interface CrudRepository<T> {
      * @param query Name of the  Template Query to be look in default-queries.xml or custom-queries
      *              .properties
      * @return A instance of the given class. Null if nothing is found.
-     * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping exception happen.
+     * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping
+     * exception happen.
      */
     T findOne(String query) throws MongoDataException;
 
@@ -104,7 +145,8 @@ public interface CrudRepository<T> {
      *                    .<br/><b>Template
      *                    queryParams are not named, therefor they have to be send multiple times if needed</b>
      * @return A instance of the given class. Null if nothing is found.
-     * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping exception happen.
+     * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping
+     * exception happen.
      */
     T findOne(String query, Object... queryParams) throws MongoDataException;
 
@@ -120,7 +162,8 @@ public interface CrudRepository<T> {
 
     /**
      * Finds by the Id.
-     * @param id  String representation of the Id.
+     *
+     * @param id String representation of the Id.
      * @return A instance of the object with the given Id.
      */
     T findById(String id) throws MongoDataException;

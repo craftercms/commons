@@ -28,6 +28,7 @@ import org.jongo.Find;
 import org.jongo.FindOne;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
+import org.jongo.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -121,7 +122,6 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
     }
 
 
-
     @Override
     public Iterable<T> find(final String query) throws MongoDataException {
         try {
@@ -208,6 +208,66 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         }
     }
 
+
+
+
+    @Override
+    public void update(final String id,final T updateObject, final boolean multi, final boolean upsert) throws
+        MongoDataException {
+        try {
+            Update update = getCollection().update(new ObjectId(id));
+            if(multi){
+                update.multi();
+            }
+            if(upsert){
+                update.upsert();
+            }
+            WriteResult result = update.with(updateObject);
+            checkCommandResult(result);
+        } catch (MongoException ex) {
+            log.error("Unable to save Document", ex);
+            throw new MongoDataException(ex);
+        }
+    }
+
+    @Override
+    public void update(final String id, final String modifier, final boolean multi, final boolean upsert) throws
+        MongoDataException {
+        try {
+            Update update = getCollection().update(new ObjectId(id));
+            if(multi){
+                update.multi();
+            }
+            if(upsert){
+                update.upsert();
+            }
+            WriteResult result = update.with(modifier);
+            checkCommandResult(result);
+        } catch (MongoException ex) {
+            log.error("Unable to save Document", ex);
+            throw new MongoDataException(ex);
+        }
+    }
+
+    public void update(final String id,final boolean multi, final boolean upsert,final String modifier,
+                       final Object... params) throws
+        MongoDataException{
+        try {
+            Update update = getCollection().update(new ObjectId(id));
+            if(multi){
+                update.multi();
+            }
+            if(upsert){
+                update.upsert();
+            }
+            WriteResult result = update.with(modifier,params);
+            checkCommandResult(result);
+        } catch (MongoException ex) {
+            log.error("Unable to save Document", ex);
+            throw new MongoDataException(ex);
+        }
+    }
+
     /**
      * Get the query string for a given key
      *
@@ -248,19 +308,21 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
 
     /**
      * Actually makes the transformation form Jongo to List of Objects.
+     *
      * @param find Find object to transform.
      * @return a Iterable with the results <b>null</b> if nothing is found.
      */
-    protected Iterable<T> returnList(final Find find){
+    protected Iterable<T> returnList(final Find find) {
         return find.as(clazz);
     }
 
     /**
      * Actually makes the transformation form Jongo to the Object.
+     *
      * @param findOne Find object to transform.
      * @return a Object with the results <b>null</b> if nothing is found.
      */
-    protected T returnSimple(final FindOne findOne){
+    protected T returnSimple(final FindOne findOne) {
         return findOne.as(clazz);
     }
 
