@@ -59,7 +59,7 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
     private JongoQueries queries;
 
     /**
-     * Creates A instance of a Jongo Repository.
+     * Creates a instance of a Jongo Repository.
      */
     @SuppressWarnings("unchecked")
     public JongoRepository() throws MongoDataException {
@@ -67,7 +67,7 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         this.clazz = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         if (this.clazz == null) {
             log.error("Unable to get class information for repository.");
-            throw new MongoDataException("Unable to create a JongoRepository , I'm unable to get Class for Type " +
+            throw new MongoDataException("Unable to create a JongoRepository, I'm unable to get Class for Type " +
                 "parameter");
         }
         // Try to get Document Annotation
@@ -208,9 +208,6 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         }
     }
 
-
-
-
     @Override
     public void update(final String id,final T updateObject, final boolean multi, final boolean upsert) throws
         MongoDataException {
@@ -326,7 +323,6 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         return findOne.as(clazz);
     }
 
-
     @Required
     public void setJongo(final Jongo jongo) {
         this.jongo = jongo;
@@ -335,4 +331,5 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
     public void setQueries(final JongoQueries queries) {
         this.queries = queries;
     }
+
 }
