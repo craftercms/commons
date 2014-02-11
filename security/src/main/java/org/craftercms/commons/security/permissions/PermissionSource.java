@@ -18,26 +18,20 @@ package org.craftercms.commons.security.permissions;
 
 import org.craftercms.commons.security.exception.PermissionException;
 
-import java.util.Map;
-
 /**
- * Service used to check permissions for subjects.
+ * Represents a source where {@link org.craftercms.commons.security.permissions.Permission}s can be retrieved.
  *
  * @author avasquez
  */
-public interface PermissionService {
+public interface PermissionSource {
 
     /**
-     * Checks if the given subject is allowed to perform the specified action.
+     * Returns all permissions for a given resource URI.
      *
-     * @param subject       the subject
-     * @param resourceUri   the resource URI of the permission
-     * @param action        the action the subject wants to perform
-     * @param variables     the variable values. Placeholders in the resource URI and the subject condition, with the
-     *                      format {value}, are replaced using this values. Eg.: ugcs:/{ugcId}, isOwner({ugcId}).
-     * @return true if the subject is allowed to execute the action, false otherwise
+     * @param resourceUri   the resource URI of the permissions
+     *
+     * @return an iterable for the matching permissions, or null if not found
      */
-    boolean allow(Object subject, String resourceUri, String action, Map<String, String> variables)
-            throws PermissionException;
+    Iterable<Permission> getPermissions(String resourceUri) throws PermissionException;
 
 }

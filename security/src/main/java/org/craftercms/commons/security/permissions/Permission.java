@@ -1,6 +1,24 @@
+/*
+ * Copyright (C) 2007-2014 Crafter Software Corporation.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.craftercms.commons.security.permissions;
 
+import org.craftercms.commons.mongo.Document;
 import org.jongo.marshall.jackson.oid.Id;
+import org.jongo.marshall.jackson.oid.ObjectId;
 
 import java.util.List;
 
@@ -10,13 +28,30 @@ import java.util.List;
  *
  * @author avasquez
  */
+@Document(collectionName = "permissions")
 public class Permission {
 
     @Id
+    @ObjectId
+    protected String id;
     protected String resourceUri;
     protected String subjectCondition;
     protected List<String> allowedActions;
     protected List<String> deniedActions;
+
+    /**
+     * Returns the permission's ID.
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the permission's ID.
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * Returns the resource URI. Resource URIs have the following format:
