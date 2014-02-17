@@ -17,38 +17,42 @@
 package org.craftercms.commons.security.permissions.impl;
 
 import org.craftercms.commons.security.permissions.Permission;
-import org.craftercms.commons.security.permissions.PermissionSource;
-import org.springframework.beans.factory.annotation.Required;
+import org.craftercms.commons.security.permissions.SecuredObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of {@link org.craftercms.commons.security.permissions.PermissionSource} that uses a
- * pre-existing list.
+ * Base for {@link org.craftercms.commons.security.permissions.SecuredObject} that provides already the
+ * permissions.
  *
  * @author avasquez
  */
-public class SimplePermissionSource implements PermissionSource {
+public class SecuredObjectBase implements SecuredObject {
 
     protected List<Permission> permissions;
 
-    @Required
+    @Override
+    public Iterable<Permission> getPermissions() {
+        return permissions;
+    }
+
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }
 
-    @Override
-    public Iterable<Permission> getPermissions(String resourceUri) {
-        List<Permission> matchingPermissions = new ArrayList<Permission>();
-
-        for (Permission permission : permissions) {
-            if (permission.getResourceUri().equals(resourceUri)) {
-                matchingPermissions.add(permission);
-            }
+    public void addPermission(Permission permission) {
+        if (permissions == null) {
+            permissions = new ArrayList<>();
         }
 
-        return matchingPermissions;
+        permissions.add(permission);
+    }
+
+    public void removePermission(Permission permission) {
+        if (permissions != null) {
+            permissions.remove(permission);
+        }
     }
 
 }

@@ -28,16 +28,18 @@ import java.util.Map;
 public interface PermissionService {
 
     /**
-     * Checks if the given subject is allowed to perform the specified action.
+     * Checks if the given subject is allowed to perform the specified action to the given object
      *
-     * @param subject       the subject
-     * @param resourceUri   the resource URI of the permission
-     * @param action        the action the subject wants to perform
-     * @param variables     the variable values. Placeholders in the resource URI and the subject condition, with the
-     *                      format {value}, are replaced using this values. Eg.: ugcs:/{ugcId}, isOwner({ugcId}).
+     * @param subject                   the subject
+     * @param object                    the object whose permissions should be checked
+     * @param action                    the action the subject wants to perform
+     * @param variables                 the variable values. Placeholders in the  the subject condition, with the
+     *                                  format {value}, are replaced using this values. Eg.: isOwner({ugcId}).
+     * @param checkAncestorPermissions  true if the object's ancestor permissions should be checked if the subject
+     *                                  doesn't match any of the current permissions
      * @return true if the subject is allowed to execute the action, false otherwise
      */
-    boolean allow(Object subject, String resourceUri, String action, Map<String, String> variables)
-            throws PermissionException;
+    boolean allow(Object subject, Object object, String action, Map<String, String> variables,
+                  boolean checkAncestorPermissions) throws PermissionException;
 
 }

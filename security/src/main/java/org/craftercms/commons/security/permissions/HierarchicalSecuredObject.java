@@ -16,22 +16,15 @@
  */
 package org.craftercms.commons.security.permissions;
 
-import org.craftercms.commons.security.exception.PermissionException;
-
 /**
- * Represents a source where {@link org.craftercms.commons.security.permissions.Permission}s can be retrieved.
+ * Optional interface that objects can implement to indicate that besides being a
+ * {@link org.craftercms.commons.security.permissions.SecuredObject}, it also forms part of a hierarchy. Permissions
+ * of an object then can be applied to it's descendants.
  *
  * @author avasquez
  */
-public interface PermissionSource {
+public interface HierarchicalSecuredObject extends SecuredObject {
 
-    /**
-     * Returns all permissions for a given resource URI.
-     *
-     * @param resourceUri   the resource URI of the permissions
-     *
-     * @return an iterable for the matching permissions, or null if not found
-     */
-    Iterable<Permission> getPermissions(String resourceUri) throws PermissionException;
+    SecuredObject getParent();
 
 }

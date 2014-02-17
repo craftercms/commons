@@ -17,11 +17,12 @@
 package org.craftercms.commons.security.permissions.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.craftercms.commons.security.exception.InvalidSubjectConditionException;
 import org.craftercms.commons.security.exception.PermissionException;
+import org.craftercms.commons.security.permissions.ParentResolver;
 import org.craftercms.commons.security.permissions.Permission;
-import org.craftercms.commons.security.permissions.PermissionSource;
+import org.craftercms.commons.security.permissions.PermissionResolver;
 import org.craftercms.commons.security.permissions.PermissionService;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -38,20 +39,22 @@ import java.util.Map;
 public class PermissionServiceImpl implements PermissionService {
 
     public static final String ANY_WILDCARD =   "*";
-    public static final String URI_SEPARATOR =    "/";
 
-    protected PermissionSource permissionSource;
+    protected PermissionResolver permissionResolver;
+    protected ParentResolver parentResolver;
 
-    public void setPermissionSource(PermissionSource permissionSource) {
-        this.permissionSource = permissionSource;
+    public void setPermissionResolver(PermissionResolver permissionResolver) {
+        this.permissionResolver = permissionResolver;
+    }
+
+    public void setParentResolver(ParentResolver parentResolver) {
+        this.parentResolver = parentResolver;
     }
 
     @Override
-    public boolean allow(Object subject, String resourceUri, String action, Map<String, String> variables)
-            throws PermissionException {
-        resourceUri = StringUtils.stripEnd(resourceUri, URI_SEPARATOR);
-
-        Iterable<Permission> permissions = permissionSource.getPermissions(resourceUri);
+    public boolean allow(Object subject, Object object, String action, Map<String, String> variables,
+                         boolean checkAncestorPermissions) throws PermissionException {
+        Iterable<Permission> permissions = permissionResolver.getPermissions(object);
 
         if (permissions != null) {
             ExpressionParser expressionParser = new SpelExpressionParser();
@@ -60,10 +63,10 @@ public class PermissionServiceImpl implements PermissionService {
                 Boolean permitted = checkPermission(permission, subject, action, expressionParser, variables);
                 if (permitted != null) {
                     return permitted;
-                } else {
-                    String parentResourceUri = getParentResourceUri(resourceUri);
-                    if (StringUtils.isNotEmpty(parentResourceUri)) {
-                        return allow(subject, parentResourceUri, action, variables);
+                } else if (checkAncestorPermissions) {
+                    Object parent = parentResolver.getParent(object);
+                    if (parent != null) {
+                        allow(subject, object, action, variables, checkAncestorPermissions);
                     }
                 }
             }
@@ -98,8 +101,10 @@ public class PermissionServiceImpl implements PermissionService {
             return true;
         }
 
-        for (Map.Entry<String, String> entry : variables.entrySet()) {
-            condition = condition.replace("{" + entry.getKey() + "}", entry.getValue());
+        if (MapUtils.isNotEmpty(variables)) {
+            for (Map.Entry<String, String> entry : variables.entrySet()) {
+                condition = condition.replace("{" + entry.getKey() + "}", entry.getValue());
+            }
         }
 
         Expression parsedCondition = expressionParser.parseExpression(condition);
@@ -110,15 +115,6 @@ public class PermissionServiceImpl implements PermissionService {
         }
 
         return (Boolean) result;
-    }
-
-    protected String getParentResourceUri(String resourceUri) {
-        int lastIndexOfSep = resourceUri.lastIndexOf(URI_SEPARATOR);
-        if (lastIndexOfSep > 0) {
-            return resourceUri.substring(0, lastIndexOfSep);
-        } else {
-            return null;
-        }
     }
 
 }
