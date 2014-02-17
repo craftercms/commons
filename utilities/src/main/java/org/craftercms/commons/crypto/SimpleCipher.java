@@ -17,11 +17,7 @@
 package org.craftercms.commons.crypto;
 
 import org.apache.commons.codec.binary.Base64;
-
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
+import org.apache.commons.codec.binary.StringUtils;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -29,6 +25,10 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Utility class for simplifying encryption/decryption with the {@link javax.crypto.Cipher} class.
@@ -90,6 +90,11 @@ public class SimpleCipher {
         cipher = Cipher.getInstance(transformation);
     }
 
+    public String encryptBase64FromString(String clear) throws InvalidAlgorithmParameterException, InvalidKeyException,
+            BadPaddingException, IllegalBlockSizeException {
+        return Base64.encodeBase64String(encrypt(StringUtils.getBytesUtf8(clear)));
+    }
+
     public String encryptBase64(byte[] clear) throws InvalidAlgorithmParameterException, InvalidKeyException,
             BadPaddingException, IllegalBlockSizeException {
         return Base64.encodeBase64String(encrypt(clear));
@@ -115,6 +120,11 @@ public class SimpleCipher {
         cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
 
         return cipher.doFinal(clear);
+    }
+
+    public String decryptBase64ToString(String encrypted) throws IllegalStateException,
+            InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        return StringUtils.newStringUtf8(decrypt(Base64.decodeBase64(encrypted)));
     }
 
     public byte[] decryptBase64(String encrypted) throws IllegalStateException, InvalidAlgorithmParameterException,
