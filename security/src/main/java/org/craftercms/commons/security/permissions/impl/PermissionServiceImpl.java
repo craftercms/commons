@@ -16,20 +16,8 @@
  */
 package org.craftercms.commons.security.permissions.impl;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
-import org.craftercms.commons.security.exception.InvalidSubjectConditionException;
 import org.craftercms.commons.security.exception.PermissionException;
-import org.craftercms.commons.security.permissions.ParentResolver;
-import org.craftercms.commons.security.permissions.Permission;
-import org.craftercms.commons.security.permissions.PermissionResolver;
-import org.craftercms.commons.security.permissions.PermissionService;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-
-import java.util.List;
-import java.util.Map;
+import org.craftercms.commons.security.permissions.*;
 
 /**
  * Default implementation of {@link org.craftercms.commons.security.permissions.PermissionService}
@@ -38,10 +26,13 @@ import java.util.Map;
  */
 public class PermissionServiceImpl implements PermissionService {
 
-    public static final String ANY_WILDCARD =   "*";
-
+    protected SubjectResolver subjectResolver;
     protected PermissionResolver permissionResolver;
     protected ParentResolver parentResolver;
+
+    public PermissionServiceImpl() {
+        permissionResolver = new SecuredObjectPermissionResolver();
+    }
 
     public void setPermissionResolver(PermissionResolver permissionResolver) {
         this.permissionResolver = permissionResolver;
@@ -52,21 +43,27 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public boolean allow(Object subject, Object object, String action, Map<String, String> variables,
-                         boolean checkAncestorPermissions) throws PermissionException {
+    public boolean allow(Object object, String action) throws PermissionException {
+        if (subjectResolver == null) {
+            throw new PermissionException("No SubjectResolver found. Unable to infer current subject");
+        }
+
+        return allow(subjectResolver.getCurrentSubject(), object, action);
+    }
+
+    @Override
+    public boolean allow(Object subject, Object object, String action) throws PermissionException {
         Iterable<Permission> permissions = permissionResolver.getPermissions(object);
 
         if (permissions != null) {
-            ExpressionParser expressionParser = new SpelExpressionParser();
-
             for (Permission permission : permissions) {
-                Boolean permitted = checkPermission(permission, subject, action, expressionParser, variables);
+                Boolean permitted = checkPermission(permission, subject, action);
                 if (permitted != null) {
                     return permitted;
-                } else if (checkAncestorPermissions) {
+                } else if (parentResolver != null) {
                     Object parent = parentResolver.getParent(object);
                     if (parent != null) {
-                        allow(subject, object, action, variables, checkAncestorPermissions);
+                        allow(subject, object, action);
                     }
                 }
             }
@@ -75,46 +72,12 @@ public class PermissionServiceImpl implements PermissionService {
         return false;
     }
 
-    protected Boolean checkPermission(Permission permission, Object subject, String action,
-                                      ExpressionParser expressionParser, Map<String, String> variables)
-            throws InvalidSubjectConditionException {
-        if (subjectMatchesCondition(subject, permission.getSubjectCondition(), expressionParser, variables)) {
-            List<String> allowedActions = permission.getAllowedActions();
-            List<String> deniedActions = permission.getDeniedActions();
-
-            if (CollectionUtils.isNotEmpty(allowedActions) &&
-                (allowedActions.contains(ANY_WILDCARD) || allowedActions.contains(action))) {
-                return true;
-            }
-            if (CollectionUtils.isNotEmpty(deniedActions) &&
-                (deniedActions.contains(ANY_WILDCARD) || deniedActions.contains(action))) {
-                return false;
-            }
+    protected Boolean checkPermission(Permission permission, Object subject, String action) {
+        if (permission.appliesTo(subject)) {
+            return permission.isActionAllowed(action);
+        } else {
+            return null;
         }
-
-        return null;
-    }
-
-    protected boolean subjectMatchesCondition(Object subject, String condition, ExpressionParser expressionParser,
-                                              Map<String, String> variables) throws InvalidSubjectConditionException {
-        if (condition.equals(ANY_WILDCARD)) {
-            return true;
-        }
-
-        if (MapUtils.isNotEmpty(variables)) {
-            for (Map.Entry<String, String> entry : variables.entrySet()) {
-                condition = condition.replace("{" + entry.getKey() + "}", entry.getValue());
-            }
-        }
-
-        Expression parsedCondition = expressionParser.parseExpression(condition);
-
-        Object result = parsedCondition.getValue(subject);
-        if (!(result instanceof Boolean)) {
-            throw new InvalidSubjectConditionException("Expression " + condition + " should return a boolean value");
-        }
-
-        return (Boolean) result;
     }
 
 }
