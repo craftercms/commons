@@ -22,7 +22,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.exception.RuntimePermissionException;
-import org.craftercms.commons.security.permissions.PermissionService;
+import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Map;
@@ -36,14 +36,14 @@ import java.util.Map;
 @Aspect
 public class HasPermissionAnnotationHandler {
 
-    protected Map<String, PermissionService> permissionServices;
+    protected Map<Class<?>, PermissionEvaluator> permissionServices;
 
     @Required
-    public void setPermissionServices(Map<String, PermissionService> permissionServices) {
+    public void setPermissionServices(Map<Class<?>, PermissionEvaluator> permissionServices) {
         this.permissionServices = permissionServices;
     }
 
-    @Around("@annotation(hasPermission)")
+    @Around("@target(hasPermission) || @annotation(hasPermission)")
     public Object checkPermissions(ProceedingJoinPoint pjp, HasPermission hasPermission) throws Throwable {
         Object[] args = pjp.getArgs();
         Object securedObject = null;
@@ -55,15 +55,11 @@ public class HasPermissionAnnotationHandler {
             }
         }
 
-        if (securedObject == null) {
-            securedObject = hasPermission.securedObject();
-        }
-
-        PermissionService permissionService = permissionServices.get(hasPermission.type());
+        PermissionEvaluator permissionEvaluator = permissionServices.get(hasPermission.type());
         boolean allowed;
         try {
-            allowed = permissionService.allow(securedObject, hasPermission.action());
-        } catch (PermissionException e) {
+            allowed = permissionEvaluator.isAllowed(securedObject, hasPermission.action());
+        } catch (IllegalArgumentException | PermissionException e) {
             throw new RuntimePermissionException("Permission checking failed", e);
         }
 

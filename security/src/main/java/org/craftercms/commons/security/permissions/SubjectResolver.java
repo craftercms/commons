@@ -21,11 +21,11 @@ package org.craftercms.commons.security.permissions;
  *
  * @author avasquez
  */
-public interface SubjectResolver {
+public interface SubjectResolver<S> {
 
     /**
      * Returns the current subject.
      */
-    Object getCurrentSubject();
+    S getCurrentSubject();
 
 }

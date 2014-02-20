@@ -22,29 +22,24 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotations that applications can use to indicate that a certain method requires permission checking.
+ * Annotations that applications can use to indicate that a certain method or all methods of a class require
+ * permission checking.
  *
  * @author avasquez
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HasPermission {
 
     /**
-     * The permission type, which indicates the {@link org.craftercms.commons.security.permissions.PermissionService}
+     * The permission type, which indicates the {@link org.craftercms.commons.security.permissions.PermissionEvaluator}
      * to use for permission evaluation.
      */
-    String type() default "*";
-
-    /**
-     * The ID of the secured object. Used when no parameter is annotated with
-     * {@link org.craftercms.commons.security.permissions.annotations.SecuredObject}.
-     */
-    String securedObject() default "*";
+    Class<?> type();
 
     /**
      * The action the current subject is trying to execute.
      */
-    String action() default "*";
+    String action();
 
 }

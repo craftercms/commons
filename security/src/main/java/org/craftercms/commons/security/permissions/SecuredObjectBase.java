@@ -14,34 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions.impl;
-
-import org.craftercms.commons.security.permissions.Permission;
-import org.craftercms.commons.security.permissions.SecuredObject;
+package org.craftercms.commons.security.permissions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base for {@link org.craftercms.commons.security.permissions.SecuredObject} that provides already the
- * permissions.
+ * Base for secured object that provide already attached permissions.
  *
  * @author avasquez
  */
-public class SecuredObjectBase implements SecuredObject {
+public class SecuredObjectBase<P extends Permission> {
 
-    protected List<Permission> permissions;
+    protected List<P> permissions;
 
-    @Override
-    public Iterable<Permission> getPermissions() {
+    public List<P> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<Permission> permissions) {
+    public void setPermissions(List<P> permissions) {
         this.permissions = permissions;
     }
 
-    public void addPermission(Permission permission) {
+    public void addPermission(P permission) {
         if (permissions == null) {
             permissions = new ArrayList<>();
         }
@@ -49,7 +44,7 @@ public class SecuredObjectBase implements SecuredObject {
         permissions.add(permission);
     }
 
-    public void removePermission(Permission permission) {
+    public void removePermission(P permission) {
         if (permissions != null) {
             permissions.remove(permission);
         }

@@ -23,7 +23,7 @@ import org.craftercms.commons.security.exception.PermissionException;
  *
  * @author avasquez
  */
-public interface ParentResolver {
+public interface ParentResolver<O> {
 
     /***
      * Returns the parent of the given object.
@@ -32,6 +32,6 @@ public interface ParentResolver {
      *
      * @return  the object's parent, or null if not found.
      */
-    Object getParent(Object object) throws PermissionException;
+    Object getParent(O object) throws IllegalArgumentException, PermissionException;
 
 }

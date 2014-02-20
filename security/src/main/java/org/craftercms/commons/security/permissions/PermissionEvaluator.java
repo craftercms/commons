@@ -19,32 +19,34 @@ package org.craftercms.commons.security.permissions;
 import org.craftercms.commons.security.exception.PermissionException;
 
 /**
- * Service used to check permissions for subjects.
+ * Evaluates or checks permissions.
  *
  * @author avasquez
  */
-public interface PermissionService {
+public interface PermissionEvaluator<S, O> {
 
     /**
      * Checks if the current subject (according to {@link org.craftercms.commons.security.permissions.SubjectResolver})
      * is allowed to perform the specified action to the given object.
      *
-     * @param object                    the object whose permissions should be checked
+     * @param object                    the object whose permissions should be checked. If null, a global permission
+     *                                  should be checked
      * @param action                    the action the subject wants to perform
      *
      * @return true if the subject is allowed to execute the action, false otherwise
      */
-    boolean allow(Object object, String action) throws PermissionException;
+    boolean isAllowed(O object, String action) throws IllegalArgumentException, PermissionException;
 
     /**
      * Checks if the given subject is allowed to perform the specified action to the given object
      *
      * @param subject                   the subject
-     * @param object                    the object whose permissions should be checked
+     * @param object                    the object whose permissions should be checked. If null, a global permission
+     *                                  should be checked
      * @param action                    the action the subject wants to perform
      *
      * @return true if the subject is allowed to execute the action, false otherwise
      */
-    boolean allow(Object subject, Object object, String action) throws PermissionException;
+    boolean isAllowed(S subject, O object, String action) throws IllegalArgumentException, PermissionException;
 
 }

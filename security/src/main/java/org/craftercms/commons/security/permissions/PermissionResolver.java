@@ -19,19 +19,29 @@ package org.craftercms.commons.security.permissions;
 import org.craftercms.commons.security.exception.PermissionException;
 
 /**
- * Resolves the permissions for a given object.
+ * Resolves the permissions for a given subject and object pair.
  *
  * @author avasquez
  */
-public interface PermissionResolver {
+public interface PermissionResolver<S, O> {
 
     /**
-     * Returns the permissions associated to a given object
+     * Returns the global permission (that applies to all objects) associated to the given subject.
      *
-     * @param object    the object whose permissions need to be looked for
+     * @param subject   the subject
      *
-     * @return the object's permissions, or null if the object doesn't have permissions
+     * @return the object/subject permission, or null if not permission found
      */
-    Iterable<Permission> getPermissions(Object object) throws PermissionException;
+    Permission getGlobalPermission(S subject) throws IllegalArgumentException, PermissionException;
+
+    /**
+     * Returns the permission associated to the given subject and object.
+     *
+     * @param subject   the subject
+     * @param object    the secured object)
+     *
+     * @return the object/subject permission, or null if not permission found
+     */
+    Permission getPermission(S subject, O object) throws IllegalArgumentException, PermissionException;
 
 }
