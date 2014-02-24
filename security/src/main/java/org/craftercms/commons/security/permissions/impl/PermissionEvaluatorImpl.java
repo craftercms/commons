@@ -18,7 +18,6 @@ package org.craftercms.commons.security.permissions.impl;
 
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.*;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Default implementation of {@link org.craftercms.commons.security.permissions.PermissionEvaluator}
@@ -31,7 +30,6 @@ public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> 
     protected PermissionResolver<S, O> permissionResolver;
     protected ParentResolver<O> parentResolver;
 
-    @Required
     public void setPermissionResolver(PermissionResolver<S, O> permissionResolver) {
         this.permissionResolver = permissionResolver;
     }

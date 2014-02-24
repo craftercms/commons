@@ -23,7 +23,6 @@ import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.exception.RuntimePermissionException;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Map;
 
@@ -38,7 +37,6 @@ public class HasPermissionAnnotationHandler {
 
     protected Map<Class<?>, PermissionEvaluator> permissionServices;
 
-    @Required
     public void setPermissionServices(Map<Class<?>, PermissionEvaluator> permissionServices) {
         this.permissionServices = permissionServices;
     }
