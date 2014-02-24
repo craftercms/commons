@@ -17,20 +17,15 @@
 package org.craftercms.commons.security.permissions;
 
 /**
- * Represents a permission that allows or denies a subject (a user, an application, etc.) the execution of an action
- * or set of actions on an object.
+ * Resolves the current subject to be used for permission checking.
  *
  * @author avasquez
  */
-public interface Permission {
+public interface SubjectResolver<S> {
 
     /**
-     * Returns true if the subject is allowed to execute the given action.
-     *
-     * @param action    the action the subject can or cannot execute
-     *
-     * @return true if the subject is allowed to execute the given action, false otherwise.
+     * Returns the current subject.
      */
-    boolean isAllowed(String action);
+    S getCurrentSubject();
 
 }
