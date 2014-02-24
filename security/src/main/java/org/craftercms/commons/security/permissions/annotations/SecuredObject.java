@@ -14,24 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions;
+package org.craftercms.commons.security.permissions.annotations;
 
-import org.craftercms.commons.security.exception.PermissionException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Represents a source where {@link org.craftercms.commons.security.permissions.Permission}s can be retrieved.
+ * Used in a method parameter to indicate the object that should be secured through permission checking.
  *
  * @author avasquez
  */
-public interface PermissionSource {
-
-    /**
-     * Returns all permissions for a given resource URI.
-     *
-     * @param resourceUri   the resource URI of the permissions
-     *
-     * @return an iterable for the matching permissions, or null if not found
-     */
-    Iterable<Permission> getPermissions(String resourceUri) throws PermissionException;
-
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface SecuredObject {
 }

@@ -16,21 +16,38 @@
  */
 package org.craftercms.commons.security.permissions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Represents a permission that allows or denies a subject (a user, an application, etc.) the execution of an action
- * or set of actions on an object.
+ * Base for secured object that provide already attached permissions.
  *
  * @author avasquez
  */
-public interface Permission {
+public class SecuredObjectBase<P extends Permission> {
 
-    /**
-     * Returns true if the subject is allowed to execute the given action.
-     *
-     * @param action    the action the subject can or cannot execute
-     *
-     * @return true if the subject is allowed to execute the given action, false otherwise.
-     */
-    boolean isAllowed(String action);
+    protected List<P> permissions;
+
+    public List<P> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<P> permissions) {
+        this.permissions = permissions;
+    }
+
+    public void addPermission(P permission) {
+        if (permissions == null) {
+            permissions = new ArrayList<>();
+        }
+
+        permissions.add(permission);
+    }
+
+    public void removePermission(P permission) {
+        if (permissions != null) {
+            permissions.remove(permission);
+        }
+    }
 
 }

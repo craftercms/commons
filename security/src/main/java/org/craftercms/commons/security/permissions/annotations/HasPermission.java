@@ -14,23 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions;
+package org.craftercms.commons.security.permissions.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Represents a permission that allows or denies a subject (a user, an application, etc.) the execution of an action
- * or set of actions on an object.
+ * Annotations that applications can use to indicate that a certain method or all methods of a class require
+ * permission checking.
  *
  * @author avasquez
  */
-public interface Permission {
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface HasPermission {
 
     /**
-     * Returns true if the subject is allowed to execute the given action.
-     *
-     * @param action    the action the subject can or cannot execute
-     *
-     * @return true if the subject is allowed to execute the given action, false otherwise.
+     * The permission type, which indicates the {@link org.craftercms.commons.security.permissions.PermissionEvaluator}
+     * to use for permission evaluation.
      */
-    boolean isAllowed(String action);
+    Class<?> type();
+
+    /**
+     * The action the current subject is trying to execute.
+     */
+    String action();
 
 }

@@ -14,23 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions;
+package org.craftercms.commons.security.exception;
 
 /**
- * Represents a permission that allows or denies a subject (a user, an application, etc.) the execution of an action
- * or set of actions on an object.
+ * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.SecurityException}.
  *
  * @author avasquez
  */
-public interface Permission {
+public class RuntimeSecurityException extends RuntimeException {
 
-    /**
-     * Returns true if the subject is allowed to execute the given action.
-     *
-     * @param action    the action the subject can or cannot execute
-     *
-     * @return true if the subject is allowed to execute the given action, false otherwise.
-     */
-    boolean isAllowed(String action);
+    public RuntimeSecurityException() {
+    }
+
+    public RuntimeSecurityException(String message) {
+        super(message);
+    }
+
+    public RuntimeSecurityException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public RuntimeSecurityException(Throwable cause) {
+        super(cause);
+    }
 
 }

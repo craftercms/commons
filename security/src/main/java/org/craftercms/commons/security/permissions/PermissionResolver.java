@@ -18,26 +18,30 @@ package org.craftercms.commons.security.permissions;
 
 import org.craftercms.commons.security.exception.PermissionException;
 
-import java.util.Map;
-
 /**
- * Service used to check permissions for subjects.
+ * Resolves the permissions for a given subject and object pair.
  *
  * @author avasquez
  */
-public interface PermissionService {
+public interface PermissionResolver<S, O> {
 
     /**
-     * Checks if the given subject is allowed to perform the specified action.
+     * Returns the global permission (that applies to all objects) associated to the given subject.
      *
-     * @param subject       the subject
-     * @param resourceUri   the resource URI of the permission
-     * @param action        the action the subject wants to perform
-     * @param variables     the variable values. Placeholders in the resource URI and the subject condition, with the
-     *                      format {value}, are replaced using this values. Eg.: ugcs:/{ugcId}, isOwner({ugcId}).
-     * @return true if the subject is allowed to execute the action, false otherwise
+     * @param subject   the subject
+     *
+     * @return the object/subject permission, or null if not permission found
      */
-    boolean allow(Object subject, String resourceUri, String action, Map<String, String> variables)
-            throws PermissionException;
+    Permission getGlobalPermission(S subject) throws IllegalArgumentException, PermissionException;
+
+    /**
+     * Returns the permission associated to the given subject and object.
+     *
+     * @param subject   the subject
+     * @param object    the secured object)
+     *
+     * @return the object/subject permission, or null if not permission found
+     */
+    Permission getPermission(S subject, O object) throws IllegalArgumentException, PermissionException;
 
 }
