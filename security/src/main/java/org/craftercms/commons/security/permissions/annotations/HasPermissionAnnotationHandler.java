@@ -19,11 +19,14 @@ package org.craftercms.commons.security.permissions.annotations;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.craftercms.commons.security.exception.ActionDeniedException;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.craftercms.commons.security.exception.AuthorizationException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.exception.RuntimePermissionException;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -35,26 +38,24 @@ import java.util.Map;
 @Aspect
 public class HasPermissionAnnotationHandler {
 
-    protected Map<Class<?>, PermissionEvaluator> permissionServices;
+    protected Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators;
 
-    public void setPermissionServices(Map<Class<?>, PermissionEvaluator> permissionServices) {
-        this.permissionServices = permissionServices;
+    public void setPermissionEvaluators(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators) {
+        this.permissionEvaluators = permissionEvaluators;
     }
 
-    @Around("@target(hasPermission) || @annotation(hasPermission)")
-    public Object checkPermissions(ProceedingJoinPoint pjp, HasPermission hasPermission) throws Throwable {
-        Object[] args = pjp.getArgs();
-        Object securedObject = null;
+    @Around("@annotation(HasPermission) || @target(HasPermission)")
+    public Object checkPermissions(ProceedingJoinPoint pjp) throws Throwable {
+        boolean allowed;
+        Method method = getActualMethod(pjp);
+        HasPermission hasPermission = getHasPermissionAnnotation(method, pjp);
+        Object securedObject = getAnnotatedSecuredObject(method, pjp);
+        PermissionEvaluator permissionEvaluator = permissionEvaluators.get(hasPermission.type());
 
-        for (Object arg : args) {
-            if (arg.getClass().isAnnotationPresent(SecuredObject.class)) {
-                securedObject = arg;
-                break;
-            }
+        if (permissionEvaluator == null) {
+            throw new RuntimePermissionException("No permission evaluator found for " + hasPermission.type());
         }
 
-        PermissionEvaluator permissionEvaluator = permissionServices.get(hasPermission.type());
-        boolean allowed;
         try {
             allowed = permissionEvaluator.isAllowed(securedObject, hasPermission.action());
         } catch (IllegalArgumentException | PermissionException e) {
@@ -64,8 +65,51 @@ public class HasPermissionAnnotationHandler {
         if (allowed) {
             return pjp.proceed();
         } else {
-            throw new ActionDeniedException("Execution of action '" + hasPermission.action() + "' denied");
+            throw new AuthorizationException("Execution of action '" + hasPermission.action() + "' denied");
         }
+    }
+
+    protected Method getActualMethod(ProceedingJoinPoint pjp) {
+        MethodSignature ms = (MethodSignature) pjp.getSignature();
+        Method method = ms.getMethod();
+
+        if (method.getDeclaringClass().isInterface()) {
+            Class<?> targetClass = pjp.getTarget().getClass();
+            try {
+                method = targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
+            } catch (NoSuchMethodException e) {
+                // Shouldn't happen, anyway
+                throw new RuntimePermissionException("Implementing method not found for " + method, e);
+            }
+        }
+
+        return method;
+    }
+
+    protected HasPermission getHasPermissionAnnotation(Method method, ProceedingJoinPoint pjp) {
+        HasPermission hasPermission = method.getAnnotation(HasPermission.class);
+
+        if (hasPermission == null) {
+            Class<?> targetClass = pjp.getTarget().getClass();
+            hasPermission = targetClass.getAnnotation(HasPermission.class);
+        }
+
+        return hasPermission;
+    }
+
+    protected Object getAnnotatedSecuredObject(Method method, ProceedingJoinPoint pjp) {
+        Annotation[][] paramAnnotations = method.getParameterAnnotations();
+        Object[] params = pjp.getArgs();
+
+        for (int i = 0; i < paramAnnotations.length; i++) {
+            for (Annotation a: paramAnnotations[i]) {
+                if (a instanceof SecuredObject) {
+                    return params[i];
+                }
+            }
+        }
+
+        return null;
     }
 
 }

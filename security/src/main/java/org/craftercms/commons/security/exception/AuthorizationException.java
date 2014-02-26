@@ -21,20 +21,20 @@ package org.craftercms.commons.security.exception;
  *
  * @author avasquez
  */
-public class ActionDeniedException extends RuntimeSecurityException {
+public class AuthorizationException extends RuntimeSecurityException {
 
-    public ActionDeniedException() {
+    public AuthorizationException() {
     }
 
-    public ActionDeniedException(String message) {
+    public AuthorizationException(String message) {
         super(message);
     }
 
-    public ActionDeniedException(String message, Throwable cause) {
+    public AuthorizationException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ActionDeniedException(Throwable cause) {
+    public AuthorizationException(Throwable cause) {
         super(cause);
     }
 

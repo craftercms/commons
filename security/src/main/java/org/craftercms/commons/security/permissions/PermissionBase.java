@@ -35,27 +35,33 @@ public abstract class PermissionBase implements Permission {
     @Override
     public boolean isAllowed(String action) {
         return CollectionUtils.isNotEmpty(allowedActions) &&
-                (allowedActions.contains(ANY_ACTION) || allowedActions.contains(action));
+               (allowedActions.contains(ANY_ACTION) || allowedActions.contains(action));
     }
 
-    public void allowAny() {
+    public PermissionBase allowAny() {
         allow(ANY_ACTION);
+
+        return this;
     }
 
-    public void allow(String action) {
+    public PermissionBase allow(String action) {
         if (allowedActions == null) {
             allowedActions = new HashSet<>();
         }
 
         allowedActions.add(action);
+
+        return this;
     }
 
-    public void allow(String... actions) {
+    public PermissionBase allow(String... actions) {
         if (ArrayUtils.isNotEmpty(actions)){
             for (String action : actions) {
                 allow(action);
             }
         }
+
+        return this;
     }
 
 }

@@ -19,28 +19,34 @@ package org.craftercms.commons.security.permissions;
 import org.craftercms.commons.security.exception.PermissionException;
 
 /**
- * Resolves the permissions for a given subject and object pair.
+ * Resolves the permissions for a particular type of subjects and objects.
  *
  * @author avasquez
  */
 public interface PermissionResolver<S, O> {
 
     /**
-     * Returns the global permission (that applies to all objects) associated to the given subject.
+     * Returns the global permission (that applies to any or all objects) associated to the given subject.
      *
      * @param subject   the subject
      *
-     * @return the object/subject permission, or null if not permission found
+     * @return the global permission, or null if no permission found
+     *
+     * @throws java.lang.IllegalArgumentException if the subject is of unexpected type
+     * @throws org.craftercms.commons.security.exception.PermissionException if something else fails
      */
     Permission getGlobalPermission(S subject) throws IllegalArgumentException, PermissionException;
 
     /**
      * Returns the permission associated to the given subject and object.
      *
-     * @param subject   the subject
-     * @param object    the secured object)
+     * @param subject   the subject (not null)
+     * @param object    the secured object or ID of the secured object (not null).
      *
-     * @return the object/subject permission, or null if not permission found
+     * @return the object/subject permission, or null if no permission found
+     *
+     * @throws java.lang.IllegalArgumentException if the subject or object is of unexpected type
+     * @throws org.craftercms.commons.security.exception.PermissionException if something else fails
      */
     Permission getPermission(S subject, O object) throws IllegalArgumentException, PermissionException;
 

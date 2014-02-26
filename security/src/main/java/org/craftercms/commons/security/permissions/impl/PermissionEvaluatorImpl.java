@@ -28,28 +28,27 @@ public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> 
 
     protected SubjectResolver<S> subjectResolver;
     protected PermissionResolver<S, O> permissionResolver;
-    protected ParentResolver<O> parentResolver;
+
+    public void setSubjectResolver(SubjectResolver<S> subjectResolver) {
+        this.subjectResolver = subjectResolver;
+    }
 
     public void setPermissionResolver(PermissionResolver<S, O> permissionResolver) {
         this.permissionResolver = permissionResolver;
     }
 
-    public void setParentResolver(ParentResolver<O> parentResolver) {
-        this.parentResolver = parentResolver;
-    }
-
     @Override
     public boolean isAllowed(O object, String action) throws PermissionException {
-        if (subjectResolver == null) {
-            throw new PermissionException("No SubjectResolver found. Unable to infer current subject");
-        }
-
         return isAllowed(subjectResolver.getCurrentSubject(), object, action);
     }
 
     @Override
     public boolean isAllowed(S subject, O object, String action) throws PermissionException {
         Permission permission;
+
+        if (subject == null) {
+            return false;
+        }
 
         if (object == null) {
             permission = permissionResolver.getGlobalPermission(subject);
@@ -59,14 +58,9 @@ public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> 
 
         if (permission != null) {
             return permission.isAllowed(action);
-        } else if (parentResolver != null) {
-            Object parent = parentResolver.getParent(object);
-            if (parent != null) {
-                return isAllowed(subject, object, action);
-            }
+        } else {
+            return false;
         }
-
-        return false;
     }
 
 }
