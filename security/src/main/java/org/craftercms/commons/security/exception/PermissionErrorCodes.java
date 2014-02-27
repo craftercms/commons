@@ -16,26 +16,17 @@
  */
 package org.craftercms.commons.security.exception;
 
+import ch.qos.cal10n.BaseName;
+import ch.qos.cal10n.Locale;
+import ch.qos.cal10n.LocaleData;
+
 /**
- * Root exception for permission related classes.
+ * Enum that contains error codes for permission related exceptions.
  *
  * @author avasquez
  */
-public class PermissionException extends SecurityException {
-
-    public PermissionException() {
-    }
-
-    public PermissionException(String message) {
-        super(message);
-    }
-
-    public PermissionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public PermissionException(Throwable cause) {
-        super(cause);
-    }
+@BaseName("crafter.security.messages.errors.permissions")
+@LocaleData(@Locale("en"))
+public enum PermissionErrorCodes {
 
 }

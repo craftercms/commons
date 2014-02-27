@@ -14,28 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.security.logging;
 
 /**
- * Thrown if the subject condition of a permission is invalid.
+ * Message codes for the security module logging.
  *
  * @author avasquez
  */
-public class InvalidSubjectConditionException extends PermissionException {
-
-    public InvalidSubjectConditionException() {
-    }
-
-    public InvalidSubjectConditionException(String message) {
-        super(message);
-    }
-
-    public InvalidSubjectConditionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public InvalidSubjectConditionException(Throwable cause) {
-        super(cause);
-    }
+public enum PermissionMessages {
+    SUBJECT_NOT_FOUND,
 
 }

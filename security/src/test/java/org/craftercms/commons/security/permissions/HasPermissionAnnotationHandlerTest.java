@@ -25,7 +25,6 @@ import org.craftercms.commons.security.permissions.annotations.SecuredObject;
 import org.craftercms.commons.security.permissions.impl.PermissionEvaluatorImpl;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
 import java.util.HashMap;

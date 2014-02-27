@@ -14,28 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.cal10n;
+
+import ch.qos.cal10n.IMessageConveyor;
+import ch.qos.cal10n.MessageConveyor;
+
+import java.util.Locale;
 
 /**
- * Root exception for permission related classes.
+ * CALI0N {@link ch.qos.cal10n.IMessageConveyor} that uses the default JVM locale.
  *
  * @author avasquez
  */
-public class PermissionException extends SecurityException {
+public abstract class DefaultMessageConveyor {
 
-    public PermissionException() {
-    }
+    public static final IMessageConveyor INSTANCE = new MessageConveyor(Locale.getDefault());
 
-    public PermissionException(String message) {
-        super(message);
-    }
-
-    public PermissionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public PermissionException(Throwable cause) {
-        super(cause);
+    private DefaultMessageConveyor() {
     }
 
 }

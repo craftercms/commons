@@ -43,7 +43,7 @@ public interface PermissionEvaluator<S, O> {
     /**
      * Checks if the given subject is allowed to perform the specified action to the given object
      *
-     * @param subject                   the subject. Can be null (possibly if subject is anonymous)
+     * @param subject                   the subject (not null)
      * @param object                    the object or ID of the object whose permissions should be checked. If null,
      *                                  the global permission should be checked
      * @param action                    the action the subject wants to perform (not null)
