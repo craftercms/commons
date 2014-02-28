@@ -16,26 +16,45 @@
  */
 package org.craftercms.commons.security.exception;
 
+import ch.qos.cal10n.IMessageConveyor;
+import org.craftercms.commons.cal10n.LocalizedException;
+
 /**
  * Root exception for all Crafter Commons Security classes.
  *
  * @author avasquez
  */
-public class SecurityException extends Exception {
+public class SecurityException extends LocalizedException {
 
     public SecurityException() {
     }
 
-    public SecurityException(String message) {
-        super(message);
+    public SecurityException(Enum<?> errorCode) {
+        super(errorCode);
     }
 
-    public SecurityException(String message, Throwable cause) {
-        super(message, cause);
+    public SecurityException(Enum<?> errorCode, Object... args) {
+        super(errorCode, args);
     }
 
-    public SecurityException(Throwable cause) {
-        super(cause);
+    public SecurityException(Enum<?> errorCode, IMessageConveyor messageConveyor) {
+        super(errorCode, messageConveyor);
+    }
+
+    public SecurityException(Enum<?> errorCode, IMessageConveyor messageConveyor, Object... args) {
+        super(errorCode, messageConveyor, args);
+    }
+
+    public SecurityException(Enum<?> errorCode, Throwable cause) {
+        super(errorCode, cause);
+    }
+
+    public SecurityException(Enum<?> errorCode, Throwable cause, Object... args) {
+        super(errorCode, cause, args);
+    }
+
+    public SecurityException(Enum<?> errorCode, IMessageConveyor messageConveyor, Throwable cause, Object... args) {
+        super(errorCode, messageConveyor, cause, args);
     }
 
 }

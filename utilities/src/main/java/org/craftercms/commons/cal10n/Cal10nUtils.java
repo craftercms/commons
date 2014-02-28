@@ -14,28 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.cal10n;
+
+import ch.qos.cal10n.IMessageConveyor;
+import ch.qos.cal10n.MessageConveyor;
+import org.slf4j.cal10n.LocLoggerFactory;
+
+import java.util.Locale;
 
 /**
- * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.PermissionException}.
+ * Utility methods and constants for CALI0N.
  *
  * @author avasquez
  */
-public class RuntimePermissionException extends RuntimeSecurityException {
+public abstract class Cal10nUtils {
 
-    public RuntimePermissionException() {
-    }
+    public static final IMessageConveyor DEFAULT_MESSAGE_CONVEYOR = new MessageConveyor(Locale.getDefault());
+    public static final LocLoggerFactory DEFAULT_LOC_LOGGER_FACTORY = new LocLoggerFactory(DEFAULT_MESSAGE_CONVEYOR);
 
-    public RuntimePermissionException(String message) {
-        super(message);
-    }
-
-    public RuntimePermissionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public RuntimePermissionException(Throwable cause) {
-        super(cause);
+    private Cal10nUtils() {
     }
 
 }

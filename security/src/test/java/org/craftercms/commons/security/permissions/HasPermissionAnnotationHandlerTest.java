@@ -16,9 +16,10 @@
  */
 package org.craftercms.commons.security.permissions;
 
-import org.craftercms.commons.security.exception.AuthorizationException;
+import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
-import org.craftercms.commons.security.exception.RuntimePermissionException;
+import org.craftercms.commons.security.exception.PermissionRuntimeException;
+import org.craftercms.commons.security.exception.SubjectNotFoundException;
 import org.craftercms.commons.security.permissions.annotations.HasPermission;
 import org.craftercms.commons.security.permissions.annotations.HasPermissionAnnotationHandler;
 import org.craftercms.commons.security.permissions.annotations.SecuredObject;
@@ -78,8 +79,8 @@ public class HasPermissionAnnotationHandlerTest {
 
         try {
             service.doAnotherThingWithObjectId(1);
-            fail("AuthorizationException expected");
-        } catch (AuthorizationException e) {
+            fail("ActionDeniedException expected");
+        } catch (ActionDeniedException e) {
             // expected, so continue
         }
 
@@ -87,17 +88,8 @@ public class HasPermissionAnnotationHandlerTest {
 
         try {
             service.doYetAnotherThingWithNoObject();
-            fail("AuthorizationException expected");
-        } catch (AuthorizationException e) {
-            // expected, so continue
-        }
-
-        subjectResolver.subject = null;
-
-        try {
-            service.doYetAnotherThingWithNoObject();
-            fail("AuthorizationException expected");
-        } catch (AuthorizationException e) {
+            fail("ActionDeniedException expected");
+        } catch (ActionDeniedException e) {
             // expected, so continue
         }
     }
@@ -106,8 +98,17 @@ public class HasPermissionAnnotationHandlerTest {
     public void testExceptions() throws Exception {
         try {
             service.doSomethingWrongPermissionType();
-            fail("RuntimePermissionException expected");
-        } catch (RuntimePermissionException e) {
+            fail("PermissionRuntimeException expected");
+        } catch (PermissionRuntimeException e) {
+            // expected, so continue
+        }
+
+        subjectResolver.subject = null;
+
+        try {
+            service.doYetAnotherThingWithNoObject();
+            fail("PermissionRuntimeException expected");
+        } catch (PermissionRuntimeException e) {
             // expected, so continue
         }
     }

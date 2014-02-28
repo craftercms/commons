@@ -16,8 +16,12 @@
  */
 package org.craftercms.commons.security.permissions.impl;
 
+import org.craftercms.commons.cal10n.Cal10nUtils;
 import org.craftercms.commons.security.exception.PermissionException;
+import org.craftercms.commons.security.exception.SubjectNotFoundException;
+import org.craftercms.commons.security.logging.PermissionLogMessage;
 import org.craftercms.commons.security.permissions.*;
+import org.slf4j.cal10n.LocLogger;
 
 /**
  * Default implementation of {@link org.craftercms.commons.security.permissions.PermissionEvaluator}
@@ -25,6 +29,9 @@ import org.craftercms.commons.security.permissions.*;
  * @author avasquez
  */
 public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> {
+
+    private static final LocLogger logger = Cal10nUtils.DEFAULT_LOC_LOGGER_FACTORY.getLocLogger(
+            PermissionEvaluatorImpl.class);
 
     protected SubjectResolver<S> subjectResolver;
     protected PermissionResolver<S, O> permissionResolver;
@@ -39,24 +46,31 @@ public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> 
 
     @Override
     public boolean isAllowed(O object, String action) throws PermissionException {
-        return isAllowed(subjectResolver.getCurrentSubject(), object, action);
+        S subject = subjectResolver.getCurrentSubject();
+        if (subject == null) {
+            throw new SubjectNotFoundException();
+        }
+
+        return isAllowed(subject, object, action);
     }
 
     @Override
     public boolean isAllowed(S subject, O object, String action) throws PermissionException {
         Permission permission;
 
-        if (subject == null) {
-            return false;
-        }
-
         if (object == null) {
+            logger.debug(PermissionLogMessage.RESOLVING_GLOBAL_PERMISSION, subject);
+
             permission = permissionResolver.getGlobalPermission(subject);
         } else {
+            logger.debug(PermissionLogMessage.RESOLVING_PERMISSION, subject, object);
+
             permission = permissionResolver.getPermission(subject, object);
         }
 
         if (permission != null) {
+            logger.debug(PermissionLogMessage.EVALUATING_PERMISSION, action, subject, object, permission);
+
             return permission.isAllowed(action);
         } else {
             return false;

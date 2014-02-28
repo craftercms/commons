@@ -17,43 +17,44 @@
 package org.craftercms.commons.security.exception;
 
 import ch.qos.cal10n.IMessageConveyor;
+import org.craftercms.commons.cal10n.LocalizedRuntimeException;
 
 /**
- * Root exception for permission related classes.
+ * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.SecurityException}.
  *
  * @author avasquez
  */
-public class PermissionException extends SecurityException {
+public class SecurityRuntimeException extends LocalizedRuntimeException {
 
-    public PermissionException() {
+    public SecurityRuntimeException() {
     }
 
-    public PermissionException(PermissionErrorCode errorCode) {
+    public SecurityRuntimeException(Enum<?> errorCode) {
         super(errorCode);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, Object... args) {
+    public SecurityRuntimeException(Enum<?> errorCode, Object... args) {
         super(errorCode, args);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, IMessageConveyor messageConveyor) {
+    public SecurityRuntimeException(Enum<?> errorCode, IMessageConveyor messageConveyor) {
         super(errorCode, messageConveyor);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, IMessageConveyor messageConveyor, Object... args) {
+    public SecurityRuntimeException(Enum<?> errorCode, IMessageConveyor messageConveyor, Object... args) {
         super(errorCode, messageConveyor, args);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, Throwable cause) {
+    public SecurityRuntimeException(Enum<?> errorCode, Throwable cause) {
         super(errorCode, cause);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, Throwable cause, Object... args) {
+    public SecurityRuntimeException(Enum<?> errorCode, Throwable cause, Object... args) {
         super(errorCode, cause, args);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, IMessageConveyor messageConveyor, Throwable cause,
-                                      Object... args) {
+    public SecurityRuntimeException(Enum<?> errorCode, IMessageConveyor messageConveyor, Throwable cause,
+                                    Object... args) {
         super(errorCode, messageConveyor, cause, args);
     }
 

@@ -16,12 +16,21 @@
  */
 package org.craftercms.commons.security.logging;
 
+import ch.qos.cal10n.BaseName;
+import ch.qos.cal10n.Locale;
+import ch.qos.cal10n.LocaleData;
+
 /**
  * Message codes for the security module logging.
  *
  * @author avasquez
  */
-public enum PermissionMessages {
-    SUBJECT_NOT_FOUND,
-
+@BaseName("crafter.security.messages.logging.permissions")
+@LocaleData(@Locale("en"))
+public enum PermissionLogMessage {
+    PROTECTED_METHOD_INTERCEPTED,
+    PROTECTED_METHOD_INTERCEPTED_NO_SEC_OBJ,
+    RESOLVING_GLOBAL_PERMISSION,
+    RESOLVING_PERMISSION,
+    EVALUATING_PERMISSION;
 }

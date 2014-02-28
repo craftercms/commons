@@ -34,12 +34,12 @@ public class LocalizedException extends Exception {
 
     public LocalizedException(Enum<?> errorCode) {
         this.errorCode = errorCode;
-        this.messageConveyor = DefaultMessageConveyor.INSTANCE;
+        this.messageConveyor = Cal10nUtils.DEFAULT_MESSAGE_CONVEYOR;
     }
 
     public LocalizedException(Enum<?> errorCode, Object... args) {
         this.errorCode = errorCode;
-        this.messageConveyor = DefaultMessageConveyor.INSTANCE;
+        this.messageConveyor = Cal10nUtils.DEFAULT_MESSAGE_CONVEYOR;
         this.args = args;
     }
 
@@ -58,14 +58,14 @@ public class LocalizedException extends Exception {
         super(cause);
 
         this.errorCode = errorCode;
-        this.messageConveyor = DefaultMessageConveyor.INSTANCE;
+        this.messageConveyor = Cal10nUtils.DEFAULT_MESSAGE_CONVEYOR;
     }
 
     public LocalizedException(Enum<?> errorCode, Throwable cause, Object... args) {
         super(cause);
 
         this.errorCode = errorCode;
-        this.messageConveyor = DefaultMessageConveyor.INSTANCE;
+        this.messageConveyor = Cal10nUtils.DEFAULT_MESSAGE_CONVEYOR;
         this.args = args;
     }
 

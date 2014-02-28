@@ -18,6 +18,8 @@ package org.craftercms.commons.security.permissions;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.craftercms.commons.cal10n.Cal10nUtils;
+import org.slf4j.cal10n.LocLogger;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -64,4 +66,10 @@ public abstract class PermissionBase implements Permission {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" +
+                "allowedActions=" + allowedActions +
+                '}';
+    }
 }

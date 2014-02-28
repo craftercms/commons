@@ -34,12 +34,12 @@ public class LocalizedRuntimeException extends RuntimeException {
 
     public LocalizedRuntimeException(Enum<?> errorCode) {
         this.errorCode = errorCode;
-        this.messageConveyor = DefaultMessageConveyor.INSTANCE;
+        this.messageConveyor = Cal10nUtils.DEFAULT_MESSAGE_CONVEYOR;
     }
 
     public LocalizedRuntimeException(Enum<?> errorCode, Object... args) {
         this.errorCode = errorCode;
-        this.messageConveyor = DefaultMessageConveyor.INSTANCE;
+        this.messageConveyor = Cal10nUtils.DEFAULT_MESSAGE_CONVEYOR;
         this.args = args;
     }
 
@@ -58,14 +58,14 @@ public class LocalizedRuntimeException extends RuntimeException {
         super(cause);
 
         this.errorCode = errorCode;
-        this.messageConveyor = DefaultMessageConveyor.INSTANCE;
+        this.messageConveyor = Cal10nUtils.DEFAULT_MESSAGE_CONVEYOR;
     }
 
     public LocalizedRuntimeException(Enum<?> errorCode, Throwable cause, Object... args) {
         super(cause);
 
         this.errorCode = errorCode;
-        this.messageConveyor = DefaultMessageConveyor.INSTANCE;
+        this.messageConveyor = Cal10nUtils.DEFAULT_MESSAGE_CONVEYOR;
         this.args = args;
     }
 

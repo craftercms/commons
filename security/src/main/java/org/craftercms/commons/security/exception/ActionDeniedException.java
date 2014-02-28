@@ -14,23 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.cal10n;
-
-import ch.qos.cal10n.IMessageConveyor;
-import ch.qos.cal10n.MessageConveyor;
-
-import java.util.Locale;
+package org.craftercms.commons.security.exception;
 
 /**
- * CALI0N {@link ch.qos.cal10n.IMessageConveyor} that uses the default JVM locale.
+ * Thrown when the execution of an action on an object has been denied to a subject.
  *
  * @author avasquez
  */
-public abstract class DefaultMessageConveyor {
+public class ActionDeniedException extends PermissionRuntimeException {
 
-    public static final IMessageConveyor INSTANCE = new MessageConveyor(Locale.getDefault());
-
-    private DefaultMessageConveyor() {
+    public ActionDeniedException(String action) {
+        super(PermissionErrorCode.ACTION_DENIED, action);
     }
 
 }

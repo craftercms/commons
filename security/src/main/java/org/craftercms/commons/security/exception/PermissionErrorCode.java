@@ -16,26 +16,21 @@
  */
 package org.craftercms.commons.security.exception;
 
+import ch.qos.cal10n.BaseName;
+import ch.qos.cal10n.Locale;
+import ch.qos.cal10n.LocaleData;
+
 /**
- * Thrown when the execution of an action on an object has been denied to a subject.
+ * Enum that contains error codes for permission related exceptions.
  *
  * @author avasquez
  */
-public class AuthorizationException extends RuntimeSecurityException {
-
-    public AuthorizationException() {
-    }
-
-    public AuthorizationException(String message) {
-        super(message);
-    }
-
-    public AuthorizationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public AuthorizationException(Throwable cause) {
-        super(cause);
-    }
-
+@BaseName("crafter.security.messages.errors.permissions")
+@LocaleData(@Locale("en"))
+public enum PermissionErrorCode {
+    PERMISSION_EVALUATOR_NOT_FOUND,
+    PERMISSION_EVALUATION_FAILED,
+    IMPLEMENTING_METHOD_NOT_FOUND,
+    SUBJECT_NOT_FOUND,
+    ACTION_DENIED;
 }

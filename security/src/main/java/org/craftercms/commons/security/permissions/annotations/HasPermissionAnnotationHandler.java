@@ -20,10 +20,14 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.craftercms.commons.security.exception.AuthorizationException;
+import org.craftercms.commons.cal10n.Cal10nUtils;
+import org.craftercms.commons.security.exception.ActionDeniedException;
+import org.craftercms.commons.security.exception.PermissionErrorCode;
 import org.craftercms.commons.security.exception.PermissionException;
-import org.craftercms.commons.security.exception.RuntimePermissionException;
+import org.craftercms.commons.security.exception.PermissionRuntimeException;
+import org.craftercms.commons.security.logging.PermissionLogMessage;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
+import org.slf4j.cal10n.LocLogger;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -38,6 +42,9 @@ import java.util.Map;
 @Aspect
 public class HasPermissionAnnotationHandler {
 
+    private static final LocLogger logger = Cal10nUtils.DEFAULT_LOC_LOGGER_FACTORY.getLocLogger(
+            HasPermissionAnnotationHandler.class);
+
     protected Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators;
 
     public void setPermissionEvaluators(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators) {
@@ -49,23 +56,31 @@ public class HasPermissionAnnotationHandler {
         boolean allowed;
         Method method = getActualMethod(pjp);
         HasPermission hasPermission = getHasPermissionAnnotation(method, pjp);
+        Class<?> type = hasPermission.type();
+        String action = hasPermission.action();
         Object securedObject = getAnnotatedSecuredObject(method, pjp);
-        PermissionEvaluator permissionEvaluator = permissionEvaluators.get(hasPermission.type());
+        PermissionEvaluator permissionEvaluator = permissionEvaluators.get(type);
+
+        if (securedObject != null) {
+            logger.debug(PermissionLogMessage.PROTECTED_METHOD_INTERCEPTED, method, hasPermission, securedObject);
+        } else {
+            logger.debug(PermissionLogMessage.PROTECTED_METHOD_INTERCEPTED_NO_SEC_OBJ, method, hasPermission);
+        }
 
         if (permissionEvaluator == null) {
-            throw new RuntimePermissionException("No permission evaluator found for " + hasPermission.type());
+            throw new PermissionRuntimeException(PermissionErrorCode.PERMISSION_EVALUATOR_NOT_FOUND, type);
         }
 
         try {
-            allowed = permissionEvaluator.isAllowed(securedObject, hasPermission.action());
+            allowed = permissionEvaluator.isAllowed(securedObject, action);
         } catch (IllegalArgumentException | PermissionException e) {
-            throw new RuntimePermissionException("Permission checking failed", e);
+            throw new PermissionRuntimeException(PermissionErrorCode.PERMISSION_EVALUATION_FAILED, e);
         }
 
         if (allowed) {
             return pjp.proceed();
         } else {
-            throw new AuthorizationException("Execution of action '" + hasPermission.action() + "' denied");
+            throw new ActionDeniedException(hasPermission.action());
         }
     }
 
@@ -79,7 +94,7 @@ public class HasPermissionAnnotationHandler {
                 method = targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
             } catch (NoSuchMethodException e) {
                 // Shouldn't happen, anyway
-                throw new RuntimePermissionException("Implementing method not found for " + method, e);
+                throw new PermissionRuntimeException(PermissionErrorCode.IMPLEMENTING_METHOD_NOT_FOUND, method, e);
             }
         }
 
