@@ -31,7 +31,8 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Utility class for simplifying encryption/decryption with the {@link javax.crypto.Cipher} class.
+ * Utility class for simplifying encryption/decryption with the {@link javax.crypto.Cipher} class. By default, the
+ * algorithm used is AES.
  *
  * @author Sumer Jabri
  * @author Alfonso Vásquez
@@ -46,12 +47,12 @@ public class SimpleCipher {
         return key;
     }
 
-    public String getBase64Key() {
-        return Base64.encodeBase64String(key.getEncoded());
-    }
-
     public void setKey(Key key) {
         this.key = key;
+    }
+
+    public String getBase64Key() {
+        return key != null? Base64.encodeBase64String(key.getEncoded()) : null;
     }
 
     public void setBase64Key(String aesKey) {
@@ -66,12 +67,12 @@ public class SimpleCipher {
         return iv;
     }
 
-    public String getBase64Iv() {
-        return Base64.encodeBase64String(iv);
-    }
-
     public void setIv(byte[] iv) {
         this.iv = iv;
+    }
+
+    public String getBase64Iv() {
+        return iv != null? Base64.encodeBase64String(iv) : null;
     }
 
     public void setBase64Iv(String iv) {
@@ -90,14 +91,9 @@ public class SimpleCipher {
         cipher = Cipher.getInstance(transformation);
     }
 
-    public String encryptBase64FromString(String clear) throws InvalidAlgorithmParameterException, InvalidKeyException,
+    public String encryptBase64(String clear) throws InvalidAlgorithmParameterException, InvalidKeyException,
             BadPaddingException, IllegalBlockSizeException {
         return Base64.encodeBase64String(encrypt(StringUtils.getBytesUtf8(clear)));
-    }
-
-    public String encryptBase64(byte[] clear) throws InvalidAlgorithmParameterException, InvalidKeyException,
-            BadPaddingException, IllegalBlockSizeException {
-        return Base64.encodeBase64String(encrypt(clear));
     }
 
     public byte[] encrypt(byte[] clear) throws InvalidAlgorithmParameterException, InvalidKeyException,
@@ -122,14 +118,9 @@ public class SimpleCipher {
         return cipher.doFinal(clear);
     }
 
-    public String decryptBase64ToString(String encrypted) throws IllegalStateException,
+    public String decryptBase64(String encrypted) throws IllegalStateException,
             InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         return StringUtils.newStringUtf8(decrypt(Base64.decodeBase64(encrypted)));
-    }
-
-    public byte[] decryptBase64(String encrypted) throws IllegalStateException, InvalidAlgorithmParameterException,
-            InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        return decrypt(Base64.decodeBase64(encrypted));
     }
 
     public byte[] decrypt(byte[] encrypted) throws IllegalStateException, InvalidAlgorithmParameterException,

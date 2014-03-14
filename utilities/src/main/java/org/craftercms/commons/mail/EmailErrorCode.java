@@ -14,21 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mail;
+
+import ch.qos.cal10n.BaseName;
+import ch.qos.cal10n.Locale;
+import ch.qos.cal10n.LocaleData;
 
 /**
- * Thrown when the execution of an action on an object has been denied to a subject.
+ * Enum that contains error codes for email related exceptions.
  *
  * @author avasquez
  */
-public class ActionDeniedException extends PermissionException {
-
-    public ActionDeniedException(String action) {
-        super(SecurityErrorCode.GLOBAL_ACTION_DENIED, action);
-    }
-
-    public ActionDeniedException(String action, Object securedObject) {
-        super(SecurityErrorCode.ACTION_DENIED, action, securedObject);
-    }
-
+@BaseName("crafter.mail.messages.errors")
+@LocaleData(@Locale("en"))
+public enum EmailErrorCode {
+    GENERAL_ERROR,
+    ADDRESS_ERROR;
 }

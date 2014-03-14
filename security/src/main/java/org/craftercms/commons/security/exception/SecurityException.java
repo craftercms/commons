@@ -17,14 +17,14 @@
 package org.craftercms.commons.security.exception;
 
 import ch.qos.cal10n.IMessageConveyor;
-import org.craftercms.commons.cal10n.LocalizedException;
+import org.craftercms.commons.cal10n.LocalizedRuntimeException;
 
 /**
- * Root exception for all Crafter Commons Security classes.
+ * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.SecurityException}.
  *
  * @author avasquez
  */
-public class SecurityException extends LocalizedException {
+public class SecurityException extends LocalizedRuntimeException {
 
     public SecurityException() {
     }
@@ -53,7 +53,8 @@ public class SecurityException extends LocalizedException {
         super(errorCode, cause, args);
     }
 
-    public SecurityException(Enum<?> errorCode, IMessageConveyor messageConveyor, Throwable cause, Object... args) {
+    public SecurityException(Enum<?> errorCode, IMessageConveyor messageConveyor, Throwable cause,
+                             Object... args) {
         super(errorCode, messageConveyor, cause, args);
     }
 

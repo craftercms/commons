@@ -16,19 +16,22 @@
  */
 package org.craftercms.commons.security.exception;
 
+import ch.qos.cal10n.BaseName;
+import ch.qos.cal10n.Locale;
+import ch.qos.cal10n.LocaleData;
+
 /**
- * Thrown when the execution of an action on an object has been denied to a subject.
+ * Enum that contains error codes for permission related exceptions.
  *
  * @author avasquez
  */
-public class ActionDeniedException extends PermissionException {
-
-    public ActionDeniedException(String action) {
-        super(SecurityErrorCode.GLOBAL_ACTION_DENIED, action);
-    }
-
-    public ActionDeniedException(String action, Object securedObject) {
-        super(SecurityErrorCode.ACTION_DENIED, action, securedObject);
-    }
-
+@BaseName("crafter.security.messages.errors")
+@LocaleData(@Locale("en"))
+public enum SecurityErrorCode {
+    PERMISSION_EVALUATOR_NOT_FOUND,
+    PERMISSION_EVALUATION_FAILED,
+    IMPLEMENTING_METHOD_NOT_FOUND,
+    SUBJECT_NOT_FOUND,
+    GLOBAL_ACTION_DENIED,
+    ACTION_DENIED;
 }

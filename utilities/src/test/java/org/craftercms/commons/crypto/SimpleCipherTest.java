@@ -24,7 +24,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.Key;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Alfonso Vásquez
@@ -36,7 +36,7 @@ public class SimpleCipherTest {
     @Test
     public void testEncryption() throws Exception {
         SimpleCipher encryptionCipher = new SimpleCipher();
-        String encrypted = encryptionCipher.encryptBase64FromString(CLEAR_TEXT);
+        String encrypted = encryptionCipher.encryptBase64(CLEAR_TEXT);
 
         Key key = encryptionCipher.getKey();
         byte[] iv = encryptionCipher.getIv();
@@ -53,7 +53,7 @@ public class SimpleCipherTest {
     @Test
     public void testDecryption() throws Exception {
         Key key = CipherUtils.generateAesKey();
-        byte[] iv = CipherUtils.generateIv(CipherUtils.AES_KEY_BYTE_SIZE);
+        byte[] iv = CipherUtils.generateAesIv();
 
         Cipher encryptionCipher = Cipher.getInstance(CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
         encryptionCipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
@@ -64,7 +64,7 @@ public class SimpleCipherTest {
         decryptionCipher.setKey(key);
         decryptionCipher.setIv(iv);
 
-        String clear = decryptionCipher.decryptBase64ToString(encrypted);
+        String clear = decryptionCipher.decryptBase64(encrypted);
 
         assertEquals(CLEAR_TEXT, clear);
     }

@@ -84,8 +84,35 @@ public interface CrudRepository<T> {
      * @param params   Params of the modifier query.
      * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
      */
-    public void update(final String id, final boolean multi, final boolean upsert, final String modifier,
+    public void update(final String id, final String modifier, final boolean multi, final boolean upsert,
                        final Object... params) throws MongoDataException;
+
+    /**
+     * Returns the number of all documents in the collection.
+     *
+     * @return the count of all documents
+     * @throws MongoDataException if an error occurs
+     */
+    public long count() throws MongoDataException;
+
+    /**
+     * Returns the number of documents that match the query
+     *
+     * @param query the query the documents should match
+     * @return the count of documents that match the query
+     * @throws MongoDataException if an error occurs
+     */
+    public long count(String query) throws MongoDataException;
+
+    /**
+     * Returns the number of documents that match the query
+     *
+     * @param query         the query the documents should match
+     * @param queryParams   the query parameters
+     * @return the count of documents that match the query
+     * @throws MongoDataException if an error occurs
+     */
+    public long count(String query, Object... queryParams) throws MongoDataException;
 
     /**
      * Gets all documents of a the given collection. Tries to convert them in to Instances of the given class.
@@ -178,10 +205,10 @@ public interface CrudRepository<T> {
     void remove(String query) throws MongoDataException;
 
     /**
-     * Removes a Document with the given <b>Mongo Object Id</b>
+     * Removes a Document with the given <b>id</b>
      *
-     * @param objectId
+     * @param id
      * @throws org.craftercms.commons.mongo.MongoDataException
      */
-    void removeById(String objectId) throws MongoDataException;
+    void removeById(String id) throws MongoDataException;
 }

@@ -18,8 +18,6 @@ package org.craftercms.commons.security.permissions;
 
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
-import org.craftercms.commons.security.exception.PermissionRuntimeException;
-import org.craftercms.commons.security.exception.SubjectNotFoundException;
 import org.craftercms.commons.security.permissions.annotations.HasPermission;
 import org.craftercms.commons.security.permissions.annotations.HasPermissionAnnotationHandler;
 import org.craftercms.commons.security.permissions.annotations.SecuredObject;
@@ -46,9 +44,9 @@ public class HasPermissionAnnotationHandlerTest {
 
     @Before
     public void setUp() throws Exception {
-        subjectResolver = createTestSubjectResolver();
-        annotationHandler = createTestAnnotationHandler();
-        service = createTestService();
+        createTestSubjectResolver();
+        createTestAnnotationHandler();
+        createTestService();
     }
 
     @Test
@@ -98,8 +96,8 @@ public class HasPermissionAnnotationHandlerTest {
     public void testExceptions() throws Exception {
         try {
             service.doSomethingWrongPermissionType();
-            fail("PermissionRuntimeException expected");
-        } catch (PermissionRuntimeException e) {
+            fail("PermissionException expected");
+        } catch (PermissionException e) {
             // expected, so continue
         }
 
@@ -107,27 +105,25 @@ public class HasPermissionAnnotationHandlerTest {
 
         try {
             service.doYetAnotherThingWithNoObject();
-            fail("PermissionRuntimeException expected");
-        } catch (PermissionRuntimeException e) {
+            fail("PermissionException expected");
+        } catch (PermissionException e) {
             // expected, so continue
         }
     }
 
-    private HasPermissionAnnotationHandler createTestAnnotationHandler() throws PermissionException {
+    private void createTestAnnotationHandler() throws PermissionException {
         Map<Class<?>, PermissionEvaluator<?, ?>> evaluators = new HashMap<>(1);
         evaluators.put(MockPermission.class, createTestPermissionEvaluator());
 
-        HasPermissionAnnotationHandler handler = new HasPermissionAnnotationHandler();
-        handler.setPermissionEvaluators(evaluators);
-
-        return handler;
+        annotationHandler = new HasPermissionAnnotationHandler();
+        annotationHandler.setPermissionEvaluators(evaluators);
     }
 
-    private MockSecuredService createTestService() throws PermissionException {
+    private void createTestService() throws PermissionException {
         AspectJProxyFactory proxyFactory = new AspectJProxyFactory(new MockSecuredServiceImpl());
         proxyFactory.addAspect(annotationHandler);
 
-        return proxyFactory.getProxy();
+        service = proxyFactory.getProxy();
     }
 
     private PermissionEvaluator<String, Object> createTestPermissionEvaluator() throws PermissionException {
@@ -138,8 +134,8 @@ public class HasPermissionAnnotationHandlerTest {
         return evaluator;
     }
 
-    private MockSubjectResolver createTestSubjectResolver() {
-        return new MockSubjectResolver();
+    private void createTestSubjectResolver() {
+        subjectResolver = new MockSubjectResolver();
     }
 
     private PermissionResolver<String, Object> createTestPermissionResolver() throws PermissionException {

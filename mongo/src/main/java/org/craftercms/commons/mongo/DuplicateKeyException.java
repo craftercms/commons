@@ -14,21 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mongo;
 
 /**
- * Thrown when the execution of an action on an object has been denied to a subject.
+ * Mongo exception thrown when a document can't be inserted because there's already a document with the same key.
  *
  * @author avasquez
  */
-public class ActionDeniedException extends PermissionException {
+public class DuplicateKeyException extends MongoDataException {
 
-    public ActionDeniedException(String action) {
-        super(SecurityErrorCode.GLOBAL_ACTION_DENIED, action);
+    public DuplicateKeyException() {
     }
 
-    public ActionDeniedException(String action, Object securedObject) {
-        super(SecurityErrorCode.ACTION_DENIED, action, securedObject);
+    public DuplicateKeyException(String message) {
+        super(message);
+    }
+
+    public DuplicateKeyException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public DuplicateKeyException(Throwable cause) {
+        super(cause);
+    }
+
+    public DuplicateKeyException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 
 }

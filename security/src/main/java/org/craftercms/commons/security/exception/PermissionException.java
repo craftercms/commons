@@ -19,7 +19,7 @@ package org.craftercms.commons.security.exception;
 import ch.qos.cal10n.IMessageConveyor;
 
 /**
- * Root exception for permission related classes.
+ * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.PermissionException}.
  *
  * @author avasquez
  */
@@ -28,32 +28,32 @@ public class PermissionException extends SecurityException {
     public PermissionException() {
     }
 
-    public PermissionException(PermissionErrorCode errorCode) {
+    public PermissionException(SecurityErrorCode errorCode) {
         super(errorCode);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, Object... args) {
+    public PermissionException(SecurityErrorCode errorCode, Object... args) {
         super(errorCode, args);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, IMessageConveyor messageConveyor) {
+    public PermissionException(SecurityErrorCode errorCode, IMessageConveyor messageConveyor) {
         super(errorCode, messageConveyor);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, IMessageConveyor messageConveyor, Object... args) {
+    public PermissionException(SecurityErrorCode errorCode, IMessageConveyor messageConveyor, Object... args) {
         super(errorCode, messageConveyor, args);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, Throwable cause) {
+    public PermissionException(SecurityErrorCode errorCode, Throwable cause) {
         super(errorCode, cause);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, Throwable cause, Object... args) {
+    public PermissionException(SecurityErrorCode errorCode, Throwable cause, Object... args) {
         super(errorCode, cause, args);
     }
 
-    public PermissionException(PermissionErrorCode errorCode, IMessageConveyor messageConveyor, Throwable cause,
-                                      Object... args) {
+    public PermissionException(SecurityErrorCode errorCode, IMessageConveyor messageConveyor, Throwable cause,
+                               Object... args) {
         super(errorCode, messageConveyor, cause, args);
     }
 

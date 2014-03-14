@@ -18,8 +18,6 @@ package org.craftercms.commons.security.permissions;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.craftercms.commons.cal10n.Cal10nUtils;
-import org.slf4j.cal10n.LocLogger;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,6 +36,14 @@ public abstract class PermissionBase implements Permission {
     public boolean isAllowed(String action) {
         return CollectionUtils.isNotEmpty(allowedActions) &&
                (allowedActions.contains(ANY_ACTION) || allowedActions.contains(action));
+    }
+
+    public Set<String> getAllowedActions() {
+        return allowedActions;
+    }
+
+    public void setAllowedActions(Set<String> allowedActions) {
+        this.allowedActions = allowedActions;
     }
 
     public PermissionBase allowAny() {
@@ -72,4 +78,28 @@ public abstract class PermissionBase implements Permission {
                 "allowedActions=" + allowedActions +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        PermissionBase that = (PermissionBase) o;
+
+        if (allowedActions != null ? !allowedActions.equals(that.allowedActions) : that.allowedActions != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return allowedActions != null ? allowedActions.hashCode() : 0;
+    }
+
 }

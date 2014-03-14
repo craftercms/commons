@@ -14,21 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mail;
+
+import org.craftercms.commons.cal10n.LocalizedException;
 
 /**
- * Thrown when the execution of an action on an object has been denied to a subject.
+ * Thrown when an email can't be sent for some reason.
  *
  * @author avasquez
  */
-public class ActionDeniedException extends PermissionException {
+public class EmailException extends LocalizedException {
 
-    public ActionDeniedException(String action) {
-        super(SecurityErrorCode.GLOBAL_ACTION_DENIED, action);
+    public EmailException(Enum<?> errorCode) {
+        super(errorCode);
     }
 
-    public ActionDeniedException(String action, Object securedObject) {
-        super(SecurityErrorCode.ACTION_DENIED, action, securedObject);
+    public EmailException(Enum<?> errorCode, Object... args) {
+        super(errorCode, args);
+    }
+
+    public EmailException(Enum<?> errorCode, Throwable cause, Object... args) {
+        super(errorCode, cause, args);
     }
 
 }

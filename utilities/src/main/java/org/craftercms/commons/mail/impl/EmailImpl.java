@@ -14,21 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mail.impl;
+
+import org.craftercms.commons.mail.Email;
+import org.craftercms.commons.mail.EmailException;
+import org.springframework.mail.javamail.JavaMailSender;
+
+import javax.mail.internet.MimeMessage;
 
 /**
- * Thrown when the execution of an action on an object has been denied to a subject.
+ * Default implementation of {@link org.craftercms.commons.mail.Email}, which uses Spring Mail to send a message.
  *
  * @author avasquez
  */
-public class ActionDeniedException extends PermissionException {
+public class EmailImpl implements Email {
 
-    public ActionDeniedException(String action) {
-        super(SecurityErrorCode.GLOBAL_ACTION_DENIED, action);
+    protected JavaMailSender mailSender;
+    protected MimeMessage message;
+
+    public EmailImpl(JavaMailSender mailSender, MimeMessage message) {
+        this.mailSender = mailSender;
+        this.message = message;
     }
 
-    public ActionDeniedException(String action, Object securedObject) {
-        super(SecurityErrorCode.ACTION_DENIED, action, securedObject);
+    @Override
+    public void send() throws EmailException {
+        mailSender.send(message);
     }
 
 }

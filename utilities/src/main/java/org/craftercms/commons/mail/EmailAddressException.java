@@ -14,21 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mail;
 
 /**
- * Thrown when the execution of an action on an object has been denied to a subject.
+ * Thrown when an email address in wrong format is encountered.
  *
  * @author avasquez
  */
-public class ActionDeniedException extends PermissionException {
+public class EmailAddressException extends EmailException {
 
-    public ActionDeniedException(String action) {
-        super(SecurityErrorCode.GLOBAL_ACTION_DENIED, action);
-    }
-
-    public ActionDeniedException(String action, Object securedObject) {
-        super(SecurityErrorCode.ACTION_DENIED, action, securedObject);
+    public EmailAddressException(Throwable cause) {
+        super(EmailErrorCode.ADDRESS_ERROR, cause);
     }
 
 }

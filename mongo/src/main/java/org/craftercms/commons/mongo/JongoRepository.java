@@ -17,21 +17,18 @@
 
 package org.craftercms.commons.mongo;
 
-import java.lang.reflect.ParameterizedType;
-
 import com.mongodb.CommandResult;
 import com.mongodb.MongoException;
 import com.mongodb.WriteResult;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
-import org.jongo.Find;
-import org.jongo.FindOne;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
-import org.jongo.Update;
+import org.jongo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+
+import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 
 /**
  * Simple interface to interact with Jongo/MongoDB.<br/>
@@ -66,9 +63,8 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         //Thru pure magic get parameter Class .
         this.clazz = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         if (this.clazz == null) {
-            log.error("Unable to get class information for repository.");
-            throw new MongoDataException("Unable to create a JongoRepository, I'm unable to get Class for Type " +
-                "parameter");
+            log.error("Unable to get class information for JongoRepository");
+            throw new MongoDataException("Unable to get class information for JongoRepository");
         }
         // Try to get Document Annotation
         Document documentAnnotation = this.clazz.getAnnotation(Document.class);
@@ -89,13 +85,18 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public void save(T document) throws MongoDataException {
+    public void save(final T document) throws MongoDataException {
         try {
             WriteResult result = getCollection().save(document);
             checkCommandResult(result);
+        } catch (MongoException.DuplicateKey ex) {
+            String msg = "Duplicate key for document " + document;
+            log.error(msg, ex);
+            throw new DuplicateKeyException(msg, ex);
         } catch (MongoException ex) {
-            log.error("Unable to save Document", ex);
-            throw new MongoDataException(ex);
+            String msg = "Unable to save document " + document;
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
@@ -104,9 +105,50 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         try {
             WriteResult writeResult = getCollection().insert(query, queryParams);
             checkCommandResult(writeResult);
+        } catch (MongoException.DuplicateKey ex) {
+            String msg = "Duplicate key for save query " + query + " of type " + clazz.toString() +
+                    " with params " + Arrays.toString(queryParams);
+            log.error(msg, ex);
+            throw new DuplicateKeyException(msg, ex);
         } catch (MongoException ex) {
-            log.debug("Something went wrong while trying to save into mongodb ", ex);
-            throw new MongoDataException(ex);
+            String msg = "Unable to save by query " + query + " of type " + clazz.toString() + " with params " +
+                    Arrays.toString(queryParams);
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
+        }
+    }
+
+    @Override
+    public long count() throws MongoDataException {
+        try {
+            return getCollection().count();
+        } catch (MongoException ex) {
+            String msg = "Unable to count all documents of type " + clazz.toString();
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
+        }
+    }
+
+    @Override
+    public long count(String query) throws MongoDataException {
+        try {
+            return getCollection().count(query);
+        } catch (MongoException ex) {
+            String msg = "Unable to count documents of type " + clazz.toString() + " that match the query " + query;
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
+        }
+    }
+
+    @Override
+    public long count(String query, Object... queryParams) throws MongoDataException {
+        try {
+            return getCollection().count(query, queryParams);
+        } catch (MongoException ex) {
+            String msg = "Unable to count documents of type " + clazz.toString() + " that match the query " + query +
+                    " with params " + Arrays.toString(queryParams);
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
@@ -115,20 +157,20 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         try {
             return returnList(getCollection().find());
         } catch (MongoException ex) {
-            log.error("Unable to find all documents of type " + clazz.toString(), ex);
-            throw new MongoDataException(ex);
+            String msg = "Unable to find all documents of type " + clazz.toString();
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
-
     }
-
 
     @Override
     public Iterable<T> find(final String query) throws MongoDataException {
         try {
             return returnList(getCollection().find(query));
         } catch (MongoException ex) {
-            log.error("Unable to find by query" + query + " of type " + clazz.toString(), ex);
-            throw new MongoDataException(ex);
+            String msg = "Unable to find by query " + query + " of type " + clazz.toString();
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
@@ -137,8 +179,10 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         try {
             return returnList(getCollection().find(query, queryParams));
         } catch (MongoException ex) {
-            log.error("Unable to find by query" + query + " of type " + clazz.toString(), ex);
-            throw new MongoDataException(ex);
+            String msg = "Unable to find by query " + query + " of type " + clazz.toString() + " with params " +
+                    Arrays.toString(queryParams);
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
@@ -147,8 +191,9 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         try {
             return returnSimple(getCollection().findOne(query));
         } catch (MongoException ex) {
-            log.error("Unable to find by query" + query + " of type " + clazz.toString(), ex);
-            throw new MongoDataException("Unable to query mongodb", ex);
+            String msg = "Unable to find one by query " + query + " of type " + clazz.toString();
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
@@ -157,19 +202,10 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         try {
             return getCollection().findOne(query, queryParams).as(clazz);
         } catch (MongoException ex) {
-            log.error("Unable to find by query" + query + " of type " + clazz.toString(), ex);
-            throw new MongoDataException("Unable to query mongodb", ex);
-        }
-    }
-
-    @Override
-    public void remove(final String query, final Object... queryParams) throws MongoDataException {
-        try {
-            WriteResult writeResult = getCollection().remove(query, queryParams);
-            checkCommandResult(writeResult);
-        } catch (MongoException ex) {
-            log.error("Unable to delete ", ex);
-            throw new MongoDataException("Unable to remove document ", ex);
+            String msg = "Unable to find one by query " + query + " of type " + clazz.toString() + " with params " +
+                    Arrays.toString(queryParams);
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
@@ -179,19 +215,38 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             WriteResult writeResult = getCollection().remove(query);
             checkCommandResult(writeResult);
         } catch (MongoException ex) {
-            log.error("Unable to delete ", ex);
-            throw new MongoDataException("Unable to remove document ", ex);
+            String msg = "Unable to remove by query " + query + " of type " + clazz.toString();
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
     @Override
-    public void removeById(String objectId) throws MongoDataException {
+    public void remove(final String query, final Object... queryParams) throws MongoDataException {
         try {
-            WriteResult writeResult = getCollection().remove(new ObjectId(objectId));
+            WriteResult writeResult = getCollection().remove(query, queryParams);
             checkCommandResult(writeResult);
         } catch (MongoException ex) {
-            log.error("Unable to delete ", ex);
-            throw new MongoDataException("Unable to remove document ", ex);
+            String msg = "Unable to remove by query " + query + " of type " + clazz.toString() + " with params " +
+                    Arrays.toString(queryParams);
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
+        }
+    }
+
+    @Override
+    public void removeById(final String id) throws MongoDataException {
+        try {
+            WriteResult writeResult = getCollection().remove(new ObjectId(id));
+            checkCommandResult(writeResult);
+        } catch (MongoException ex) {
+            String msg = "Unable to remove object of type " + clazz.toString() + " by id '" + id + "'";
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
+        } catch (IllegalArgumentException ex) {
+            String msg = "Given id '" + id + "' can't be converted to an ObjectId";
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
@@ -200,30 +255,39 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         try {
             return getCollection().findOne(new ObjectId(id)).as(clazz);
         } catch (MongoException ex) {
-            log.error("Unable to search Object by id " + id, ex);
-            throw new MongoDataException("Unable to find Object by id", ex);
+            String msg = "Unable to find object of type " + clazz.toString() + " by id '" + id + "'";
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         } catch (IllegalArgumentException ex) {
-            log.error("Given Id " + id + " can't be converted to a ObjectId");
-            throw new MongoDataException("Invalid Id " + id);
+            String msg = "Given id '" + id + "' can't be converted to an ObjectId";
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
     @Override
-    public void update(final String id,final T updateObject, final boolean multi, final boolean upsert) throws
+    public void update(final String id, final T updateObject, final boolean multi, final boolean upsert) throws
         MongoDataException {
         try {
             Update update = getCollection().update(new ObjectId(id));
-            if(multi){
+            if (multi){
                 update.multi();
             }
-            if(upsert){
+            if (upsert){
                 update.upsert();
             }
             WriteResult result = update.with(updateObject);
             checkCommandResult(result);
+        } catch (MongoException.DuplicateKey ex) {
+            String msg = "Duplicate key for update with id='" + id + "', updatedObject=" + updateObject + ", multi=" +
+                    multi + ", upsert=" + upsert;
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         } catch (MongoException ex) {
-            log.error("Unable to save Document", ex);
-            throw new MongoDataException(ex);
+            String msg = "Unable to do update with id='" + id + "', updatedObject=" + updateObject + ", multi=" +
+                    multi + ", upsert=" + upsert;
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
@@ -240,15 +304,21 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             }
             WriteResult result = update.with(modifier);
             checkCommandResult(result);
+        } catch (MongoException.DuplicateKey ex) {
+            String msg = "Duplicate key for update with id='" + id + "', modifier=" + modifier + ", multi=" +
+                    multi + ", upsert=" + upsert;
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         } catch (MongoException ex) {
-            log.error("Unable to save Document", ex);
-            throw new MongoDataException(ex);
+            String msg = "Unable to do update with id='" + id + "', modifier=" + modifier + ", multi=" +
+                    multi + ", upsert=" + upsert;
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
-    public void update(final String id,final boolean multi, final boolean upsert,final String modifier,
-                       final Object... params) throws
-        MongoDataException{
+    public void update(final String id, final String modifier, final boolean multi, final boolean upsert,
+                       final Object... params) throws MongoDataException {
         try {
             Update update = getCollection().update(new ObjectId(id));
             if(multi){
@@ -259,9 +329,16 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             }
             WriteResult result = update.with(modifier,params);
             checkCommandResult(result);
+        } catch (MongoException.DuplicateKey ex) {
+            String msg = "Duplicate key for update with id='" + id + "', modifier=" + modifier + ", multi=" +
+                    multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         } catch (MongoException ex) {
-            log.error("Unable to save Document", ex);
-            throw new MongoDataException(ex);
+            String msg = "Unable to do update with id='" + id + "', modifier=" + modifier + ", multi=" +
+                    multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
         }
     }
 
@@ -280,8 +357,8 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             log.error("Query for {} key does not exist", key);
             throw new IllegalArgumentException("Query for key " + key + " does not exist");
         } else if (StringUtils.isBlank(query)) {
-            log.error("Query for key {} can't be blank or whitespace", key);
-            throw new IllegalArgumentException("Query for key " + key + " can't be blank or whitespace");
+            log.error("Query for key {} can't be blank or be only whitespace", key);
+            throw new IllegalArgumentException("Query for key " + key + " can't be blank or be only whitespace");
         }
         return query;
     }
@@ -298,8 +375,13 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         log.debug("Saving send to mongodb checking result");
         log.debug("Result is {}", lastError.ok()? "OK": lastError.getErrorMessage());
         if (!lastError.ok()) {
-            log.error("Unable to save into mongodb due " + lastError.getErrorMessage(), lastError.getException());
-            throw new MongoDataException(lastError.getException());
+            MongoException ex = lastError.getException();
+            log.error("Unable to save into mongodb due to " + lastError.getErrorMessage(), ex);
+            if (ex instanceof MongoException.DuplicateKey) {
+                throw new DuplicateKeyException(ex.getMessage(), ex);
+            } else {
+                throw new MongoDataException(ex.getMessage(), ex);
+            }
         }
     }
 

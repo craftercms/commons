@@ -22,10 +22,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.craftercms.commons.cal10n.Cal10nUtils;
 import org.craftercms.commons.security.exception.ActionDeniedException;
-import org.craftercms.commons.security.exception.PermissionErrorCode;
 import org.craftercms.commons.security.exception.PermissionException;
-import org.craftercms.commons.security.exception.PermissionRuntimeException;
-import org.craftercms.commons.security.logging.PermissionLogMessage;
+import org.craftercms.commons.security.exception.SecurityErrorCode;
+import org.craftercms.commons.security.logging.SecurityLogMessage;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.slf4j.cal10n.LocLogger;
 
@@ -62,23 +61,25 @@ public class HasPermissionAnnotationHandler {
         PermissionEvaluator permissionEvaluator = permissionEvaluators.get(type);
 
         if (securedObject != null) {
-            logger.debug(PermissionLogMessage.PROTECTED_METHOD_INTERCEPTED, method, hasPermission, securedObject);
+            logger.debug(SecurityLogMessage.PROTECTED_METHOD_INTERCEPTED, method, hasPermission, securedObject);
         } else {
-            logger.debug(PermissionLogMessage.PROTECTED_METHOD_INTERCEPTED_NO_SEC_OBJ, method, hasPermission);
+            logger.debug(SecurityLogMessage.PROTECTED_METHOD_INTERCEPTED_NO_SEC_OBJ, method, hasPermission);
         }
 
         if (permissionEvaluator == null) {
-            throw new PermissionRuntimeException(PermissionErrorCode.PERMISSION_EVALUATOR_NOT_FOUND, type);
+            throw new PermissionException(SecurityErrorCode.PERMISSION_EVALUATOR_NOT_FOUND, type);
         }
 
         try {
             allowed = permissionEvaluator.isAllowed(securedObject, action);
         } catch (IllegalArgumentException | PermissionException e) {
-            throw new PermissionRuntimeException(PermissionErrorCode.PERMISSION_EVALUATION_FAILED, e);
+            throw new PermissionException(SecurityErrorCode.PERMISSION_EVALUATION_FAILED, e);
         }
 
         if (allowed) {
             return pjp.proceed();
+        } else if (securedObject != null) {
+            throw new ActionDeniedException(hasPermission.action(), securedObject);
         } else {
             throw new ActionDeniedException(hasPermission.action());
         }
@@ -94,7 +95,7 @@ public class HasPermissionAnnotationHandler {
                 method = targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
             } catch (NoSuchMethodException e) {
                 // Shouldn't happen, anyway
-                throw new PermissionRuntimeException(PermissionErrorCode.IMPLEMENTING_METHOD_NOT_FOUND, method, e);
+                throw new PermissionException(SecurityErrorCode.IMPLEMENTING_METHOD_NOT_FOUND, method, e);
             }
         }
 

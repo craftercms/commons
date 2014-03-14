@@ -14,23 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
-
-import ch.qos.cal10n.BaseName;
-import ch.qos.cal10n.Locale;
-import ch.qos.cal10n.LocaleData;
+package org.craftercms.commons.mail;
 
 /**
- * Enum that contains error codes for permission related exceptions.
+ * Thrown when a general messaging error occurs.
  *
  * @author avasquez
  */
-@BaseName("crafter.security.messages.errors.permissions")
-@LocaleData(@Locale("en"))
-public enum PermissionErrorCode {
-    PERMISSION_EVALUATOR_NOT_FOUND,
-    PERMISSION_EVALUATION_FAILED,
-    IMPLEMENTING_METHOD_NOT_FOUND,
-    SUBJECT_NOT_FOUND,
-    ACTION_DENIED;
+public class GeneralEmailException extends EmailException {
+
+    public GeneralEmailException(Throwable cause) {
+        super(EmailErrorCode.GENERAL_ERROR, cause);
+    }
+
 }

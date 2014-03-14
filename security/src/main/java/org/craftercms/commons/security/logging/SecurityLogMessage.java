@@ -25,9 +25,9 @@ import ch.qos.cal10n.LocaleData;
  *
  * @author avasquez
  */
-@BaseName("crafter.security.messages.logging.permissions")
+@BaseName("crafter.security.messages.logging")
 @LocaleData(@Locale("en"))
-public enum PermissionLogMessage {
+public enum SecurityLogMessage {
     PROTECTED_METHOD_INTERCEPTED,
     PROTECTED_METHOD_INTERCEPTED_NO_SEC_OBJ,
     RESOLVING_GLOBAL_PERMISSION,
