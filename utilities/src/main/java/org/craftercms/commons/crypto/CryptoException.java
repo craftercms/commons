@@ -14,23 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.logging;
+package org.craftercms.commons.crypto;
 
-import ch.qos.cal10n.BaseName;
-import ch.qos.cal10n.Locale;
-import ch.qos.cal10n.LocaleData;
+import org.craftercms.commons.i10n.I10nException;
 
 /**
- * Message codes for the security module logging.
+ * General error thrown when a crypto related error occurs.
  *
  * @author avasquez
  */
-@BaseName("crafter.security.messages.logging")
-@LocaleData(@Locale("en"))
-public enum SecurityLogMessage {
-    PROTECTED_METHOD_INTERCEPTED,
-    PROTECTED_METHOD_INTERCEPTED_NO_SEC_OBJ,
-    RESOLVING_GLOBAL_PERMISSION,
-    RESOLVING_PERMISSION,
-    EVALUATING_PERMISSION;
+public class CryptoException extends I10nException {
+
+    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
+
+    public CryptoException(String key, Object... args) {
+        super(key, BUNDLE_NAME, args);
+    }
+
+    public CryptoException(String key, Throwable cause, Object... args) {
+        super(key, BUNDLE_NAME, cause, args);
+    }
+
 }

@@ -17,6 +17,7 @@
 package org.craftercms.commons.crypto;
 
 import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
@@ -39,12 +40,12 @@ public class CipherUtils {
      *
      * @return the generated key
      */
-    public static Key generateAesKey() {
+    public static SecretKey generateAesKey() {
         try {
             return generateKey(AES_CIPHER_ALGORITHM);
         } catch (NoSuchAlgorithmException e) {
             // Should NEVER happen
-            throw new InternalError(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -55,7 +56,7 @@ public class CipherUtils {
      *
      * @return the generated key
      */
-    public static Key generateKey(String cipherAlgorithm) throws NoSuchAlgorithmException {
+    public static SecretKey generateKey(String cipherAlgorithm) throws NoSuchAlgorithmException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance(cipherAlgorithm);
         keyGenerator.init(CryptoUtils.secureRandom);
 

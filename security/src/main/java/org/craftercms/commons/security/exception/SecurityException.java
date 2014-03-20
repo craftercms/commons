@@ -16,46 +16,35 @@
  */
 package org.craftercms.commons.security.exception;
 
-import ch.qos.cal10n.IMessageConveyor;
-import org.craftercms.commons.cal10n.LocalizedRuntimeException;
+import org.craftercms.commons.i10n.I10nRuntimeException;
 
 /**
  * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.SecurityException}.
  *
  * @author avasquez
  */
-public class SecurityException extends LocalizedRuntimeException {
+public class SecurityException extends I10nRuntimeException {
+
+    public static final String BUNDLE_NAME = "crafter.security.messages.errors";
 
     public SecurityException() {
     }
 
-    public SecurityException(Enum<?> errorCode) {
-        super(errorCode);
+    public SecurityException(String key, Object... args) {
+        super(key, BUNDLE_NAME, args);
     }
 
-    public SecurityException(Enum<?> errorCode, Object... args) {
-        super(errorCode, args);
+    public SecurityException(String key, Throwable cause, Object... args) {
+        super(key, BUNDLE_NAME, cause, args);
     }
 
-    public SecurityException(Enum<?> errorCode, IMessageConveyor messageConveyor) {
-        super(errorCode, messageConveyor);
+    public SecurityException(Throwable cause) {
+        super(cause);
     }
 
-    public SecurityException(Enum<?> errorCode, IMessageConveyor messageConveyor, Object... args) {
-        super(errorCode, messageConveyor, args);
-    }
-
-    public SecurityException(Enum<?> errorCode, Throwable cause) {
-        super(errorCode, cause);
-    }
-
-    public SecurityException(Enum<?> errorCode, Throwable cause, Object... args) {
-        super(errorCode, cause, args);
-    }
-
-    public SecurityException(Enum<?> errorCode, IMessageConveyor messageConveyor, Throwable cause,
+    public SecurityException(String key, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
                              Object... args) {
-        super(errorCode, messageConveyor, cause, args);
+        super(key, BUNDLE_NAME, cause, enableSuppression, writableStackTrace, args);
     }
 
 }

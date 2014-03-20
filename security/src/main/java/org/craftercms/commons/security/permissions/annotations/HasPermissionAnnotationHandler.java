@@ -20,13 +20,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.craftercms.commons.cal10n.Cal10nUtils;
+import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
-import org.craftercms.commons.security.exception.SecurityErrorCode;
-import org.craftercms.commons.security.logging.SecurityLogMessage;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
-import org.slf4j.cal10n.LocLogger;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -41,8 +38,14 @@ import java.util.Map;
 @Aspect
 public class HasPermissionAnnotationHandler {
 
-    private static final LocLogger logger = Cal10nUtils.DEFAULT_LOC_LOGGER_FACTORY.getLocLogger(
-            HasPermissionAnnotationHandler.class);
+    private static final I10nLogger logger = new I10nLogger(HasPermissionAnnotationHandler.class,
+            "crafter.security.messages.logging");
+
+    private static final String LOG_KEY_METHOD_INT =            "security.permission.methodIntercepted";
+    private static final String LOG_KEY_METHOD_INT_NO_SEC_OBJ = "security.permission.methodInterceptedNoSecObject";
+
+    private static final String ERROR_KEY_EVALUATOR_NOT_FOUND = "security.permission.evaluatorNotFound";
+    private static final String ERROR_KEY_EVALUATION_FAILED =   "security.permission.evaluationFailed";
 
     protected Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators;
 
@@ -61,19 +64,19 @@ public class HasPermissionAnnotationHandler {
         PermissionEvaluator permissionEvaluator = permissionEvaluators.get(type);
 
         if (securedObject != null) {
-            logger.debug(SecurityLogMessage.PROTECTED_METHOD_INTERCEPTED, method, hasPermission, securedObject);
+            logger.debug(LOG_KEY_METHOD_INT, method, hasPermission, securedObject);
         } else {
-            logger.debug(SecurityLogMessage.PROTECTED_METHOD_INTERCEPTED_NO_SEC_OBJ, method, hasPermission);
+            logger.debug(LOG_KEY_METHOD_INT_NO_SEC_OBJ, method, hasPermission);
         }
 
         if (permissionEvaluator == null) {
-            throw new PermissionException(SecurityErrorCode.PERMISSION_EVALUATOR_NOT_FOUND, type);
+            throw new PermissionException(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
         }
 
         try {
             allowed = permissionEvaluator.isAllowed(securedObject, action);
         } catch (IllegalArgumentException | PermissionException e) {
-            throw new PermissionException(SecurityErrorCode.PERMISSION_EVALUATION_FAILED, e);
+            throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
         }
 
         if (allowed) {
@@ -94,8 +97,8 @@ public class HasPermissionAnnotationHandler {
             try {
                 method = targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
             } catch (NoSuchMethodException e) {
-                // Shouldn't happen, anyway
-                throw new PermissionException(SecurityErrorCode.IMPLEMENTING_METHOD_NOT_FOUND, method, e);
+                // Should NEVER happen
+                throw new RuntimeException(e);
             }
         }
 

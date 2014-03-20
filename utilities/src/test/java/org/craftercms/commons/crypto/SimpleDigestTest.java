@@ -17,6 +17,7 @@
 package org.craftercms.commons.crypto;
 
 import org.apache.commons.codec.binary.Base64;
+import org.craftercms.commons.crypto.SimpleDigest;
 import org.junit.Test;
 
 import java.security.MessageDigest;

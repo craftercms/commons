@@ -16,15 +16,13 @@
  */
 package org.craftercms.commons.security.permissions.impl;
 
-import org.craftercms.commons.cal10n.Cal10nUtils;
+import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.exception.SubjectNotFoundException;
-import org.craftercms.commons.security.logging.SecurityLogMessage;
 import org.craftercms.commons.security.permissions.Permission;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.craftercms.commons.security.permissions.PermissionResolver;
 import org.craftercms.commons.security.permissions.SubjectResolver;
-import org.slf4j.cal10n.LocLogger;
 
 /**
  * Default implementation of {@link org.craftercms.commons.security.permissions.PermissionEvaluator}
@@ -33,8 +31,12 @@ import org.slf4j.cal10n.LocLogger;
  */
 public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> {
 
-    private static final LocLogger logger = Cal10nUtils.DEFAULT_LOC_LOGGER_FACTORY.getLocLogger(
-            PermissionEvaluatorImpl.class);
+    private static final I10nLogger logger = new I10nLogger(PermissionEvaluatorImpl.class,
+            "crafter.security.messages.logging");
+
+    private static final String LOG_KEY_RESOLVING_GLOBAL_PERM = "security.permission.resolvingGlobalPermission";
+    private static final String LOG_KEY_RESOLVING_PERM =        "security.permission.resolvingPermission";
+    private static final String LOG_KEY_EVALUATING_PERM =       "security.permission.evaluatingPermission";
 
     protected SubjectResolver<S> subjectResolver;
     protected PermissionResolver<S, O> permissionResolver;
@@ -62,17 +64,17 @@ public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> 
         Permission permission;
 
         if (object == null) {
-            logger.debug(SecurityLogMessage.RESOLVING_GLOBAL_PERMISSION, subject);
+            logger.debug(LOG_KEY_RESOLVING_GLOBAL_PERM, subject);
 
             permission = permissionResolver.getGlobalPermission(subject);
         } else {
-            logger.debug(SecurityLogMessage.RESOLVING_PERMISSION, subject, object);
+            logger.debug(LOG_KEY_RESOLVING_PERM, subject, object);
 
             permission = permissionResolver.getPermission(subject, object);
         }
 
         if (permission != null) {
-            logger.debug(SecurityLogMessage.EVALUATING_PERMISSION, action, subject, object, permission);
+            logger.debug(LOG_KEY_EVALUATING_PERM, action, subject, object, permission);
 
             return permission.isAllowed(action);
         } else {

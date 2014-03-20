@@ -17,6 +17,7 @@
 package org.craftercms.commons.crypto;
 
 import org.apache.commons.codec.binary.Base64;
+import org.craftercms.commons.i10n.I10nLogger;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -24,12 +25,20 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Utility class for simplifying message digest generation, using the {@link java.security.MessageDigest}. Default
- * digest algorithm is SHA-256, and the 1000 iterations to make hashes strong against attack, according to OWASP
+ * digest algorithm is SHA-256, and 1000 iterations are done to make hashes strong against attacks, according to OWASP
  * recommendations.
  *
  * @author avasquez
  */
 public class SimpleDigest {
+
+    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, "crafter.commons.messages.logging");
+
+    private static final String LOG_KEY_DEF_DIGEST_CREATED =    "crypto.digest.defaultDigestCreated";
+    private static final String LOG_KEY_SALT_GEN =              "crypto.digest.saltGenerated";
+    private static final String LOG_KEY_DIGEST_GEN =            "crypto.digest.digestGenerated";
+
+    private static final String ERROR_KEY_INVALID_ALG = "crypto.digest.invalidDigestAlgorithm";
 
     public static final String DEFAULT_ALGORITHM =  "SHA-256";
     public static final int DEFAULT_ITERATIONS =    1000;
@@ -47,11 +56,15 @@ public class SimpleDigest {
         return digest;
     }
 
-    public void setAlgorithm(String algorithm) throws IllegalArgumentException {
+    public void setDigest(MessageDigest digest) {
+        this.digest = digest;
+    }
+
+    public void setAlgorithm(String algorithm) throws CryptoException {
         try {
             this.digest = MessageDigest.getInstance(algorithm);
         } catch (NoSuchAlgorithmException ex) {
-            throw new IllegalArgumentException("Unrecognized message digest algorithm '" + algorithm + "'", ex);
+            throw new CryptoException(ERROR_KEY_INVALID_ALG, ex, algorithm);
         }
     }
 
@@ -80,15 +93,11 @@ public class SimpleDigest {
     }
 
     public String digestBase64(String clear) {
-        return Base64.encodeBase64String(digest(clear));
-    }
-
-    public byte[] digest(String clear) {
         try {
-            return digest(clear.getBytes("UTF-8"));
+            return Base64.encodeBase64String(digest(clear.getBytes("UTF-8")));
         } catch (UnsupportedEncodingException e) {
             // Should NEVER happen
-            throw new InternalError();
+            throw new RuntimeException(e);
         }
     }
 
@@ -98,11 +107,15 @@ public class SimpleDigest {
                 digest = MessageDigest.getInstance(DEFAULT_ALGORITHM);
             } catch (NoSuchAlgorithmException e) {
                 // Should NEVER happen
-                throw new InternalError();
+                throw new RuntimeException(e);
             }
+
+            logger.debug(LOG_KEY_DEF_DIGEST_CREATED, DEFAULT_ALGORITHM);
         }
         if (salt == null) {
             salt = CryptoUtils.generateRandomBytes(DEFAULT_SALT_SIZE);
+
+            logger.debug(LOG_KEY_SALT_GEN, DEFAULT_SALT_SIZE);
         }
 
         digest.update(salt);
@@ -114,6 +127,8 @@ public class SimpleDigest {
 
             hash = digest.digest(hash);
         }
+
+        logger.debug(LOG_KEY_DIGEST_GEN, iterations);
 
         return hash;
     }

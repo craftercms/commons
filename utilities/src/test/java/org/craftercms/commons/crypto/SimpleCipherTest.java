@@ -18,6 +18,8 @@ package org.craftercms.commons.crypto;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
+import org.craftercms.commons.crypto.CipherUtils;
+import org.craftercms.commons.crypto.SimpleCipher;
 import org.junit.Test;
 
 import javax.crypto.Cipher;

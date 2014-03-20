@@ -28,33 +28,21 @@ public class PermissionException extends SecurityException {
     public PermissionException() {
     }
 
-    public PermissionException(SecurityErrorCode errorCode) {
-        super(errorCode);
+    public PermissionException(String key, Object... args) {
+        super(key, args);
     }
 
-    public PermissionException(SecurityErrorCode errorCode, Object... args) {
-        super(errorCode, args);
+    public PermissionException(String key, Throwable cause, Object... args) {
+        super(key, cause, args);
     }
 
-    public PermissionException(SecurityErrorCode errorCode, IMessageConveyor messageConveyor) {
-        super(errorCode, messageConveyor);
+    public PermissionException(Throwable cause) {
+        super(cause);
     }
 
-    public PermissionException(SecurityErrorCode errorCode, IMessageConveyor messageConveyor, Object... args) {
-        super(errorCode, messageConveyor, args);
-    }
-
-    public PermissionException(SecurityErrorCode errorCode, Throwable cause) {
-        super(errorCode, cause);
-    }
-
-    public PermissionException(SecurityErrorCode errorCode, Throwable cause, Object... args) {
-        super(errorCode, cause, args);
-    }
-
-    public PermissionException(SecurityErrorCode errorCode, IMessageConveyor messageConveyor, Throwable cause,
+    public PermissionException(String key, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
                                Object... args) {
-        super(errorCode, messageConveyor, cause, args);
+        super(key, cause, enableSuppression, writableStackTrace, args);
     }
 
 }

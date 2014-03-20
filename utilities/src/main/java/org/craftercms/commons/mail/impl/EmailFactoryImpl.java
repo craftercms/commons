@@ -19,6 +19,8 @@ package org.craftercms.commons.mail.impl;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.mail.*;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -37,7 +39,12 @@ import java.io.StringWriter;
  */
 public class EmailFactoryImpl implements EmailFactory {
 
+    private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, "crafter.commons.messages.logging");
+
     public static final String DEFAULT_ENCODING = "UTF-8";
+
+    private static final String LOG_KEY_MIME_MSG_CREATED =          "mail.mimeMessageCreated";
+    private static final String LOG_KEY_PROCESSING_EMAIL_TEMPLATE = "mail.processingEmailTemplate";
 
     protected JavaMailSender mailSender;
     protected String defaultFromAddress;
@@ -91,6 +98,10 @@ public class EmailFactoryImpl implements EmailFactory {
         MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage());
 
         try {
+            if (from == null) {
+                from = defaultFromAddress;
+            }
+
             messageHelper.setFrom(from != null? from : defaultFromAddress);
             if (to != null) {
                 messageHelper.setTo(to);
@@ -109,10 +120,15 @@ public class EmailFactoryImpl implements EmailFactory {
             throw new GeneralEmailException(e);
         }
 
+        logger.debug(LOG_KEY_MIME_MSG_CREATED, from, StringUtils.join(to, ','), StringUtils.join(cc, ','),
+                StringUtils.join(bcc, ','), subject, body);
+
         return messageHelper.getMimeMessage();
     }
 
     protected String processTemplate(String templateName, Object templateModel) throws EmailException {
+        logger.debug(LOG_KEY_PROCESSING_EMAIL_TEMPLATE, templateName);
+
         try {
             Template template = freeMarkerConfig.getTemplate(templateName, templateEncoding);
             StringWriter out = new StringWriter();

@@ -18,15 +18,13 @@ package org.craftercms.commons.crypto;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
+import org.craftercms.commons.i10n.I10nLogger;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
+import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
@@ -38,6 +36,20 @@ import java.security.NoSuchAlgorithmException;
  * @author Alfonso Vásquez
  */
 public class SimpleCipher {
+
+    private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, "crafter.commons.messages.logging");
+
+    private static final String LOG_KEY_ENC_SUCCESSFUL =        "crypto.cipher.encryptionSuccessful";
+    private static final String LOG_KEY_DEC_SUCCESSFUL =        "crypto.cipher.decryptionSuccessful";
+    private static final String LOG_KEY_KEY_GEN =               "crypto.cipher.keyGenerated";
+    private static final String LOG_KEY_IV_GEN =                "crypto.cipher.ivGenerated";
+    private static final String LOG_KEY_DEF_CIPHER_CREATED =    "crypto.cipher.defaultCipherCreated";
+
+    private static final String ERROR_KEY_INVALID_TRANSFORMATION =  "crypto.cipher.invalidCipherTransformation";
+    private static final String ERROR_KEY_KEY_NOT_SET =             "crypto.cipher.keyNotSet";
+    private static final String ERROR_KEY_IV_NOT_SET =              "crypto.cipher.ivNotSet";
+    private static final String ERROR_KEY_ENC_ERROR =               "crypto.cipher.encryptionError";
+    private static final String ERROR_KEY_DEC_ERROR =               "crypto.cipher.decryptionError";
 
 	private Key key;
     private byte[] iv;
@@ -87,62 +99,86 @@ public class SimpleCipher {
         this.cipher = cipher;
     }
 
-    public void setCipherTransformation(String transformation) throws NoSuchPaddingException, NoSuchAlgorithmException {
-        cipher = Cipher.getInstance(transformation);
+    public void setCipherTransformation(String transformation) throws CryptoException {
+        try {
+            cipher = Cipher.getInstance(transformation);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new CryptoException(ERROR_KEY_INVALID_TRANSFORMATION, e, transformation);
+        }
     }
 
-    public String encryptBase64(String clear) throws InvalidAlgorithmParameterException, InvalidKeyException,
-            BadPaddingException, IllegalBlockSizeException {
+    public String encryptBase64(String clear) throws CryptoException {
         return Base64.encodeBase64String(encrypt(StringUtils.getBytesUtf8(clear)));
     }
 
-    public byte[] encrypt(byte[] clear) throws InvalidAlgorithmParameterException, InvalidKeyException,
-            BadPaddingException, IllegalBlockSizeException {
+    public byte[] encrypt(byte[] clear) throws CryptoException {
         if (key == null) {
             key = CipherUtils.generateAesKey();
+
+            logger.debug(LOG_KEY_KEY_GEN);
         }
         if (iv == null) {
             iv = CipherUtils.generateAesIv();
+
+            logger.debug(LOG_KEY_IV_GEN);
         }
         if (cipher == null) {
+            String cipherTransformation = CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
+
             try {
-                cipher = Cipher.getInstance(CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
+                cipher = Cipher.getInstance(cipherTransformation);
             } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
                 // Should NEVER happen
-                throw new InternalError(e.getMessage());
+                throw new RuntimeException(e);
             }
+
+            logger.debug(LOG_KEY_DEF_CIPHER_CREATED, cipherTransformation);
         }
 
-        cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
 
-        return cipher.doFinal(clear);
+            return cipher.doFinal(clear);
+        } catch (GeneralSecurityException e){
+            throw new CryptoException(ERROR_KEY_ENC_ERROR, e);
+        } finally {
+            logger.debug(LOG_KEY_ENC_SUCCESSFUL);
+        }
     }
 
-    public String decryptBase64(String encrypted) throws IllegalStateException,
-            InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public String decryptBase64(String encrypted) throws CryptoException {
         return StringUtils.newStringUtf8(decrypt(Base64.decodeBase64(encrypted)));
     }
 
-    public byte[] decrypt(byte[] encrypted) throws IllegalStateException, InvalidAlgorithmParameterException,
-            InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public byte[] decrypt(byte[] encrypted) throws CryptoException {
         if (key == null) {
-            throw new IllegalStateException("No encryption key set");
+            throw new CryptoException(ERROR_KEY_KEY_NOT_SET);
         }
         if (iv == null) {
-            throw new IllegalStateException("No IV set");
+            throw new CryptoException(ERROR_KEY_IV_NOT_SET);
         }
         if (cipher == null) {
+            String cipherTransformation = CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
+
             try {
                 cipher = Cipher.getInstance(CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
             } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
                 // Should NEVER happen
-                throw new InternalError(e.getMessage());
+                throw new RuntimeException(e);
             }
+
+            logger.debug(LOG_KEY_DEF_CIPHER_CREATED, cipherTransformation);
         }
 
-        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+        try {
+            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
 
-        return cipher.doFinal(encrypted);
+            return cipher.doFinal(encrypted);
+        } catch (GeneralSecurityException e) {
+            throw new CryptoException(ERROR_KEY_DEC_ERROR, e);
+        } finally {
+            logger.debug(LOG_KEY_DEC_SUCCESSFUL);
+        }
     }
 
 }

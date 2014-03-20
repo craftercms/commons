@@ -23,8 +23,10 @@ package org.craftercms.commons.security.exception;
  */
 public class SubjectNotFoundException extends PermissionException {
 
+    public static final String KEY = "security.permission.subjectNotFound";
+
     public SubjectNotFoundException() {
-        super(SecurityErrorCode.SUBJECT_NOT_FOUND);
+        super(KEY);
     }
 
 }

@@ -23,8 +23,10 @@ package org.craftercms.commons.mail;
  */
 public class GeneralEmailException extends EmailException {
 
+    private static final String KEY = "mail.generalError";
+
     public GeneralEmailException(Throwable cause) {
-        super(EmailErrorCode.GENERAL_ERROR, cause);
+        super(KEY, cause);
     }
 
 }

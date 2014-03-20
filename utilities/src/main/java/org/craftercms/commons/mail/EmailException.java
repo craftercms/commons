@@ -16,25 +16,23 @@
  */
 package org.craftercms.commons.mail;
 
-import org.craftercms.commons.cal10n.LocalizedException;
+import org.craftercms.commons.i10n.I10nException;
 
 /**
  * Thrown when an email can't be sent for some reason.
  *
  * @author avasquez
  */
-public class EmailException extends LocalizedException {
+public class EmailException extends I10nException {
 
-    public EmailException(Enum<?> errorCode) {
-        super(errorCode);
+    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
+
+    public EmailException(String key, Object... args) {
+        super(key, BUNDLE_NAME, args);
     }
 
-    public EmailException(Enum<?> errorCode, Object... args) {
-        super(errorCode, args);
-    }
-
-    public EmailException(Enum<?> errorCode, Throwable cause, Object... args) {
-        super(errorCode, cause, args);
+    public EmailException(String key, Throwable cause, Object... args) {
+        super(key, BUNDLE_NAME, cause, args);
     }
 
 }
