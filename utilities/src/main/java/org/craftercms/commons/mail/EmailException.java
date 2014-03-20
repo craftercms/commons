@@ -14,28 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mail;
+
+import org.craftercms.commons.i10n.I10nException;
 
 /**
- * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.PermissionException}.
+ * Thrown when an email can't be sent for some reason.
  *
  * @author avasquez
  */
-public class RuntimePermissionException extends RuntimeSecurityException {
+public class EmailException extends I10nException {
 
-    public RuntimePermissionException() {
+    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
+
+    public EmailException(String key, Object... args) {
+        super(key, BUNDLE_NAME, args);
     }
 
-    public RuntimePermissionException(String message) {
-        super(message);
-    }
-
-    public RuntimePermissionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public RuntimePermissionException(Throwable cause) {
-        super(cause);
+    public EmailException(String key, Throwable cause, Object... args) {
+        super(key, BUNDLE_NAME, cause, args);
     }
 
 }

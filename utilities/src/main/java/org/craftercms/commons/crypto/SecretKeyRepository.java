@@ -14,23 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions;
+package org.craftercms.commons.crypto;
+
+import javax.crypto.SecretKey;
 
 /**
- * Represents a permission that allows or denies a subject (a user, an application, etc.) the execution of an action
- * or set of actions on an object.
+ * Repository for storing/retrieving encryption keys.
  *
  * @author avasquez
  */
-public interface Permission {
+public interface SecretKeyRepository {
 
     /**
-     * Returns true if action execution is allowed
+     * Returns the secret key for the specified key name
      *
-     * @param action    the action to execute
+     * @param name      the key's name in the repository
+     * @param create    true to create new key if there's no key with the specified name in the repository.
      *
-     * @return true if action execution is allowed, false otherwise.
+     * @return the key
      */
-    boolean isAllowed(String action);
+    SecretKey getKey(String name, boolean create) throws CryptoException;
+
+    /**
+     * Saves the secret key in the repository, with the specified name
+     *
+     * @param name  the key's name in the repository
+     * @param key   the key to save
+     */
+    void saveKey(String name, SecretKey key) throws CryptoException;
 
 }

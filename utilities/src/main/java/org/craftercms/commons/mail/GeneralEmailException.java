@@ -14,28 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mail;
 
 /**
- * Thrown if the subject condition of a permission is invalid.
+ * Thrown when a general messaging error occurs.
  *
  * @author avasquez
  */
-public class InvalidSubjectConditionException extends PermissionException {
+public class GeneralEmailException extends EmailException {
 
-    public InvalidSubjectConditionException() {
-    }
+    private static final String KEY = "mail.generalError";
 
-    public InvalidSubjectConditionException(String message) {
-        super(message);
-    }
-
-    public InvalidSubjectConditionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public InvalidSubjectConditionException(Throwable cause) {
-        super(cause);
+    public GeneralEmailException(Throwable cause) {
+        super(KEY, cause);
     }
 
 }

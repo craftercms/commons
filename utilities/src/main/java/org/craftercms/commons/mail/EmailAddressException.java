@@ -14,23 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions;
+package org.craftercms.commons.mail;
 
 /**
- * Represents a permission that allows or denies a subject (a user, an application, etc.) the execution of an action
- * or set of actions on an object.
+ * Thrown when an email address in wrong format is encountered.
  *
  * @author avasquez
  */
-public interface Permission {
+public class EmailAddressException extends EmailException {
 
-    /**
-     * Returns true if action execution is allowed
-     *
-     * @param action    the action to execute
-     *
-     * @return true if action execution is allowed, false otherwise.
-     */
-    boolean isAllowed(String action);
+    private static final String KEY = "mail.addressError";
+
+    public EmailAddressException(Throwable cause) {
+        super(KEY, cause);
+    }
 
 }

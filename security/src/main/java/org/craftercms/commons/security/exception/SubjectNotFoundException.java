@@ -17,25 +17,16 @@
 package org.craftercms.commons.security.exception;
 
 /**
- * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.SecurityException}.
+ * Thrown to indicate that the current subject couldn't be found.
  *
  * @author avasquez
  */
-public class RuntimeSecurityException extends RuntimeException {
+public class SubjectNotFoundException extends PermissionException {
 
-    public RuntimeSecurityException() {
-    }
+    public static final String KEY = "security.permission.subjectNotFound";
 
-    public RuntimeSecurityException(String message) {
-        super(message);
-    }
-
-    public RuntimeSecurityException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public RuntimeSecurityException(Throwable cause) {
-        super(cause);
+    public SubjectNotFoundException() {
+        super(KEY);
     }
 
 }

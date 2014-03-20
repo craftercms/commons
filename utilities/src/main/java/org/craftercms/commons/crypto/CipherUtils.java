@@ -17,9 +17,9 @@
 package org.craftercms.commons.crypto;
 
 import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 /**
  * Utility methods for encryption/decryption.
@@ -32,8 +32,6 @@ public class CipherUtils {
     public static final int AES_KEY_BYTE_SIZE =                     16;
     public static final String DEFAULT_AES_CIPHER_TRANSFORMATION =  "AES/CBC/PKCS5Padding";
 
-    public static final SecureRandom secureRandom = new SecureRandom();
-
     private CipherUtils() {
     }
 
@@ -42,12 +40,12 @@ public class CipherUtils {
      *
      * @return the generated key
      */
-    public static Key generateAesKey() {
+    public static SecretKey generateAesKey() {
         try {
             return generateKey(AES_CIPHER_ALGORITHM);
         } catch (NoSuchAlgorithmException e) {
             // Should NEVER happen
-            throw new InternalError(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -58,9 +56,9 @@ public class CipherUtils {
      *
      * @return the generated key
      */
-    public static Key generateKey(String cipherAlgorithm) throws NoSuchAlgorithmException {
+    public static SecretKey generateKey(String cipherAlgorithm) throws NoSuchAlgorithmException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance(cipherAlgorithm);
-        keyGenerator.init(secureRandom);
+        keyGenerator.init(CryptoUtils.secureRandom);
 
         return keyGenerator.generateKey();
     }
@@ -71,22 +69,7 @@ public class CipherUtils {
      * @return the generated IV
      */
     public static byte[] generateAesIv() {
-        return generateIv(AES_KEY_BYTE_SIZE);
-    }
-
-    /**
-     * Generates a random initialization vector for a cipher.
-     *
-     * @param size  the size of the IV
-     *
-     * @return the generated IV
-     */
-    public static byte[] generateIv(int size) {
-        byte[] iv = new byte[size];
-
-        secureRandom.nextBytes(iv);
-
-        return iv;
+        return CryptoUtils.generateRandomBytes(AES_KEY_BYTE_SIZE);
     }
 
 }

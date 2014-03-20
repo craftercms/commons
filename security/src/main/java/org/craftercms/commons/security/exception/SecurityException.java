@@ -16,26 +16,35 @@
  */
 package org.craftercms.commons.security.exception;
 
+import org.craftercms.commons.i10n.I10nRuntimeException;
+
 /**
- * Root exception for all Crafter Commons Security classes.
+ * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.SecurityException}.
  *
  * @author avasquez
  */
-public class SecurityException extends Exception {
+public class SecurityException extends I10nRuntimeException {
+
+    public static final String BUNDLE_NAME = "crafter.security.messages.errors";
 
     public SecurityException() {
     }
 
-    public SecurityException(String message) {
-        super(message);
+    public SecurityException(String key, Object... args) {
+        super(key, BUNDLE_NAME, args);
     }
 
-    public SecurityException(String message, Throwable cause) {
-        super(message, cause);
+    public SecurityException(String key, Throwable cause, Object... args) {
+        super(key, BUNDLE_NAME, cause, args);
     }
 
     public SecurityException(Throwable cause) {
         super(cause);
+    }
+
+    public SecurityException(String key, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
+                             Object... args) {
+        super(key, BUNDLE_NAME, cause, enableSuppression, writableStackTrace, args);
     }
 
 }

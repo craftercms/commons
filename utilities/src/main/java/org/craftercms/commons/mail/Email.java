@@ -14,23 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions;
+package org.craftercms.commons.mail;
 
 /**
- * Represents a permission that allows or denies a subject (a user, an application, etc.) the execution of an action
- * or set of actions on an object.
+ * Represents an email (possibly with from, to, body, etc., depending of the implementation).
  *
  * @author avasquez
  */
-public interface Permission {
+public interface Email {
 
     /**
-     * Returns true if action execution is allowed
-     *
-     * @param action    the action to execute
-     *
-     * @return true if action execution is allowed, false otherwise.
+     * Sends the email.
      */
-    boolean isAllowed(String action);
+    void send() throws EmailException;
 
 }

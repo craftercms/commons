@@ -14,24 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions;
-
-import org.craftercms.commons.security.exception.PermissionException;
+package org.craftercms.commons.mongo;
 
 /**
- * Resolves the parent of a given object.
+ * Mongo exception thrown when a document can't be inserted because there's already a document with the same key.
  *
  * @author avasquez
  */
-public interface ParentResolver<O> {
+public class DuplicateKeyException extends MongoDataException {
 
-    /***
-     * Returns the parent of the given object.
-     *
-     * @param object    the object whose parent should be looked for
-     *
-     * @return  the object's parent, or null if not found.
-     */
-    Object getParent(O object) throws IllegalArgumentException, PermissionException;
+    public DuplicateKeyException() {
+    }
+
+    public DuplicateKeyException(String message) {
+        super(message);
+    }
+
+    public DuplicateKeyException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public DuplicateKeyException(Throwable cause) {
+        super(cause);
+    }
+
+    public DuplicateKeyException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }

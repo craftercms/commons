@@ -21,21 +21,17 @@ package org.craftercms.commons.security.exception;
  *
  * @author avasquez
  */
-public class ActionDeniedException extends RuntimeSecurityException {
+public class ActionDeniedException extends PermissionException {
 
-    public ActionDeniedException() {
+    private static final String GLOBAL_ACTION_DENIED_KEY =  "security.permission.globalActionDenied";
+    private static final String ACTION_DENIED_KEY =         "security.permission.actionDenied";
+
+    public ActionDeniedException(String action) {
+        super(GLOBAL_ACTION_DENIED_KEY, action);
     }
 
-    public ActionDeniedException(String message) {
-        super(message);
-    }
-
-    public ActionDeniedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ActionDeniedException(Throwable cause) {
-        super(cause);
+    public ActionDeniedException(String action, Object securedObject) {
+        super(ACTION_DENIED_KEY, action, securedObject);
     }
 
 }
