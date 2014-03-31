@@ -18,6 +18,8 @@ package org.craftercms.commons.crypto;
 
 import org.craftercms.commons.i10n.I10nException;
 
+import java.util.ResourceBundle;
+
 /**
  * General error thrown when a crypto related error occurs.
  *
@@ -28,11 +30,16 @@ public class CryptoException extends I10nException {
     public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
 
     public CryptoException(String key, Object... args) {
-        super(key, BUNDLE_NAME, args);
+        super(key, args);
     }
 
     public CryptoException(String key, Throwable cause, Object... args) {
-        super(key, BUNDLE_NAME, cause, args);
+        super(key, cause, args);
+    }
+
+    @Override
+    protected ResourceBundle getResourceBundle() {
+        return ResourceBundle.getBundle(BUNDLE_NAME);
     }
 
 }

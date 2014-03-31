@@ -25,26 +25,22 @@ import java.util.ResourceBundle;
  *
  * @author avasquez
  */
-public class I10nException extends Exception {
+public abstract class I10nException extends Exception {
 
-    protected String key;
-    protected ResourceBundle resourceBundle;
     protected Object[] args;
 
     public I10nException() {
     }
 
-    public I10nException(String key, String bundleName, Object... args) {
+    public I10nException(String key, Object... args) {
         super(key);
 
-        this.resourceBundle = ResourceBundle.getBundle(bundleName);
         this.args = args;
     }
 
-    public I10nException(String key, String bundleName, Throwable cause, Object... args) {
+    public I10nException(String key, Throwable cause, Object... args) {
         super(key, cause);
 
-        this.resourceBundle = ResourceBundle.getBundle(bundleName);
         this.args = args;
     }
 
@@ -52,11 +48,10 @@ public class I10nException extends Exception {
         super(cause);
     }
 
-    public I10nException(String key, String bundleName, Throwable cause, boolean enableSuppression,
-                         boolean writableStackTrace, Object... args) {
+    public I10nException(String key, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
+                         Object... args) {
         super(key, cause, enableSuppression, writableStackTrace);
 
-        this.resourceBundle = ResourceBundle.getBundle(bundleName);
         this.args = args;
     }
 
@@ -64,10 +59,12 @@ public class I10nException extends Exception {
     public String getLocalizedMessage() {
         String key = getMessage();
         if (StringUtils.isNotEmpty(key)) {
-            return I10nUtils.getLocalizedMessage(resourceBundle, key, args);
+            return I10nUtils.getLocalizedMessage(getResourceBundle(), key, args);
         } else {
             return null;
         }
     }
+
+    protected abstract ResourceBundle getResourceBundle();
 
 }

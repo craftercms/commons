@@ -25,26 +25,22 @@ import java.util.ResourceBundle;
  *
  * @author avasquez
  */
-public class I10nRuntimeException extends RuntimeException {
+public abstract class I10nRuntimeException extends RuntimeException {
 
-    protected String key;
-    protected ResourceBundle resourceBundle;
     protected Object[] args;
 
     public I10nRuntimeException() {
     }
 
-    public I10nRuntimeException(String key, String bundleName, Object... args) {
+    public I10nRuntimeException(String key, Object... args) {
         super(key);
 
-        this.resourceBundle = ResourceBundle.getBundle(bundleName);
         this.args = args;
     }
 
-    public I10nRuntimeException(String key, String bundleName, Throwable cause, Object... args) {
+    public I10nRuntimeException(String key, Throwable cause, Object... args) {
         super(key, cause);
 
-        this.resourceBundle = ResourceBundle.getBundle(bundleName);
         this.args = args;
     }
 
@@ -52,11 +48,10 @@ public class I10nRuntimeException extends RuntimeException {
         super(cause);
     }
 
-    public I10nRuntimeException(String key, String bundleName, Throwable cause, boolean enableSuppression,
-                                boolean writableStackTrace, Object... args) {
+    public I10nRuntimeException(String key, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
+                                Object... args) {
         super(key, cause, enableSuppression, writableStackTrace);
 
-        this.resourceBundle = ResourceBundle.getBundle(bundleName);
         this.args = args;
     }
 
@@ -64,10 +59,12 @@ public class I10nRuntimeException extends RuntimeException {
     public String getLocalizedMessage() {
         String key = getMessage();
         if (StringUtils.isNotEmpty(key)) {
-            return I10nUtils.getLocalizedMessage(resourceBundle, key, args);
+            return I10nUtils.getLocalizedMessage(getResourceBundle(), key, args);
         } else {
             return null;
         }
     }
+
+    protected abstract ResourceBundle getResourceBundle();
 
 }

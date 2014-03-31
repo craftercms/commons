@@ -34,11 +34,8 @@ public interface PermissionEvaluator<S, O> {
      * @param action                    the action the subject wants to perform (not null)
      *
      * @return true if the subject is allowed to execute the action, false otherwise
-     *
-     * @throws java.lang.IllegalArgumentException if the subject or object is of unexpected type
-     * @throws org.craftercms.commons.security.exception.PermissionException if something else fails
      */
-    boolean isAllowed(O object, String action) throws IllegalArgumentException, PermissionException;
+    boolean isAllowed(O object, String action) throws PermissionException;
 
     /**
      * Checks if the given subject is allowed to perform the specified action to the given object
@@ -49,10 +46,7 @@ public interface PermissionEvaluator<S, O> {
      * @param action                    the action the subject wants to perform (not null)
      *
      * @return true if the subject is allowed to execute the action, false otherwise
-     *
-     * @throws java.lang.IllegalArgumentException if the subject or object is of unexpected type
-     * @throws org.craftercms.commons.security.exception.PermissionException if something else fails
      */
-    boolean isAllowed(S subject, O object, String action) throws IllegalArgumentException, PermissionException;
+    boolean isAllowed(S subject, O object, String action) throws PermissionException;
 
 }

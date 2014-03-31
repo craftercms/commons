@@ -18,6 +18,8 @@ package org.craftercms.commons.security.exception;
 
 import org.craftercms.commons.i10n.I10nRuntimeException;
 
+import java.util.ResourceBundle;
+
 /**
  * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.SecurityException}.
  *
@@ -31,11 +33,11 @@ public class SecurityException extends I10nRuntimeException {
     }
 
     public SecurityException(String key, Object... args) {
-        super(key, BUNDLE_NAME, args);
+        super(key, args);
     }
 
     public SecurityException(String key, Throwable cause, Object... args) {
-        super(key, BUNDLE_NAME, cause, args);
+        super(key, cause, args);
     }
 
     public SecurityException(Throwable cause) {
@@ -44,7 +46,12 @@ public class SecurityException extends I10nRuntimeException {
 
     public SecurityException(String key, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
                              Object... args) {
-        super(key, BUNDLE_NAME, cause, enableSuppression, writableStackTrace, args);
+        super(key, cause, enableSuppression, writableStackTrace, args);
+    }
+
+    @Override
+    protected ResourceBundle getResourceBundle() {
+        return ResourceBundle.getBundle(BUNDLE_NAME);
     }
 
 }
