@@ -34,8 +34,8 @@ public class RequestContextBindingFilter implements Filter {
     private static final I10nLogger logger = new I10nLogger(RequestContextBindingFilter.class,
             "crafter.commons.messages.logging");
 
-    private static final String LOG_KEY_BINGING_CONTEXT = "http.requestContext.bindingContext";
-    private static final String LOG_KEY_UNBINDING_CONTEXT = "http.requestContext.unbindingContext";
+    public static final String LOG_KEY_BINGING_CONTEXT = "http.requestContext.bindingContext";
+    public static final String LOG_KEY_UNBINDING_CONTEXT = "http.requestContext.unbindingContext";
 
     @Override
     public void init(FilterConfig filterConfig) {

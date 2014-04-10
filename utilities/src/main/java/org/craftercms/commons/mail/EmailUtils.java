@@ -16,17 +16,23 @@
  */
 package org.craftercms.commons.mail;
 
+import java.util.regex.Pattern;
+
 /**
- * Thrown when a general messaging error occurs.
+ * Utility methods for email related stuff.
  *
  * @author avasquez
  */
-public class GeneralEmailException extends EmailException {
+public class EmailUtils {
 
-    private static final String KEY = "mail.generalError";
+    public static final Pattern EMAIL_PATTERN = Pattern.compile("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@" +
+            "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
-    public GeneralEmailException(Throwable cause) {
-        super(KEY, cause);
+    private EmailUtils() {
+    }
+
+    public static final boolean validateEmail(String email) {
+        return EMAIL_PATTERN.matcher(email).matches();
     }
 
 }

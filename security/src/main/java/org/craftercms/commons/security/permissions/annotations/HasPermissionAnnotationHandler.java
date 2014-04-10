@@ -77,7 +77,7 @@ public class HasPermissionAnnotationHandler {
 
         try {
             allowed = permissionEvaluator.isAllowed(securedObject, action);
-        } catch (IllegalArgumentException | PermissionException e) {
+        } catch (PermissionException e) {
             throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
         }
 

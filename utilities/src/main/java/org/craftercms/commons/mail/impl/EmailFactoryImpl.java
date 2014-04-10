@@ -43,11 +43,10 @@ public class EmailFactoryImpl implements EmailFactory {
 
     public static final String DEFAULT_ENCODING = "UTF-8";
 
-    private static final String LOG_KEY_MIME_MSG_CREATED =          "mail.mimeMessageCreated";
-    private static final String LOG_KEY_PROCESSING_EMAIL_TEMPLATE = "mail.processingEmailTemplate";
+    public static final String LOG_KEY_MIME_MSG_CREATED =          "mail.mimeMessageCreated";
+    public static final String LOG_KEY_PROCESSING_EMAIL_TEMPLATE = "mail.processingEmailTemplate";
 
     protected JavaMailSender mailSender;
-    protected String defaultFromAddress;
     protected Configuration freeMarkerConfig;
     protected String templateEncoding;
 
@@ -58,11 +57,6 @@ public class EmailFactoryImpl implements EmailFactory {
     @Required
     public void setMailSender(JavaMailSender mailSender) {
         this.mailSender = mailSender;
-    }
-
-    @Required
-    public void setDefaultFromAddress(String defaultFromAddress) {
-        this.defaultFromAddress = defaultFromAddress;
     }
 
     @Required
@@ -98,11 +92,7 @@ public class EmailFactoryImpl implements EmailFactory {
         MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage());
 
         try {
-            if (from == null) {
-                from = defaultFromAddress;
-            }
-
-            messageHelper.setFrom(from != null? from : defaultFromAddress);
+            messageHelper.setFrom(from);
             if (to != null) {
                 messageHelper.setTo(to);
             }
@@ -117,7 +107,7 @@ public class EmailFactoryImpl implements EmailFactory {
         } catch (AddressException e) {
             throw new EmailAddressException(e);
         } catch (MessagingException e) {
-            throw new GeneralEmailException(e);
+            throw new EmailPreparationException(e);
         }
 
         logger.debug(LOG_KEY_MIME_MSG_CREATED, from, StringUtils.join(to, ','), StringUtils.join(cc, ','),
@@ -137,7 +127,7 @@ public class EmailFactoryImpl implements EmailFactory {
 
             return out.toString();
         } catch (IOException | TemplateException e) {
-            throw new GeneralEmailException(e);
+            throw new EmailPreparationException(e);
         }
     }
 
