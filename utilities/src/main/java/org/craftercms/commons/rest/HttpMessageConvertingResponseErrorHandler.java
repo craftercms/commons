@@ -16,10 +16,13 @@
  */
 package org.craftercms.commons.rest;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.HttpMessageConverterExtractor;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
@@ -27,15 +30,15 @@ import java.util.List;
 
 /**
  * {@link org.springframework.web.client.ResponseErrorHandler} that converts the body of a response with error status
- * code using {@link org.springframework.http.converter.HttpMessageConverter}s. Subclasses should implement
- * {@link #handleErrorInternal(Object, org.springframework.http.client.ClientHttpResponse)} to handle the extracted
- * error object.
+ * code using {@link org.springframework.http.converter.HttpMessageConverter}s, and then throws a
+ * {@link RestServiceException} with the deserialized response body as the {@code errorDetails}.
  *
  * @author avasquez
  */
-public abstract class HttpMessageConvertingResponseErrorHandler<T> extends DefaultResponseErrorHandler {
+public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorHandler {
 
     protected List<HttpMessageConverter<?>> messageConverters;
+    protected Class<?> responseType;
 
     public List<HttpMessageConverter<?>> getMessageConverters() {
         return messageConverters;
@@ -45,23 +48,45 @@ public abstract class HttpMessageConvertingResponseErrorHandler<T> extends Defau
         this.messageConverters = messageConverters;
     }
 
-    @Override
-    public void handleError(ClientHttpResponse response) throws IOException {
-        HttpMessageConverterExtractor<? extends T> responseExtractor =
-                new HttpMessageConverterExtractor<>(getErrorResponseType(), messageConverters);
-
-        try {
-            T errorObject = responseExtractor.extractData(response);
-
-            handleErrorInternal(errorObject, response);
-        } catch (RestClientException e) {
-            // No message converter to extract the response, so throw it as the default response handler would.
-            super.handleError(response);
-        }
+    public Class<?> getResponseType() {
+        return responseType;
     }
 
-    protected abstract Class<? extends T> getErrorResponseType();
+    @Required
+    public void setResponseType(Class<?> responseType) {
+        this.responseType = responseType;
+    }
 
-    protected abstract void handleErrorInternal(T errorObject, ClientHttpResponse response) throws IOException;
+    @Override
+    public boolean hasError(ClientHttpResponse response) throws IOException {
+        return hasError(response.getStatusCode());
+    }
+
+    @Override
+    public void handleError(ClientHttpResponse response) throws IOException {
+        HttpStatus status = response.getStatusCode();
+        HttpMessageConverterExtractor<?> responseExtractor =
+                new HttpMessageConverterExtractor<>(responseType, messageConverters);
+
+        Object errorDetails;
+        try {
+            errorDetails = responseExtractor.extractData(response);
+        } catch (RestClientException e) {
+            // No message converter to extract the response, so make the error details
+            // the response body as string
+            throw new RestServiceException(status, getResponseBodyAsString(response));
+        }
+
+        throw new RestServiceException(status, errorDetails);
+    }
+
+    protected boolean hasError(HttpStatus statusCode) {
+        return (statusCode.series() == HttpStatus.Series.CLIENT_ERROR ||
+                statusCode.series() == HttpStatus.Series.SERVER_ERROR);
+    }
+
+    protected String getResponseBodyAsString(ClientHttpResponse response) throws IOException {
+        return IOUtils.toString(response.getBody(), response.getHeaders().getContentType().getCharSet());
+    }
 
 }

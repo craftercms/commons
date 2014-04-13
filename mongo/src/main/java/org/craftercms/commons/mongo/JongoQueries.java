@@ -17,14 +17,14 @@
 
 package org.craftercms.commons.mongo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
 
 /**
  * Holds a Map of all the register MongoQueries.
@@ -59,10 +59,10 @@ public class JongoQueries {
                 try (InputStream in = queryFile.getInputStream()) {
                     properties.loadFromXML(in);
                 } catch (IOException ex) {
-                    log.debug("Unable to load " + queryFile.getFilename(), ex);
+                    log.debug("Unable to load queries from " + queryFile.getDescription(), ex);
                 }
             } else {
-                log.info("Query File {} not found ", queryFile.getFilename());
+                log.info("Query file at {} not found. Ignoring it...", queryFile.getDescription());
             }
         }
     }

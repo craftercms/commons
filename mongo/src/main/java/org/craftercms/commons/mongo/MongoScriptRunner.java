@@ -97,15 +97,17 @@ public class MongoScriptRunner {
         try {
             script = IOUtils.toString(scriptPath.getInputStream(), "UTF-8");
         } catch (IOException e) {
-            throw new MongoDataException("Unable to read script " + scriptPath);
+            throw new MongoDataException("Unable to read script at " + scriptPath.getDescription());
         }
 
-        CommandResult result = db.doEval("function() { " + script + " }");
+        CommandResult result = db.doEval(script);
         if (!result.ok()) {
-            throw new MongoDataException("An error occurred while running script " + scriptPath, result.getException());
+            Exception ex = result.getException();
+
+            throw new MongoDataException("An error occurred while running script at " + scriptPath.getDescription(), ex);
         }
 
-        logger.info("Mongo script {} executed successfully", scriptPath);
+        logger.info("Mongo script at {} executed successfully", scriptPath.getDescription());
     }
 
     private DB getDB() throws MongoDataException {
