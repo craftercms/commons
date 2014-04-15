@@ -64,7 +64,7 @@ public class RestTemplate extends org.springframework.web.client.RestTemplate {
             if (errorHandler.getMessageConverters() == null) {
                 errorHandler.setMessageConverters(getMessageConverters());
             }
-            if (errorHandler.getResponseType() == null) {
+            if (errorHandler.getResponseType() == null && errorResponseType != null) {
                 errorHandler.setResponseType(errorResponseType);
             }
         }
