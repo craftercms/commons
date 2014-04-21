@@ -21,8 +21,25 @@ package org.craftercms.commons.mongo;
  * @author Carlos Ortiz.
  */
 public interface CrudRepository<T> {
+
     /**
-     * Saves the Document into the collection.
+     * Inserts the document into the collection.
+     *
+     * @param document document to be inserted (aka Pojo).
+     * @throws org.craftercms.commons.mongo.MongoDataException if the document can't be inserted.
+     */
+    void insert(T document) throws MongoDataException;
+
+    /**
+     * Inserts multiple documents into the collection.
+     *
+     * @param documents documents to be inserted (aka Pojo).
+     * @throws org.craftercms.commons.mongo.MongoDataException if the documents can't be inserted.
+     */
+    void insert(T... documents) throws MongoDataException;
+
+    /**
+     * Saves the document into the collection.
      *
      * @param document Document to be save (aka Pojo).
      * @throws org.craftercms.commons.mongo.MongoDataException if Document can't be save.

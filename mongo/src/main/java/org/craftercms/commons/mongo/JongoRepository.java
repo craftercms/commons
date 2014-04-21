@@ -85,6 +85,38 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
+    public void insert(T document) throws MongoDataException {
+        try {
+            WriteResult result = getCollection().insert(document);
+            checkCommandResult(result);
+        } catch (MongoException.DuplicateKey ex) {
+            String msg = "Duplicate key for document " + document;
+            log.error(msg, ex);
+            throw new DuplicateKeyException(msg, ex);
+        } catch (MongoException ex) {
+            String msg = "Unable to insert document " + document;
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
+        }
+    }
+
+    @Override
+    public void insert(T... documents) throws MongoDataException {
+        try {
+            WriteResult result = getCollection().insert(documents);
+            checkCommandResult(result);
+        } catch (MongoException.DuplicateKey ex) {
+            String msg = "Duplicate key for documents " + Arrays.toString(documents);
+            log.error(msg, ex);
+            throw new DuplicateKeyException(msg, ex);
+        } catch (MongoException ex) {
+            String msg = "Unable to insert documents " + Arrays.toString(documents);
+            log.error(msg, ex);
+            throw new MongoDataException(msg, ex);
+        }
+    }
+
+    @Override
     public void save(final T document) throws MongoDataException {
         try {
             WriteResult result = getCollection().save(document);

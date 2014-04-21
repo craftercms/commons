@@ -63,6 +63,7 @@ public class IterableUtils {
         if (iterable != null) {
             Iterator<T> iter = iterable.iterator();
             while (iter.hasNext()) {
+                iter.next();
                 count++;
             }
         }
