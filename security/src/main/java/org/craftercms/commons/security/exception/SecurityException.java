@@ -44,11 +44,6 @@ public class SecurityException extends I10nRuntimeException {
         super(cause);
     }
 
-    public SecurityException(String key, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
-                             Object... args) {
-        super(key, cause, enableSuppression, writableStackTrace, args);
-    }
-
     @Override
     protected ResourceBundle getResourceBundle() {
         return ResourceBundle.getBundle(BUNDLE_NAME);

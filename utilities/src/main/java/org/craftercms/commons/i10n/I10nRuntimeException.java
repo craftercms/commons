@@ -27,20 +27,21 @@ import java.util.ResourceBundle;
  */
 public abstract class I10nRuntimeException extends RuntimeException {
 
+    protected String key;
     protected Object[] args;
 
     public I10nRuntimeException() {
     }
 
     public I10nRuntimeException(String key, Object... args) {
-        super(key);
-
+        this.key = key;
         this.args = args;
     }
 
     public I10nRuntimeException(String key, Throwable cause, Object... args) {
-        super(key, cause);
+        super(cause);
 
+        this.key = key;
         this.args = args;
     }
 
@@ -48,16 +49,8 @@ public abstract class I10nRuntimeException extends RuntimeException {
         super(cause);
     }
 
-    public I10nRuntimeException(String key, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
-                                Object... args) {
-        super(key, cause, enableSuppression, writableStackTrace);
-
-        this.args = args;
-    }
-
     @Override
-    public String getLocalizedMessage() {
-        String key = getMessage();
+    public String getMessage() {
         if (StringUtils.isNotEmpty(key)) {
             return I10nUtils.getLocalizedMessage(getResourceBundle(), key, args);
         } else {

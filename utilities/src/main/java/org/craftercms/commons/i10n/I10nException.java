@@ -51,7 +51,6 @@ public abstract class I10nException extends Exception {
 
     @Override
     public String getMessage() {
-        String key = getMessage();
         if (StringUtils.isNotEmpty(key)) {
             return I10nUtils.getLocalizedMessage(getResourceBundle(), key, args);
         } else {

@@ -392,7 +392,7 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             log.error("Query for key {} can't be blank or be only whitespace", key);
             throw new IllegalArgumentException("Query for key " + key + " can't be blank or be only whitespace");
         }
-        return query;
+        return query.trim().replaceAll("\\s+", " ");
     }
 
     /**
