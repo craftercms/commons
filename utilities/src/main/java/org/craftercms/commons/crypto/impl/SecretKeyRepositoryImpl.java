@@ -37,17 +37,17 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
     private static final I10nLogger logger = new I10nLogger(SecretKeyRepositoryImpl.class,
         "crafter.commons.messages.logging");
 
-    private static final String LOG_KEY_KEY_FOUND =         "crypto.keyRepo.keyFound";
-    private static final String LOG_KEY_KEY_NOT_FOUND =     "crypto.keyRepo.keyNotFound";
-    private static final String LOG_KEY_KEY_CREATED =       "crypto.keyRepo.keyCreated";
-    private static final String LOG_KEY_KEY_SAVED =         "crypto.keyRepo.keySaved";
-    private static final String LOG_KEY_KEY_STORE_LOADED =  "crypto.keyRepo.keyStoreLoaded";
-    private static final String LOG_KEY_KEY_STORE_STORED =  "crypto.keyRepo.keyStoreStored";
+    public static final String LOG_KEY_KEY_FOUND =         "crypto.keyRepo.keyFound";
+    public static final String LOG_KEY_KEY_NOT_FOUND =     "crypto.keyRepo.keyNotFound";
+    public static final String LOG_KEY_KEY_CREATED =       "crypto.keyRepo.keyCreated";
+    public static final String LOG_KEY_KEY_SAVED =         "crypto.keyRepo.keySaved";
+    public static final String LOG_KEY_KEY_STORE_LOADED =  "crypto.keyRepo.keyStoreLoaded";
+    public static final String LOG_KEY_KEY_STORE_STORED =  "crypto.keyRepo.keyStoreStored";
 
-    private static final String ERROR_KEY_KEY_STORE_LOAD_ERROR =    "crypto.keyRepo.keyStoreLoadError";
-    private static final String ERROR_KEY_KEY_STORE_STORE_ERROR =   "crypto.keyRepo.keyStoreStoreError";
-    private static final String ERROR_KEY_GET_KEY_ERROR =           "crypto.keyRepo.getKeyError";
-    private static final String ERROR_KEY_SAVE_KEY_ERROR =          "crypto.keyRepo.saveKeyError";
+    public static final String ERROR_KEY_KEY_STORE_LOAD_ERROR =    "crypto.keyRepo.keyStoreLoadError";
+    public static final String ERROR_KEY_KEY_STORE_STORE_ERROR =   "crypto.keyRepo.keyStoreStoreError";
+    public static final String ERROR_KEY_GET_KEY_ERROR =           "crypto.keyRepo.getKeyError";
+    public static final String ERROR_KEY_SAVE_KEY_ERROR =          "crypto.keyRepo.saveKeyError";
 
     protected File keyStoreFile;
     protected char[] keyStorePassword;

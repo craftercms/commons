@@ -1,7 +1,7 @@
 package org.craftercms.commons.mongo;
 
 import com.mongodb.DB;
-import com.mongodb.MongoClient;
+import com.mongodb.Mongo;
 import org.apache.commons.lang3.StringUtils;
 import org.jongo.Jongo;
 import org.springframework.beans.factory.annotation.Required;
@@ -18,7 +18,7 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
     private String dbName;
     private String username;
     private String password;
-    private MongoClient mongoClient;
+    private Mongo mongo;
 
     @Required
     public void setDbName(String dbName) {
@@ -26,8 +26,8 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
     }
 
     @Required
-    public void setMongoClient(MongoClient mongoClient) {
-        this.mongoClient = mongoClient;
+    public void setMongo(Mongo mongoClient) {
+        this.mongo = mongoClient;
     }
 
     public void setPassword(final String password) {
@@ -45,7 +45,7 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
 
     @Override
     protected Jongo createInstance() throws Exception {
-        DB db = mongoClient.getDB(dbName);
+        DB db = mongo.getDB(dbName);
         if (!StringUtils.isBlank(password)) {
             if (!db.authenticate(username, password.toCharArray())) {
                 throw new MongoDataException("Unable to authenticate with given user/pwd");

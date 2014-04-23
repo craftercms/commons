@@ -21,8 +21,25 @@ package org.craftercms.commons.mongo;
  * @author Carlos Ortiz.
  */
 public interface CrudRepository<T> {
+
     /**
-     * Saves the Document into the collection.
+     * Inserts the document into the collection.
+     *
+     * @param document document to be inserted (aka Pojo).
+     * @throws org.craftercms.commons.mongo.MongoDataException if the document can't be inserted.
+     */
+    void insert(T document) throws MongoDataException;
+
+    /**
+     * Inserts multiple documents into the collection.
+     *
+     * @param documents documents to be inserted (aka Pojo).
+     * @throws org.craftercms.commons.mongo.MongoDataException if the documents can't be inserted.
+     */
+    void insert(T... documents) throws MongoDataException;
+
+    /**
+     * Saves the document into the collection.
      *
      * @param document Document to be save (aka Pojo).
      * @throws org.craftercms.commons.mongo.MongoDataException if Document can't be save.
@@ -57,8 +74,8 @@ public interface CrudRepository<T> {
      * @param updateObject Object to be use to updated.
      * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
      */
-    public void update(final String id, final T updateObject, final boolean multi,
-                       final boolean upsert) throws MongoDataException;
+    void update(final String id, final T updateObject, final boolean multi, final boolean upsert)
+            throws MongoDataException;
 
     /**
      * Updates the given
@@ -70,8 +87,8 @@ public interface CrudRepository<T> {
      * @param upsert   If set to true, creates a new document when no document matches the query criteria.
      * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
      */
-    public void update(final String id, final String modifier, final boolean multi,
-                       final boolean upsert) throws MongoDataException;
+    void update(final String id, final String modifier, final boolean multi, final boolean upsert)
+            throws MongoDataException;
 
     /**
      * Updates the given
@@ -84,8 +101,8 @@ public interface CrudRepository<T> {
      * @param params   Params of the modifier query.
      * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
      */
-    public void update(final String id, final String modifier, final boolean multi, final boolean upsert,
-                       final Object... params) throws MongoDataException;
+    void update(final String id, final String modifier, final boolean multi, final boolean upsert,
+                final Object... params) throws MongoDataException;
 
     /**
      * Returns the number of all documents in the collection.
@@ -93,7 +110,7 @@ public interface CrudRepository<T> {
      * @return the count of all documents
      * @throws MongoDataException if an error occurs
      */
-    public long count() throws MongoDataException;
+    long count() throws MongoDataException;
 
     /**
      * Returns the number of documents that match the query
@@ -102,7 +119,7 @@ public interface CrudRepository<T> {
      * @return the count of documents that match the query
      * @throws MongoDataException if an error occurs
      */
-    public long count(String query) throws MongoDataException;
+    long count(String query) throws MongoDataException;
 
     /**
      * Returns the number of documents that match the query
@@ -112,7 +129,7 @@ public interface CrudRepository<T> {
      * @return the count of documents that match the query
      * @throws MongoDataException if an error occurs
      */
-    public long count(String query, Object... queryParams) throws MongoDataException;
+    long count(String query, Object... queryParams) throws MongoDataException;
 
     /**
      * Gets all documents of a the given collection. Tries to convert them in to Instances of the given class.

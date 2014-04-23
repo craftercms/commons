@@ -24,6 +24,7 @@ import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
+import org.springframework.core.annotation.Order;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -36,6 +37,7 @@ import java.util.Map;
  * @author avasquez
  */
 @Aspect
+@Order(-1)
 public class HasPermissionAnnotationHandler {
 
     private static final I10nLogger logger = new I10nLogger(HasPermissionAnnotationHandler.class,
@@ -75,7 +77,7 @@ public class HasPermissionAnnotationHandler {
 
         try {
             allowed = permissionEvaluator.isAllowed(securedObject, action);
-        } catch (IllegalArgumentException | PermissionException e) {
+        } catch (PermissionException e) {
             throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
         }
 

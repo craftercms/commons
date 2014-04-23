@@ -17,7 +17,6 @@
 package org.craftercms.commons.crypto;
 
 import org.apache.commons.codec.binary.Base64;
-import org.craftercms.commons.crypto.SimpleDigest;
 import org.junit.Test;
 
 import java.security.MessageDigest;
@@ -42,7 +41,7 @@ public class SimpleDigestTest {
 
         actualDigest.update(Base64.decodeBase64(salt));
 
-        byte[] hashedBytes = CLEAR_TEXT.getBytes("UTF-8");
+        byte[] hashedBytes = actualDigest.digest(CLEAR_TEXT.getBytes("UTF-8"));
 
         for (int i = 0; i < SimpleDigest.DEFAULT_ITERATIONS; i++) {
             actualDigest.reset();

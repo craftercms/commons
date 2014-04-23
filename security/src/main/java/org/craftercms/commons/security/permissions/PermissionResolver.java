@@ -31,11 +31,8 @@ public interface PermissionResolver<S, O> {
      * @param subject   the subject
      *
      * @return the global permission, or null if no permission found
-     *
-     * @throws java.lang.IllegalArgumentException if the subject is of unexpected type
-     * @throws org.craftercms.commons.security.exception.PermissionException if something else fails
      */
-    Permission getGlobalPermission(S subject) throws IllegalArgumentException, PermissionException;
+    Permission getGlobalPermission(S subject) throws PermissionException;
 
     /**
      * Returns the permission associated to the given subject and object.
@@ -44,10 +41,7 @@ public interface PermissionResolver<S, O> {
      * @param object    the secured object or ID of the secured object (not null).
      *
      * @return the object/subject permission, or null if no permission found
-     *
-     * @throws java.lang.IllegalArgumentException if the subject or object is of unexpected type
-     * @throws org.craftercms.commons.security.exception.PermissionException if something else fails
      */
-    Permission getPermission(S subject, O object) throws IllegalArgumentException, PermissionException;
+    Permission getPermission(S subject, O object) throws PermissionException;
 
 }

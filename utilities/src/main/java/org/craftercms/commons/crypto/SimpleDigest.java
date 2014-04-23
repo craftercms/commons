@@ -34,11 +34,11 @@ public class SimpleDigest {
 
     private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, "crafter.commons.messages.logging");
 
-    private static final String LOG_KEY_DEF_DIGEST_CREATED =    "crypto.digest.defaultDigestCreated";
-    private static final String LOG_KEY_SALT_GEN =              "crypto.digest.saltGenerated";
-    private static final String LOG_KEY_DIGEST_GEN =            "crypto.digest.digestGenerated";
+    public static final String LOG_KEY_DEF_DIGEST_CREATED =    "crypto.digest.defaultDigestCreated";
+    public static final String LOG_KEY_SALT_GEN =              "crypto.digest.saltGenerated";
+    public static final String LOG_KEY_DIGEST_GEN =            "crypto.digest.digestGenerated";
 
-    private static final String ERROR_KEY_INVALID_ALG = "crypto.digest.invalidDigestAlgorithm";
+    public static final String ERROR_KEY_INVALID_ALG = "crypto.digest.invalidDigestAlgorithm";
 
     public static final String DEFAULT_ALGORITHM =  "SHA-256";
     public static final int DEFAULT_ITERATIONS =    1000;
@@ -120,7 +120,7 @@ public class SimpleDigest {
 
         digest.update(salt);
 
-        byte[] hash = clear;
+        byte[] hash = digest.digest(clear);
 
         for (int i = 0; i < iterations; i++) {
             digest.reset();

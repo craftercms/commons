@@ -39,17 +39,17 @@ public class SimpleCipher {
 
     private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, "crafter.commons.messages.logging");
 
-    private static final String LOG_KEY_ENC_SUCCESSFUL =        "crypto.cipher.encryptionSuccessful";
-    private static final String LOG_KEY_DEC_SUCCESSFUL =        "crypto.cipher.decryptionSuccessful";
-    private static final String LOG_KEY_KEY_GEN =               "crypto.cipher.keyGenerated";
-    private static final String LOG_KEY_IV_GEN =                "crypto.cipher.ivGenerated";
-    private static final String LOG_KEY_DEF_CIPHER_CREATED =    "crypto.cipher.defaultCipherCreated";
+    public static final String LOG_KEY_ENC_SUCCESSFUL =        "crypto.cipher.encryptionSuccessful";
+    public static final String LOG_KEY_DEC_SUCCESSFUL =        "crypto.cipher.decryptionSuccessful";
+    public static final String LOG_KEY_KEY_GEN =               "crypto.cipher.keyGenerated";
+    public static final String LOG_KEY_IV_GEN =                "crypto.cipher.ivGenerated";
+    public static final String LOG_KEY_DEF_CIPHER_CREATED =    "crypto.cipher.defaultCipherCreated";
 
-    private static final String ERROR_KEY_INVALID_TRANSFORMATION =  "crypto.cipher.invalidCipherTransformation";
-    private static final String ERROR_KEY_KEY_NOT_SET =             "crypto.cipher.keyNotSet";
-    private static final String ERROR_KEY_IV_NOT_SET =              "crypto.cipher.ivNotSet";
-    private static final String ERROR_KEY_ENC_ERROR =               "crypto.cipher.encryptionError";
-    private static final String ERROR_KEY_DEC_ERROR =               "crypto.cipher.decryptionError";
+    public static final String ERROR_KEY_INVALID_TRANSFORMATION =  "crypto.cipher.invalidCipherTransformation";
+    public static final String ERROR_KEY_KEY_NOT_SET =             "crypto.cipher.keyNotSet";
+    public static final String ERROR_KEY_IV_NOT_SET =              "crypto.cipher.ivNotSet";
+    public static final String ERROR_KEY_ENC_ERROR =               "crypto.cipher.encryptionError";
+    public static final String ERROR_KEY_DEC_ERROR =               "crypto.cipher.decryptionError";
 
 	private Key key;
     private byte[] iv;

@@ -14,32 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.crypto;
+package org.craftercms.commons.jackson;
 
-import org.craftercms.commons.i10n.I10nException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import org.bson.types.ObjectId;
 
-import java.util.ResourceBundle;
+import java.io.IOException;
 
 /**
- * General error thrown when a crypto related error occurs.
- *
- * @author avasquez
+ * Custom Jackson deserializer for {@link org.bson.types.ObjectId}s, which deserializes a String as an ObjectId by
+ * creating the ObjectId through {@link org.bson.types.ObjectId#ObjectId(String)}.
  */
-public class CryptoException extends I10nException {
-
-    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
-
-    public CryptoException(String key, Object... args) {
-        super(key, args);
-    }
-
-    public CryptoException(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
-    }
+public class ObjectIdDeserializer extends JsonDeserializer<ObjectId> {
 
     @Override
-    protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(BUNDLE_NAME);
+    public ObjectId deserialize(final JsonParser jsonParser, final DeserializationContext context) throws IOException {
+        return new ObjectId(jsonParser.getText());
     }
 
 }

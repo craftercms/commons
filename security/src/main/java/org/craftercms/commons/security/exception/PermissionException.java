@@ -16,8 +16,6 @@
  */
 package org.craftercms.commons.security.exception;
 
-import ch.qos.cal10n.IMessageConveyor;
-
 /**
  * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.PermissionException}.
  *
@@ -38,11 +36,6 @@ public class PermissionException extends SecurityException {
 
     public PermissionException(Throwable cause) {
         super(cause);
-    }
-
-    public PermissionException(String key, Throwable cause, boolean enableSuppression, boolean writableStackTrace,
-                               Object... args) {
-        super(key, cause, enableSuppression, writableStackTrace, args);
     }
 
 }

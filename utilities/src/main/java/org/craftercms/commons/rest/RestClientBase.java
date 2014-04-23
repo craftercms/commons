@@ -14,38 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions;
+package org.craftercms.commons.rest;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.web.client.RestTemplate;
 
 /**
- * Base for secured object that provide already attached permissions.
+ * Base class for all Crafter REST clients.
  *
  * @author avasquez
  */
-public class SecuredObjectBase<P extends Permission> {
+public abstract class RestClientBase {
 
-    protected List<P> permissions;
+    protected String baseUrl;
+    protected String extension;
+    protected RestTemplate restTemplate;
 
-    public List<P> getPermissions() {
-        if (permissions == null) {
-            permissions = new ArrayList<>();
-        }
-
-        return permissions;
+    @Required
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
-    public void setPermissions(List<P> permissions) {
-        this.permissions = permissions;
+    public void setExtension(String extension) {
+        this.extension = extension;
     }
 
-    public void addPermission(P permission) {
-        getPermissions().add(permission);
+    @Required
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
-    public void removePermission(P permission) {
-        getPermissions().remove(permission);
+    protected String getAbsoluteUrl(String relativeUrl) {
+        return baseUrl + relativeUrl + (extension != null ? extension : "");
     }
 
 }

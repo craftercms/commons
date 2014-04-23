@@ -14,32 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.crypto;
-
-import org.craftercms.commons.i10n.I10nException;
-
-import java.util.ResourceBundle;
+package org.craftercms.commons.mail;
 
 /**
- * General error thrown when a crypto related error occurs.
+ * Thrown when an email message couldn't be prepared properly.
  *
  * @author avasquez
  */
-public class CryptoException extends I10nException {
+public class EmailPreparationException extends EmailException {
 
-    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
+    public static final String KEY = "mail.preparationError";
 
-    public CryptoException(String key, Object... args) {
-        super(key, args);
-    }
-
-    public CryptoException(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
-    }
-
-    @Override
-    protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(BUNDLE_NAME);
+    public EmailPreparationException(Throwable cause) {
+        super(KEY, cause);
     }
 
 }

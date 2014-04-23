@@ -26,7 +26,7 @@ public interface EmailFactory {
     /**
      * Creates a new {@link org.craftercms.commons.mail.Email}.
      *
-     * @param from      the sender's address (optional, if null will use a default sender's address)
+     * @param from      the sender's address
      * @param to        the recipients' addresses (optional)
      * @param cc        the CC recipients' addresses (optional)
      * @param bcc       the BCC recipients' addresses (optional)
@@ -42,7 +42,7 @@ public interface EmailFactory {
     /**
      * Creates a new {@link org.craftercms.commons.mail.Email}.
      *
-     * @param from          the sender's address (optional, if null will use a default sender's address)
+     * @param from          the sender's address
      * @param to            the recipients' addresses (optional)
      * @param cc            the CC recipients' addresses (optional)
      * @param bcc           the BCC recipients' addresses (optional)
