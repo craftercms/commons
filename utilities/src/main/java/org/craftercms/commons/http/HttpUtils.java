@@ -16,7 +16,11 @@
  */
 package org.craftercms.commons.http;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Utility methods for HTTP related stuff.
@@ -53,6 +57,58 @@ public class HttpUtils {
         }
 
         return url;
+    }
+
+    /**
+     * Returns the cookie with the given name for the given request
+     *
+     * @param name      the name of the cookie
+     * @param request   the request where to extract the request from
+     *
+     * @return the cookie object, or null if not found
+     */
+    public static Cookie getCookie(String name, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (ArrayUtils.isNotEmpty(cookies)) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(name)) {
+                    return cookie;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the cookie value with the given name for the given request
+     *
+     * @param name      the name of the cookie
+     * @param request   the request where to extract the request from
+     *
+     * @return the cookie value, or null if no cookie found
+     */
+    public static String getCookieValue(String name, HttpServletRequest request) {
+        Cookie cookie = getCookie(name, request);
+        if (cookie != null) {
+            return cookie.getValue();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Indicate that the cookie should be delete in the response
+     *
+     * @param name      the name of the cookie
+     * @param response  the response where to indicate that the cookie should be deleted
+     */
+    public static void deleteCookie(String name, HttpServletResponse response) {
+        Cookie emptyCookie = new Cookie(name, "");
+        emptyCookie.setPath("/");
+        emptyCookie.setMaxAge(0);
+
+        response.addCookie(emptyCookie);
     }
 
 }
