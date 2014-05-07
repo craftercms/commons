@@ -18,10 +18,15 @@
 package org.craftercms.commons.mongo;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.mongodb.CommandResult;
 import com.mongodb.MongoException;
 import com.mongodb.WriteResult;
+import org.apache.commons.collections4.keyvalue.DefaultKeyValue;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.jongo.Find;
@@ -285,6 +290,35 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
         }
         return query;
     }
+
+    /**
+     * Creates a Sort query based on the fields.<br/>
+     * Key of the map is the field <b>False=Desc,True=asc</b>
+     * for the field, Respect order of the keys
+     * @param fields Keys are fields, true if asc, false desc
+     * @return
+     */
+     protected String createSortQuery(final List<DefaultKeyValue<String,Boolean>> fields){
+         StringBuilder builder = new StringBuilder("{");
+         Iterator<DefaultKeyValue<String, Boolean>> iter = fields.iterator();
+         while(iter.hasNext()){
+             DefaultKeyValue<String, Boolean> field = iter.next();
+             builder.append("\"");
+             builder.append(field.getKey());
+             builder.append("\"");
+             builder.append(":");
+             if(field.getValue()){
+                builder.append(1);
+             }else{
+                 builder.append(-1);
+             }
+             if(iter.hasNext()){
+                 builder.append(",");
+             }
+         }
+         builder.append("}");
+        return builder.toString();
+     }
 
     /**
      * Internal checks if the CommandResult is ok , if not will throw a MongoRepositoryException with the last error
