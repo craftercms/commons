@@ -17,9 +17,8 @@
 package org.craftercms.commons.crypto;
 
 import javax.crypto.KeyGenerator;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 /**
  * Utility methods for encryption/decryption.
@@ -32,7 +31,7 @@ public class CipherUtils {
     public static final int AES_KEY_BYTE_SIZE =                     16;
     public static final String DEFAULT_AES_CIPHER_TRANSFORMATION =  "AES/CBC/PKCS5Padding";
 
-    public static final SecureRandom secureRandom = new SecureRandom();
+    public static final String PASSWORD_SEP = "|";
 
     private CipherUtils() {
     }
@@ -42,12 +41,12 @@ public class CipherUtils {
      *
      * @return the generated key
      */
-    public static Key generateAesKey() {
+    public static SecretKey generateAesKey() {
         try {
             return generateKey(AES_CIPHER_ALGORITHM);
         } catch (NoSuchAlgorithmException e) {
             // Should NEVER happen
-            throw new InternalError(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -58,9 +57,9 @@ public class CipherUtils {
      *
      * @return the generated key
      */
-    public static Key generateKey(String cipherAlgorithm) throws NoSuchAlgorithmException {
+    public static SecretKey generateKey(String cipherAlgorithm) throws NoSuchAlgorithmException {
         KeyGenerator keyGenerator = KeyGenerator.getInstance(cipherAlgorithm);
-        keyGenerator.init(secureRandom);
+        keyGenerator.init(CryptoUtils.secureRandom);
 
         return keyGenerator.generateKey();
     }
@@ -71,22 +70,42 @@ public class CipherUtils {
      * @return the generated IV
      */
     public static byte[] generateAesIv() {
-        return generateIv(AES_KEY_BYTE_SIZE);
+        return CryptoUtils.generateRandomBytes(AES_KEY_BYTE_SIZE);
     }
 
     /**
-     * Generates a random initialization vector for a cipher.
+     * Hashes a password using a {@link org.craftercms.commons.crypto.SimpleDigest}. The generated salt is appended
+     * to the password, using the {@link #PASSWORD_SEP}.
      *
-     * @param size  the size of the IV
+     * @param clearPswd the password to hash, in clear
      *
-     * @return the generated IV
+     * @return the hashed password + {@link #PASSWORD_SEP} + salt
      */
-    public static byte[] generateIv(int size) {
-        byte[] iv = new byte[size];
+    public static String hashPassword(String clearPswd) {
+        SimpleDigest digest = new SimpleDigest();
+        String hashedPswd = digest.digestBase64(clearPswd);
 
-        secureRandom.nextBytes(iv);
+        return hashedPswd + PASSWORD_SEP + digest.getBase64Salt();
+    }
 
-        return iv;
+    /**
+     * Returns true if it's a password match, that is, if the hashed clear password equals the given hash.
+     *
+     * @param hashedPswdAndSalt the hashed password + {@link #PASSWORD_SEP} + salt, as returned by
+     *                          {@link #hashPassword(String)}
+     * @param clearPswd         the password that we're trying to match, in clear
+     *
+     * @return if the password matches
+     */
+    public static boolean matchPassword(String hashedPswdAndSalt, String clearPswd) {
+        int idxOfSep = hashedPswdAndSalt.indexOf(PASSWORD_SEP);
+        String storedHash = hashedPswdAndSalt.substring(0, idxOfSep);
+        String salt = hashedPswdAndSalt.substring(idxOfSep + 1);
+        SimpleDigest digest = new SimpleDigest();
+
+        digest.setBase64Salt(salt);
+
+        return storedHash.equals(digest.digestBase64(clearPswd));
     }
 
 }

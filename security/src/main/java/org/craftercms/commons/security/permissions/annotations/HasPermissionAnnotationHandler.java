@@ -19,11 +19,15 @@ package org.craftercms.commons.security.permissions.annotations;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
-import org.craftercms.commons.security.exception.RuntimePermissionException;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
+import org.springframework.core.annotation.Order;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -33,39 +37,100 @@ import java.util.Map;
  * @author avasquez
  */
 @Aspect
+@Order(-1)
 public class HasPermissionAnnotationHandler {
 
-    protected Map<Class<?>, PermissionEvaluator> permissionServices;
+    private static final I10nLogger logger = new I10nLogger(HasPermissionAnnotationHandler.class,
+            "crafter.security.messages.logging");
 
-    public void setPermissionServices(Map<Class<?>, PermissionEvaluator> permissionServices) {
-        this.permissionServices = permissionServices;
+    private static final String LOG_KEY_METHOD_INT =            "security.permission.methodIntercepted";
+    private static final String LOG_KEY_METHOD_INT_NO_SEC_OBJ = "security.permission.methodInterceptedNoSecObject";
+
+    private static final String ERROR_KEY_EVALUATOR_NOT_FOUND = "security.permission.evaluatorNotFound";
+    private static final String ERROR_KEY_EVALUATION_FAILED =   "security.permission.evaluationFailed";
+
+    protected Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators;
+
+    public void setPermissionEvaluators(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators) {
+        this.permissionEvaluators = permissionEvaluators;
     }
 
-    @Around("@target(hasPermission) || @annotation(hasPermission)")
-    public Object checkPermissions(ProceedingJoinPoint pjp, HasPermission hasPermission) throws Throwable {
-        Object[] args = pjp.getArgs();
-        Object securedObject = null;
+    @Around("@annotation(HasPermission) || @target(HasPermission)")
+    public Object checkPermissions(ProceedingJoinPoint pjp) throws Throwable {
+        boolean allowed;
+        Method method = getActualMethod(pjp);
+        HasPermission hasPermission = getHasPermissionAnnotation(method, pjp);
+        Class<?> type = hasPermission.type();
+        String action = hasPermission.action();
+        Object securedObject = getAnnotatedSecuredObject(method, pjp);
+        PermissionEvaluator permissionEvaluator = permissionEvaluators.get(type);
 
-        for (Object arg : args) {
-            if (arg.getClass().isAnnotationPresent(SecuredObject.class)) {
-                securedObject = arg;
-                break;
-            }
+        if (securedObject != null) {
+            logger.debug(LOG_KEY_METHOD_INT, method, hasPermission, securedObject);
+        } else {
+            logger.debug(LOG_KEY_METHOD_INT_NO_SEC_OBJ, method, hasPermission);
         }
 
-        PermissionEvaluator permissionEvaluator = permissionServices.get(hasPermission.type());
-        boolean allowed;
+        if (permissionEvaluator == null) {
+            throw new PermissionException(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
+        }
+
         try {
-            allowed = permissionEvaluator.isAllowed(securedObject, hasPermission.action());
-        } catch (IllegalArgumentException | PermissionException e) {
-            throw new RuntimePermissionException("Permission checking failed", e);
+            allowed = permissionEvaluator.isAllowed(securedObject, action);
+        } catch (PermissionException e) {
+            throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
         }
 
         if (allowed) {
             return pjp.proceed();
+        } else if (securedObject != null) {
+            throw new ActionDeniedException(hasPermission.action(), securedObject);
         } else {
-            throw new ActionDeniedException("Execution of action '" + hasPermission.action() + "' denied");
+            throw new ActionDeniedException(hasPermission.action());
         }
+    }
+
+    protected Method getActualMethod(ProceedingJoinPoint pjp) {
+        MethodSignature ms = (MethodSignature) pjp.getSignature();
+        Method method = ms.getMethod();
+
+        if (method.getDeclaringClass().isInterface()) {
+            Class<?> targetClass = pjp.getTarget().getClass();
+            try {
+                method = targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
+            } catch (NoSuchMethodException e) {
+                // Should NEVER happen
+                throw new RuntimeException(e);
+            }
+        }
+
+        return method;
+    }
+
+    protected HasPermission getHasPermissionAnnotation(Method method, ProceedingJoinPoint pjp) {
+        HasPermission hasPermission = method.getAnnotation(HasPermission.class);
+
+        if (hasPermission == null) {
+            Class<?> targetClass = pjp.getTarget().getClass();
+            hasPermission = targetClass.getAnnotation(HasPermission.class);
+        }
+
+        return hasPermission;
+    }
+
+    protected Object getAnnotatedSecuredObject(Method method, ProceedingJoinPoint pjp) {
+        Annotation[][] paramAnnotations = method.getParameterAnnotations();
+        Object[] params = pjp.getArgs();
+
+        for (int i = 0; i < paramAnnotations.length; i++) {
+            for (Annotation a: paramAnnotations[i]) {
+                if (a instanceof SecuredObject) {
+                    return params[i];
+                }
+            }
+        }
+
+        return null;
     }
 
 }

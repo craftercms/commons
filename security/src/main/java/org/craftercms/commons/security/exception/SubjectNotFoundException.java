@@ -17,25 +17,16 @@
 package org.craftercms.commons.security.exception;
 
 /**
- * Thrown if the subject condition of a permission is invalid.
+ * Thrown to indicate that the current subject couldn't be found.
  *
  * @author avasquez
  */
-public class InvalidSubjectConditionException extends PermissionException {
+public class SubjectNotFoundException extends PermissionException {
 
-    public InvalidSubjectConditionException() {
-    }
+    public static final String KEY = "security.permission.subjectNotFound";
 
-    public InvalidSubjectConditionException(String message) {
-        super(message);
-    }
-
-    public InvalidSubjectConditionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public InvalidSubjectConditionException(Throwable cause) {
-        super(cause);
+    public SubjectNotFoundException() {
+        super(KEY);
     }
 
 }

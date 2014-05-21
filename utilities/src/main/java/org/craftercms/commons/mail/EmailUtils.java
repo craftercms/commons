@@ -14,28 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mail;
+
+import java.util.regex.Pattern;
 
 /**
- * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.PermissionException}.
+ * Utility methods for email related stuff.
  *
  * @author avasquez
  */
-public class RuntimePermissionException extends RuntimeSecurityException {
+public class EmailUtils {
 
-    public RuntimePermissionException() {
+    public static final Pattern EMAIL_PATTERN = Pattern.compile("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@" +
+            "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+
+    private EmailUtils() {
     }
 
-    public RuntimePermissionException(String message) {
-        super(message);
-    }
-
-    public RuntimePermissionException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public RuntimePermissionException(Throwable cause) {
-        super(cause);
+    public static final boolean validateEmail(String email) {
+        return EMAIL_PATTERN.matcher(email).matches();
     }
 
 }

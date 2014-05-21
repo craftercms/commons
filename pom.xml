@@ -53,7 +53,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Dependency Version Numbers -->
-        <spring.version>3.1.1.RELEASE</spring.version>
+        <spring.version>4.0.3.RELEASE</spring.version>
     </properties>
 
 	<build>

@@ -17,19 +17,21 @@
 package org.craftercms.commons.security.exception;
 
 /**
- * Root exception for permission related classes
+ * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.PermissionException}.
+ *
+ * @author avasquez
  */
 public class PermissionException extends SecurityException {
 
     public PermissionException() {
     }
 
-    public PermissionException(String message) {
-        super(message);
+    public PermissionException(String key, Object... args) {
+        super(key, args);
     }
 
-    public PermissionException(String message, Throwable cause) {
-        super(message, cause);
+    public PermissionException(String key, Throwable cause, Object... args) {
+        super(key, cause, args);
     }
 
     public PermissionException(Throwable cause) {

@@ -25,11 +25,11 @@ package org.craftercms.commons.security.permissions;
 public interface Permission {
 
     /**
-     * Returns true if the subject is allowed to execute the given action.
+     * Returns true if action execution is allowed
      *
-     * @param action    the action the subject can or cannot execute
+     * @param action    the action to execute
      *
-     * @return true if the subject is allowed to execute the given action, false otherwise.
+     * @return true if action execution is allowed, false otherwise.
      */
     boolean isAllowed(String action);
 

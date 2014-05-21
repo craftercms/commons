@@ -29,6 +29,10 @@ public class SecuredObjectBase<P extends Permission> {
     protected List<P> permissions;
 
     public List<P> getPermissions() {
+        if (permissions == null) {
+            permissions = new ArrayList<>();
+        }
+
         return permissions;
     }
 
@@ -37,17 +41,11 @@ public class SecuredObjectBase<P extends Permission> {
     }
 
     public void addPermission(P permission) {
-        if (permissions == null) {
-            permissions = new ArrayList<>();
-        }
-
-        permissions.add(permission);
+        getPermissions().add(permission);
     }
 
     public void removePermission(P permission) {
-        if (permissions != null) {
-            permissions.remove(permission);
-        }
+        getPermissions().remove(permission);
     }
 
 }

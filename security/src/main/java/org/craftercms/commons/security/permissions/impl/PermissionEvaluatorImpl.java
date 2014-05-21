@@ -16,8 +16,13 @@
  */
 package org.craftercms.commons.security.permissions.impl;
 
+import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.security.exception.PermissionException;
-import org.craftercms.commons.security.permissions.*;
+import org.craftercms.commons.security.exception.SubjectNotFoundException;
+import org.craftercms.commons.security.permissions.Permission;
+import org.craftercms.commons.security.permissions.PermissionEvaluator;
+import org.craftercms.commons.security.permissions.PermissionResolver;
+import org.craftercms.commons.security.permissions.SubjectResolver;
 
 /**
  * Default implementation of {@link org.craftercms.commons.security.permissions.PermissionEvaluator}
@@ -26,25 +31,32 @@ import org.craftercms.commons.security.permissions.*;
  */
 public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> {
 
+    private static final I10nLogger logger = new I10nLogger(PermissionEvaluatorImpl.class,
+            "crafter.security.messages.logging");
+
+    private static final String LOG_KEY_RESOLVING_GLOBAL_PERM = "security.permission.resolvingGlobalPermission";
+    private static final String LOG_KEY_RESOLVING_PERM =        "security.permission.resolvingPermission";
+    private static final String LOG_KEY_EVALUATING_PERM =       "security.permission.evaluatingPermission";
+
     protected SubjectResolver<S> subjectResolver;
     protected PermissionResolver<S, O> permissionResolver;
-    protected ParentResolver<O> parentResolver;
+
+    public void setSubjectResolver(SubjectResolver<S> subjectResolver) {
+        this.subjectResolver = subjectResolver;
+    }
 
     public void setPermissionResolver(PermissionResolver<S, O> permissionResolver) {
         this.permissionResolver = permissionResolver;
     }
 
-    public void setParentResolver(ParentResolver<O> parentResolver) {
-        this.parentResolver = parentResolver;
-    }
-
     @Override
     public boolean isAllowed(O object, String action) throws PermissionException {
-        if (subjectResolver == null) {
-            throw new PermissionException("No SubjectResolver found. Unable to infer current subject");
+        S subject = subjectResolver.getCurrentSubject();
+        if (subject == null) {
+            throw new SubjectNotFoundException();
         }
 
-        return isAllowed(subjectResolver.getCurrentSubject(), object, action);
+        return isAllowed(subject, object, action);
     }
 
     @Override
@@ -52,21 +64,22 @@ public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> 
         Permission permission;
 
         if (object == null) {
+            logger.debug(LOG_KEY_RESOLVING_GLOBAL_PERM, subject);
+
             permission = permissionResolver.getGlobalPermission(subject);
         } else {
+            logger.debug(LOG_KEY_RESOLVING_PERM, subject, object);
+
             permission = permissionResolver.getPermission(subject, object);
         }
 
         if (permission != null) {
-            return permission.isAllowed(action);
-        } else if (parentResolver != null) {
-            Object parent = parentResolver.getParent(object);
-            if (parent != null) {
-                return isAllowed(subject, object, action);
-            }
-        }
+            logger.debug(LOG_KEY_EVALUATING_PERM, action, subject, object, permission);
 
-        return false;
+            return permission.isAllowed(action);
+        } else {
+            return false;
+        }
     }
 
 }

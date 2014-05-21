@@ -22,7 +22,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used in a method parameter to indicate the object that should be secured through permission checking.
+ * Used in a method parameter to indicate the object or the ID of the object that should be secured through permission
+ * checking.
  *
  * @author avasquez
  */

@@ -14,24 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.permissions;
+package org.craftercms.commons.crypto;
 
-import org.craftercms.commons.security.exception.PermissionException;
+import javax.crypto.SecretKey;
 
 /**
- * Resolves the parent of a given object.
+ * Repository for storing/retrieving encryption keys.
  *
  * @author avasquez
  */
-public interface ParentResolver<O> {
+public interface SecretKeyRepository {
 
-    /***
-     * Returns the parent of the given object.
+    /**
+     * Returns the secret key for the specified key name
      *
-     * @param object    the object whose parent should be looked for
+     * @param name      the key's name in the repository
+     * @param create    true to create new key if there's no key with the specified name in the repository.
      *
-     * @return  the object's parent, or null if not found.
+     * @return the key
      */
-    Object getParent(O object) throws IllegalArgumentException, PermissionException;
+    SecretKey getKey(String name, boolean create) throws CryptoException;
+
+    /**
+     * Saves the secret key in the repository, with the specified name
+     *
+     * @param name  the key's name in the repository
+     * @param key   the key to save
+     */
+    void saveKey(String name, SecretKey key) throws CryptoException;
 
 }

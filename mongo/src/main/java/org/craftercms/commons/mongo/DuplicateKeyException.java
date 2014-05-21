@@ -14,28 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mongo;
 
 /**
- * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.SecurityException}.
+ * Mongo exception thrown when a document can't be inserted because there's already a document with the same key.
  *
  * @author avasquez
  */
-public class RuntimeSecurityException extends RuntimeException {
+public class DuplicateKeyException extends MongoDataException {
 
-    public RuntimeSecurityException() {
+    public DuplicateKeyException() {
     }
 
-    public RuntimeSecurityException(String message) {
+    public DuplicateKeyException(String message) {
         super(message);
     }
 
-    public RuntimeSecurityException(String message, Throwable cause) {
+    public DuplicateKeyException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public RuntimeSecurityException(Throwable cause) {
+    public DuplicateKeyException(Throwable cause) {
         super(cause);
+    }
+
+    public DuplicateKeyException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 
 }
