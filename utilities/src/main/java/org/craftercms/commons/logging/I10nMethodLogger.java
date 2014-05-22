@@ -35,17 +35,17 @@ public class I10nMethodLogger implements MethodLogger {
 
     @Override
     public void logEntry(String className, String methodName, Object[] args) {
-        logger.debug(LOG_KEY_ENTRY, methodName, className, Arrays.toString(args));
+        logger.trace(LOG_KEY_ENTRY, methodName, className, Arrays.toString(args));
     }
 
     @Override
     public void logExit(String className, String methodName, Object returnValue) {
-        logger.debug(LOG_KEY_EXIT, methodName, className, returnValue);
+        logger.trace(LOG_KEY_EXIT, methodName, className, returnValue);
     }
 
     @Override
     public void logException(String className, String methodName, Throwable e) {
-        logger.debug(LOG_KEY_EXCEPTION, e, methodName, className);
+        logger.error(LOG_KEY_EXCEPTION, e, methodName, className);
     }
 
 }

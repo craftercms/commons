@@ -8,7 +8,7 @@ package org.craftercms.commons.logging;
 public interface MethodLogger {
 
     /**
-     * Logs a method entry
+     * Logs a method entry.
      *
      * @param className     the method's class name
      * @param methodName    the method's name
@@ -17,7 +17,7 @@ public interface MethodLogger {
     void logEntry(String className, String methodName, Object[] args);
 
     /**
-     * Logs a method exit
+     * Logs a method exit.
      *
      * @param className     the method's class name
      * @param methodName    the method's name
@@ -26,7 +26,7 @@ public interface MethodLogger {
     void logExit(String className, String methodName, Object returnValue);
 
     /**
-     * Logs a method failure with a exception
+     * Logs a method failure with a exception.
      *
      * @param className     the method's class name
      * @param methodName    the method's name
