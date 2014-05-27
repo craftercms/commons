@@ -16,7 +16,7 @@
  */
 package org.craftercms.commons.security.permissions;
 
-import org.craftercms.commons.security.exception.PermissionExceptionAbstract;
+import org.craftercms.commons.security.exception.PermissionException;
 
 /**
  * Evaluates or checks permissions.
@@ -34,7 +34,7 @@ public interface PermissionEvaluator<S, O> {
      * @param action the action the subject wants to perform (not null)
      * @return true if the subject is allowed to execute the action, false otherwise
      */
-    boolean isAllowed(O object, String action) throws PermissionExceptionAbstract;
+    boolean isAllowed(O object, String action) throws PermissionException;
 
     /**
      * Checks if the given subject is allowed to perform the specified action to the given object
@@ -45,6 +45,6 @@ public interface PermissionEvaluator<S, O> {
      * @param action  the action the subject wants to perform (not null)
      * @return true if the subject is allowed to execute the action, false otherwise
      */
-    boolean isAllowed(S subject, O object, String action) throws PermissionExceptionAbstract;
+    boolean isAllowed(S subject, O object, String action) throws PermissionException;
 
 }

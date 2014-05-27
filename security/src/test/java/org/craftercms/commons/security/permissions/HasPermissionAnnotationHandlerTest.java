@@ -19,8 +19,8 @@ package org.craftercms.commons.security.permissions;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.craftercms.commons.security.exception.ActionDeniedExceptionAbstract;
-import org.craftercms.commons.security.exception.PermissionExceptionAbstract;
+import org.craftercms.commons.security.exception.ActionDeniedException;
+import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.annotations.HasPermission;
 import org.craftercms.commons.security.permissions.annotations.HasPermissionAnnotationHandler;
 import org.craftercms.commons.security.permissions.annotations.SecuredObject;
@@ -81,7 +81,7 @@ public class HasPermissionAnnotationHandlerTest {
         try {
             service.doAnotherThingWithObjectId(1);
             fail("ActionDeniedException expected");
-        } catch (ActionDeniedExceptionAbstract e) {
+        } catch (ActionDeniedException e) {
             // expected, so continue
         }
 
@@ -90,7 +90,7 @@ public class HasPermissionAnnotationHandlerTest {
         try {
             service.doYetAnotherThingWithNoObject();
             fail("ActionDeniedException expected");
-        } catch (ActionDeniedExceptionAbstract e) {
+        } catch (ActionDeniedException e) {
             // expected, so continue
         }
     }
@@ -100,7 +100,7 @@ public class HasPermissionAnnotationHandlerTest {
         try {
             service.doSomethingWrongPermissionType();
             fail("PermissionException expected");
-        } catch (PermissionExceptionAbstract e) {
+        } catch (PermissionException e) {
             // expected, so continue
         }
 
@@ -109,12 +109,12 @@ public class HasPermissionAnnotationHandlerTest {
         try {
             service.doYetAnotherThingWithNoObject();
             fail("PermissionException expected");
-        } catch (PermissionExceptionAbstract e) {
+        } catch (PermissionException e) {
             // expected, so continue
         }
     }
 
-    private void createTestAnnotationHandler() throws PermissionExceptionAbstract {
+    private void createTestAnnotationHandler() throws PermissionException {
         Map<Class<?>, PermissionEvaluator<?, ?>> evaluators = new HashMap<>(1);
         evaluators.put(MockPermission.class, createTestPermissionEvaluator());
 
@@ -122,14 +122,14 @@ public class HasPermissionAnnotationHandlerTest {
         annotationHandler.setPermissionEvaluators(evaluators);
     }
 
-    private void createTestService() throws PermissionExceptionAbstract {
+    private void createTestService() throws PermissionException {
         AspectJProxyFactory proxyFactory = new AspectJProxyFactory(new MockSecuredServiceImpl());
         proxyFactory.addAspect(annotationHandler);
 
         service = proxyFactory.getProxy();
     }
 
-    private PermissionEvaluator<String, Object> createTestPermissionEvaluator() throws PermissionExceptionAbstract {
+    private PermissionEvaluator<String, Object> createTestPermissionEvaluator() throws PermissionException {
         PermissionEvaluatorImpl<String, Object> evaluator = new PermissionEvaluatorImpl<>();
         evaluator.setSubjectResolver(subjectResolver);
         evaluator.setPermissionResolver(createTestPermissionResolver());
@@ -141,7 +141,7 @@ public class HasPermissionAnnotationHandlerTest {
         subjectResolver = new MockSubjectResolver();
     }
 
-    private PermissionResolver<String, Object> createTestPermissionResolver() throws PermissionExceptionAbstract {
+    private PermissionResolver<String, Object> createTestPermissionResolver() throws PermissionException {
         Permission permission1 = new MockPermission().allow("doSomething");
         Permission permission2 = new MockPermission().allowAny();
         Permission permission3 = new MockPermission().allow("doYetAnotherThing");

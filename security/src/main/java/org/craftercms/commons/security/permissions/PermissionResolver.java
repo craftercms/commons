@@ -16,7 +16,7 @@
  */
 package org.craftercms.commons.security.permissions;
 
-import org.craftercms.commons.security.exception.PermissionExceptionAbstract;
+import org.craftercms.commons.security.exception.PermissionException;
 
 /**
  * Resolves the permissions for a particular type of subjects and objects.
@@ -31,7 +31,7 @@ public interface PermissionResolver<S, O> {
      * @param subject the subject
      * @return the global permission, or null if no permission found
      */
-    Permission getGlobalPermission(S subject) throws PermissionExceptionAbstract;
+    Permission getGlobalPermission(S subject) throws PermissionException;
 
     /**
      * Returns the permission associated to the given subject and object.
@@ -40,6 +40,6 @@ public interface PermissionResolver<S, O> {
      * @param object  the secured object or ID of the secured object (not null).
      * @return the object/subject permission, or null if no permission found
      */
-    Permission getPermission(S subject, O object) throws PermissionExceptionAbstract;
+    Permission getPermission(S subject, O object) throws PermissionException;
 
 }

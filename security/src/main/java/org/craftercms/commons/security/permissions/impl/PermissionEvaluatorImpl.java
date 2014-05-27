@@ -17,8 +17,8 @@
 package org.craftercms.commons.security.permissions.impl;
 
 import org.craftercms.commons.i10n.I10nLogger;
-import org.craftercms.commons.security.exception.PermissionExceptionAbstract;
-import org.craftercms.commons.security.exception.SubjectNotFoundExceptionAbstract;
+import org.craftercms.commons.security.exception.PermissionException;
+import org.craftercms.commons.security.exception.SubjectNotFoundException;
 import org.craftercms.commons.security.permissions.Permission;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.craftercms.commons.security.permissions.PermissionResolver;
@@ -50,17 +50,17 @@ public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> 
     }
 
     @Override
-    public boolean isAllowed(O object, String action) throws PermissionExceptionAbstract {
+    public boolean isAllowed(O object, String action) throws PermissionException {
         S subject = subjectResolver.getCurrentSubject();
         if (subject == null) {
-            throw new SubjectNotFoundExceptionAbstract();
+            throw new SubjectNotFoundException();
         }
 
         return isAllowed(subject, object, action);
     }
 
     @Override
-    public boolean isAllowed(S subject, O object, String action) throws PermissionExceptionAbstract {
+    public boolean isAllowed(S subject, O object, String action) throws PermissionException {
         Permission permission;
 
         if (object == null) {

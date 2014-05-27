@@ -17,25 +17,21 @@
 package org.craftercms.commons.security.exception;
 
 /**
- * {@link java.lang.RuntimeException} version of {@link PermissionExceptionAbstract}.
+ * Thrown when the execution of an action on an object has been denied to a subject.
  *
  * @author avasquez
  */
-public class PermissionExceptionAbstract extends SecurityExceptionAbstract {
+public class ActionDeniedException extends PermissionException {
 
-    public PermissionExceptionAbstract() {
+    private static final String GLOBAL_ACTION_DENIED_KEY = "security.permission.globalActionDenied";
+    private static final String ACTION_DENIED_KEY = "security.permission.actionDenied";
+
+    public ActionDeniedException(String action) {
+        super(GLOBAL_ACTION_DENIED_KEY, action);
     }
 
-    public PermissionExceptionAbstract(String key, Object... args) {
-        super(key, args);
-    }
-
-    public PermissionExceptionAbstract(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
-    }
-
-    public PermissionExceptionAbstract(Throwable cause) {
-        super(cause);
+    public ActionDeniedException(String action, Object securedObject) {
+        super(ACTION_DENIED_KEY, action, securedObject);
     }
 
 }

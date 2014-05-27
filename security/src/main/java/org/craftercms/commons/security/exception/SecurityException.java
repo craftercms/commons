@@ -21,26 +21,26 @@ import java.util.ResourceBundle;
 import org.craftercms.commons.i10n.AbstractI10nRuntimeException;
 
 /**
- * {@link java.lang.RuntimeException} version of {@link SecurityExceptionAbstract}.
+ * {@link java.lang.RuntimeException} version of {@link SecurityException}.
  *
  * @author avasquez
  */
-public class SecurityExceptionAbstract extends AbstractI10nRuntimeException {
+public class SecurityException extends AbstractI10nRuntimeException {
 
     public static final String BUNDLE_NAME = "crafter.security.messages.errors";
 
-    public SecurityExceptionAbstract() {
+    public SecurityException() {
     }
 
-    public SecurityExceptionAbstract(String key, Object... args) {
+    public SecurityException(String key, Object... args) {
         super(key, args);
     }
 
-    public SecurityExceptionAbstract(String key, Throwable cause, Object... args) {
+    public SecurityException(String key, Throwable cause, Object... args) {
         super(key, cause, args);
     }
 
-    public SecurityExceptionAbstract(Throwable cause) {
+    public SecurityException(Throwable cause) {
         super(cause);
     }
 

@@ -25,8 +25,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.craftercms.commons.i10n.I10nLogger;
-import org.craftercms.commons.security.exception.ActionDeniedExceptionAbstract;
-import org.craftercms.commons.security.exception.PermissionExceptionAbstract;
+import org.craftercms.commons.security.exception.ActionDeniedException;
+import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.springframework.core.annotation.Order;
 
@@ -72,21 +72,21 @@ public class HasPermissionAnnotationHandler {
         }
 
         if (permissionEvaluator == null) {
-            throw new PermissionExceptionAbstract(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
+            throw new PermissionException(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
         }
 
         try {
             allowed = permissionEvaluator.isAllowed(securedObject, action);
-        } catch (PermissionExceptionAbstract e) {
-            throw new PermissionExceptionAbstract(ERROR_KEY_EVALUATION_FAILED, e);
+        } catch (PermissionException e) {
+            throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
         }
 
         if (allowed) {
             return pjp.proceed();
         } else if (securedObject != null) {
-            throw new ActionDeniedExceptionAbstract(hasPermission.action(), securedObject);
+            throw new ActionDeniedException(hasPermission.action(), securedObject);
         } else {
-            throw new ActionDeniedExceptionAbstract(hasPermission.action());
+            throw new ActionDeniedException(hasPermission.action());
         }
     }
 
