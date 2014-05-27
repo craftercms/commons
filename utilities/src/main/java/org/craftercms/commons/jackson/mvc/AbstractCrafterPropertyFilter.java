@@ -15,21 +15,26 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftercms.commons.mongo;
+package org.craftercms.commons.jackson.mvc;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import org.craftercms.commons.properties.OverrideProperties;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import org.apache.commons.lang3.ClassUtils;
 
 /**
- * Holds a Map of all the register MongoQueries.
+ *
  */
-public class JongoQueries extends OverrideProperties {
+public abstract class AbstractCrafterPropertyFilter extends SimpleBeanPropertyFilter {
 
-    @Override
-    protected void readPropertyFile(final InputStream input) throws IOException {
-        properties.loadFromXML(input);
+    public abstract String getFilterName();
+
+
+    protected boolean isPrimitive(Class<?> clazz) {
+        return Date.class.isAssignableFrom(clazz) || ClassUtils.isPrimitiveOrWrapper(clazz) || List.class
+            .isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz);
     }
 
 }

@@ -37,8 +37,8 @@ public class EBusBeanDefinitionRegistrar implements ImportBeanDefinitionRegistra
     private static final String DEFAULT_EBUS_ENVIRONMENT_NAME = "ebusEnvironment";
 
     @Override
-    public void registerBeanDefinitions(final AnnotationMetadata annotationMetadata, final BeanDefinitionRegistry
-        beanDefinitionRegistry) {
+    public void registerBeanDefinitions(final AnnotationMetadata annotationMetadata,
+                                        final BeanDefinitionRegistry beanDefinitionRegistry) {
 
         // Create a root Environment
         if (!beanDefinitionRegistry.containsBeanDefinition(DEFAULT_EBUS_ENVIRONMENT_NAME)) {
@@ -48,13 +48,16 @@ public class EBusBeanDefinitionRegistrar implements ImportBeanDefinitionRegistra
 
             Supplier<Environment> envSupplier = new DefaultEnvironmentSupplier();
             envBeanDef.addConstructorArgValue(envSupplier);
-            beanDefinitionRegistry.registerBeanDefinition(DEFAULT_EBUS_ENVIRONMENT_NAME, envBeanDef.getBeanDefinition());
+            beanDefinitionRegistry.registerBeanDefinition(DEFAULT_EBUS_ENVIRONMENT_NAME,
+                envBeanDef.getBeanDefinition());
         }
 
         // Create a EBusBeanAutoConfiguration
         if (!beanDefinitionRegistry.containsBeanDefinition(EBusBeanAutoConfiguration.class.getName())) {
-            BeanDefinitionBuilder autoConfigDef = BeanDefinitionBuilder.rootBeanDefinition(EBusBeanAutoConfiguration.class);
-            beanDefinitionRegistry.registerBeanDefinition(EBusBeanAutoConfiguration.class.getName(), autoConfigDef.getBeanDefinition());
+            BeanDefinitionBuilder autoConfigDef = BeanDefinitionBuilder.rootBeanDefinition(EBusBeanAutoConfiguration
+                .class);
+            beanDefinitionRegistry.registerBeanDefinition(EBusBeanAutoConfiguration.class.getName(),
+                autoConfigDef.getBeanDefinition());
         }
     }
 }

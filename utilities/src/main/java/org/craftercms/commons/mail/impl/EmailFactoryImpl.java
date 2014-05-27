@@ -16,21 +16,25 @@
  */
 package org.craftercms.commons.mail.impl;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.MimeMessage;
+
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.i10n.I10nLogger;
-import org.craftercms.commons.mail.*;
+import org.craftercms.commons.mail.Email;
+import org.craftercms.commons.mail.EmailAddressExceptionAbstract;
+import org.craftercms.commons.mail.EmailExceptionAbstract;
+import org.craftercms.commons.mail.EmailFactory;
+import org.craftercms.commons.mail.EmailPreparationExceptionAbstract;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.io.StringWriter;
 
 /**
  * Default implementation of {@link org.craftercms.commons.mail.EmailFactory}.
@@ -39,13 +43,10 @@ import java.io.StringWriter;
  */
 public class EmailFactoryImpl implements EmailFactory {
 
-    private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, "crafter.commons.messages.logging");
-
     public static final String DEFAULT_ENCODING = "UTF-8";
-
-    public static final String LOG_KEY_MIME_MSG_CREATED =          "mail.mimeMessageCreated";
+    public static final String LOG_KEY_MIME_MSG_CREATED = "mail.mimeMessageCreated";
     public static final String LOG_KEY_PROCESSING_EMAIL_TEMPLATE = "mail.processingEmailTemplate";
-
+    private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, "crafter.commons.messages.logging");
     protected JavaMailSender mailSender;
     protected Configuration freeMarkerConfig;
     protected String templateEncoding;
@@ -70,7 +71,7 @@ public class EmailFactoryImpl implements EmailFactory {
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String body,
-                          boolean html) throws EmailException {
+                          boolean html) throws EmailExceptionAbstract {
         MimeMessage message = createMessage(from, to, cc, bcc, subject, body, html);
         Email email = new EmailImpl(mailSender, message);
 
@@ -79,7 +80,7 @@ public class EmailFactoryImpl implements EmailFactory {
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String templateName,
-                          Object templateModel, boolean html) throws EmailException {
+                          Object templateModel, boolean html) throws EmailExceptionAbstract {
         String body = processTemplate(templateName, templateModel);
         MimeMessage message = createMessage(from, to, cc, bcc, subject, body, html);
         Email email = new EmailImpl(mailSender, message);
@@ -87,8 +88,8 @@ public class EmailFactoryImpl implements EmailFactory {
         return email;
     }
 
-    protected MimeMessage createMessage(String from, String[] to, String[] cc,  String[] bcc, String subject,
-                                        String body, boolean html) throws EmailException {
+    protected MimeMessage createMessage(String from, String[] to, String[] cc, String[] bcc, String subject,
+                                        String body, boolean html) throws EmailExceptionAbstract {
         MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage());
 
         try {
@@ -105,18 +106,18 @@ public class EmailFactoryImpl implements EmailFactory {
             messageHelper.setSubject(subject);
             messageHelper.setText(body, html);
         } catch (AddressException e) {
-            throw new EmailAddressException(e);
+            throw new EmailAddressExceptionAbstract(e);
         } catch (MessagingException e) {
-            throw new EmailPreparationException(e);
+            throw new EmailPreparationExceptionAbstract(e);
         }
 
         logger.debug(LOG_KEY_MIME_MSG_CREATED, from, StringUtils.join(to, ','), StringUtils.join(cc, ','),
-                StringUtils.join(bcc, ','), subject, body);
+            StringUtils.join(bcc, ','), subject, body);
 
         return messageHelper.getMimeMessage();
     }
 
-    protected String processTemplate(String templateName, Object templateModel) throws EmailException {
+    protected String processTemplate(String templateName, Object templateModel) throws EmailExceptionAbstract {
         logger.debug(LOG_KEY_PROCESSING_EMAIL_TEMPLATE, templateName);
 
         try {
@@ -127,7 +128,7 @@ public class EmailFactoryImpl implements EmailFactory {
 
             return out.toString();
         } catch (IOException | TemplateException e) {
-            throw new EmailPreparationException(e);
+            throw new EmailPreparationExceptionAbstract(e);
         }
     }
 

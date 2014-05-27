@@ -16,8 +16,11 @@
  */
 package org.craftercms.commons.security.permissions;
 
-import org.craftercms.commons.security.exception.ActionDeniedException;
-import org.craftercms.commons.security.exception.PermissionException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.craftercms.commons.security.exception.ActionDeniedExceptionAbstract;
+import org.craftercms.commons.security.exception.PermissionExceptionAbstract;
 import org.craftercms.commons.security.permissions.annotations.HasPermission;
 import org.craftercms.commons.security.permissions.annotations.HasPermissionAnnotationHandler;
 import org.craftercms.commons.security.permissions.annotations.SecuredObject;
@@ -26,12 +29,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author avasquez
@@ -78,7 +81,7 @@ public class HasPermissionAnnotationHandlerTest {
         try {
             service.doAnotherThingWithObjectId(1);
             fail("ActionDeniedException expected");
-        } catch (ActionDeniedException e) {
+        } catch (ActionDeniedExceptionAbstract e) {
             // expected, so continue
         }
 
@@ -87,7 +90,7 @@ public class HasPermissionAnnotationHandlerTest {
         try {
             service.doYetAnotherThingWithNoObject();
             fail("ActionDeniedException expected");
-        } catch (ActionDeniedException e) {
+        } catch (ActionDeniedExceptionAbstract e) {
             // expected, so continue
         }
     }
@@ -97,7 +100,7 @@ public class HasPermissionAnnotationHandlerTest {
         try {
             service.doSomethingWrongPermissionType();
             fail("PermissionException expected");
-        } catch (PermissionException e) {
+        } catch (PermissionExceptionAbstract e) {
             // expected, so continue
         }
 
@@ -106,12 +109,12 @@ public class HasPermissionAnnotationHandlerTest {
         try {
             service.doYetAnotherThingWithNoObject();
             fail("PermissionException expected");
-        } catch (PermissionException e) {
+        } catch (PermissionExceptionAbstract e) {
             // expected, so continue
         }
     }
 
-    private void createTestAnnotationHandler() throws PermissionException {
+    private void createTestAnnotationHandler() throws PermissionExceptionAbstract {
         Map<Class<?>, PermissionEvaluator<?, ?>> evaluators = new HashMap<>(1);
         evaluators.put(MockPermission.class, createTestPermissionEvaluator());
 
@@ -119,14 +122,14 @@ public class HasPermissionAnnotationHandlerTest {
         annotationHandler.setPermissionEvaluators(evaluators);
     }
 
-    private void createTestService() throws PermissionException {
+    private void createTestService() throws PermissionExceptionAbstract {
         AspectJProxyFactory proxyFactory = new AspectJProxyFactory(new MockSecuredServiceImpl());
         proxyFactory.addAspect(annotationHandler);
 
         service = proxyFactory.getProxy();
     }
 
-    private PermissionEvaluator<String, Object> createTestPermissionEvaluator() throws PermissionException {
+    private PermissionEvaluator<String, Object> createTestPermissionEvaluator() throws PermissionExceptionAbstract {
         PermissionEvaluatorImpl<String, Object> evaluator = new PermissionEvaluatorImpl<>();
         evaluator.setSubjectResolver(subjectResolver);
         evaluator.setPermissionResolver(createTestPermissionResolver());
@@ -138,7 +141,7 @@ public class HasPermissionAnnotationHandlerTest {
         subjectResolver = new MockSubjectResolver();
     }
 
-    private PermissionResolver<String, Object> createTestPermissionResolver() throws PermissionException {
+    private PermissionResolver<String, Object> createTestPermissionResolver() throws PermissionExceptionAbstract {
         Permission permission1 = new MockPermission().allow("doSomething");
         Permission permission2 = new MockPermission().allowAny();
         Permission permission3 = new MockPermission().allow("doYetAnotherThing");
@@ -149,6 +152,18 @@ public class HasPermissionAnnotationHandlerTest {
         when(resolver.getGlobalPermission("user2")).thenReturn(permission3);
 
         return resolver;
+    }
+
+    private interface MockSecuredService {
+
+        String doSomethingWithObject(MockSecuredObject object);
+
+        String doAnotherThingWithObjectId(long id);
+
+        String doYetAnotherThingWithNoObject();
+
+        void doSomethingWrongPermissionType();
+
     }
 
     private static class MockSubjectResolver implements SubjectResolver<String> {
@@ -173,21 +188,9 @@ public class HasPermissionAnnotationHandlerTest {
         @Override
         public String toString() {
             return "MockSecuredObject{" +
-                    "id='" + id + '\'' +
-                    '}';
+                "id='" + id + '\'' +
+                '}';
         }
-
-    }
-
-    private interface MockSecuredService {
-
-        String doSomethingWithObject(MockSecuredObject object);
-
-        String doAnotherThingWithObjectId(long id);
-
-        String doYetAnotherThingWithNoObject();
-
-        void doSomethingWrongPermissionType();
 
     }
 

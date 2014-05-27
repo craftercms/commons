@@ -16,9 +16,9 @@
  */
 package org.craftercms.commons.crypto;
 
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Utility methods for encryption/decryption.
@@ -27,9 +27,9 @@ import java.security.NoSuchAlgorithmException;
  */
 public class CipherUtils {
 
-    public static final String AES_CIPHER_ALGORITHM =               "AES";
-    public static final int AES_KEY_BYTE_SIZE =                     16;
-    public static final String DEFAULT_AES_CIPHER_TRANSFORMATION =  "AES/CBC/PKCS5Padding";
+    public static final String AES_CIPHER_ALGORITHM = "AES";
+    public static final int AES_KEY_BYTE_SIZE = 16;
+    public static final String DEFAULT_AES_CIPHER_TRANSFORMATION = "AES/CBC/PKCS5Padding";
 
     public static final String PASSWORD_SEP = "|";
 
@@ -53,8 +53,7 @@ public class CipherUtils {
     /**
      * Generates a random encryption key.
      *
-     * @param cipherAlgorithm   the cipher algorithm the key will be used with. Will determine the key size
-     *
+     * @param cipherAlgorithm the cipher algorithm the key will be used with. Will determine the key size
      * @return the generated key
      */
     public static SecretKey generateKey(String cipherAlgorithm) throws NoSuchAlgorithmException {
@@ -78,7 +77,6 @@ public class CipherUtils {
      * to the password, using the {@link #PASSWORD_SEP}.
      *
      * @param clearPswd the password to hash, in clear
-     *
      * @return the hashed password + {@link #PASSWORD_SEP} + salt
      */
     public static String hashPassword(String clearPswd) {
@@ -94,7 +92,6 @@ public class CipherUtils {
      * @param hashedPswdAndSalt the hashed password + {@link #PASSWORD_SEP} + salt, as returned by
      *                          {@link #hashPassword(String)}
      * @param clearPswd         the password that we're trying to match, in clear
-     *
      * @return if the password matches
      */
     public static boolean matchPassword(String hashedPswdAndSalt, String clearPswd) {

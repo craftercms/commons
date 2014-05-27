@@ -16,6 +16,10 @@
  */
 package org.craftercms.commons.mongo;
 
+import java.io.IOException;
+import java.util.List;
+import javax.annotation.PostConstruct;
+
 import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
@@ -25,10 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.io.Resource;
-
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Utility class for running Mongo scripts in JS.
@@ -104,7 +104,8 @@ public class MongoScriptRunner {
         if (!result.ok()) {
             Exception ex = result.getException();
 
-            throw new MongoDataException("An error occurred while running script at " + scriptPath.getDescription(), ex);
+            throw new MongoDataException("An error occurred while running script at " + scriptPath.getDescription(),
+                ex);
         }
 
         logger.info("Mongo script at {} executed successfully", scriptPath.getDescription());

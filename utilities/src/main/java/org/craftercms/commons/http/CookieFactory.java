@@ -16,9 +16,9 @@
  */
 package org.craftercms.commons.http;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.servlet.http.Cookie;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utility class to create cookies with common domain, path and max age.

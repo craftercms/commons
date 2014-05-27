@@ -14,19 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.mail;
+package org.craftercms.commons.crypto;
+
+import java.util.ResourceBundle;
+
+import org.craftercms.commons.i10n.AbstractI10nException;
 
 /**
- * Thrown when an email address in wrong format is encountered.
+ * General error thrown when a crypto related error occurs.
  *
  * @author avasquez
  */
-public class EmailAddressException extends EmailException {
+public class CryptoExceptionAbstract extends AbstractI10nException {
 
-    private static final String KEY = "mail.addressError";
+    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
 
-    public EmailAddressException(Throwable cause) {
-        super(KEY, cause);
+    public CryptoExceptionAbstract(String key, Object... args) {
+        super(key, args);
+    }
+
+    public CryptoExceptionAbstract(String key, Throwable cause, Object... args) {
+        super(key, cause, args);
+    }
+
+    @Override
+    protected ResourceBundle getResourceBundle() {
+        return ResourceBundle.getBundle(BUNDLE_NAME);
     }
 
 }

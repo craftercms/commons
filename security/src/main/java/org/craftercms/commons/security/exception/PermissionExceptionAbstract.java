@@ -14,19 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.mail;
+package org.craftercms.commons.security.exception;
 
 /**
- * Thrown when an email couldn't be sent for some reason.
+ * {@link java.lang.RuntimeException} version of {@link PermissionExceptionAbstract}.
  *
  * @author avasquez
  */
-public class EmailSendException extends EmailException {
+public class PermissionExceptionAbstract extends SecurityExceptionAbstract {
 
-    public static final String KEY = "mail.sendError";
+    public PermissionExceptionAbstract() {
+    }
 
-    public EmailSendException(Throwable cause) {
-        super(KEY, cause);
+    public PermissionExceptionAbstract(String key, Object... args) {
+        super(key, args);
+    }
+
+    public PermissionExceptionAbstract(String key, Throwable cause, Object... args) {
+        super(key, cause, args);
+    }
+
+    public PermissionExceptionAbstract(Throwable cause) {
+        super(cause);
     }
 
 }

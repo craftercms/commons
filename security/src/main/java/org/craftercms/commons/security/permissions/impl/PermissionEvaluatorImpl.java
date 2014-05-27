@@ -17,8 +17,8 @@
 package org.craftercms.commons.security.permissions.impl;
 
 import org.craftercms.commons.i10n.I10nLogger;
-import org.craftercms.commons.security.exception.PermissionException;
-import org.craftercms.commons.security.exception.SubjectNotFoundException;
+import org.craftercms.commons.security.exception.PermissionExceptionAbstract;
+import org.craftercms.commons.security.exception.SubjectNotFoundExceptionAbstract;
 import org.craftercms.commons.security.permissions.Permission;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.craftercms.commons.security.permissions.PermissionResolver;
@@ -32,11 +32,11 @@ import org.craftercms.commons.security.permissions.SubjectResolver;
 public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> {
 
     private static final I10nLogger logger = new I10nLogger(PermissionEvaluatorImpl.class,
-            "crafter.security.messages.logging");
+        "crafter.security.messages.logging");
 
     private static final String LOG_KEY_RESOLVING_GLOBAL_PERM = "security.permission.resolvingGlobalPermission";
-    private static final String LOG_KEY_RESOLVING_PERM =        "security.permission.resolvingPermission";
-    private static final String LOG_KEY_EVALUATING_PERM =       "security.permission.evaluatingPermission";
+    private static final String LOG_KEY_RESOLVING_PERM = "security.permission.resolvingPermission";
+    private static final String LOG_KEY_EVALUATING_PERM = "security.permission.evaluatingPermission";
 
     protected SubjectResolver<S> subjectResolver;
     protected PermissionResolver<S, O> permissionResolver;
@@ -50,17 +50,17 @@ public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> 
     }
 
     @Override
-    public boolean isAllowed(O object, String action) throws PermissionException {
+    public boolean isAllowed(O object, String action) throws PermissionExceptionAbstract {
         S subject = subjectResolver.getCurrentSubject();
         if (subject == null) {
-            throw new SubjectNotFoundException();
+            throw new SubjectNotFoundExceptionAbstract();
         }
 
         return isAllowed(subject, object, action);
     }
 
     @Override
-    public boolean isAllowed(S subject, O object, String action) throws PermissionException {
+    public boolean isAllowed(S subject, O object, String action) throws PermissionExceptionAbstract {
         Permission permission;
 
         if (object == null) {

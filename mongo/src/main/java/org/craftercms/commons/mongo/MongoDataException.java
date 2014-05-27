@@ -19,6 +19,7 @@ package org.craftercms.commons.mongo;
 
 /**
  * Checked Exception to wrap around MongoException.
+ *
  * @author Carlos Ortiz.
  */
 public class MongoDataException extends Exception {

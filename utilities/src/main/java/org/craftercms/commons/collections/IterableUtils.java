@@ -34,7 +34,6 @@ public class IterableUtils {
      * Creates a new list from the iterable elements.
      *
      * @param iterable the iterable
-     *
      * @return a list with the iterable elements
      */
     public static <T> List<T> toList(Iterable<T> iterable) {
@@ -54,7 +53,6 @@ public class IterableUtils {
      * Returns the number of elements the iterable contains.
      *
      * @param iterable the iterable
-     *
      * @return the element count of the iterable
      */
     public static <T> int count(Iterable<T> iterable) {

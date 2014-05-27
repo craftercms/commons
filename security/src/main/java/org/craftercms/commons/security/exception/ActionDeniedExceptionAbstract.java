@@ -17,16 +17,21 @@
 package org.craftercms.commons.security.exception;
 
 /**
- * Thrown to indicate that the current subject couldn't be found.
+ * Thrown when the execution of an action on an object has been denied to a subject.
  *
  * @author avasquez
  */
-public class SubjectNotFoundException extends PermissionException {
+public class ActionDeniedExceptionAbstract extends PermissionExceptionAbstract {
 
-    public static final String KEY = "security.permission.subjectNotFound";
+    private static final String GLOBAL_ACTION_DENIED_KEY = "security.permission.globalActionDenied";
+    private static final String ACTION_DENIED_KEY = "security.permission.actionDenied";
 
-    public SubjectNotFoundException() {
-        super(KEY);
+    public ActionDeniedExceptionAbstract(String action) {
+        super(GLOBAL_ACTION_DENIED_KEY, action);
+    }
+
+    public ActionDeniedExceptionAbstract(String action, Object securedObject) {
+        super(ACTION_DENIED_KEY, action, securedObject);
     }
 
 }

@@ -14,24 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.security.exception;
+package org.craftercms.commons.mail;
 
 /**
- * Thrown when the execution of an action on an object has been denied to a subject.
+ * Thrown when an email couldn't be sent for some reason.
  *
  * @author avasquez
  */
-public class ActionDeniedException extends PermissionException {
+public class EmailSendExceptionAbstract extends EmailExceptionAbstract {
 
-    private static final String GLOBAL_ACTION_DENIED_KEY =  "security.permission.globalActionDenied";
-    private static final String ACTION_DENIED_KEY =         "security.permission.actionDenied";
+    public static final String KEY = "mail.sendError";
 
-    public ActionDeniedException(String action) {
-        super(GLOBAL_ACTION_DENIED_KEY, action);
-    }
-
-    public ActionDeniedException(String action, Object securedObject) {
-        super(ACTION_DENIED_KEY, action, securedObject);
+    public EmailSendExceptionAbstract(Throwable cause) {
+        super(KEY, cause);
     }
 
 }

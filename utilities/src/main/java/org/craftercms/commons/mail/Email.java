@@ -26,6 +26,6 @@ public interface Email {
     /**
      * Sends the email.
      */
-    void send() throws EmailException;
+    void send() throws EmailExceptionAbstract;
 
 }

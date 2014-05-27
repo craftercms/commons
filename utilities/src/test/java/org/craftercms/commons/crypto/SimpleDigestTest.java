@@ -16,10 +16,10 @@
  */
 package org.craftercms.commons.crypto;
 
+import java.security.MessageDigest;
+
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
-
-import java.security.MessageDigest;
 
 import static org.junit.Assert.assertArrayEquals;
 

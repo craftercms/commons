@@ -16,20 +16,20 @@
  */
 package org.craftercms.commons.rest;
 
+import java.util.List;
+import javax.annotation.PostConstruct;
+
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 /**
  * Simple extension of {@link org.springframework.web.client.RestTemplate} that adds the following custom
  * functionality:
- *
+ * <p/>
  * <ul>
- *     <li>Forces the use of {@link org.springframework.http.client.HttpComponentsClientHttpRequestFactory},
- *     to avoid issues with 40x responses.</li>
- *     <li>{@link org.craftercms.commons.rest.HttpMessageConvertingResponseErrorHandler} is used by default.</li>
+ * <li>Forces the use of {@link org.springframework.http.client.HttpComponentsClientHttpRequestFactory},
+ * to avoid issues with 40x responses.</li>
+ * <li>{@link org.craftercms.commons.rest.HttpMessageConvertingResponseErrorHandler} is used by default.</li>
  * </ul>
  *
  * @author avasquez
@@ -37,10 +37,6 @@ import java.util.List;
 public class RestTemplate extends org.springframework.web.client.RestTemplate {
 
     protected Class<?> errorResponseType;
-
-    public void setErrorResponseType(Class<?> errorResponseType) {
-        this.errorResponseType = errorResponseType;
-    }
 
     public RestTemplate() {
         super(new HttpComponentsClientHttpRequestFactory());
@@ -55,11 +51,15 @@ public class RestTemplate extends org.springframework.web.client.RestTemplate {
         setErrorHandler(new HttpMessageConvertingResponseErrorHandler());
     }
 
+    public void setErrorResponseType(Class<?> errorResponseType) {
+        this.errorResponseType = errorResponseType;
+    }
+
     @PostConstruct
     public void init() {
         if (getErrorHandler() instanceof HttpMessageConvertingResponseErrorHandler) {
-            HttpMessageConvertingResponseErrorHandler errorHandler =
-                    (HttpMessageConvertingResponseErrorHandler) getErrorHandler();
+            HttpMessageConvertingResponseErrorHandler errorHandler = (HttpMessageConvertingResponseErrorHandler)
+                getErrorHandler();
 
             if (errorHandler.getMessageConverters() == null) {
                 errorHandler.setMessageConverters(getMessageConverters());

@@ -16,19 +16,19 @@
  */
 package org.craftercms.commons.security.permissions.annotations;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Map;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.craftercms.commons.i10n.I10nLogger;
-import org.craftercms.commons.security.exception.ActionDeniedException;
-import org.craftercms.commons.security.exception.PermissionException;
+import org.craftercms.commons.security.exception.ActionDeniedExceptionAbstract;
+import org.craftercms.commons.security.exception.PermissionExceptionAbstract;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.springframework.core.annotation.Order;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * Aspect that handles {@link org.craftercms.commons.security.permissions.annotations.HasPermission} annotations,
@@ -41,13 +41,13 @@ import java.util.Map;
 public class HasPermissionAnnotationHandler {
 
     private static final I10nLogger logger = new I10nLogger(HasPermissionAnnotationHandler.class,
-            "crafter.security.messages.logging");
+        "crafter.security.messages.logging");
 
-    private static final String LOG_KEY_METHOD_INT =            "security.permission.methodIntercepted";
+    private static final String LOG_KEY_METHOD_INT = "security.permission.methodIntercepted";
     private static final String LOG_KEY_METHOD_INT_NO_SEC_OBJ = "security.permission.methodInterceptedNoSecObject";
 
     private static final String ERROR_KEY_EVALUATOR_NOT_FOUND = "security.permission.evaluatorNotFound";
-    private static final String ERROR_KEY_EVALUATION_FAILED =   "security.permission.evaluationFailed";
+    private static final String ERROR_KEY_EVALUATION_FAILED = "security.permission.evaluationFailed";
 
     protected Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators;
 
@@ -72,26 +72,26 @@ public class HasPermissionAnnotationHandler {
         }
 
         if (permissionEvaluator == null) {
-            throw new PermissionException(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
+            throw new PermissionExceptionAbstract(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
         }
 
         try {
             allowed = permissionEvaluator.isAllowed(securedObject, action);
-        } catch (PermissionException e) {
-            throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
+        } catch (PermissionExceptionAbstract e) {
+            throw new PermissionExceptionAbstract(ERROR_KEY_EVALUATION_FAILED, e);
         }
 
         if (allowed) {
             return pjp.proceed();
         } else if (securedObject != null) {
-            throw new ActionDeniedException(hasPermission.action(), securedObject);
+            throw new ActionDeniedExceptionAbstract(hasPermission.action(), securedObject);
         } else {
-            throw new ActionDeniedException(hasPermission.action());
+            throw new ActionDeniedExceptionAbstract(hasPermission.action());
         }
     }
 
     protected Method getActualMethod(ProceedingJoinPoint pjp) {
-        MethodSignature ms = (MethodSignature) pjp.getSignature();
+        MethodSignature ms = (MethodSignature)pjp.getSignature();
         Method method = ms.getMethod();
 
         if (method.getDeclaringClass().isInterface()) {
@@ -123,7 +123,7 @@ public class HasPermissionAnnotationHandler {
         Object[] params = pjp.getArgs();
 
         for (int i = 0; i < paramAnnotations.length; i++) {
-            for (Annotation a: paramAnnotations[i]) {
+            for (Annotation a : paramAnnotations[i]) {
                 if (a instanceof SecuredObject) {
                     return params[i];
                 }

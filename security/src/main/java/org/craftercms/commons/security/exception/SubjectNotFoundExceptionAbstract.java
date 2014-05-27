@@ -17,25 +17,16 @@
 package org.craftercms.commons.security.exception;
 
 /**
- * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.PermissionException}.
+ * Thrown to indicate that the current subject couldn't be found.
  *
  * @author avasquez
  */
-public class PermissionException extends SecurityException {
+public class SubjectNotFoundExceptionAbstract extends PermissionExceptionAbstract {
 
-    public PermissionException() {
-    }
+    public static final String KEY = "security.permission.subjectNotFound";
 
-    public PermissionException(String key, Object... args) {
-        super(key, args);
-    }
-
-    public PermissionException(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
-    }
-
-    public PermissionException(Throwable cause) {
-        super(cause);
+    public SubjectNotFoundExceptionAbstract() {
+        super(KEY);
     }
 
 }

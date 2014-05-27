@@ -16,15 +16,13 @@
  */
 package org.craftercms.commons.crypto;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
-import org.craftercms.commons.crypto.CipherUtils;
-import org.craftercms.commons.crypto.SimpleCipher;
-import org.junit.Test;
-
+import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
-import java.security.Key;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 

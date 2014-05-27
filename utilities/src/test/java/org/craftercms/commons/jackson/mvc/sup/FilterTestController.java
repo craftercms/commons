@@ -15,21 +15,31 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftercms.commons.mongo;
+package org.craftercms.commons.jackson.mvc.sup;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.craftercms.commons.properties.OverrideProperties;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Holds a Map of all the register MongoQueries.
+ * Created by cortiz on 5/26/14.
  */
-public class JongoQueries extends OverrideProperties {
+@Controller
+public class FilterTestController {
 
-    @Override
-    protected void readPropertyFile(final InputStream input) throws IOException {
-        properties.loadFromXML(input);
+    public static final String SELECTOR = "/alias";
+    public static final String ALIAS_NESTED_SELECTOR = "/aliasSelector";
+
+    @RequestMapping(SELECTOR)
+    @ResponseBody
+    public Person aliasSelector() {
+        return new Person();
     }
 
+
+    @RequestMapping(ALIAS_NESTED_SELECTOR)
+    @ResponseBody
+    public User alias() {
+        return new User();
+    }
 }

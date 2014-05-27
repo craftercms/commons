@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns="http://www.springframework.org/schema/mvc"
+             xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc 
+			http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <context:component-scan base-package="org.craftercms.commons.jackson.mvc.sup"/>
+
+    <annotation-driven content-negotiation-manager="contentNegotiationManager">
+
+        <message-converters>
+            <beans:bean id="jacksonMessageConverter"
+                        class="org.craftercms.commons.jackson.mvc.CrafterJackson2MessageConverter"
+                    >
+                <beans:property name="supportedMediaTypes" value="application/json"/>
+                <beans:property name="prettyPrint" value="false"/>
+                <beans:property name="filter">
+                    <beans:bean class="org.craftercms.commons.jackson.mvc.SelectorFilterFactory">
+                        <beans:property name="filters">
+                            <beans:list>
+                                <beans:bean class="org.craftercms.commons.jackson.mvc.GDataPropertyFilter">
+                                    <beans:property name="selectorParameterName" value="selector"/>
+                                    <beans:property name="alias">
+                                        <beans:bean class="org.craftercms.commons.properties.OverrideProperties"
+                                                    init-method="init">
+                                            <beans:property name="resources">
+                                                <beans:list>
+                                                    <beans:value>
+                                                        classpath:/test-alias-selectors.properties
+                                                    </beans:value>
+                                                </beans:list>
+                                            </beans:property>
+                                        </beans:bean>
+                                    </beans:property>
+                                </beans:bean>
+                            </beans:list>
+                        </beans:property>
+                    </beans:bean>
+                </beans:property>
+                <beans:property name="objectMapper">
+                    <beans:bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                        <beans:property name="annotationIntrospector">
+                            <beans:bean class="org.craftercms.commons.jackson.mvc.CrafterJacksonAnnotationIntrospector">
+                                <beans:property name="defaultFilter" value="gdata"/>
+                            </beans:bean>
+                        </beans:property>
+                        <beans:property name="dateFormat">
+                            <beans:bean class="java.text.SimpleDateFormat">
+                                <beans:constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+                            </beans:bean>
+                        </beans:property>
+                    </beans:bean>
+                </beans:property>
+            </beans:bean>
+        </message-converters>
+    </annotation-driven>
+
+    <beans:bean id="contentNegotiationManager"
+                class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <beans:property name="favorPathExtension" value="true"/>
+        <beans:property name="favorParameter" value="false"/>
+        <beans:property name="ignoreAcceptHeader" value="true"/>
+        <beans:property name="defaultContentType" value="application/json"/>
+        <beans:property name="useJaf" value="false"/>
+        <beans:property name="mediaTypes">
+            <beans:value>
+                json=application/json
+                html=text/html
+                *=*/*
+            </beans:value>
+        </beans:property>
+    </beans:bean>
+
+
+</beans:beans>

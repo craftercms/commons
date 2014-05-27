@@ -16,30 +16,17 @@
  */
 package org.craftercms.commons.mail;
 
-import org.craftercms.commons.i10n.I10nException;
-
-import java.util.ResourceBundle;
-
 /**
- * Thrown when an email can't be sent for some reason.
+ * Thrown when an email address in wrong format is encountered.
  *
  * @author avasquez
  */
-public class EmailException extends I10nException {
+public class EmailAddressExceptionAbstract extends EmailExceptionAbstract {
 
-    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
+    private static final String KEY = "mail.addressError";
 
-    public EmailException(String key, Object... args) {
-        super(key, args);
-    }
-
-    public EmailException(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
-    }
-
-    @Override
-    protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(BUNDLE_NAME);
+    public EmailAddressExceptionAbstract(Throwable cause) {
+        super(KEY, cause);
     }
 
 }
