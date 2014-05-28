@@ -23,10 +23,10 @@ import org.junit.Test;
 /**
  * Created by cortiz on 1/10/14.
  */
-public class AbstractJongoRepositoryTest {
+public class JongoRepositoryTest {
 
-    public static final String TESTPOJO = "testpojo";
     private static final String COLLECTION_NAME = "testPojo";
+    public static final String TESTPOJO = "testpojo";
 
     @Test
     public void testAnnotatedPojoRepository() throws Exception {
@@ -41,8 +41,7 @@ public class AbstractJongoRepositoryTest {
 
     }
 
-
-    class TestAnnotated extends AbstractJongoRepository<TestAnnotatedPojo> {
+    private class TestAnnotated extends AbstractJongoRepository<TestAnnotatedPojo>{
 
         /**
          * Creates A instance of a Jongo Repository.
@@ -51,7 +50,7 @@ public class AbstractJongoRepositoryTest {
         }
     }
 
-    class TestSimple extends AbstractJongoRepository<TestPojo> {
+    private class TestSimple extends AbstractJongoRepository<TestPojo>{
 
         /**
          * Creates A instance of a Jongo Repository.
