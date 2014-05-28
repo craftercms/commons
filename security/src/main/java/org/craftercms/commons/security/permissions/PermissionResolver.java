@@ -28,8 +28,7 @@ public interface PermissionResolver<S, O> {
     /**
      * Returns the global permission (that applies to any or all objects) associated to the given subject.
      *
-     * @param subject   the subject
-     *
+     * @param subject the subject
      * @return the global permission, or null if no permission found
      */
     Permission getGlobalPermission(S subject) throws PermissionException;
@@ -37,9 +36,8 @@ public interface PermissionResolver<S, O> {
     /**
      * Returns the permission associated to the given subject and object.
      *
-     * @param subject   the subject (not null)
-     * @param object    the secured object or ID of the secured object (not null).
-     *
+     * @param subject the subject (not null)
+     * @param object  the secured object or ID of the secured object (not null).
      * @return the object/subject permission, or null if no permission found
      */
     Permission getPermission(S subject, O object) throws PermissionException;

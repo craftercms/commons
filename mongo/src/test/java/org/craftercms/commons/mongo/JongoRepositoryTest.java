@@ -41,7 +41,7 @@ public class JongoRepositoryTest {
 
     }
 
-    private class TestAnnotated extends JongoRepository<TestAnnotatedPojo>{
+    private class TestAnnotated extends AbstractJongoRepository<TestAnnotatedPojo>{
 
         /**
          * Creates A instance of a Jongo Repository.
@@ -50,7 +50,7 @@ public class JongoRepositoryTest {
         }
     }
 
-    private class TestSimple extends JongoRepository<TestPojo>{
+    private class TestSimple extends AbstractJongoRepository<TestPojo>{
 
         /**
          * Creates A instance of a Jongo Repository.

@@ -31,6 +31,11 @@ public class RequestContext {
     private HttpServletRequest request;
     private HttpServletResponse response;
 
+    public RequestContext(HttpServletRequest request, HttpServletResponse response) {
+        this.request = request;
+        this.response = response;
+    }
+
     /**
      * Returns the context for the current thread.
      */
@@ -50,11 +55,6 @@ public class RequestContext {
      */
     public static void clear() {
         threadLocal.remove();
-    }
-
-    public RequestContext(HttpServletRequest request, HttpServletResponse response) {
-        this.request = request;
-        this.response = response;
     }
 
     public HttpServletRequest getRequest() {

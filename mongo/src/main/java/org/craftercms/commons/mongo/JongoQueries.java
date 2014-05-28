@@ -17,82 +17,19 @@
 
 package org.craftercms.commons.mongo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Properties;
+
+import org.craftercms.commons.properties.OverrideProperties;
 
 /**
  * Holds a Map of all the register MongoQueries.
  */
-public class JongoQueries {
+public class JongoQueries extends OverrideProperties {
 
-    /**
-     * Logger.
-     */
-    private Logger log = LoggerFactory.getLogger(JongoQueries.class);
-
-    /**
-     * List of all Query files to be load.
-     */
-    private List<Resource> queryFiles;
-
-    /**
-     * Backend properties file.
-     */
-    protected Properties properties;
-
-    /**
-     * Create a JongoQueries instance.
-     */
-    public JongoQueries() {
-        properties = new Properties();
+    @Override
+    protected void readPropertyFile(final InputStream input) throws IOException {
+        properties.loadFromXML(input);
     }
 
-    public void init() {
-        for (Resource queryFile : queryFiles) {
-            if (queryFile.exists()) {
-                try (InputStream in = queryFile.getInputStream()) {
-                    properties.loadFromXML(in);
-                } catch (IOException ex) {
-                    log.debug("Unable to load queries from " + queryFile.getDescription(), ex);
-                }
-            } else {
-                log.info("Query file at {} not found. Ignoring it...", queryFile.getDescription());
-            }
-        }
-    }
-
-    /**
-     * Gets the Query with the given name. Null if query is not found.
-     *
-     * @param name Name of the query.
-     * @return Query with the given name. Null if nothing with that name if found.
-     */
-    public String get(String name) {
-        return properties.getProperty(name);
-    }
-
-    /**
-     * Reload the Query map.
-     */
-    public void reload() {
-        destroy();
-        init();
-    }
-
-    /**
-     * Delete all the queries from the map.
-     */
-    private void destroy() {
-        properties.clear();
-    }
-
-    public void setQueryFiles(final List<Resource> queryFiles) {
-        this.queryFiles = queryFiles;
-    }
 }

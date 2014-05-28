@@ -17,18 +17,25 @@
 
 package org.craftercms.commons.mongo;
 
+import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
 import com.mongodb.CommandResult;
 import com.mongodb.MongoException;
 import com.mongodb.WriteResult;
+import org.apache.commons.collections4.keyvalue.DefaultKeyValue;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
-import org.jongo.*;
+import org.jongo.Find;
+import org.jongo.FindOne;
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
+import org.jongo.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
-
-import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
 
 /**
  * Simple interface to interact with Jongo/MongoDB.<br/>
@@ -46,9 +53,9 @@ import java.util.Arrays;
  *
  * @author Carlos Ortiz.
  */
-public abstract class JongoRepository<T> implements CrudRepository<T> {
+public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
 
-    private static final Logger log = LoggerFactory.getLogger(JongoRepository.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractJongoRepository.class);
 
     protected final Class<T> clazz;
     protected Jongo jongo;
@@ -59,7 +66,7 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
      * Creates a instance of a Jongo Repository.
      */
     @SuppressWarnings("unchecked")
-    public JongoRepository() throws MongoDataException {
+    public AbstractJongoRepository() throws MongoDataException {
         //Thru pure magic get parameter Class .
         this.clazz = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         if (this.clazz == null) {
@@ -139,12 +146,12 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             checkCommandResult(writeResult);
         } catch (MongoException.DuplicateKey ex) {
             String msg = "Duplicate key for save query " + query + " of type " + clazz.getName() +
-                    " with params " + Arrays.toString(queryParams);
+                " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new DuplicateKeyException(msg, ex);
         } catch (MongoException ex) {
             String msg = "Unable to save document by query " + query + " of type " + clazz.getName() +
-                    " with params " + Arrays.toString(queryParams);
+                " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -178,7 +185,7 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             return getCollection().count(query, queryParams);
         } catch (MongoException ex) {
             String msg = "Unable to count documents of type " + clazz.getName() + " that match the query " + query +
-                    " with params " + Arrays.toString(queryParams);
+                " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -212,7 +219,7 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             return returnList(getCollection().find(query, queryParams));
         } catch (MongoException ex) {
             String msg = "Unable to find documents by query " + query + " of type " + clazz.getName() +
-                    " with params " + Arrays.toString(queryParams);
+                " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -235,7 +242,7 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             return getCollection().findOne(query, queryParams).as(clazz);
         } catch (MongoException ex) {
             String msg = "Unable to find document by query " + query + " of type " + clazz.getName() +
-                    " with params " + Arrays.toString(queryParams);
+                " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -260,7 +267,7 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
             checkCommandResult(writeResult);
         } catch (MongoException ex) {
             String msg = "Unable to remove document by query " + query + " of type " + clazz.getName() +
-                    " with params " + Arrays.toString(queryParams);
+                " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -298,52 +305,52 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public void update(final String id, final T updateObject, final boolean multi, final boolean upsert) throws
-        MongoDataException {
+    public void update(final String id, final T updateObject, final boolean multi,
+                       final boolean upsert) throws MongoDataException {
         try {
             Update update = getCollection().update(new ObjectId(id));
-            if (multi){
+            if (multi) {
                 update.multi();
             }
-            if (upsert){
+            if (upsert) {
                 update.upsert();
             }
             WriteResult result = update.with(updateObject);
             checkCommandResult(result);
         } catch (MongoException.DuplicateKey ex) {
             String msg = "Duplicate key for update with id='" + id + "', updatedObject=" + updateObject + ", multi=" +
-                    multi + ", upsert=" + upsert;
+                multi + ", upsert=" + upsert;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         } catch (MongoException ex) {
             String msg = "Unable to do update with id='" + id + "', updatedObject=" + updateObject + ", multi=" +
-                    multi + ", upsert=" + upsert;
+                multi + ", upsert=" + upsert;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
     }
 
     @Override
-    public void update(final String id, final String modifier, final boolean multi, final boolean upsert) throws
-        MongoDataException {
+    public void update(final String id, final String modifier, final boolean multi,
+                       final boolean upsert) throws MongoDataException {
         try {
             Update update = getCollection().update(new ObjectId(id));
-            if(multi){
+            if (multi) {
                 update.multi();
             }
-            if(upsert){
+            if (upsert) {
                 update.upsert();
             }
             WriteResult result = update.with(modifier);
             checkCommandResult(result);
         } catch (MongoException.DuplicateKey ex) {
             String msg = "Duplicate key for update with id='" + id + "', modifier=" + modifier + ", multi=" +
-                    multi + ", upsert=" + upsert;
+                multi + ", upsert=" + upsert;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         } catch (MongoException ex) {
             String msg = "Unable to do update with id='" + id + "', modifier=" + modifier + ", multi=" +
-                    multi + ", upsert=" + upsert;
+                multi + ", upsert=" + upsert;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -353,22 +360,22 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
                        final Object... params) throws MongoDataException {
         try {
             Update update = getCollection().update(new ObjectId(id));
-            if(multi){
+            if (multi) {
                 update.multi();
             }
-            if(upsert){
+            if (upsert) {
                 update.upsert();
             }
-            WriteResult result = update.with(modifier,params);
+            WriteResult result = update.with(modifier, params);
             checkCommandResult(result);
         } catch (MongoException.DuplicateKey ex) {
             String msg = "Duplicate key for update with id='" + id + "', modifier=" + modifier + ", multi=" +
-                    multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
+                multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         } catch (MongoException ex) {
             String msg = "Unable to do update with id='" + id + "', modifier=" + modifier + ", multi=" +
-                    multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
+                multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -415,6 +422,37 @@ public abstract class JongoRepository<T> implements CrudRepository<T> {
                 throw new MongoDataException(ex.getMessage(), ex);
             }
         }
+    }
+
+
+    /**
+     * Creates a Sort query based on the fields.<br/>
+     * Key of the map is the field <b>False=Desc,True=asc</b>
+     * for the field, Respect order of the keys
+     *
+     * @param fields Keys are fields, true if asc, false desc
+     * @return
+     */
+    protected String createSortQuery(final List<DefaultKeyValue<String, Boolean>> fields) {
+        StringBuilder builder = new StringBuilder("{");
+        Iterator<DefaultKeyValue<String, Boolean>> iter = fields.iterator();
+        while (iter.hasNext()) {
+            DefaultKeyValue<String, Boolean> field = iter.next();
+            builder.append("\"");
+            builder.append(field.getKey());
+            builder.append("\"");
+            builder.append(":");
+            if (field.getValue()) {
+                builder.append(1);
+            } else {
+                builder.append(-1);
+            }
+            if (iter.hasNext()) {
+                builder.append(",");
+            }
+        }
+        builder.append("}");
+        return builder.toString();
     }
 
     /**

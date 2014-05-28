@@ -16,36 +16,37 @@
  */
 package org.craftercms.commons.i10n;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
- * Root exception for any {@link java.lang.Exception} that wants to be localized.
+ * Root runtime exception for any {@link Exception} that wants to be localized.
  *
  * @author avasquez
  */
-public abstract class I10nException extends Exception {
+public abstract class AbstractI10nRuntimeException extends RuntimeException {
 
+    private static final long serialVersionUID = -2438526910810755060L;
     protected String key;
     protected Object[] args;
 
-    public I10nException() {
+    public AbstractI10nRuntimeException() {
     }
 
-    public I10nException(String key, Object... args) {
+    public AbstractI10nRuntimeException(String key, Object... args) {
         this.key = key;
         this.args = args;
     }
 
-    public I10nException(String key, Throwable cause, Object... args) {
+    public AbstractI10nRuntimeException(String key, Throwable cause, Object... args) {
         super(cause);
 
         this.key = key;
         this.args = args;
     }
 
-    public I10nException(Throwable cause) {
+    public AbstractI10nRuntimeException(Throwable cause) {
         super(cause);
     }
 

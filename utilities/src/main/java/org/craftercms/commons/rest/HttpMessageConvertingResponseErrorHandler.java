@@ -16,6 +16,9 @@
  */
 package org.craftercms.commons.rest;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
@@ -24,9 +27,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClientException;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * {@link org.springframework.web.client.ResponseErrorHandler} that converts the body of a response with error status
@@ -65,8 +65,8 @@ public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorH
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
         HttpStatus status = response.getStatusCode();
-        HttpMessageConverterExtractor<?> responseExtractor =
-                new HttpMessageConverterExtractor<>(responseType, messageConverters);
+        HttpMessageConverterExtractor<?> responseExtractor = new HttpMessageConverterExtractor<>(responseType,
+            messageConverters);
 
         Object errorDetails;
         try {
@@ -81,8 +81,8 @@ public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorH
     }
 
     protected boolean hasError(HttpStatus statusCode) {
-        return (statusCode.series() == HttpStatus.Series.CLIENT_ERROR ||
-                statusCode.series() == HttpStatus.Series.SERVER_ERROR);
+        return (statusCode.series() == HttpStatus.Series.CLIENT_ERROR || statusCode.series() == HttpStatus.Series
+            .SERVER_ERROR);
     }
 
     protected String getResponseBodyAsString(ClientHttpResponse response) throws IOException {

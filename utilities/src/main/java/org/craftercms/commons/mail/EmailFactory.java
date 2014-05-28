@@ -26,14 +26,13 @@ public interface EmailFactory {
     /**
      * Creates a new {@link org.craftercms.commons.mail.Email}.
      *
-     * @param from      the sender's address
-     * @param to        the recipients' addresses (optional)
-     * @param cc        the CC recipients' addresses (optional)
-     * @param bcc       the BCC recipients' addresses (optional)
-     * @param subject   the subject of the email
-     * @param body      the text body of the email
-     * @param html      if the body is in HTML format
-     *
+     * @param from    the sender's address
+     * @param to      the recipients' addresses (optional)
+     * @param cc      the CC recipients' addresses (optional)
+     * @param bcc     the BCC recipients' addresses (optional)
+     * @param subject the subject of the email
+     * @param body    the text body of the email
+     * @param html    if the body is in HTML format
      * @return the created email
      */
     Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String body,
@@ -50,7 +49,6 @@ public interface EmailFactory {
      * @param templateName  the template name of the email
      * @param templateModel the template model of the email
      * @param html          if the body is in HTML format
-     *
      * @return the created email
      */
     Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String templateName,

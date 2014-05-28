@@ -16,12 +16,17 @@
  */
 package org.craftercms.commons.http;
 
-import org.craftercms.commons.i10n.I10nLogger;
-
-import javax.servlet.*;
+import java.io.IOException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.craftercms.commons.i10n.I10nLogger;
 
 /**
  * Binds a new request context to the current thread before the chain is called, and then removes it after the chain
@@ -31,11 +36,10 @@ import java.io.IOException;
  */
 public class RequestContextBindingFilter implements Filter {
 
-    private static final I10nLogger logger = new I10nLogger(RequestContextBindingFilter.class,
-            "crafter.commons.messages.logging");
-
     public static final String LOG_KEY_BINGING_CONTEXT = "http.requestContext.bindingContext";
     public static final String LOG_KEY_UNBINDING_CONTEXT = "http.requestContext.unbindingContext";
+    private static final I10nLogger logger = new I10nLogger(RequestContextBindingFilter.class,
+        "crafter.commons.messages.logging");
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -54,10 +58,10 @@ public class RequestContextBindingFilter implements Filter {
      * @param chain
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException,
-            IOException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse resp = (HttpServletResponse) response;
+    public void doFilter(ServletRequest request, ServletResponse response,
+                         FilterChain chain) throws ServletException, IOException {
+        HttpServletRequest req = (HttpServletRequest)request;
+        HttpServletResponse resp = (HttpServletResponse)response;
         RequestContext context = createRequestContext(req, resp);
         String threadName = Thread.currentThread().getName();
 

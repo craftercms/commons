@@ -38,7 +38,8 @@ public class DuplicateKeyException extends MongoDataException {
         super(cause);
     }
 
-    public DuplicateKeyException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DuplicateKeyException(String message, Throwable cause, boolean enableSuppression,
+                                 boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

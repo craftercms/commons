@@ -16,6 +16,9 @@
  */
 package org.craftercms.commons.security.permissions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.annotations.HasPermission;
@@ -26,12 +29,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author avasquez
@@ -151,6 +154,18 @@ public class HasPermissionAnnotationHandlerTest {
         return resolver;
     }
 
+    private interface MockSecuredService {
+
+        String doSomethingWithObject(MockSecuredObject object);
+
+        String doAnotherThingWithObjectId(long id);
+
+        String doYetAnotherThingWithNoObject();
+
+        void doSomethingWrongPermissionType();
+
+    }
+
     private static class MockSubjectResolver implements SubjectResolver<String> {
 
         private String subject;
@@ -173,21 +188,9 @@ public class HasPermissionAnnotationHandlerTest {
         @Override
         public String toString() {
             return "MockSecuredObject{" +
-                    "id='" + id + '\'' +
-                    '}';
+                "id='" + id + '\'' +
+                '}';
         }
-
-    }
-
-    private interface MockSecuredService {
-
-        String doSomethingWithObject(MockSecuredObject object);
-
-        String doAnotherThingWithObjectId(long id);
-
-        String doYetAnotherThingWithNoObject();
-
-        void doSomethingWrongPermissionType();
 
     }
 

@@ -34,15 +34,14 @@ public final class MapUtils {
      *
      * @param dst the map where elements will be merged into
      * @param src the map with the elements to merge
-     *
      * @return a deep merge of the two given maps.
      */
     public static Map deepMerge(Map dst, Map src) {
         if (dst != null && src != null) {
             for (Object key : src.keySet()) {
                 if (src.get(key) instanceof Map && dst.get(key) instanceof Map) {
-                    Map originalChild = (Map) dst.get(key);
-                    Map newChild = (Map) src.get(key);
+                    Map originalChild = (Map)dst.get(key);
+                    Map newChild = (Map)src.get(key);
                     dst.put(key, deepMerge(originalChild, newChild));
                 } else {
                     dst.put(key, src.get(key));

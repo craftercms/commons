@@ -17,7 +17,7 @@
 package org.craftercms.commons.security.exception;
 
 /**
- * {@link java.lang.RuntimeException} version of {@link org.craftercms.commons.security.exception.PermissionException}.
+ * {@link java.lang.RuntimeException} version of {@link PermissionException}.
  *
  * @author avasquez
  */

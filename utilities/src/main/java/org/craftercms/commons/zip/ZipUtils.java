@@ -1,14 +1,22 @@
 package org.craftercms.commons.zip;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utility for zipping files.
@@ -21,9 +29,8 @@ public class ZipUtils {
     /**
      * Zips a collection of files to a destination zip output stream.
      *
-     * @param files A collection of files and directories
+     * @param files        A collection of files and directories
      * @param outputStream The output stream of the destination zip file
-     *
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -44,9 +51,8 @@ public class ZipUtils {
     /**
      * Zips a collection of files to a destination zip file.
      *
-     * @param files A collection of files and directories
+     * @param files   A collection of files and directories
      * @param zipFile The path of the destination zip file
-     *
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -62,7 +68,7 @@ public class ZipUtils {
     /**
      * Unzips a zip from an input stream into an output folder.
      *
-     * @param inputStream the zip input stream
+     * @param inputStream  the zip input stream
      * @param outputFolder the output folder where the files
      * @throws IOException
      */
@@ -88,7 +94,7 @@ public class ZipUtils {
     /**
      * Unzips a zip file into an output folder.
      *
-     * @param zipFile the zip file
+     * @param zipFile      the zip file
      * @param outputFolder the output folder where the files
      * @throws IOException
      */
@@ -104,14 +110,14 @@ public class ZipUtils {
     /**
      * Adds a directory to the current zip
      *
-     * @param path the path of the parent folder in the zip
+     * @param path   the path of the parent folder in the zip
      * @param folder the directory to be  added
-     * @param zos the current zip output stream
+     * @param zos    the current zip output stream
      * @throws FileNotFoundException
      * @throws IOException
      */
     private static void addFolderToZip(String path, File folder, ZipOutputStream zos) throws IOException {
-        String currentPath = StringUtils.isNotEmpty(path) ? path + "/" + folder.getName() : folder.getName();
+        String currentPath = StringUtils.isNotEmpty(path)? path + "/" + folder.getName(): folder.getName();
 
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
@@ -127,12 +133,12 @@ public class ZipUtils {
      *
      * @param path the path of the parent folder in the zip
      * @param file the file to be added
-     * @param zos the current zip output stream
+     * @param zos  the current zip output stream
      * @throws FileNotFoundException
      * @throws IOException
      */
     private static void addFileToZip(String path, File file, ZipOutputStream zos) throws IOException {
-        String currentPath = StringUtils.isNotEmpty(path) ? path + "/" + file.getName() : file.getName();
+        String currentPath = StringUtils.isNotEmpty(path)? path + "/" + file.getName(): file.getName();
 
         zos.putNextEntry(new ZipEntry(currentPath));
 
