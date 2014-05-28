@@ -21,11 +21,11 @@ package org.craftercms.commons.mail;
  *
  * @author avasquez
  */
-public class EmailSendExceptionAbstract extends EmailExceptionAbstract {
+public class EmailSendException extends EmailException {
 
     public static final String KEY = "mail.sendError";
 
-    public EmailSendExceptionAbstract(Throwable cause) {
+    public EmailSendException(Throwable cause) {
         super(KEY, cause);
     }
 

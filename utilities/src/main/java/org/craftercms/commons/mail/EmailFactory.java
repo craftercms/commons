@@ -36,7 +36,7 @@ public interface EmailFactory {
      * @return the created email
      */
     Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String body,
-                   boolean html) throws EmailExceptionAbstract;
+                   boolean html) throws EmailException;
 
     /**
      * Creates a new {@link org.craftercms.commons.mail.Email}.
@@ -52,6 +52,6 @@ public interface EmailFactory {
      * @return the created email
      */
     Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String templateName,
-                   Object templateModel, boolean html) throws EmailExceptionAbstract;
+                   Object templateModel, boolean html) throws EmailException;
 
 }

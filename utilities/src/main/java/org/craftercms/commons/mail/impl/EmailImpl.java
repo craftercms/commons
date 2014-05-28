@@ -20,8 +20,8 @@ import javax.mail.internet.MimeMessage;
 
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.mail.Email;
-import org.craftercms.commons.mail.EmailExceptionAbstract;
-import org.craftercms.commons.mail.EmailSendExceptionAbstract;
+import org.craftercms.commons.mail.EmailException;
+import org.craftercms.commons.mail.EmailSendException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -43,11 +43,11 @@ public class EmailImpl implements Email {
     }
 
     @Override
-    public void send() throws EmailExceptionAbstract {
+    public void send() throws EmailException {
         try {
             mailSender.send(message);
         } catch (MailException e) {
-            throw new EmailSendExceptionAbstract(e);
+            throw new EmailSendException(e);
         }
 
         logger.debug(LOG_KEY_EMAIL_SENT);

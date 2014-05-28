@@ -16,17 +16,30 @@
  */
 package org.craftercms.commons.mail;
 
+import java.util.ResourceBundle;
+
+import org.craftercms.commons.i10n.AbstractI10nException;
+
 /**
- * Thrown when an email message couldn't be prepared properly.
+ * Thrown when an email can't be sent for some reason.
  *
  * @author avasquez
  */
-public class EmailPreparationExceptionAbstract extends EmailExceptionAbstract {
+public class EmailException extends AbstractI10nException {
 
-    public static final String KEY = "mail.preparationError";
+    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
 
-    public EmailPreparationExceptionAbstract(Throwable cause) {
-        super(KEY, cause);
+    public EmailException(String key, Object... args) {
+        super(key, args);
+    }
+
+    public EmailException(String key, Throwable cause, Object... args) {
+        super(key, cause, args);
+    }
+
+    @Override
+    protected ResourceBundle getResourceBundle() {
+        return ResourceBundle.getBundle(BUNDLE_NAME);
     }
 
 }
