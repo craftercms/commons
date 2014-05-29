@@ -1,17 +1,17 @@
 package org.craftercms.commons.zip;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.springframework.core.io.ClassPathResource;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.springframework.core.io.ClassPathResource;
 
 import static org.junit.Assert.assertTrue;
 

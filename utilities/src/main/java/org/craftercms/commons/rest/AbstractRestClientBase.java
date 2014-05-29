@@ -24,7 +24,7 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author avasquez
  */
-public abstract class RestClientBase {
+public abstract class AbstractRestClientBase {
 
     protected String baseUrl;
     protected String extension;
@@ -45,7 +45,7 @@ public abstract class RestClientBase {
     }
 
     protected String getAbsoluteUrl(String relativeUrl) {
-        return baseUrl + relativeUrl + (extension != null ? extension : "");
+        return baseUrl + relativeUrl + (extension != null? extension: "");
     }
 
 }

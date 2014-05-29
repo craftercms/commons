@@ -16,11 +16,11 @@
  */
 package org.craftercms.commons.security.permissions;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Base for {@link org.craftercms.commons.security.permissions.Permission} that uses a set of allowed actions to
@@ -34,8 +34,8 @@ public abstract class PermissionBase implements Permission {
 
     @Override
     public boolean isAllowed(String action) {
-        return CollectionUtils.isNotEmpty(allowedActions) &&
-               (allowedActions.contains(ANY_ACTION) || allowedActions.contains(action));
+        return CollectionUtils.isNotEmpty(allowedActions) && (allowedActions.contains(ANY_ACTION) || allowedActions
+            .contains(action));
     }
 
     public Set<String> getAllowedActions() {
@@ -63,7 +63,7 @@ public abstract class PermissionBase implements Permission {
     }
 
     public PermissionBase allow(String... actions) {
-        if (ArrayUtils.isNotEmpty(actions)){
+        if (ArrayUtils.isNotEmpty(actions)) {
             for (String action : actions) {
                 allow(action);
             }
@@ -75,8 +75,8 @@ public abstract class PermissionBase implements Permission {
     @Override
     public String toString() {
         return getClass().getSimpleName() + "{" +
-                "allowedActions=" + allowedActions +
-                '}';
+            "allowedActions=" + allowedActions +
+            '}';
     }
 
     @Override
@@ -88,9 +88,9 @@ public abstract class PermissionBase implements Permission {
             return false;
         }
 
-        PermissionBase that = (PermissionBase) o;
+        PermissionBase that = (PermissionBase)o;
 
-        if (allowedActions != null ? !allowedActions.equals(that.allowedActions) : that.allowedActions != null) {
+        if (allowedActions != null? !allowedActions.equals(that.allowedActions): that.allowedActions != null) {
             return false;
         }
 
@@ -99,7 +99,7 @@ public abstract class PermissionBase implements Permission {
 
     @Override
     public int hashCode() {
-        return allowedActions != null ? allowedActions.hashCode() : 0;
+        return allowedActions != null? allowedActions.hashCode(): 0;
     }
 
 }

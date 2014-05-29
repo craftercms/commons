@@ -16,16 +16,16 @@
  */
 package org.craftercms.commons.mail;
 
-import org.craftercms.commons.i10n.I10nException;
-
 import java.util.ResourceBundle;
+
+import org.craftercms.commons.i10n.AbstractI10nException;
 
 /**
  * Thrown when an email can't be sent for some reason.
  *
  * @author avasquez
  */
-public class EmailException extends I10nException {
+public class EmailException extends AbstractI10nException {
 
     public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
 

@@ -74,8 +74,8 @@ public interface CrudRepository<T> {
      * @param updateObject Object to be use to updated.
      * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
      */
-    void update(final String id, final T updateObject, final boolean multi, final boolean upsert)
-            throws MongoDataException;
+    void update(final String id, final T updateObject, final boolean multi,
+                final boolean upsert) throws MongoDataException;
 
     /**
      * Updates the given
@@ -87,8 +87,8 @@ public interface CrudRepository<T> {
      * @param upsert   If set to true, creates a new document when no document matches the query criteria.
      * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
      */
-    void update(final String id, final String modifier, final boolean multi, final boolean upsert)
-            throws MongoDataException;
+    void update(final String id, final String modifier, final boolean multi,
+                final boolean upsert) throws MongoDataException;
 
     /**
      * Updates the given
@@ -124,8 +124,8 @@ public interface CrudRepository<T> {
     /**
      * Returns the number of documents that match the query
      *
-     * @param query         the query the documents should match
-     * @param queryParams   the query parameters
+     * @param query       the query the documents should match
+     * @param queryParams the query parameters
      * @return the count of documents that match the query
      * @throws MongoDataException if an error occurs
      */
@@ -142,7 +142,7 @@ public interface CrudRepository<T> {
      *
      * @return A Iterable Instance of all the documents.<b>This is lazy loaded</b>
      * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping
-     * exception happen.
+     *                                                         exception happen.
      */
     Iterable<T> findAll() throws MongoDataException;
 
@@ -165,7 +165,7 @@ public interface CrudRepository<T> {
      *                    queryParams are not named, therefor they have to be send multiple times if needed</b>
      * @return A Iterable Instance of all the documents.<b>This is lazy loaded</b>
      * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping
-     * exception happen.
+     *                                                         exception happen.
      */
     Iterable<T> find(String query, Object... queryParams) throws MongoDataException;
 
@@ -176,7 +176,7 @@ public interface CrudRepository<T> {
      *              .properties
      * @return A instance of the given class. Null if nothing is found.
      * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping
-     * exception happen.
+     *                                                         exception happen.
      */
     T findOne(String query) throws MongoDataException;
 
@@ -190,7 +190,7 @@ public interface CrudRepository<T> {
      *                    queryParams are not named, therefor they have to be send multiple times if needed</b>
      * @return A instance of the given class. Null if nothing is found.
      * @throws org.craftercms.commons.mongo.MongoDataException If couldn't search for the documents. or a mapping
-     * exception happen.
+     *                                                         exception happen.
      */
     T findOne(String query, Object... queryParams) throws MongoDataException;
 

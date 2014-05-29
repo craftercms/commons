@@ -16,12 +16,12 @@
  */
 package org.craftercms.commons.jackson;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.bson.types.ObjectId;
-
-import java.io.IOException;
 
 /**
  * Custom Jackson serializer for {@link org.bson.types.ObjectId}s, which serializes an ObjectId as a String by

@@ -27,8 +27,7 @@ public interface Permission {
     /**
      * Returns true if action execution is allowed
      *
-     * @param action    the action to execute
-     *
+     * @param action the action to execute
      * @return true if action execution is allowed, false otherwise.
      */
     boolean isAllowed(String action);

@@ -16,12 +16,12 @@
  */
 package org.craftercms.commons.crypto;
 
-import org.apache.commons.codec.binary.Base64;
-import org.craftercms.commons.i10n.I10nLogger;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.codec.binary.Base64;
+import org.craftercms.commons.i10n.I10nLogger;
 
 /**
  * Utility class for simplifying message digest generation, using the {@link java.security.MessageDigest}. Default
@@ -32,18 +32,14 @@ import java.security.NoSuchAlgorithmException;
  */
 public class SimpleDigest {
 
-    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, "crafter.commons.messages.logging");
-
-    public static final String LOG_KEY_DEF_DIGEST_CREATED =    "crypto.digest.defaultDigestCreated";
-    public static final String LOG_KEY_SALT_GEN =              "crypto.digest.saltGenerated";
-    public static final String LOG_KEY_DIGEST_GEN =            "crypto.digest.digestGenerated";
-
+    public static final String LOG_KEY_DEF_DIGEST_CREATED = "crypto.digest.defaultDigestCreated";
+    public static final String LOG_KEY_SALT_GEN = "crypto.digest.saltGenerated";
+    public static final String LOG_KEY_DIGEST_GEN = "crypto.digest.digestGenerated";
     public static final String ERROR_KEY_INVALID_ALG = "crypto.digest.invalidDigestAlgorithm";
-
-    public static final String DEFAULT_ALGORITHM =  "SHA-256";
-    public static final int DEFAULT_ITERATIONS =    1000;
-    public static final int DEFAULT_SALT_SIZE =     16;
-
+    public static final String DEFAULT_ALGORITHM = "SHA-256";
+    public static final int DEFAULT_ITERATIONS = 1000;
+    public static final int DEFAULT_SALT_SIZE = 16;
+    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, "crafter.commons.messages.logging");
     private MessageDigest digest;
     private int iterations;
     private byte[] salt;
@@ -60,11 +56,11 @@ public class SimpleDigest {
         this.digest = digest;
     }
 
-    public void setAlgorithm(String algorithm) throws CryptoException {
+    public void setAlgorithm(String algorithm) throws CryptoExceptionAbstract {
         try {
             this.digest = MessageDigest.getInstance(algorithm);
         } catch (NoSuchAlgorithmException ex) {
-            throw new CryptoException(ERROR_KEY_INVALID_ALG, ex, algorithm);
+            throw new CryptoExceptionAbstract(ERROR_KEY_INVALID_ALG, ex, algorithm);
         }
     }
 
@@ -85,7 +81,7 @@ public class SimpleDigest {
     }
 
     public String getBase64Salt() {
-        return salt != null? Base64.encodeBase64String(salt) : null;
+        return salt != null? Base64.encodeBase64String(salt): null;
     }
 
     public void setBase64Salt(String salt) {

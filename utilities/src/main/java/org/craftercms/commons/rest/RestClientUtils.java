@@ -16,14 +16,14 @@
  */
 package org.craftercms.commons.rest;
 
-import org.apache.commons.collections4.MapUtils;
-import org.springframework.util.MultiValueMap;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.util.MultiValueMap;
 
 /**
  * Utilities for REST clients.
@@ -38,9 +38,9 @@ public class RestClientUtils {
     /**
      * Adds a param value to a params map. If value is null, nothing is done.
      *
-     * @param key       the param key
-     * @param value     the param value
-     * @param params    the params map
+     * @param key    the param key
+     * @param value  the param value
+     * @param params the params map
      */
     public static void addValue(String key, Object value, MultiValueMap<String, String> params) {
         if (value != null) {
@@ -51,9 +51,9 @@ public class RestClientUtils {
     /**
      * Adds a collection of param values to a params map. If the collection is null, nothing is done.
      *
-     * @param key       the param key
-     * @param values    the collection of param values
-     * @param params    the params map
+     * @param key    the param key
+     * @param values the collection of param values
+     * @param params the params map
      */
     public static void addValues(String key, Collection<String> values, MultiValueMap<String, String> params) {
         if (values != null) {
@@ -66,9 +66,9 @@ public class RestClientUtils {
     /**
      * Adds an array of param values to a params map. If the array is null, nothing is done.
      *
-     * @param key       the param key
-     * @param values    the array of param values
-     * @param params    the params map
+     * @param key    the param key
+     * @param values the array of param values
+     * @param params the params map
      */
     public static void addValues(String key, String[] values, MultiValueMap<String, String> params) {
         if (values != null) {
@@ -81,11 +81,10 @@ public class RestClientUtils {
     /**
      * Converts a map of params to a query string, and adds it to the specified URL.
      *
-     * @param url           the URL to add the params to
-     * @param params        the params to convert to a query string and add to the URL
-     * @param encodeParams  if the param values should be encoded
-     *
-     * @return  the URL with the appended query string
+     * @param url          the URL to add the params to
+     * @param params       the params to convert to a query string and add to the URL
+     * @param encodeParams if the param values should be encoded
+     * @return the URL with the appended query string
      */
     public static String addQueryParams(String url, MultiValueMap<String, String> params, boolean encodeParams) {
         return url + createQueryStringFromParams(params, encodeParams);
@@ -94,9 +93,8 @@ public class RestClientUtils {
     /**
      * Converts a map of params to a query string.
      *
-     * @param params    the params to convert to a query string
-     * @param encode    if the param values should be encoded
-     *
+     * @param params the params to convert to a query string
+     * @param encode if the param values should be encoded
      * @return the params as a query string
      */
     public static String createQueryStringFromParams(MultiValueMap<String, String> params, boolean encode) {

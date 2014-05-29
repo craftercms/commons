@@ -73,13 +73,47 @@ public class EBusBeanAutoConfiguration implements ApplicationListener<ContextRef
     private BeanResolver beanResolver;
     private TemplateAwareExpressionParser expressionParser;
 
+    public EBusBeanAutoConfiguration() {
+        this.expressionParser = new SpelExpressionParser();
+    }
+
+    private static Set<Method> findHandlerMethods(final Class<?> handlerType, final ReflectionUtils.MethodFilter
+        listenerMethodFilter) {
+
+        final Set<Method> handlerMethods = new LinkedHashSet<Method>();
+
+        if (handlerType == null) {
+            return handlerMethods;
+        }
+
+        Set<Class<?>> handlerTypes = new LinkedHashSet<Class<?>>();
+        Class<?> specifiedHandlerType = null;
+        if (!Proxy.isProxyClass(handlerType)) {
+            handlerTypes.add(handlerType);
+            specifiedHandlerType = handlerType;
+        }
+        handlerTypes.addAll(Arrays.asList(handlerType.getInterfaces()));
+        for (Class<?> currentHandlerType : handlerTypes) {
+            final Class<?> targetClass = (specifiedHandlerType != null? specifiedHandlerType: currentHandlerType);
+            ReflectionUtils.doWithMethods(currentHandlerType, new ReflectionUtils.MethodCallback() {
+                @Override
+                public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
+                    Method specificMethod = ClassUtils.getMostSpecificMethod(method, targetClass);
+                    Method bridgeMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
+                    if (listenerMethodFilter.matches(specificMethod) && (bridgeMethod == specificMethod ||
+                        !listenerMethodFilter.matches(bridgeMethod))) {
+                        handlerMethods.add(specificMethod);
+                    }
+                }
+            }, ReflectionUtils.USER_DECLARED_METHODS);
+        }
+
+        return handlerMethods;
+    }
+
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-    }
-
-    public EBusBeanAutoConfiguration() {
-        this.expressionParser = new SpelExpressionParser();
     }
 
     @Override
@@ -90,21 +124,23 @@ public class EBusBeanAutoConfiguration implements ApplicationListener<ContextRef
             return;
         }
 
-        if(null == beanResolver) {
+        if (null == beanResolver) {
             beanResolver = new BeanFactoryResolver(ctx);
         }
 
-        if(null == conversionService) {
+        if (null == conversionService) {
             try {
                 conversionService = ctx.getBean(ConsumerBeanAutoConfiguration.REACTOR_CONVERSION_SERVICE_BEAN_NAME,
                     ConversionService.class);
-            } catch(BeansException be) {
+            } catch (BeansException be) {
                 // TODO: log that conversion service is not found.
             }
         }
 
         synchronized (this) {
-            if (started) return;
+            if (started) {
+                return;
+            }
 
             Set<Method> methods;
             Class<?> type;
@@ -144,7 +180,7 @@ public class EBusBeanAutoConfiguration implements ApplicationListener<ContextRef
     }
 
     private <T> T expression(String selector, Object bean) {
-        if(selector == null) {
+        if (selector == null) {
             return null;
         }
 
@@ -246,52 +282,18 @@ public class EBusBeanAutoConfiguration implements ApplicationListener<ContextRef
                 return ReflectionUtils.invokeMethod(method, bean, event.getData());
             }
 
-            if (!argTypes[0].isAssignableFrom(event.getClass())
-                && conversionService.canConvert(event.getClass(), argTypes[0])) {
+            if (!argTypes[0].isAssignableFrom(event.getClass()) && conversionService.canConvert(event.getClass(),
+                argTypes[0])) {
                 ReflectionUtils.invokeMethod(method, bean, conversionService.convert(event, argTypes[0]));
             }
 
-            if(conversionService.canConvert(event.getData().getClass(), argTypes[0])) {
+            if (conversionService.canConvert(event.getData().getClass(), argTypes[0])) {
                 Object convertedObj = conversionService.convert(event.getData(), argTypes[0]);
                 return ReflectionUtils.invokeMethod(method, bean, convertedObj);
             }
 
-            throw new IllegalArgumentException("Cannot invoke method " + method + " passing parameter " + event.getData
-                ());
+            throw new IllegalArgumentException("Cannot invoke method " + method + " passing parameter " + event
+                .getData());
         }
-    }
-
-    private static Set<Method> findHandlerMethods(final Class<?> handlerType, final ReflectionUtils.MethodFilter
-        listenerMethodFilter) {
-
-        final Set<Method> handlerMethods = new LinkedHashSet<Method>();
-
-        if (handlerType == null) {
-            return handlerMethods;
-        }
-
-        Set<Class<?>> handlerTypes = new LinkedHashSet<Class<?>>();
-        Class<?> specifiedHandlerType = null;
-        if (!Proxy.isProxyClass(handlerType)) {
-            handlerTypes.add(handlerType);
-            specifiedHandlerType = handlerType;
-        }
-        handlerTypes.addAll(Arrays.asList(handlerType.getInterfaces()));
-        for (Class<?> currentHandlerType : handlerTypes) {
-            final Class<?> targetClass = (specifiedHandlerType != null ? specifiedHandlerType : currentHandlerType);
-            ReflectionUtils.doWithMethods(currentHandlerType, new ReflectionUtils.MethodCallback() {
-                @Override
-                public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
-                    Method specificMethod = ClassUtils.getMostSpecificMethod(method, targetClass);
-                    Method bridgeMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
-                    if (listenerMethodFilter.matches(specificMethod) && (bridgeMethod == specificMethod ||
-                        !listenerMethodFilter.matches(bridgeMethod))) {
-                        handlerMethods.add(specificMethod);
-                    }
-                }
-            }, ReflectionUtils.USER_DECLARED_METHODS);
-        }
-
-        return handlerMethods;
     }
 }

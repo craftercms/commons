@@ -16,10 +16,10 @@
  */
 package org.craftercms.commons.crypto;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Required;
-
-import javax.crypto.SecretKey;
 
 /**
  * Spring factory bean used to easily inject a secret key from a

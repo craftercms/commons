@@ -16,13 +16,13 @@
  */
 package org.craftercms.commons.cache;
 
+import javax.annotation.PostConstruct;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Required;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Spring {@link org.springframework.beans.factory.FactoryBean} used to create EhCache caches as beans.
