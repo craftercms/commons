@@ -17,15 +17,22 @@
 package org.craftercms.commons.http;
 
 import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.i10n.I10nLogger;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * Utility class to create cookies with common domain, path and max age.
+ * Utility class to create and delete cookies with common domain, path and max age.
  *
  * @author avasquez
  */
-public class CookieFactory {
+public class CookieManager {
+
+    private static final I10nLogger logger = new I10nLogger(CookieManager.class, "crafter.commons.messages.logging");
+
+    public static final String LOG_KEY_ADDED_COOKIE =   "http.cookie.addedCookie";
+    public static final String LOG_KEY_DELETED_COOKIE = "http.cookie.deletedCookie";
 
     private String domain;
     private String path;
@@ -43,7 +50,13 @@ public class CookieFactory {
         this.maxAge = maxAge;
     }
 
-    public Cookie createCookie(String name, String value) {
+    /**
+     * Add a new cookie, using the configured domain, path and max age, to the response.
+     *
+     * @param name  the name of the cookie
+     * @param value the value of the cookie
+     */
+    public void addCookie(String name, String value, HttpServletResponse response) {
         Cookie cookie = new Cookie(name, value);
 
         if (StringUtils.isNotEmpty(domain)) {
@@ -56,7 +69,31 @@ public class CookieFactory {
             cookie.setMaxAge(maxAge);
         }
 
-        return cookie;
+        response.addCookie(cookie);
+
+        logger.debug(LOG_KEY_ADDED_COOKIE, name);
+    }
+
+    /**
+     * Add a "delete" cookie to the response to indicate the that the stored cookie should be deleted.
+     *
+     * @param name the name of the cookie
+     */
+    public void deleteCookie(String name, HttpServletResponse response) {
+        Cookie cookie = new Cookie(name, null);
+
+        if (StringUtils.isNotEmpty(domain)) {
+            cookie.setDomain(domain);
+        }
+        if (StringUtils.isNotEmpty(path)) {
+            cookie.setPath(path);
+        }
+
+        cookie.setMaxAge(0);
+
+        response.addCookie(cookie);
+
+        logger.debug(LOG_KEY_DELETED_COOKIE, name);
     }
 
 }

@@ -20,7 +20,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Utility methods for HTTP related stuff.
@@ -43,7 +42,7 @@ public class HttpUtils {
      *
      * @return the base request URL
      */
-    public static final StringBuilder getBaseRequestUrl(HttpServletRequest request, boolean forceHttps) {
+    public static StringBuilder getBaseRequestUrl(HttpServletRequest request, boolean forceHttps) {
         String scheme = forceHttps ? HTTPS_SCHEME : request.getScheme();
         String serverName = request.getServerName();
         int serverPort = request.getServerPort();
@@ -57,6 +56,15 @@ public class HttpUtils {
         }
 
         return url;
+    }
+
+    /**
+     * Returns the request URI without the context path.
+     *
+     * @param request   the request where to get the URI from
+     */
+    public static final String getRequestUriWithoutContextPath(HttpServletRequest request) {
+        return request.getRequestURI().substring(request.getContextPath().length());
     }
 
     /**
@@ -95,20 +103,6 @@ public class HttpUtils {
         } else {
             return null;
         }
-    }
-
-    /**
-     * Indicate that the cookie should be delete in the response
-     *
-     * @param name      the name of the cookie
-     * @param response  the response where to indicate that the cookie should be deleted
-     */
-    public static void deleteCookie(String name, HttpServletResponse response) {
-        Cookie emptyCookie = new Cookie(name, "");
-        emptyCookie.setPath("/");
-        emptyCookie.setMaxAge(0);
-
-        response.addCookie(emptyCookie);
     }
 
 }
