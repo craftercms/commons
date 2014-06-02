@@ -59,6 +59,30 @@ public class HttpUtils {
     }
 
     /**
+     * Returns the full URL for the relative URL based in the specified request. The full URL includes the scheme,
+     * server name, port number, context path and server path.
+     *
+     * @param request       the request object used to build the base URL
+     * @param relativeUrl   the relative URL
+     *
+     * @return the full URL
+     */
+    public static String getFullUrl(HttpServletRequest request, String relativeUrl) {
+        StringBuilder baseUrl = getBaseRequestUrl(request, false);
+        String contextPath = request.getContextPath();
+        String servletPath = request.getServletPath();
+
+        if (contextPath.equals("/")) {
+            contextPath = "";
+        }
+        if (servletPath.equals("/")) {
+            servletPath = "";
+        }
+
+        return baseUrl.append(contextPath).append(servletPath).append(relativeUrl).toString();
+    }
+
+    /**
      * Returns the request URI without the context path.
      *
      * @param request   the request where to get the URI from
