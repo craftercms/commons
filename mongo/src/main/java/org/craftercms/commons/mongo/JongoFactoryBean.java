@@ -2,6 +2,7 @@ package org.craftercms.commons.mongo;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jongo.Jongo;
 import org.springframework.beans.factory.annotation.Required;

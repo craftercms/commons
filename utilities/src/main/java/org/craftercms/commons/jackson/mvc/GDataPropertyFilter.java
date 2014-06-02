@@ -17,6 +17,9 @@
 
 package org.craftercms.commons.jackson.mvc;
 
+import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
+import com.fasterxml.jackson.databind.ser.PropertyWriter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +28,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.ser.PropertyWriter;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.properties.OverrideProperties;
@@ -63,6 +64,7 @@ public class GDataPropertyFilter extends AbstractCrafterPropertyFilter {
     protected boolean include(final BeanPropertyWriter writer) {
         Class<?> clazz = writer.getMember().getDeclaringClass();
         String propName = writer.getName();
+
         if (!isPrimitive(clazz)) {
             propName = getMostSuperClassName(clazz) + "." + propName;
         }

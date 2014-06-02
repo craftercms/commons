@@ -17,13 +17,14 @@
 
 package org.craftercms.commons.jackson.mvc;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
+
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.converter.HttpMessageNotWritableException;
