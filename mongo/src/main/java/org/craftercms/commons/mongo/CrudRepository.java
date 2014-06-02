@@ -17,6 +17,12 @@
 
 package org.craftercms.commons.mongo;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import org.apache.commons.io.FileExistsException;
+import org.bson.types.ObjectId;
+
 /**
  * @author Carlos Ortiz.
  */
@@ -77,6 +83,15 @@ public interface CrudRepository<T> {
     void update(final String id, final T updateObject, final boolean multi,
                 final boolean upsert) throws MongoDataException;
 
+
+    /**
+     *<p> Updates the object with the given id with the given Object information.</p>
+     *<p>Should be equals to {@link #update(String, Object, boolean, boolean)} with String,Object,false,false</p>
+     * @param id           Id of the object to be updated.
+     * @param updateObject Object to be use to updated.
+     * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
+     */
+    void update(final String id, final T updateObject) throws MongoDataException;
     /**
      * Updates the given
      *
@@ -224,8 +239,108 @@ public interface CrudRepository<T> {
     /**
      * Removes a Document with the given <b>id</b>
      *
-     * @param id
+     * @param id Id of the object to be remove
      * @throws org.craftercms.commons.mongo.MongoDataException
      */
     void removeById(String id) throws MongoDataException;
+
+    /**
+     * Saves the given InputStream as with the given name.
+     * <b>Closes the Stream after its done</b>.
+     * @param inputStream InputStream to be Save.
+     * @param filename File name for the inputStream.
+     * @return FileInfo with all the information of the file.
+     * @throws MongoDataException If Can't save the file.
+     * @throws FileExistsException If a file with the given file name already exists.
+     */
+    FileInfo saveFile(final InputStream inputStream,final String filename,final String contentType) throws
+        MongoDataException,
+        FileExistsException;
+
+    /**
+     * Gets the file information based on its id..
+     * @param fileId file Id to look up the information.
+     * @return File Information of the file.
+     * @throws FileNotFoundException If file with the given id does not exist.
+     */
+    FileInfo getFileInfo(final ObjectId fileId) throws FileNotFoundException;
+    /**
+     * Gets the file information based on its name..
+     * @param fileName file name to look up the information.
+     * @return File Information of the file.
+     * @throws FileNotFoundException If file with the given id does not exist.
+     */
+    FileInfo getFileInfo(final String fileName) throws FileNotFoundException;
+
+    /**
+     * Returns the InputStream of the file with the given id.
+     * @param fileId File Id to read.
+     * @return A InputStream with that file Information.
+     * @throws FileNotFoundException If there is no file with that Id.
+     */
+    FileInfo readFile(final ObjectId fileId) throws FileNotFoundException;
+    /**
+     * Returns the InputStream of the file with the given name.
+     * @param fileName File Id to read.
+     * @return A InputStream with that file Information.
+     * @throws FileNotFoundException If there is no file with that name.
+     */
+    FileInfo readFile(final String fileName) throws FileNotFoundException;
+
+    /**
+     * Deletes the File with the given Id.
+     * @param fileId Id of the file to delete.
+     * @throws FileNotFoundException If there is no file with that id.
+     */
+    void deleteFile(final ObjectId fileId) throws FileNotFoundException;
+
+    /**
+     * Deletes the File with the given name.
+     * @param fileName Name of the file to delete.
+     * @throws FileNotFoundException If there is no file with that name.
+     */
+    void deleteFile(final String fileName) throws FileNotFoundException;
+
+    /**
+     *<p>"Updates" the file with the new information (A name change is valid as long a file with new name does not
+     * exists)</p>
+     * <p><b>Mongodb Does not actually support any update Operation in GridFs therefor Calling this method
+     * should be as calling {@link #deleteFile(org.bson.types.ObjectId)}
+     * and then {@link #saveFile(java.io.InputStream, String,String)} <i>It will generate also new FileInfo Including
+     * It's Id</i></b>
+     * </p>
+     * <p></p>
+     * @param fileId File id to be Updated
+     * @param inputStream new InputStream of the file.
+     * @param filename File name of the inputStream (can differ from the original).
+     * @return The new FileInfo of the "Updated" file
+     * @throws FileNotFoundException If File with Given Id Does not exists.
+     * @throws MongoDataException If unable to save the File.
+     * @throws FileExistsException If a file name exists with the new filename <i>(this should Only happen if you change
+     * the file name)</i>
+     */
+    FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
+                        final String contentType) throws FileNotFoundException,
+        MongoDataException, FileExistsException;
+
+    /**
+     *<p>"Updates" the file with the new information <b><i>(A name change is NOT valid )</i></b></p>
+     * <p><b>Mongodb Does not actually support any update Operation in GridFs therefor Calling this method
+     * should be as calling {@link #deleteFile(org.bson.types.ObjectId)}
+     * and then {@link #saveFile(java.io.InputStream, String,String)} <i>It will generate also new FileInfo Including
+     * It's Id</i></b>
+     * </p>
+     * <p></p>
+     * @param filename File id to be Updated. (Have to the the same as the original of not
+     *                  it will throw a FileNotFoundException)
+     * @param inputStream new InputStream of the file.
+     * @return The new FileInfo of the "Updated" file
+     * @throws FileNotFoundException If File with Given Id Does not exists.
+     * @throws MongoDataException If unable to save the File.
+     * @throws FileExistsException this exception is highly unlikely to happen but posible.
+     */
+    FileInfo updateFile(final InputStream inputStream, final String filename,final String contentType) throws
+        FileNotFoundException,
+        MongoDataException,
+        FileExistsException;
 }

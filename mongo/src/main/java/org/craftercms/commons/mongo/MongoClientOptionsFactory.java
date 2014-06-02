@@ -21,6 +21,7 @@ package org.craftercms.commons.mongo;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.ReadPreference;
 import com.mongodb.WriteConcern;
+
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 /**

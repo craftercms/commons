@@ -16,9 +16,9 @@
  */
 package org.craftercms.commons.logging;
 
-import org.craftercms.commons.i10n.I10nLogger;
-
 import java.util.Arrays;
+
+import org.craftercms.commons.i10n.I10nLogger;
 
 /**
  * {@link org.craftercms.commons.logging.MethodLogger} using I10n logging.

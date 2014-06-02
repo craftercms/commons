@@ -16,11 +16,12 @@
  */
 package org.craftercms.commons.jackson;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+
+import java.io.IOException;
+
 import org.bson.types.ObjectId;
 
 /**
