@@ -16,10 +16,11 @@
  */
 package org.craftercms.commons.i10n;
 
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-
 import org.apache.commons.lang3.ArrayUtils;
+
+import java.text.MessageFormat;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * Utility class for localization stuff.
@@ -37,18 +38,20 @@ public class I10nUtils {
      * @param bundle the resource bundle where the message format should be
      * @param key    the key of the message format
      * @param args   the args of the message format
-     * @return the formatted, localized message, or the same key if no associated message format was found
+     * @return the formatted, localized message
      */
     public static String getLocalizedMessage(ResourceBundle bundle, String key, Object... args) {
-        String pattern = bundle.getString(key);
-        if (pattern != null) {
-            if (ArrayUtils.isNotEmpty(args)) {
-                return MessageFormat.format(pattern, args);
-            } else {
-                return pattern;
-            }
+        String pattern;
+        try {
+            pattern = bundle.getString(key);
+        } catch (MissingResourceException e) {
+            pattern = key;
+        }
+
+        if (ArrayUtils.isNotEmpty(args)) {
+            return MessageFormat.format(pattern, args);
         } else {
-            return key;
+            return pattern;
         }
     }
 

@@ -23,6 +23,14 @@ import com.mongodb.WriteResult;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
+import org.apache.commons.collections4.keyvalue.DefaultKeyValue;
+import org.apache.commons.io.FileExistsException;
+import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
+import org.jongo.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -30,19 +38,6 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.collections4.keyvalue.DefaultKeyValue;
-import org.apache.commons.io.FileExistsException;
-import org.apache.commons.lang3.StringUtils;
-import org.bson.types.ObjectId;
-import org.jongo.Find;
-import org.jongo.FindOne;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
-import org.jongo.Update;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Simple interface to interact with Jongo/MongoDB.<br/>
@@ -69,14 +64,6 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     protected String collectionName;
     protected JongoQueries queries;
     protected GridFS gridfs;
-
-    /**
-     * Creates a instance of a Jongo Repository.
-     */
-    @SuppressWarnings("unchecked")
-    public AbstractJongoRepository() throws Exception {
-
-    }
 
     public void init() throws Exception {
         //Thru pure magic get parameter Class .
