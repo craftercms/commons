@@ -16,13 +16,14 @@
  */
 package org.craftercms.commons.mongo;
 
+import com.mongodb.CommandResult;
+import com.mongodb.DB;
+import com.mongodb.Mongo;
+
 import java.io.IOException;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
-import com.mongodb.CommandResult;
-import com.mongodb.DB;
-import com.mongodb.Mongo;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

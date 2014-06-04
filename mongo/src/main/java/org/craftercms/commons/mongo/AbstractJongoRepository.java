@@ -17,25 +17,27 @@
 
 package org.craftercms.commons.mongo;
 
+import com.mongodb.CommandResult;
+import com.mongodb.MongoException;
+import com.mongodb.WriteResult;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
+import com.mongodb.gridfs.GridFSInputFile;
+import org.apache.commons.collections4.keyvalue.DefaultKeyValue;
+import org.apache.commons.io.FileExistsException;
+import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
+import org.jongo.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Required;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import com.mongodb.CommandResult;
-import com.mongodb.MongoException;
-import com.mongodb.WriteResult;
-import org.apache.commons.collections4.keyvalue.DefaultKeyValue;
-import org.apache.commons.lang3.StringUtils;
-import org.bson.types.ObjectId;
-import org.jongo.Find;
-import org.jongo.FindOne;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
-import org.jongo.Update;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Simple interface to interact with Jongo/MongoDB.<br/>
@@ -57,16 +59,13 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractJongoRepository.class);
 
-    protected final Class<T> clazz;
+    protected Class<? extends T> clazz;
     protected Jongo jongo;
     protected String collectionName;
     protected JongoQueries queries;
+    protected GridFS gridfs;
 
-    /**
-     * Creates a instance of a Jongo Repository.
-     */
-    @SuppressWarnings("unchecked")
-    public AbstractJongoRepository() throws MongoDataException {
+    public void init() throws Exception {
         //Thru pure magic get parameter Class .
         this.clazz = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         if (this.clazz == null) {
@@ -173,7 +172,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
         try {
             return getCollection().count(query);
         } catch (MongoException ex) {
-            String msg = "Unable to count documents of type " + clazz.getName() + " that match the query " + query;
+            String msg = "Unable to count documents of type " + clazz.getName() + " that match the " +
+                "query " + query;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -184,7 +184,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
         try {
             return getCollection().count(query, queryParams);
         } catch (MongoException ex) {
-            String msg = "Unable to count documents of type " + clazz.getName() + " that match the query " + query +
+            String msg = "Unable to count documents of type " + clazz.getName() + " that match the " +
+                "query " + query +
                 " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
@@ -356,6 +357,11 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
         }
     }
 
+    @Override
+    public void update(final String id, final T updateObject) throws MongoDataException {
+        update(id, updateObject, false, false);
+    }
+
     public void update(final String id, final String modifier, final boolean multi, final boolean upsert,
                        final Object... params) throws MongoDataException {
         try {
@@ -380,6 +386,93 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             throw new MongoDataException(msg, ex);
         }
     }
+
+    @Override
+    public FileInfo saveFile(final InputStream inputStream, final String filename,
+                             final String contentType) throws MongoDataException, FileExistsException {
+        try {
+
+            if (gridfs.findOne(filename) != null) {
+                log.error("A file named {} already exists", filename);
+                throw new FileExistsException("File with name " + filename + " already Exists");
+            }
+            GridFSInputFile savedFile = gridfs.createFile(inputStream, filename, true);
+            savedFile.setContentType(contentType);
+            savedFile.save();
+            FileInfo fileInfo = new FileInfo(savedFile, false);
+            log.debug("File {} was saved " + fileInfo);
+            return fileInfo;
+        } catch (MongoException ex) {
+            log.error("Unable to save file");
+            throw new MongoDataException("Unable to save file to GridFs", ex);
+        }
+    }
+
+    @Override
+    public FileInfo getFileInfo(final ObjectId fileId) throws FileNotFoundException {
+        return new FileInfo(validateObject(fileId), false);
+    }
+
+    @Override
+    public FileInfo getFileInfo(final String fileName) throws FileNotFoundException {
+        return new FileInfo(validateObject(fileName), false);
+    }
+
+    @Override
+    public FileInfo readFile(final ObjectId fileId) throws FileNotFoundException {
+        return new FileInfo(validateObject(fileId), true);
+    }
+
+    @Override
+    public FileInfo readFile(final String fileName) throws FileNotFoundException {
+        return new FileInfo(validateObject(fileName), true);
+    }
+
+    @Override
+    public void deleteFile(final ObjectId fileId) throws FileNotFoundException {
+        gridfs.remove(validateObject(fileId));
+    }
+
+    @Override
+    public void deleteFile(final String fileName) throws FileNotFoundException {
+        gridfs.remove(validateObject(fileName));
+    }
+
+    @Override
+    public FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
+                               final String contentType) throws FileNotFoundException, MongoDataException,
+        FileExistsException {
+        gridfs.remove(validateObject(fileId));
+        return saveFile(inputStream, filename, contentType);
+    }
+
+    @Override
+    public FileInfo updateFile(final InputStream inputStream, final String filename,
+                               final String contentType) throws FileNotFoundException, MongoDataException,
+        FileExistsException {
+        gridfs.remove(validateObject(filename));
+        return saveFile(inputStream, filename, contentType);
+    }
+
+
+    protected GridFSDBFile validateObject(final ObjectId fileId) throws FileNotFoundException {
+        GridFSDBFile file = gridfs.findOne(fileId);
+        if (file == null) {
+            log.error("A file with id {} does not exists", fileId);
+            throw new FileNotFoundException("File with file name " + fileId + " does not exist");
+        }
+        return file;
+    }
+
+    protected GridFSDBFile validateObject(final String fileName) throws FileNotFoundException {
+        GridFSDBFile file = gridfs.findOne(fileName);
+        if (file == null) {
+            log.error("A file with name {} does not exists", fileName);
+            throw new FileNotFoundException("File with file name " + fileName + " does not exist");
+        }
+        return file;
+    }
+
 
     /**
      * Get the query string for a given key
@@ -462,7 +555,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
      * @return a Iterable with the results <b>null</b> if nothing is found.
      */
     protected Iterable<T> returnList(final Find find) {
-        return find.as(clazz);
+        return (Iterable<T>)find.as(clazz);
     }
 
     /**
@@ -478,6 +571,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @Required
     public void setJongo(final Jongo jongo) {
         this.jongo = jongo;
+        this.gridfs = new GridFS(jongo.getDatabase());
     }
 
     public void setQueries(final JongoQueries queries) {

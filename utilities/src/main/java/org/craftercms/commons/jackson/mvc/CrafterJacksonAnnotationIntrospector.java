@@ -18,7 +18,10 @@
 package org.craftercms.commons.jackson.mvc;
 
 import com.fasterxml.jackson.databind.introspect.Annotated;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+
+import org.craftercms.commons.jackson.mvc.annotations.Exclude;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
@@ -36,6 +39,15 @@ public class CrafterJacksonAnnotationIntrospector extends JacksonAnnotationIntro
             base = defaultFilter;
         }
         return base;
+    }
+
+    @Override
+    public boolean hasIgnoreMarker(final AnnotatedMember m) {
+        if(m.getAnnotated().isAnnotationPresent(Exclude.class)){
+           return true;
+        }else {
+            return super.hasIgnoreMarker(m);
+        }
     }
 
     @Required

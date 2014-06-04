@@ -17,11 +17,12 @@
 
 package org.craftercms.commons.jackson.mvc;
 
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import org.apache.commons.lang3.ClassUtils;
 
 /**
@@ -32,7 +33,7 @@ public abstract class AbstractCrafterPropertyFilter extends SimpleBeanPropertyFi
     public abstract String getFilterName();
 
 
-    protected boolean isPrimitive(Class<?> clazz) {
+    protected boolean isPrimitive(final Class<?> clazz) {
         return Date.class.isAssignableFrom(clazz) || ClassUtils.isPrimitiveOrWrapper(clazz) || List.class
             .isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz);
     }

@@ -16,15 +16,16 @@
  */
 package org.craftercms.commons.jackson;
 
-import java.util.List;
-import java.util.Map;
-import javax.annotation.PostConstruct;
-
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import java.util.List;
+import java.util.Map;
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 

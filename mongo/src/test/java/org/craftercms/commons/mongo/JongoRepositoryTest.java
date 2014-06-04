@@ -31,12 +31,14 @@ public class JongoRepositoryTest {
     @Test
     public void testAnnotatedPojoRepository() throws Exception {
         TestAnnotated repository = new TestAnnotated();
+        repository.init();
         Assert.assertEquals(COLLECTION_NAME, repository.collectionName);
     }
 
     @Test
     public void testNonAnnotatedPojoRepository() throws Exception {
         TestSimple repository = new TestSimple();
+        repository.init();
         Assert.assertEquals(TESTPOJO, repository.collectionName);
 
     }
@@ -46,7 +48,7 @@ public class JongoRepositoryTest {
         /**
          * Creates A instance of a Jongo Repository.
          */
-        public TestAnnotated() throws MongoDataException {
+        public TestAnnotated() throws Exception {
         }
     }
 
@@ -55,7 +57,7 @@ public class JongoRepositoryTest {
         /**
          * Creates A instance of a Jongo Repository.
          */
-        public TestSimple() throws MongoDataException {
+        public TestSimple() throws Exception {
         }
     }
 

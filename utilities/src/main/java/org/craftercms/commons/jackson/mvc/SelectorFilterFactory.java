@@ -17,11 +17,12 @@
 
 package org.craftercms.commons.jackson.mvc;
 
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 /**

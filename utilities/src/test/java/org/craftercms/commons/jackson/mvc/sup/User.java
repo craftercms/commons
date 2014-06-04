@@ -17,10 +17,10 @@
 
 package org.craftercms.commons.jackson.mvc.sup;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Arrays;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  */
