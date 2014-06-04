@@ -16,17 +16,17 @@
  */
 package org.craftercms.commons.crypto;
 
-import java.security.GeneralSecurityException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+import org.craftercms.commons.i10n.I10nLogger;
+
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
-import org.craftercms.commons.i10n.I10nLogger;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Utility class for simplifying encryption/decryption with the {@link javax.crypto.Cipher} class. By default, the
@@ -42,12 +42,15 @@ public class SimpleCipher {
     public static final String LOG_KEY_KEY_GEN = "crypto.cipher.keyGenerated";
     public static final String LOG_KEY_IV_GEN = "crypto.cipher.ivGenerated";
     public static final String LOG_KEY_DEF_CIPHER_CREATED = "crypto.cipher.defaultCipherCreated";
+
     public static final String ERROR_KEY_INVALID_TRANSFORMATION = "crypto.cipher.invalidCipherTransformation";
     public static final String ERROR_KEY_KEY_NOT_SET = "crypto.cipher.keyNotSet";
     public static final String ERROR_KEY_IV_NOT_SET = "crypto.cipher.ivNotSet";
     public static final String ERROR_KEY_ENC_ERROR = "crypto.cipher.encryptionError";
     public static final String ERROR_KEY_DEC_ERROR = "crypto.cipher.decryptionError";
+
     private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, "crafter.commons.messages.logging");
+
     private Key key;
     private byte[] iv;
     private Cipher cipher;
