@@ -16,10 +16,6 @@
  */
 package org.craftercms.commons.security.permissions.annotations;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Map;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,6 +25,10 @@ import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.springframework.core.annotation.Order;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * Aspect that handles {@link org.craftercms.commons.security.permissions.annotations.HasPermission} annotations,
@@ -55,7 +55,8 @@ public class HasPermissionAnnotationHandler {
         this.permissionEvaluators = permissionEvaluators;
     }
 
-    @Around("@annotation(HasPermission) || @target(HasPermission)")
+    @Around("@within(org.craftercms.commons.security.permissions.annotations.HasPermission) || " +
+            "@annotation(org.craftercms.commons.security.permissions.annotations.HasPermission)")
     public Object checkPermissions(ProceedingJoinPoint pjp) throws Throwable {
         boolean allowed;
         Method method = getActualMethod(pjp);
