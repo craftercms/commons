@@ -39,7 +39,7 @@ public class LoggedAspect {
         this.methodLogger = methodLogger;
     }
 
-    @Around("@annotation(org.craftercms.commons.logging.Logged) || @target(org.craftercms.commons.logging.Logged)")
+    @Around("@within(org.craftercms.commons.logging.Logged) || @annotation(org.craftercms.commons.logging.Logged)")
     public Object logMethod(ProceedingJoinPoint pjp) throws Throwable {
         String className = pjp.getTarget().getClass().getName();
         String methodName = pjp.getSignature().getName();
