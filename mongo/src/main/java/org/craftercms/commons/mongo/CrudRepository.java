@@ -253,6 +253,19 @@ public interface CrudRepository<T> {
      * @throws MongoDataException If Can't save the file.
      * @throws FileExistsException If a file with the given file name already exists.
      */
+    FileInfo saveFile(final InputStream inputStream,final String filename,final String contentType,final ObjectId fileId) throws
+        MongoDataException,
+        FileExistsException;
+
+    /**
+     * Saves the given InputStream as with the given name.
+     * <b>Closes the Stream after its done</b>.
+     * @param inputStream InputStream to be Save.
+     * @param filename File name for the inputStream.
+     * @return FileInfo with all the information of the file.
+     * @throws MongoDataException If Can't save the file.
+     * @throws FileExistsException If a file with the given file name already exists.
+     */
     FileInfo saveFile(final InputStream inputStream,final String filename,final String contentType) throws
         MongoDataException,
         FileExistsException;
@@ -321,6 +334,28 @@ public interface CrudRepository<T> {
      */
     FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
                         final String contentType) throws FileNotFoundException,
+        MongoDataException, FileExistsException;
+
+    /**
+     *<p>"Updates" the file with the new information (A name change is valid as long a file with new name does not
+     * exists)</p>
+     * <p><b>Mongodb Does not actually support any update Operation in GridFs therefor Calling this method
+     * should be as calling {@link #deleteFile(org.bson.types.ObjectId)}
+     * and then {@link #saveFile(java.io.InputStream, String,String)} <i>It will generate also new FileInfo Including
+     * It's Id</i></b>
+     * </p>
+     * <p></p>
+     * @param fileId File id to be Updated
+     * @param inputStream new InputStream of the file.
+     * @param filename File name of the inputStream (can differ from the original).
+     * @return The new FileInfo of the "Updated" file
+     * @throws FileNotFoundException If File with Given Id Does not exists.
+     * @throws MongoDataException If unable to save the File.
+     * @throws FileExistsException If a file name exists with the new filename <i>(this should Only happen if you change
+     * the file name)</i>
+     */
+    FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
+                        final String contentType,final boolean sameFileId) throws FileNotFoundException,
         MongoDataException, FileExistsException;
 
     /**

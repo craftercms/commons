@@ -23,14 +23,6 @@ import com.mongodb.WriteResult;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
-import org.apache.commons.collections4.keyvalue.DefaultKeyValue;
-import org.apache.commons.io.FileExistsException;
-import org.apache.commons.lang3.StringUtils;
-import org.bson.types.ObjectId;
-import org.jongo.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -38,6 +30,19 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.collections4.keyvalue.DefaultKeyValue;
+import org.apache.commons.io.FileExistsException;
+import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
+import org.jongo.Find;
+import org.jongo.FindOne;
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
+import org.jongo.Update;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Simple interface to interact with Jongo/MongoDB.<br/>
@@ -388,8 +393,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public FileInfo saveFile(final InputStream inputStream, final String filename,
-                             final String contentType) throws MongoDataException, FileExistsException {
+    public FileInfo saveFile(final InputStream inputStream, final String filename, final String contentType,
+                             final ObjectId fileId) throws MongoDataException, FileExistsException {
         try {
 
             if (gridfs.findOne(filename) != null) {
@@ -398,6 +403,10 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             }
             GridFSInputFile savedFile = gridfs.createFile(inputStream, filename, true);
             savedFile.setContentType(contentType);
+            if (fileId != null) {
+                log.debug("Saving file with given Id {} probably a update", fileId);
+                savedFile.setId(fileId);
+            }
             savedFile.save();
             FileInfo fileInfo = new FileInfo(savedFile, false);
             log.debug("File {} was saved " + fileInfo);
@@ -406,6 +415,12 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             log.error("Unable to save file");
             throw new MongoDataException("Unable to save file to GridFs", ex);
         }
+    }
+
+    @Override
+    public FileInfo saveFile(final InputStream inputStream, final String filename,
+                             final String contentType) throws MongoDataException, FileExistsException {
+        return saveFile(inputStream, filename, contentType, null);
     }
 
     @Override
@@ -442,8 +457,15 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     public FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
                                final String contentType) throws FileNotFoundException, MongoDataException,
         FileExistsException {
+        return updateFile(fileId, inputStream, filename, contentType, false);
+    }
+
+    @Override
+    public FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
+                               final String contentType, boolean sameFileId) throws FileNotFoundException,
+        MongoDataException, FileExistsException {
         gridfs.remove(validateObject(fileId));
-        return saveFile(inputStream, filename, contentType);
+        return saveFile(inputStream, filename, contentType, sameFileId? fileId: null);
     }
 
     @Override
