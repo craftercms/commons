@@ -16,18 +16,13 @@
  */
 package org.craftercms.commons.jackson;
 
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 
 /**
  * Extended {@link com.fasterxml.jackson.databind.ObjectMapper} that lets you provide your own
@@ -35,16 +30,14 @@ import org.apache.commons.collections4.MapUtils;
  */
 public class CustomSerializationObjectMapper extends ObjectMapper {
 
-    public static final String MODULE_NAME = "CustomSerializationModule";
+    protected List<JsonSerializer<?>> serializers;
+    protected Map<Class<?>, JsonDeserializer<?>> deserializers;
 
-    protected List<JsonSerializer> serializers;
-    protected Map<Class, JsonDeserializer> deserializers;
-
-    public void setSerializers(List<JsonSerializer> serializers) {
+    public void setSerializers(List<JsonSerializer<?>> serializers) {
         this.serializers = serializers;
     }
 
-    public void setDeserializers(Map<Class, JsonDeserializer> deserializers) {
+    public void setDeserializers(Map<Class<?>, JsonDeserializer<?>> deserializers) {
         this.deserializers = deserializers;
     }
 
@@ -54,25 +47,7 @@ public class CustomSerializationObjectMapper extends ObjectMapper {
     }
 
     protected void registerSerializationModule() {
-        SimpleModule module = new SimpleModule(MODULE_NAME, getModuleVersion());
-
-        if (CollectionUtils.isNotEmpty(serializers)) {
-            for (JsonSerializer<?> serializer : serializers) {
-                module.addSerializer(serializer);
-            }
-        }
-
-        if (MapUtils.isNotEmpty(deserializers)) {
-            for (Map.Entry<Class, JsonDeserializer> entry : deserializers.entrySet()) {
-                module.addDeserializer(entry.getKey(), entry.getValue());
-            }
-        }
-
-        registerModule(module);
-    }
-
-    protected Version getModuleVersion() {
-        return new Version(1, 0, 0, null, null, null);
+        registerModule(JacksonUtils.createModule(serializers, deserializers));
     }
 
 }
