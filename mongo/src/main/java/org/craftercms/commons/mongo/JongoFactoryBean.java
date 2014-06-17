@@ -1,18 +1,25 @@
 package org.craftercms.commons.mongo;
 
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
-
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.jackson.JacksonUtils;
 import org.jongo.Jongo;
+import org.jongo.marshall.jackson.JacksonMapper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- * Creates a Jongo singleton for application wide
- * use.
+ * Creates a Jongo singleton for application wide use.
  *
- * @author Alfonso Vazquez.
+ * @author avasquez
  */
 public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
 
@@ -20,6 +27,8 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
     private String username;
     private String password;
     private Mongo mongo;
+    private List<JsonSerializer<?>> serializers;
+    private Map<Class<?>, JsonDeserializer<?>> deserializers;
 
     @Required
     public void setDbName(String dbName) {
@@ -39,6 +48,14 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
         this.username = username;
     }
 
+    public void setSerializers(List<JsonSerializer<?>> serializers) {
+        this.serializers = serializers;
+    }
+
+    public void setDeserializers(Map<Class<?>, JsonDeserializer<?>> deserializers) {
+        this.deserializers = deserializers;
+    }
+
     @Override
     public Class<?> getObjectType() {
         return Jongo.class;
@@ -52,7 +69,13 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
                 throw new MongoDataException("Unable to authenticate with given user/pwd");
             }
         }
-        return new Jongo(db);
+
+        JacksonMapper.Builder builder = new JacksonMapper.Builder();
+        if (CollectionUtils.isNotEmpty(serializers) || MapUtils.isNotEmpty(deserializers)) {
+            builder.registerModule(JacksonUtils.createModule(serializers, deserializers));
+        }
+
+        return new Jongo(db, builder.build());
     }
 
 }
