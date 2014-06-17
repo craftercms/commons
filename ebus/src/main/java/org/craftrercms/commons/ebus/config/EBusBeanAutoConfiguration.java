@@ -197,7 +197,7 @@ public class EBusBeanAutoConfiguration implements ApplicationListener<ContextRef
 
     protected Object parseSelector(EventHandler eventHandlerAnnotation, Object bean, Method method) {
         if (!StringUtils.isEmpty(eventHandlerAnnotation.event())) {
-            return method.getName();
+            return eventHandlerAnnotation.event();
         }
 
         try {
