@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 
 import org.craftercms.commons.jackson.mvc.annotations.Exclude;
+import org.craftercms.commons.jackson.mvc.annotations.SecureProperty;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
@@ -31,6 +32,7 @@ public class CrafterJacksonAnnotationIntrospector extends JacksonAnnotationIntro
     private static final long serialVersionUID = -4614283468824831495L;
 
     private String defaultFilter;
+    private SecurePropertyHandler securityPropertyFilter;
 
     @Override
     public Object findFilterId(final Annotated a) {
@@ -42,12 +44,25 @@ public class CrafterJacksonAnnotationIntrospector extends JacksonAnnotationIntro
     }
 
     @Override
+    public boolean hasCreatorAnnotation(final Annotated a) {
+        return super.hasCreatorAnnotation(a);
+    }
+
+    @Override
     public boolean hasIgnoreMarker(final AnnotatedMember m) {
-        if(m.getAnnotated().isAnnotationPresent(Exclude.class)){
-           return true;
-        }else {
+        if (m.getAnnotated().isAnnotationPresent(Exclude.class)) {
+            return true;
+        } else if (m.getAnnotated().isAnnotationPresent(SecureProperty.class) && securityPropertyFilter != null) {
+            SecureProperty property = m.getAnnotated().getAnnotation(SecureProperty.class);
+            return securityPropertyFilter.suppressProperty(m.getDeclaringClass().getCanonicalName() + "." + m.getName
+                (), property.role());
+        } else {
             return super.hasIgnoreMarker(m);
         }
+    }
+
+    public void setSecurityPropertyFilter(final SecurePropertyHandler securityPropertyFilter) {
+        this.securityPropertyFilter = securityPropertyFilter;
     }
 
     @Required

@@ -22,10 +22,12 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -53,7 +55,6 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
             if (this.jsonPrefix != null) {
                 jsonGenerator.writeRaw(this.jsonPrefix);
             }
-
             this.getObjectMapper().writer(filter).writeValue(jsonGenerator, object);
         } catch (JsonProcessingException ex) {
             throw new HttpMessageNotWritableException("Could not write JSON: " + ex.getMessage(), ex);
