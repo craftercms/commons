@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.jackson.mvc.annotations.InjectValue;
+import org.craftercms.commons.jackson.mvc.annotations.InjectValueFactory;
 import org.craftercms.commons.properties.OverrideProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +50,7 @@ public class GDataPropertyFilter extends AbstractCrafterPropertyFilter {
     protected Map<String, List<String>> aliasParsedCache;
     protected Pattern p = Pattern.compile("\\w+\\(\\w+(\\,\\w+)*\\)", Pattern.CASE_INSENSITIVE);
     private Logger log = LoggerFactory.getLogger(GDataPropertyFilter.class);
+    private InjectValueFactory injectValueFactory;
 
     public GDataPropertyFilter() {
         superClassCache = new HashMap<>();
@@ -64,11 +67,18 @@ public class GDataPropertyFilter extends AbstractCrafterPropertyFilter {
     protected boolean include(final BeanPropertyWriter writer) {
         Class<?> clazz = writer.getMember().getDeclaringClass();
         String propName = writer.getName();
-
         if (!isPrimitive(clazz)) {
             propName = getMostSuperClassName(clazz) + "." + propName;
         }
+        checkForCrafterAnnotations(writer);
         return checkProperty(propName);
+    }
+
+    private void checkForCrafterAnnotations(final BeanPropertyWriter writer) {
+        InjectValue annotations = writer.getAnnotation(InjectValue.class);
+        if(annotations!=null && injectValueFactory!=null){
+
+        }
     }
 
     @Override
