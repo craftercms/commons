@@ -16,9 +16,9 @@
  */
 package org.craftercms.commons.logging;
 
-import java.util.Arrays;
-
 import org.craftercms.commons.i10n.I10nLogger;
+
+import java.util.Arrays;
 
 /**
  * {@link org.craftercms.commons.logging.MethodLogger} using I10n logging.
@@ -45,7 +45,7 @@ public class I10nMethodLogger implements MethodLogger {
 
     @Override
     public void logException(String className, String methodName, Throwable e) {
-        logger.error(LOG_KEY_EXCEPTION, e, methodName, className);
+        logger.debug(LOG_KEY_EXCEPTION, e, methodName, className);
     }
 
 }
