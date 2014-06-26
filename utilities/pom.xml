@@ -132,6 +132,7 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
