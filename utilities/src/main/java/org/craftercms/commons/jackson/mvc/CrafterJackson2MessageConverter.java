@@ -28,7 +28,12 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.craftercms.commons.jackson.mvc.annotations.InjectValue;
@@ -47,7 +52,12 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
     protected FilterProvider filter;
     protected InjectValueFactory injectValueFactory;
     private Logger log = LoggerFactory.getLogger(CrafterJackson2MessageConverter.class);
+    private Map<Class<?>, List<Field>> fieldsPerClass;
 
+
+    public CrafterJackson2MessageConverter() {
+        fieldsPerClass = new HashMap<>();
+    }
 
     @Override
     protected void writeInternal(Object object, HttpOutputMessage outputMessage) throws IOException,
@@ -55,7 +65,7 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
 
         JsonEncoding encoding = getJsonEncoding(outputMessage.getHeaders().getContentType());
         JsonGenerator jsonGenerator = this.getObjectMapper().getFactory().createGenerator(outputMessage.getBody(),
-    encoding);
+            encoding);
         // A workaround for JsonGenerators not applying serialization features
         // https://github.com/FasterXML/jackson-databind/issues/12
         if (this.getObjectMapper().isEnabled(SerializationFeature.INDENT_OUTPUT)) {
@@ -81,14 +91,17 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
             PropertyDescriptor[] propertiesDescriptor = PropertyUtils.getPropertyDescriptors(object);
             for (PropertyDescriptor propertyDescriptor : propertiesDescriptor) {
                 // Avoid the "getClass" as a property
-                if(propertyDescriptor.getPropertyType().equals(Class.class) || (propertyDescriptor.getReadMethod()
-                    ==null && propertyDescriptor.getWriteMethod()==null)){
+                if (propertyDescriptor.getPropertyType().equals(Class.class) || (propertyDescriptor.getReadMethod()
+                    == null && propertyDescriptor.getWriteMethod() == null)) {
                     continue;
                 }
-                Field field = getAllFieldsFor(object.getClass(), propertyDescriptor.getName());
+                Field field = getFieldFor(object.getClass(), propertyDescriptor.getName());
+                if (field == null) {
+                    continue; //Ignore!!
+                }
                 if (field.isAnnotationPresent(InjectValue.class)) {
                     injectValue(object, field);
-                   continue;
+                    continue;
                 }
                 Object fieldValue = PropertyUtils.getProperty(object, propertyDescriptor.getName());
                 if (Iterable.class.isInstance(fieldValue)) {
@@ -102,21 +115,33 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
                     }
                 }
             }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchFieldException e) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             log.error("Unable to inject Value for class " + object.getClass(), e);
         }
     }
 
-
-    private Field getAllFieldsFor(final Class<?> object, final String fieldName) throws NoSuchFieldException {
-        if (object != null) {
-            try {
-                return object.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                return getAllFieldsFor(object.getSuperclass(), fieldName);
+    private Field getFieldFor(final Class<?> clazz, final String fieldName) {
+        List<Field> fields;
+        if (fieldsPerClass.containsKey(clazz)) {
+            fields = fieldsPerClass.get(clazz);
+        } else {
+            fields = new ArrayList<>();
+            getAllFieldsFor(clazz, fields);
+            fieldsPerClass.put(clazz, fields);
+        }
+        for (Field field : fields) {
+            if (field.getName().equals(fieldName)) {
+                return field;
             }
         }
-        throw new NoSuchFieldException("Field " + fieldName + " does not exist");
+        return null;
+    }
+
+    private void getAllFieldsFor(final Class<?> clazz, final List<Field> fields) {
+        if (clazz != null) {
+            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+            getAllFieldsFor(clazz.getSuperclass(), fields);
+        }
     }
 
     private void injectValue(final Object object, final Field field) {
