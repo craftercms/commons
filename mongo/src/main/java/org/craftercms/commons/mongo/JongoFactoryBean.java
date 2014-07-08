@@ -1,5 +1,6 @@
 package org.craftercms.commons.mongo;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.mongodb.DB;
@@ -71,6 +72,7 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
         }
 
         JacksonMapper.Builder builder = new JacksonMapper.Builder();
+         builder.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         if (CollectionUtils.isNotEmpty(serializers) || MapUtils.isNotEmpty(deserializers)) {
             builder.registerModule(JacksonUtils.createModule(serializers, deserializers));
         }
