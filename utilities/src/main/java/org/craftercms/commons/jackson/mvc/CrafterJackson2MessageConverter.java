@@ -23,13 +23,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
-
-import java.beans.PropertyDescriptor;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.craftercms.commons.jackson.mvc.annotations.InjectValue;
 import org.craftercms.commons.jackson.mvc.annotations.InjectValueFactory;
@@ -39,6 +32,12 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 
 
 public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageConverter {
@@ -55,7 +54,7 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
 
         JsonEncoding encoding = getJsonEncoding(outputMessage.getHeaders().getContentType());
         JsonGenerator jsonGenerator = this.getObjectMapper().getFactory().createGenerator(outputMessage.getBody(),
-    encoding);
+                encoding);
         // A workaround for JsonGenerators not applying serialization features
         // https://github.com/FasterXML/jackson-databind/issues/12
         if (this.getObjectMapper().isEnabled(SerializationFeature.INDENT_OUTPUT)) {
@@ -78,45 +77,50 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
 
     private void injectValues(final Object object) {
         try {
+            if (Iterable.class.isInstance(object) && !Iterator.class.isInstance(object)) {
+                for (Object element : (Iterable)object) {
+                    injectValues(element);
+                }
+            }
+
             PropertyDescriptor[] propertiesDescriptor = PropertyUtils.getPropertyDescriptors(object);
             for (PropertyDescriptor propertyDescriptor : propertiesDescriptor) {
                 // Avoid the "getClass" as a property
-                if(propertyDescriptor.getPropertyType().equals(Class.class) || (propertyDescriptor.getReadMethod()
-                    ==null && propertyDescriptor.getWriteMethod()==null)){
+                if(propertyDescriptor.getPropertyType().equals(Class.class) ||
+                  (propertyDescriptor.getReadMethod() == null && propertyDescriptor.getWriteMethod() == null)){
                     continue;
                 }
-                Field field = getAllFieldsFor(object.getClass(), propertyDescriptor.getName());
-                if (field.isAnnotationPresent(InjectValue.class)) {
+                Field field = findField(object.getClass(), propertyDescriptor.getName());
+                if (field != null && field.isAnnotationPresent(InjectValue.class)) {
                     injectValue(object, field);
-                   continue;
+                    continue;
                 }
+
                 Object fieldValue = PropertyUtils.getProperty(object, propertyDescriptor.getName());
-                if (Iterable.class.isInstance(fieldValue)) {
-                    for (Object collectionObject : (Iterable)fieldValue) {
-                        injectValues(collectionObject);
-                    }
-                } else if (Iterator.class.isInstance(fieldValue)) {
-                    Iterator iter = (Iterator)fieldValue;
-                    while (iter.hasNext()) {
-                        injectValues(iter.next());
+                if (Iterable.class.isInstance(fieldValue) && !Iterator.class.isInstance(object)) {
+                    for (Object element : (Iterable)fieldValue) {
+                        injectValues(element);
                     }
                 }
             }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | NoSuchFieldException e) {
-            log.error("Unable to inject Value for class " + object.getClass(), e);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            log.error("Unable to inject value for " + object.getClass(), e);
         }
     }
 
 
-    private Field getAllFieldsFor(final Class<?> object, final String fieldName) throws NoSuchFieldException {
+    private Field findField(final Class<?> object, final String fieldName) {
         if (object != null) {
             try {
                 return object.getDeclaredField(fieldName);
             } catch (NoSuchFieldException e) {
-                return getAllFieldsFor(object.getSuperclass(), fieldName);
+                return findField(object.getSuperclass(), fieldName);
             }
         }
-        throw new NoSuchFieldException("Field " + fieldName + " does not exist");
+
+        log.debug("Field {} does not exist", fieldName);
+
+        return null;
     }
 
     private void injectValue(final Object object, final Field field) {
@@ -125,11 +129,10 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
         try {
             Object propertyValue = PropertyUtils.getProperty(object, propertyToUseName);
             Object valueToInject = injectValueFactory.getObjectFor(PropertyUtils.getPropertyType(object,
-                field.getName()), propertyValue, object);
+                    field.getName()), propertyValue, object);
             PropertyUtils.setProperty(object, field.getName(), valueToInject);
-
         } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            log.error("Unable to inject Value " + field.getName() + "for class " + object.getClass(), e);
+            log.error("Unable to inject value " + field.getName() + " for class " + object.getClass(), e);
         }
     }
 
