@@ -11,6 +11,7 @@
         <module>security</module>
         <module>mongo</module>
         <module>ebus</module>
+        <module>api-documentation</module>
     </modules>
 
     <name>Crafter Commons</name>
