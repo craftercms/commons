@@ -18,6 +18,7 @@
 package org.craftercms.commons.api.documentation;
 
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
+import com.mangofactory.swagger.ordering.ResourceListingPositionalOrdering;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 import com.wordnik.swagger.model.ApiInfo;
@@ -73,13 +74,20 @@ public class ApiDocumentationSwaggerConfiguration {
     @Value("${swagger.apiLicenceUrl}")
     private String apiLicenceUrl;
 
+    @Value("${swagger.enablePositionalOrdering}")
+    private boolean enablePositionalOrdering;
+
 
     @Bean
     public SwaggerSpringMvcPlugin customSwaggerSpringMvcPlugin(){
-        return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
-                .apiInfo(apiInfo())
-                .includePatterns(includePatterns.toArray(new String[includePatterns.size()]))
-                .build();
+        SwaggerSpringMvcPlugin plugin = new SwaggerSpringMvcPlugin(this.springSwaggerConfig);
+        plugin = plugin.apiInfo(apiInfo());
+        plugin = plugin.includePatterns(includePatterns.toArray(new String[includePatterns.size()]));
+        if (enablePositionalOrdering) {
+            plugin = plugin.apiListingReferenceOrdering(new ResourceListingPositionalOrdering());
+        }
+        plugin = plugin.build();
+        return plugin;
     }
 
     private ApiInfo apiInfo() {
