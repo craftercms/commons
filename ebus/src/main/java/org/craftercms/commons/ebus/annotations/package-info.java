@@ -15,11 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftrercms.commons.ebus.annotations;
-
 /**
+ * Annotations package
+ *
  * @author Dejan Brkic
  */
-public enum EventSelectorType {
-    OBJECT, REGEX
-}
+package org.craftercms.commons.ebus.annotations;

@@ -15,22 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftrercms.commons.ebus.annotations;
+package org.craftercms.commons.ebus.config;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import reactor.core.Environment;
+import reactor.core.Reactor;
+import reactor.core.spec.Reactors;
 
 /**
- * Denotes a class as being eligible to scan for event handling methods.
+ * EBus Reactor Factory.
  *
  * @author Dejan Brkic
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Component
-public @interface EListener {
+public class EBusReactorFactory {
+
+    private Environment env;
+
+    public Reactor createReactor() {
+        return Reactors.reactor().env(env).dispatcher(Environment.THREAD_POOL).get();
+    }
+
+    public void setEnv(Environment env) {
+        this.env = env;
+    }
 }

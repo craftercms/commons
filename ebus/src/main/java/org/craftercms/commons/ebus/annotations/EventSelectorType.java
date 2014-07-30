@@ -15,27 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftrercms.commons.ebus.annotations;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.craftercms.commons.ebus.annotations;
 
 /**
- * Denotes method that is EBus event handler.
- *
  * @author Dejan Brkic
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-public @interface EventHandler {
-
-    String event();
-
-    String ebus();
-
-    EventSelectorType type() default EventSelectorType.OBJECT;
+public enum EventSelectorType {
+    OBJECT, REGEX
 }
