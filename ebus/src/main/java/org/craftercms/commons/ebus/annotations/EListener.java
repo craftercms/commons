@@ -15,24 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftrercms.commons.ebus.annotations;
+package org.craftercms.commons.ebus.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.craftrercms.commons.ebus.config.EBusBeanDefinitionRegistrar;
-import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Component;
 
 /**
- * Helper annotation to be placed on {@link org.springframework.context.annotation.Configuration} classes to ensure
- * creation of the necessary beans for automatic wiring of annotated beans.
+ * Denotes a class as being eligible to scan for event handling methods.
  *
  * @author Dejan Brkic
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(EBusBeanDefinitionRegistrar.class)
-public @interface EnableEBus {
+@Component
+public @interface EListener {
 }

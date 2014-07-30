@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftrercms.commons.ebus.config;
+package org.craftercms.commons.ebus.config;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.craftrercms.commons.ebus.annotations.EventHandler;
+import org.craftercms.commons.ebus.annotations.EventHandler;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -52,7 +52,7 @@ import static reactor.event.selector.Selectors.regex;
 
 /**
  * {@link org.springframework.context.ApplicationListener} implementation that finds beans registered in the current
- * {@link org.springframework.context.ApplicationContext} that look like a {@link org.craftrercms.commons.ebus
+ * {@link org.springframework.context.ApplicationContext} that look like a {@link org.craftercms.commons.ebus
  * .annotations.EListener} bean and interrogates it for event handling methods.
  *
  * @author Dejan Brkic
