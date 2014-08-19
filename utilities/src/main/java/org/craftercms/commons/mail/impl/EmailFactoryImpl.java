@@ -46,7 +46,10 @@ public class EmailFactoryImpl implements EmailFactory {
     public static final String DEFAULT_ENCODING = "UTF-8";
     public static final String LOG_KEY_MIME_MSG_CREATED = "mail.mimeMessageCreated";
     public static final String LOG_KEY_PROCESSING_EMAIL_TEMPLATE = "mail.processingEmailTemplate";
+    public static final String ERROR_KEY_TEMPLATE_CONFIG_MISSING = "mail.templateConfigMissing";
+
     private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, "crafter.commons.messages.logging");
+
     protected JavaMailSender mailSender;
     protected Configuration freeMarkerConfig;
     protected String templateEncoding;
@@ -60,7 +63,6 @@ public class EmailFactoryImpl implements EmailFactory {
         this.mailSender = mailSender;
     }
 
-    @Required
     public void setFreeMarkerConfig(Configuration freeMarkerConfig) {
         this.freeMarkerConfig = freeMarkerConfig;
     }
@@ -118,6 +120,10 @@ public class EmailFactoryImpl implements EmailFactory {
     }
 
     protected String processTemplate(String templateName, Object templateModel) throws EmailException {
+        if (freeMarkerConfig == null) {
+            throw new EmailException(ERROR_KEY_TEMPLATE_CONFIG_MISSING);
+        }
+
         logger.debug(LOG_KEY_PROCESSING_EMAIL_TEMPLATE, templateName);
 
         try {
