@@ -20,7 +20,7 @@ package org.craftercms.commons.audit;
 /**
  * Audit Constants.
  *
- * @author Carlos Ortiz .
+ * @author Carlos Ortiz.
  */
 public final class Audit {
 
@@ -29,7 +29,7 @@ public final class Audit {
      */
     public static final String AUDIT_EVENT = "crafterCommons.audit.Audit";
     /**
-     * Name of the AuditReactor <b>Missing required @</b>
+     * Name of the AuditReactor <b>Missing required @</b>.
      */
     public static final String AUDIT_REACTOR = "AuditReactor";
 
