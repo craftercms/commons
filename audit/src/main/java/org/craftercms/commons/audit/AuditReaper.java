@@ -27,14 +27,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Audit Reaper Service. this class is meant to be run periodically.
+ *
  * @author Carlos Ortiz.
  */
 public class AuditReaper {
 
-    /**
-     *Logger of the class.
-     */
-    private Logger log = LoggerFactory.getLogger(AuditReaper.class);
     /**
      * Audit Service implementation.
      */
@@ -45,6 +42,11 @@ public class AuditReaper {
     protected int maxAuditAllowedDays;
 
     /**
+     * Logger of the class.
+     */
+    private Logger log = LoggerFactory.getLogger(AuditReaper.class);
+
+    /**
      * <p>Search all logs to be deleted and send there id's to the audit service to be deleted.</p>
      * <p>If maximum days is set to  -1 nothing will deleted, 0 it delete all audits daily.</p>
      */
@@ -52,7 +54,7 @@ public class AuditReaper {
         log.debug("Starting Audit Cleanup");
         if (maxAuditAllowedDays >= 0) {
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH, (maxAuditAllowedDays * -1));
+            calendar.add(Calendar.DAY_OF_MONTH, maxAuditAllowedDays * -1);
             final Date since = new Date(calendar.getTimeInMillis());
             final List<? extends AuditModel> toDelete = auditService.getAuditLogs(since, new Date());
             final List<String> idstoDel = getIdList(toDelete);
@@ -68,11 +70,12 @@ public class AuditReaper {
 
     /**
      * Gets the list of Id's of the given List of Models.
+     *
      * @param toDelete List of AuditModels to get there Ids.
      * @return A List of Ids.
      */
     private List<String> getIdList(final List<? extends AuditModel> toDelete) {
-        ArrayList<String> ids = new ArrayList<>(toDelete.size());
+        List<String> ids = new ArrayList<>(toDelete.size());
         for (AuditModel auditModel : toDelete) {
             ids.add(auditModel.getId());
         }

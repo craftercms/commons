@@ -22,12 +22,13 @@ import java.util.List;
 
 /**
  * Defines  Basic Audit Service.
+ * @param <T> Any Object that Extents AuditModel.
  */
 public abstract class AuditService<T extends AuditModel> {
     /**
      * Sets date and persist the Audit in the repository.
      *
-     * @param auditModel
+     * @param auditModel Audit to be save.
      */
     public void audit(final T auditModel) {
         persistAudit(auditModel);
