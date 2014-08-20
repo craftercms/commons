@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2007-2014 Crafter Software Corporation.
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  --> 
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder file-encoding="UTF-8"
+                                  location="classpath:/org/craftercms/commons/audit/audit.properties"/>
+    <import resource="classpath*:/crafter/ebus/ebus-context.xml"/>
+    <context:component-scan base-package="org.craftercms.commons.ebus"/>
+
+    <bean id="AuditReactor" name="AuditReactor" factory-bean="reactorFactory" factory-method="createReactor"/>
+
+
+    <bean id="auditScytheCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="auditScythe"/>
+        <property name="cronExpression" value="${org.craftercms.commons.audit.auditScytheCronExp}"/>
+    </bean>
+    <bean id="auditScythe" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="auditReaper"/>
+        <property name="targetMethod" value="scythe"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="auditScytheCronTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.craftercms.commons.audit.AuditReaper" id="auditReaper">
+        <property name="auditService" ref="org.craftercms.commons.audit.AuditServiceImpl"/>
+        <property name="maxAuditAllowedDays" value="${org.craftercms.commons.audit.maxAuditAllowedDays}"/>
+    </bean>
+
+    <bean class="org.craftercms.commons.audit.AuditListener" id="auditListener">
+        <property name="auditService" ref="org.craftercms.commons.audit.AuditServiceImpl"/>
+    </bean>
+
+</beans>
