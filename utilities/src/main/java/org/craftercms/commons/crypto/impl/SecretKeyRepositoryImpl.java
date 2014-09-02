@@ -28,15 +28,19 @@ import javax.crypto.SecretKey;
 
 import org.apache.commons.io.FileUtils;
 import org.craftercms.commons.crypto.CipherUtils;
-import org.craftercms.commons.crypto.CryptoExceptionAbstract;
+import org.craftercms.commons.crypto.CryptoException;
 import org.craftercms.commons.crypto.SecretKeyRepository;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
- * Default implementation of {@link org.craftercms.commons.crypto.SecretKeyRepository}, which uses
+ * Default implementation of {@link org.craftercms.commons.crypto.SecretKeyRepository}, which uses JCE Key Store.
+ *
+ * @author avasquez
  */
 public class SecretKeyRepositoryImpl implements SecretKeyRepository {
+
+    public static final String KEY_STORE_TYPE = "JCEKS";
 
     public static final String LOG_KEY_KEY_FOUND = "crypto.keyRepo.keyFound";
     public static final String LOG_KEY_KEY_NOT_FOUND = "crypto.keyRepo.keyNotFound";
@@ -48,8 +52,10 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
     public static final String ERROR_KEY_KEY_STORE_STORE_ERROR = "crypto.keyRepo.keyStoreStoreError";
     public static final String ERROR_KEY_GET_KEY_ERROR = "crypto.keyRepo.getKeyError";
     public static final String ERROR_KEY_SAVE_KEY_ERROR = "crypto.keyRepo.saveKeyError";
+
     private static final I10nLogger logger = new I10nLogger(SecretKeyRepositoryImpl.class,
         "crafter.commons.messages.logging");
+
     protected File keyStoreFile;
     protected char[] keyStorePassword;
     protected String defaultKeyAlgorithm;
@@ -75,14 +81,14 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
     }
 
     @PostConstruct
-    public void init() throws CryptoExceptionAbstract {
+    public void init() throws CryptoException {
         loadKeyStore();
     }
 
     @Override
-    public SecretKey getKey(String name, boolean create) throws CryptoExceptionAbstract {
+    public SecretKey getKey(String name, boolean create) throws CryptoException {
         try {
-            SecretKey key = (SecretKey)keyStore.getKey(name, keyStorePassword);
+            SecretKey key = (SecretKey) keyStore.getKey(name, keyStorePassword);
             if (key == null) {
                 logger.debug(LOG_KEY_KEY_NOT_FOUND, name);
 
@@ -98,19 +104,19 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
 
             return key;
         } catch (GeneralSecurityException e) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_GET_KEY_ERROR, e);
+            throw new CryptoException(ERROR_KEY_GET_KEY_ERROR, e);
         }
     }
 
     @Override
-    public void saveKey(String name, SecretKey key) throws CryptoExceptionAbstract {
+    public void saveKey(String name, SecretKey key) throws CryptoException {
         KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(keyStorePassword);
         KeyStore.SecretKeyEntry entry = new KeyStore.SecretKeyEntry(key);
 
         try {
             keyStore.setEntry(name, entry, protParam);
         } catch (GeneralSecurityException e) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_SAVE_KEY_ERROR, e);
+            throw new CryptoException(ERROR_KEY_SAVE_KEY_ERROR, e);
         }
 
         logger.debug(LOG_KEY_KEY_SAVED, name);
@@ -118,9 +124,9 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
         storeKeyStore();
     }
 
-    protected void loadKeyStore() throws CryptoExceptionAbstract {
+    protected void loadKeyStore() throws CryptoException {
         try {
-            keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore = KeyStore.getInstance(KEY_STORE_TYPE);
 
             if (keyStoreFile.exists()) {
                 try (InputStream in = new FileInputStream(keyStoreFile)) {
@@ -128,13 +134,16 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
                 }
 
                 logger.debug(LOG_KEY_KEY_STORE_LOADED, keyStoreFile);
+            } else {
+                // Create new empty keystore
+                keyStore.load(null, keyStorePassword);
             }
         } catch (GeneralSecurityException | IOException e) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_KEY_STORE_LOAD_ERROR, e);
+            throw new CryptoException(ERROR_KEY_KEY_STORE_LOAD_ERROR, e);
         }
     }
 
-    protected void storeKeyStore() throws CryptoExceptionAbstract {
+    protected void storeKeyStore() throws CryptoException {
         try {
             try (OutputStream out = FileUtils.openOutputStream(keyStoreFile)) {
                 keyStore.store(out, keyStorePassword);
@@ -142,7 +151,7 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
 
             logger.debug(LOG_KEY_KEY_STORE_STORED, keyStoreFile);
         } catch (GeneralSecurityException | IOException e) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_KEY_STORE_STORE_ERROR, e);
+            throw new CryptoException(ERROR_KEY_KEY_STORE_STORE_ERROR, e);
         }
     }
 

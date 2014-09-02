@@ -1,0 +1,51 @@
+package org.craftercms.commons.crypto.impl;
+
+import java.security.Key;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.craftercms.commons.crypto.CipherUtils;
+import org.craftercms.commons.crypto.CryptoException;
+import org.craftercms.commons.crypto.SimpleCipher;
+import org.craftercms.commons.crypto.TextEncryptor;
+
+/**
+ * Implementation of {@link org.craftercms.commons.crypto.TextEncryptor} that uses AES as it's cipher algorithm and
+ * Base 64 to encode raw bytes.
+ *
+ * @author avasquez
+ */
+public class AesTextEncryptor implements TextEncryptor {
+
+    private Key key;
+
+    public AesTextEncryptor(final Key key) {
+        this.key = key;
+    }
+
+    @Override
+    public String encrypt(final String clear) throws CryptoException {
+        SimpleCipher cipher = new SimpleCipher();
+        cipher.setKey(key);
+
+        byte[] encrypted = cipher.encrypt(StringUtils.getBytesUtf8(clear));
+        byte[] iv = cipher.getIv();
+
+        return Base64.encodeBase64String(ArrayUtils.addAll(iv, encrypted));
+    }
+
+    @Override
+    public String decrypt(final String encrypted) throws CryptoException {
+        byte[] decoded = Base64.decodeBase64(encrypted);
+        byte[] iv = ArrayUtils.subarray(decoded, 0, CipherUtils.AES_KEY_BYTE_SIZE);
+        byte[] encryptedBytes = ArrayUtils.subarray(decoded, CipherUtils.AES_KEY_BYTE_SIZE, decoded.length);
+
+        SimpleCipher cipher = new SimpleCipher();
+        cipher.setKey(key);
+        cipher.setIv(iv);
+
+        return StringUtils.newStringUtf8(cipher.decrypt(encryptedBytes));
+    }
+
+}

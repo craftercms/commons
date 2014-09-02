@@ -25,15 +25,15 @@ import org.craftercms.commons.i10n.AbstractI10nException;
  *
  * @author avasquez
  */
-public class CryptoExceptionAbstract extends AbstractI10nException {
+public class CryptoException extends AbstractI10nException {
 
     public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
 
-    public CryptoExceptionAbstract(String key, Object... args) {
+    public CryptoException(String key, Object... args) {
         super(key, args);
     }
 
-    public CryptoExceptionAbstract(String key, Throwable cause, Object... args) {
+    public CryptoException(String key, Throwable cause, Object... args) {
         super(key, cause, args);
     }
 

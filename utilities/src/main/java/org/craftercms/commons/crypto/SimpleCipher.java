@@ -16,17 +16,16 @@
  */
 package org.craftercms.commons.crypto;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
-import org.craftercms.commons.i10n.I10nLogger;
-
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+import org.craftercms.commons.i10n.I10nLogger;
 
 /**
  * Utility class for simplifying encryption/decryption with the {@link javax.crypto.Cipher} class. By default, the
@@ -43,7 +42,6 @@ public class SimpleCipher {
     public static final String LOG_KEY_IV_GEN = "crypto.cipher.ivGenerated";
     public static final String LOG_KEY_DEF_CIPHER_CREATED = "crypto.cipher.defaultCipherCreated";
 
-    public static final String ERROR_KEY_INVALID_TRANSFORMATION = "crypto.cipher.invalidCipherTransformation";
     public static final String ERROR_KEY_KEY_NOT_SET = "crypto.cipher.keyNotSet";
     public static final String ERROR_KEY_IV_NOT_SET = "crypto.cipher.ivNotSet";
     public static final String ERROR_KEY_ENC_ERROR = "crypto.cipher.encryptionError";
@@ -63,32 +61,12 @@ public class SimpleCipher {
         this.key = key;
     }
 
-    public String getBase64Key() {
-        return key != null? Base64.encodeBase64String(key.getEncoded()): null;
-    }
-
-    public void setBase64Key(String aesKey) {
-        this.key = new SecretKeySpec(Base64.decodeBase64(aesKey), CipherUtils.AES_CIPHER_ALGORITHM);
-    }
-
-    public void setBase64Key(String key, String algorithm) {
-        this.key = new SecretKeySpec(Base64.decodeBase64(key), algorithm);
-    }
-
     public byte[] getIv() {
         return iv;
     }
 
     public void setIv(byte[] iv) {
         this.iv = iv;
-    }
-
-    public String getBase64Iv() {
-        return iv != null? Base64.encodeBase64String(iv): null;
-    }
-
-    public void setBase64Iv(String iv) {
-        this.iv = Base64.decodeBase64(iv);
     }
 
     public Cipher getCipher() {
@@ -99,19 +77,11 @@ public class SimpleCipher {
         this.cipher = cipher;
     }
 
-    public void setCipherTransformation(String transformation) throws CryptoExceptionAbstract {
-        try {
-            cipher = Cipher.getInstance(transformation);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_INVALID_TRANSFORMATION, e, transformation);
-        }
-    }
-
-    public String encryptBase64(String clear) throws CryptoExceptionAbstract {
+    public String encryptBase64(String clear) throws CryptoException {
         return Base64.encodeBase64String(encrypt(StringUtils.getBytesUtf8(clear)));
     }
 
-    public byte[] encrypt(byte[] clear) throws CryptoExceptionAbstract {
+    public byte[] encrypt(byte[] clear) throws CryptoException {
         if (key == null) {
             key = CipherUtils.generateAesKey();
 
@@ -140,22 +110,22 @@ public class SimpleCipher {
 
             return cipher.doFinal(clear);
         } catch (GeneralSecurityException e) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_ENC_ERROR, e);
+            throw new CryptoException(ERROR_KEY_ENC_ERROR, e);
         } finally {
             logger.debug(LOG_KEY_ENC_SUCCESSFUL);
         }
     }
 
-    public String decryptBase64(String encrypted) throws CryptoExceptionAbstract {
+    public String decryptBase64(String encrypted) throws CryptoException {
         return StringUtils.newStringUtf8(decrypt(Base64.decodeBase64(encrypted)));
     }
 
-    public byte[] decrypt(byte[] encrypted) throws CryptoExceptionAbstract {
+    public byte[] decrypt(byte[] encrypted) throws CryptoException {
         if (key == null) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_KEY_NOT_SET);
+            throw new CryptoException(ERROR_KEY_KEY_NOT_SET);
         }
         if (iv == null) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_IV_NOT_SET);
+            throw new CryptoException(ERROR_KEY_IV_NOT_SET);
         }
         if (cipher == null) {
             String cipherTransformation = CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
@@ -175,7 +145,7 @@ public class SimpleCipher {
 
             return cipher.doFinal(encrypted);
         } catch (GeneralSecurityException e) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_DEC_ERROR, e);
+            throw new CryptoException(ERROR_KEY_DEC_ERROR, e);
         } finally {
             logger.debug(LOG_KEY_DEC_SUCCESSFUL);
         }
