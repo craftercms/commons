@@ -36,10 +36,13 @@ public class SimpleDigest {
     public static final String LOG_KEY_SALT_GEN = "crypto.digest.saltGenerated";
     public static final String LOG_KEY_DIGEST_GEN = "crypto.digest.digestGenerated";
     public static final String ERROR_KEY_INVALID_ALG = "crypto.digest.invalidDigestAlgorithm";
+
     public static final String DEFAULT_ALGORITHM = "SHA-256";
     public static final int DEFAULT_ITERATIONS = 1000;
     public static final int DEFAULT_SALT_SIZE = 16;
+
     private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, "crafter.commons.messages.logging");
+
     private MessageDigest digest;
     private int iterations;
     private byte[] salt;
@@ -56,11 +59,11 @@ public class SimpleDigest {
         this.digest = digest;
     }
 
-    public void setAlgorithm(String algorithm) throws CryptoExceptionAbstract {
+    public void setAlgorithm(String algorithm) throws CryptoException {
         try {
             this.digest = MessageDigest.getInstance(algorithm);
         } catch (NoSuchAlgorithmException ex) {
-            throw new CryptoExceptionAbstract(ERROR_KEY_INVALID_ALG, ex, algorithm);
+            throw new CryptoException(ERROR_KEY_INVALID_ALG, ex, algorithm);
         }
     }
 

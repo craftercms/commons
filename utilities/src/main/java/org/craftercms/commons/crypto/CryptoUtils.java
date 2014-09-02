@@ -18,8 +18,6 @@ package org.craftercms.commons.crypto;
 
 import java.security.SecureRandom;
 
-import org.apache.commons.codec.binary.Base64;
-
 /**
  * Utility methods that can be used both for cipher and message digest operations.
  *
@@ -41,17 +39,6 @@ public class CryptoUtils {
         secureRandom.nextBytes(bytes);
 
         return bytes;
-    }
-
-    /**
-     * Generates a random array of bytes, using the singleton {@link java.security.SecureRandom}, and then encodes
-     * them to Base 64.
-     *
-     * @param size the size of the array
-     * @return the generated array, encoded as Base 64
-     */
-    public String generateBase64RandomBytes(int size) {
-        return Base64.encodeBase64String(generateRandomBytes(size));
     }
 
 }

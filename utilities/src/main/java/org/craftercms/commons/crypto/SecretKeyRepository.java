@@ -32,7 +32,7 @@ public interface SecretKeyRepository {
      * @param create true to create new key if there's no key with the specified name in the repository.
      * @return the key
      */
-    SecretKey getKey(String name, boolean create) throws CryptoExceptionAbstract;
+    SecretKey getKey(String name, boolean create) throws CryptoException;
 
     /**
      * Saves the secret key in the repository, with the specified name
@@ -40,6 +40,6 @@ public interface SecretKeyRepository {
      * @param name the key's name in the repository
      * @param key  the key to save
      */
-    void saveKey(String name, SecretKey key) throws CryptoExceptionAbstract;
+    void saveKey(String name, SecretKey key) throws CryptoException;
 
 }
