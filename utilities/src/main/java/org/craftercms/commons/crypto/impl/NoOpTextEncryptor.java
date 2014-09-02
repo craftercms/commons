@@ -13,11 +13,11 @@ import org.craftercms.commons.i10n.I10nLogger;
  *
  * @author avasquez
  */
-public class NoopTextEncryptor implements TextEncryptor {
+public class NoOpTextEncryptor implements TextEncryptor {
 
-    private static final I10nLogger logger = new I10nLogger(NoopTextEncryptor.class, "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(NoOpTextEncryptor.class, "crafter.commons.messages.logging");
 
-    public static final String LOG_KEY_NOOP_USED = "crypto.textEncryptor.noopUsed";
+    public static final String LOG_KEY_NOOP_USED = "crypto.textEncryptor.noOpUsed";
 
     @PostConstruct
     public void init() {
