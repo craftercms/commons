@@ -61,8 +61,7 @@ public class TestAuditServiceImpl<T extends AuditModel> extends AuditService<T> 
     @Override
     public void deleteAudits(final List auditId) {
         for (Object o : auditId) {
-            T remove = memoryPersistence.remove(o);
-            remove = null;
+             memoryPersistence.remove(o);
         }
     }
 
@@ -73,6 +72,9 @@ public class TestAuditServiceImpl<T extends AuditModel> extends AuditService<T> 
 
     @Override
     public List<T> getAuditLogs(final Date from, final Date to) {
+        if(memoryPersistence.values()==null) {
+            return null;
+        }
         List<T> valueSet = new ArrayList(memoryPersistence.values());
         CollectionUtils.filter(valueSet, new Predicate<Object>() {
             @Override

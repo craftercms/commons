@@ -72,5 +72,15 @@ public class AuditReaperTest {
         assertEquals(3, auditService.countAuditLogs());
     }
 
+    @Test
+    public void testScytheAuditServiceNull() throws Exception {
+        auditService.clear();
+        auditService.audit(new TestAuditModel("1984-09-20 12:01:00"));
+        auditService.audit(new TestAuditModel(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
+        auditService.audit(new TestAuditModel("3001-09-20 12:01:00"));
+        reaper.setMaxAuditAllowedDays(-1);
+        reaper.scythe();
+        assertEquals(3, auditService.countAuditLogs());
+    }
 
 }

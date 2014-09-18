@@ -57,12 +57,17 @@ public class AuditReaper {
             calendar.add(Calendar.DAY_OF_MONTH, maxAuditAllowedDays * -1);
             final Date since = new Date(calendar.getTimeInMillis());
             final List<? extends AuditModel> toDelete = auditService.getAuditLogs(since, new Date());
-            final List<String> idstoDel = getIdList(toDelete);
-            log.info("Deleting {} audit entries ", idstoDel.size());
             if (toDelete != null) {
-                auditService.deleteAudits(idstoDel);
+                final List<String> idstoDel = getIdList(toDelete);
+                log.info("Deleting {} audit entries ", idstoDel.size());
+                if (toDelete != null) {
+                    auditService.deleteAudits(idstoDel);
+                }
+                log.info("Going to sleep now");
+            } else {
+                log.info("AuditService return null when ask to give audits with in this range {} {}", since,
+                    new Date());
             }
-            log.info("Going to sleep now");
         } else {
             log.info("Skipping scythe maxAuditAllowedDays is set to infinity");
         }
