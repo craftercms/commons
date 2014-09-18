@@ -60,6 +60,10 @@ public class I10nLogger {
         return actualLogger.isErrorEnabled();
     }
 
+    public boolean isInfoEnabled() {
+        return actualLogger.isInfoEnabled();
+    }
+
     public void trace(String key, Object... args) {
         if (isTraceEnabled()) {
             actualLogger.trace(getLocalizedMessage(key, args));
@@ -108,6 +112,17 @@ public class I10nLogger {
         }
     }
 
+    public void info(String key, Throwable e, Object... args) {
+        if (isInfoEnabled()) {
+            actualLogger.error(getLocalizedMessage(key, args), e);
+        }
+    }
+
+    public void info(String key, Object... args) {
+        if (isInfoEnabled()) {
+            actualLogger.error(getLocalizedMessage(key, args));
+        }
+    }
     protected String getLocalizedMessage(String key, Object... args) {
         return I10nUtils.getLocalizedMessage(resourceBundle, key, args);
     }
