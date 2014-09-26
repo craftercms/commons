@@ -248,12 +248,12 @@ public interface CrudRepository<T> {
      * Saves the given InputStream as with the given name.
      * <b>Closes the Stream after its done</b>.
      * @param inputStream InputStream to be Save.
-     * @param filename File name for the inputStream.
+     * @param storeName File name for the inputStream.
      * @return FileInfo with all the information of the file.
      * @throws MongoDataException If Can't save the file.
      * @throws FileExistsException If a file with the given file name already exists.
      */
-    FileInfo saveFile(final InputStream inputStream,final String filename,final String contentType,final ObjectId fileId) throws
+    FileInfo saveFile(final InputStream inputStream,final String storeName,final String contentType,final ObjectId fileId) throws
         MongoDataException,
         FileExistsException;
 
@@ -261,12 +261,12 @@ public interface CrudRepository<T> {
      * Saves the given InputStream as with the given name.
      * <b>Closes the Stream after its done</b>.
      * @param inputStream InputStream to be Save.
-     * @param filename File name for the inputStream.
+     * @param storeName File name for the inputStream.
      * @return FileInfo with all the information of the file.
      * @throws MongoDataException If Can't save the file.
      * @throws FileExistsException If a file with the given file name already exists.
      */
-    FileInfo saveFile(final InputStream inputStream,final String filename,final String contentType) throws
+    FileInfo saveFile(final InputStream inputStream,final String storeName,final String contentType) throws
         MongoDataException,
         FileExistsException;
 
@@ -279,11 +279,11 @@ public interface CrudRepository<T> {
     FileInfo getFileInfo(final ObjectId fileId) throws FileNotFoundException;
     /**
      * Gets the file information based on its name..
-     * @param fileName file name to look up the information.
+     * @param storeName file name to look up the information.
      * @return File Information of the file.
      * @throws FileNotFoundException If file with the given id does not exist.
      */
-    FileInfo getFileInfo(final String fileName) throws FileNotFoundException;
+    FileInfo getFileInfo(final String storeName) throws FileNotFoundException;
 
     /**
      * Returns the InputStream of the file with the given id.
@@ -294,11 +294,11 @@ public interface CrudRepository<T> {
     FileInfo readFile(final ObjectId fileId) throws FileNotFoundException;
     /**
      * Returns the InputStream of the file with the given name.
-     * @param fileName File Id to read.
+     * @param storeName File Id to read.
      * @return A InputStream with that file Information.
      * @throws FileNotFoundException If there is no file with that name.
      */
-    FileInfo readFile(final String fileName) throws FileNotFoundException;
+    FileInfo readFile(final String storeName) throws FileNotFoundException;
 
     /**
      * Deletes the File with the given Id.
@@ -309,10 +309,10 @@ public interface CrudRepository<T> {
 
     /**
      * Deletes the File with the given name.
-     * @param fileName Name of the file to delete.
+     * @param storeName Name of the file to delete.
      * @throws FileNotFoundException If there is no file with that name.
      */
-    void deleteFile(final String fileName) throws FileNotFoundException;
+    void deleteFile(final String storeName) throws FileNotFoundException;
 
     /**
      *<p>"Updates" the file with the new information (A name change is valid as long a file with new name does not
@@ -325,14 +325,14 @@ public interface CrudRepository<T> {
      * <p></p>
      * @param fileId File id to be Updated
      * @param inputStream new InputStream of the file.
-     * @param filename File name of the inputStream (can differ from the original).
+     * @param storeName File name of the inputStream (can differ from the original).
      * @return The new FileInfo of the "Updated" file
      * @throws FileNotFoundException If File with Given Id Does not exists.
      * @throws MongoDataException If unable to save the File.
-     * @throws FileExistsException If a file name exists with the new filename <i>(this should Only happen if you change
+     * @throws FileExistsException If a file name exists with the new storeName <i>(this should Only happen if you change
      * the file name)</i>
      */
-    FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
+    FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String storeName,
                         final String contentType) throws FileNotFoundException,
         MongoDataException, FileExistsException;
 
@@ -347,14 +347,14 @@ public interface CrudRepository<T> {
      * <p></p>
      * @param fileId File id to be Updated
      * @param inputStream new InputStream of the file.
-     * @param filename File name of the inputStream (can differ from the original).
+     * @param storeName File name of the inputStream (can differ from the original).
      * @return The new FileInfo of the "Updated" file
      * @throws FileNotFoundException If File with Given Id Does not exists.
      * @throws MongoDataException If unable to save the File.
-     * @throws FileExistsException If a file name exists with the new filename <i>(this should Only happen if you change
+     * @throws FileExistsException If a file name exists with the new storeName <i>(this should Only happen if you change
      * the file name)</i>
      */
-    FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
+    FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String storeName,
                         final String contentType,final boolean sameFileId) throws FileNotFoundException,
         MongoDataException, FileExistsException;
 
@@ -366,7 +366,7 @@ public interface CrudRepository<T> {
      * It's Id</i></b>
      * </p>
      * <p></p>
-     * @param filename File id to be Updated. (Have to the the same as the original of not
+     * @param storeName File id to be Updated. (Have to the the same as the original of not
      *                  it will throw a FileNotFoundException)
      * @param inputStream new InputStream of the file.
      * @return The new FileInfo of the "Updated" file
@@ -374,7 +374,7 @@ public interface CrudRepository<T> {
      * @throws MongoDataException If unable to save the File.
      * @throws FileExistsException this exception is highly unlikely to happen but posible.
      */
-    FileInfo updateFile(final InputStream inputStream, final String filename,final String contentType) throws
+    FileInfo updateFile(final InputStream inputStream, final String storeName,final String contentType) throws
         FileNotFoundException,
         MongoDataException,
         FileExistsException;

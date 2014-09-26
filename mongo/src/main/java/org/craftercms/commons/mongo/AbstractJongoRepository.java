@@ -393,15 +393,15 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public FileInfo saveFile(final InputStream inputStream, final String filename, final String contentType,
+    public FileInfo saveFile(final InputStream inputStream, final String storeName, final String contentType,
                              final ObjectId fileId) throws MongoDataException, FileExistsException {
         try {
 
-            if (gridfs.findOne(filename) != null) {
-                log.error("A file named {} already exists", filename);
-                throw new FileExistsException("File with name " + filename + " already Exists");
+            if (gridfs.findOne(storeName) != null) {
+                log.error("A file named {} already exists", storeName);
+                throw new FileExistsException("File with name " + storeName + " already Exists");
             }
-            GridFSInputFile savedFile = gridfs.createFile(inputStream, filename, true);
+            GridFSInputFile savedFile = gridfs.createFile(inputStream, storeName, true);
             savedFile.setContentType(contentType);
             if (fileId != null) {
                 log.debug("Saving file with given Id {} probably a update", fileId);
@@ -418,9 +418,9 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public FileInfo saveFile(final InputStream inputStream, final String filename,
+    public FileInfo saveFile(final InputStream inputStream, final String storeName,
                              final String contentType) throws MongoDataException, FileExistsException {
-        return saveFile(inputStream, filename, contentType, null);
+        return saveFile(inputStream, storeName, contentType, null);
     }
 
     @Override
@@ -429,8 +429,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public FileInfo getFileInfo(final String fileName) throws FileNotFoundException {
-        return new FileInfo(validateObject(fileName), false);
+    public FileInfo getFileInfo(final String storeName) throws FileNotFoundException {
+        return new FileInfo(validateObject(storeName), false);
     }
 
     @Override
@@ -439,8 +439,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public FileInfo readFile(final String fileName) throws FileNotFoundException {
-        return new FileInfo(validateObject(fileName), true);
+    public FileInfo readFile(final String storeName) throws FileNotFoundException {
+        return new FileInfo(validateObject(storeName), true);
     }
 
     @Override
@@ -449,31 +449,31 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public void deleteFile(final String fileName) throws FileNotFoundException {
-        gridfs.remove(validateObject(fileName));
+    public void deleteFile(final String storeName) throws FileNotFoundException {
+        gridfs.remove(validateObject(storeName));
     }
 
     @Override
-    public FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
+    public FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String storeName,
                                final String contentType) throws FileNotFoundException, MongoDataException,
         FileExistsException {
-        return updateFile(fileId, inputStream, filename, contentType, false);
+        return updateFile(fileId, inputStream, storeName, contentType, false);
     }
 
     @Override
-    public FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String filename,
+    public FileInfo updateFile(final ObjectId fileId, final InputStream inputStream, final String storeName,
                                final String contentType, boolean sameFileId) throws FileNotFoundException,
         MongoDataException, FileExistsException {
         gridfs.remove(validateObject(fileId));
-        return saveFile(inputStream, filename, contentType, sameFileId? fileId: null);
+        return saveFile(inputStream, storeName, contentType, sameFileId? fileId: null);
     }
 
     @Override
-    public FileInfo updateFile(final InputStream inputStream, final String filename,
+    public FileInfo updateFile(final InputStream inputStream, final String storeName,
                                final String contentType) throws FileNotFoundException, MongoDataException,
         FileExistsException {
-        gridfs.remove(validateObject(filename));
-        return saveFile(inputStream, filename, contentType);
+        gridfs.remove(validateObject(storeName));
+        return saveFile(inputStream, storeName, contentType);
     }
 
 
@@ -486,11 +486,11 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
         return file;
     }
 
-    protected GridFSDBFile validateObject(final String fileName) throws FileNotFoundException {
-        GridFSDBFile file = gridfs.findOne(fileName);
+    protected GridFSDBFile validateObject(final String storeName) throws FileNotFoundException {
+        GridFSDBFile file = gridfs.findOne(storeName);
         if (file == null) {
-            log.error("A file with name {} does not exists", fileName);
-            throw new FileNotFoundException("File with file name " + fileName + " does not exist");
+            log.error("A file with name {} does not exists", storeName);
+            throw new FileNotFoundException("File with file name " + storeName + " does not exist");
         }
         return file;
     }
