@@ -6,6 +6,8 @@ import com.mongodb.gridfs.GridFSFile;
 
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 import org.craftercms.commons.file.FileUtils;
@@ -19,26 +21,31 @@ public class FileInfo {
     private ObjectId fileId;
     private String contentType;
     private String fileSize;
+    private String storeName;
     private String fileName;
     private Date savedDate;
     private long fileSizeBytes;
+    private Map<String,Object> attributes;
     @JsonIgnore
     private InputStream inputStream;
+
 
     FileInfo(final GridFSFile savedFile,final boolean withInputStream) {
         this.md5 = savedFile.getMD5();
         this.fileId = (ObjectId)savedFile.getId();
         this.contentType = savedFile.getContentType();
         this.fileSize = FileUtils.readableFileSize(savedFile.getLength());
-        this.fileName = savedFile.getFilename();
+        this.storeName = savedFile.getFilename();
         this.savedDate = savedFile.getUploadDate();
         this.fileSizeBytes = savedFile.getLength();
         if (withInputStream && savedFile instanceof GridFSDBFile) {
             this.inputStream = ((GridFSDBFile)savedFile).getInputStream();
         }
+        attributes=new HashMap<>();
     }
 
     public FileInfo() {
+        attributes=new HashMap<>();
     }
 
     public String getMd5() {
@@ -73,12 +80,12 @@ public class FileInfo {
         this.fileSize = fileSize;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setFileName(final String fileName) {
-        this.fileName = fileName;
+    public void setStoreName(final String storeName) {
+        this.storeName = storeName;
     }
 
     public Date getSavedDate() {
@@ -101,6 +108,14 @@ public class FileInfo {
         this.fileSizeBytes = fileSizeBytes;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(final String fileName) {
+        this.fileName = fileName;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -115,17 +130,29 @@ public class FileInfo {
         if (!fileId.equals(fileInfo.fileId)) {
             return false;
         }
-        if (!fileName.equals(fileInfo.fileName)) {
+        if (!storeName.equals(fileInfo.storeName)) {
             return false;
         }
 
         return true;
     }
 
+    public void setAttribute(final String key,final Object value){
+        attributes.put(key,value);
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(final Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
+
     @Override
     public int hashCode() {
         int result = fileId.hashCode();
-        result = 31 * result + fileName.hashCode();
+        result = 31 * result + storeName.hashCode();
         return result;
     }
 
@@ -136,7 +163,7 @@ public class FileInfo {
             ", fileId=" + fileId +
             ", contentType='" + contentType + '\'' +
             ", fileSize='" + fileSize + '\'' +
-            ", fileName='" + fileName + '\'' +
+            ", storeName='" + storeName + '\'' +
             ", savedDate=" + savedDate +
             '}';
     }
