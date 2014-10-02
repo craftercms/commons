@@ -20,6 +20,8 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Utility methods for encryption/decryption.
  *
@@ -80,10 +82,14 @@ public class CipherUtils {
      * @return the hashed password + {@link #PASSWORD_SEP} + salt
      */
     public static String hashPassword(String clearPswd) {
-        SimpleDigest digest = new SimpleDigest();
-        String hashedPswd = digest.digestBase64(clearPswd);
+        if (StringUtils.isNotEmpty(clearPswd)) {
+            SimpleDigest digest = new SimpleDigest();
+            String hashedPswd = digest.digestBase64(clearPswd);
 
-        return hashedPswd + PASSWORD_SEP + digest.getBase64Salt();
+            return hashedPswd + PASSWORD_SEP + digest.getBase64Salt();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -95,14 +101,22 @@ public class CipherUtils {
      * @return if the password matches
      */
     public static boolean matchPassword(String hashedPswdAndSalt, String clearPswd) {
-        int idxOfSep = hashedPswdAndSalt.indexOf(PASSWORD_SEP);
-        String storedHash = hashedPswdAndSalt.substring(0, idxOfSep);
-        String salt = hashedPswdAndSalt.substring(idxOfSep + 1);
-        SimpleDigest digest = new SimpleDigest();
+        if (StringUtils.isNotEmpty(hashedPswdAndSalt) && StringUtils.isNotEmpty(clearPswd)) {
+            int idxOfSep = hashedPswdAndSalt.indexOf(PASSWORD_SEP);
+            String storedHash = hashedPswdAndSalt.substring(0, idxOfSep);
+            String salt = hashedPswdAndSalt.substring(idxOfSep + 1);
+            SimpleDigest digest = new SimpleDigest();
 
-        digest.setBase64Salt(salt);
+            digest.setBase64Salt(salt);
 
-        return storedHash.equals(digest.digestBase64(clearPswd));
+            return storedHash.equals(digest.digestBase64(clearPswd));
+        } else if (hashedPswdAndSalt == null && clearPswd == null) {
+            return true;
+        } else if (hashedPswdAndSalt.isEmpty() && clearPswd.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
