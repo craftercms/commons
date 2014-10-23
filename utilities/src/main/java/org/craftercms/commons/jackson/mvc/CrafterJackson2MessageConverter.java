@@ -129,7 +129,7 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
         try {
             Object propertyValue = PropertyUtils.getProperty(object, propertyToUseName);
             Object valueToInject = injectValueFactory.getObjectFor(PropertyUtils.getPropertyType(object,
-                    field.getName()), propertyValue, object);
+                    field.getName()), propertyValue,propertyToUseName, object);
             PropertyUtils.setProperty(object, field.getName(), valueToInject);
         } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             log.error("Unable to inject value " + field.getName() + " for class " + object.getClass(), e);

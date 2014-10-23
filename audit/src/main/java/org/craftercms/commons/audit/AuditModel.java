@@ -18,6 +18,7 @@
 package org.craftercms.commons.audit;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
 * Defines the minimum attributes needed in a generic audit entry.
@@ -39,6 +40,10 @@ public abstract class AuditModel {
      */
     protected Object payload;
 
+    protected AuditModel() {
+        this.id= UUID.randomUUID().toString();
+        this.setAuditDate(new Date());
+    }
 
     /**
      * Gets Audit entry Date.

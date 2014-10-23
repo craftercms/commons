@@ -220,10 +220,11 @@ public interface CrudRepository<T> {
     void remove(String query, Object... queryParams) throws MongoDataException;
 
     /**
-     * Finds by the Id.
-     *
+     * <p>Finds by the Id.</p>
+     * <p><b>Internal transforms the given String to and Object Id</b></p>
      * @param id String representation of the Id.
      * @return A instance of the object with the given Id.
+     * @throws java.lang.IllegalArgumentException If given id is not a Valid Object Id.
      */
     T findById(String id) throws MongoDataException;
 
@@ -378,4 +379,13 @@ public interface CrudRepository<T> {
         FileNotFoundException,
         MongoDataException,
         FileExistsException;
+
+
+    /**
+     * <p>Finds by the Id.</p>
+     * <p><b> No internal Modification is done, uses Mongodb default '_id' field name</b></p>
+     * @param id String representation of the Id.
+     * @return A instance of the object with the given Id.
+     */
+    T findByStringId(String id) throws MongoDataException;
 }
