@@ -43,6 +43,8 @@
     </bean>
 
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="schedulerName" value="Crafter Audit Schedule Jobs"/>
+        <property name="startupDelay" value="60" />
         <property name="triggers">
             <list>
                 <ref bean="auditScytheCronTrigger"/>
