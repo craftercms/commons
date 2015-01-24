@@ -36,11 +36,13 @@ public class CORSFilter extends OncePerRequestFilter {
     public static final String ALLOW_METHODS = "Access-Control-Allow-Methods";
     public static final String MAX_AGE = "Access-Control-Max-Age";
     public static final String ALLOW_HEADERS = "Access-Control-Allow-Headers";
+    public static final String ALLOW_CREDENTIALS ="Access-Control-Allow-Credentials";
 
     private String allowOrigins;
     private String allowMethods;
     private String maxAge;
     private String allowHeaders;
+    private String allowCredentials;
 
 
     @Override
@@ -64,6 +66,10 @@ public class CORSFilter extends OncePerRequestFilter {
         this.allowHeaders = allowHeaders;
     }
 
+    public void setAllowCredentials(final String allowCredentials) {
+        this.allowCredentials = allowCredentials;
+    }
+
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final
     FilterChain filterChain) throws ServletException, IOException {
@@ -72,6 +78,7 @@ public class CORSFilter extends OncePerRequestFilter {
         responseWrapper.addHeader(ALLOW_METHODS, allowMethods);
         responseWrapper.addHeader(MAX_AGE, maxAge);
         responseWrapper.addHeader(ALLOW_HEADERS, allowHeaders);
+        responseWrapper.addHeader(ALLOW_CREDENTIALS,allowCredentials);
         filterChain.doFilter(request, responseWrapper);
     }
 
