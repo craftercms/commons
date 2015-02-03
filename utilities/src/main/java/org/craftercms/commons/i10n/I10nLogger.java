@@ -114,13 +114,13 @@ public class I10nLogger {
 
     public void info(String key, Throwable e, Object... args) {
         if (isInfoEnabled()) {
-            actualLogger.error(getLocalizedMessage(key, args), e);
+            actualLogger.info(getLocalizedMessage(key, args), e);
         }
     }
 
     public void info(String key, Object... args) {
         if (isInfoEnabled()) {
-            actualLogger.error(getLocalizedMessage(key, args));
+            actualLogger.info(getLocalizedMessage(key, args));
         }
     }
     protected String getLocalizedMessage(String key, Object... args) {
