@@ -380,7 +380,6 @@ public interface CrudRepository<T> {
         MongoDataException,
         FileExistsException;
 
-
     /**
      * <p>Finds by the Id.</p>
      * <p><b> No internal Modification is done, uses Mongodb default '_id' field name</b></p>
@@ -388,4 +387,12 @@ public interface CrudRepository<T> {
      * @return A instance of the object with the given Id.
      */
     T findByStringId(String id) throws MongoDataException;
+
+    /**
+     * <p>Removes by the Id.</p>
+     * <p><b> No internal Modification is done, uses Mongodb default '_id' field name</b></p>
+     * @param id String representation of the Id.
+     */
+    void removeByStringId(String id) throws MongoDataException;
+
 }

@@ -240,8 +240,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
         }
     }
 
-    public void update(final String id, final String modifier, final boolean multi, final boolean upsert, final
-    Object... params) throws MongoDataException {
+    public void update(final String id, final String modifier, final boolean multi, final boolean upsert,
+                       final Object... params) throws MongoDataException {
         try {
             Update update = getCollection().update(new ObjectId(id));
             if (multi) {
@@ -506,8 +506,16 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             String msg = "Unable to find document of type " + clazz.getName() + " by id '" + id + "'";
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
-        } catch (IllegalArgumentException ex) {
-            String msg = "Given id '" + id + "' can't be converted to an ObjectId";
+        }
+    }
+
+    @Override
+    public void removeByStringId(final String id) throws MongoDataException {
+        try {
+            WriteResult result = getCollection().remove("{_id:#}", id);
+            checkCommandResult(result);
+        } catch (MongoException ex) {
+            String msg = "Unable to remove document of type " + clazz.getName() + " by id '" + id + "'";
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
