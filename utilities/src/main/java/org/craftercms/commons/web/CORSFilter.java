@@ -44,7 +44,6 @@ public class CORSFilter extends OncePerRequestFilter {
     private String allowHeaders;
     private String allowCredentials;
 
-
     @Override
     public void destroy() {
 
@@ -71,8 +70,8 @@ public class CORSFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final
-    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
+                                    final FilterChain filterChain) throws ServletException, IOException {
         final HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(response);
         responseWrapper.addHeader(ALLOW_ORIGIN, allowOrigins);
         responseWrapper.addHeader(ALLOW_METHODS, allowMethods);
