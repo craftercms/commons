@@ -34,8 +34,8 @@ public abstract class PermissionBase implements Permission {
 
     @Override
     public boolean isAllowed(String action) {
-        return CollectionUtils.isNotEmpty(allowedActions) && (allowedActions.contains(ANY_ACTION) || allowedActions
-            .contains(action));
+        return CollectionUtils.isNotEmpty(allowedActions) &&
+               (allowedActions.contains(ANY_ACTION) || allowedActions.contains(action));
     }
 
     public Set<String> getAllowedActions() {
