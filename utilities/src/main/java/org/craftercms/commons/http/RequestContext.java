@@ -18,6 +18,7 @@ package org.craftercms.commons.http;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
 
 /**
  * Holds the current HTTP servlet request and response.
@@ -30,6 +31,7 @@ public class RequestContext {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
+    private ServletContext servletContext;
 
     public RequestContext(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
@@ -71,6 +73,14 @@ public class RequestContext {
 
     public void setResponse(HttpServletResponse response) {
         this.response = response;
+    }
+
+    public ServletContext getServletContext() {
+        return this.servletContext;
+    }
+
+    public void setServletContext(ServletContext ctx) {
+        this.servletContext = ctx;
     }
 
 }

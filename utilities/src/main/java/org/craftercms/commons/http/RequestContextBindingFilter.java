@@ -25,6 +25,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
 
 import org.craftercms.commons.i10n.I10nLogger;
 
@@ -41,8 +42,11 @@ public class RequestContextBindingFilter implements Filter {
     private static final I10nLogger logger = new I10nLogger(RequestContextBindingFilter.class,
         "crafter.commons.messages.logging");
 
+    private ServletContext servletContext;
+
     @Override
     public void init(FilterConfig filterConfig) {
+        servletContext = filterConfig.getServletContext();
     }
 
     @Override
@@ -83,7 +87,9 @@ public class RequestContextBindingFilter implements Filter {
      * HttpServletResponse}.
      */
     protected RequestContext createRequestContext(HttpServletRequest request, HttpServletResponse response) {
-        return new RequestContext(request, response);
-    }
+        RequestContext context = new RequestContext(request, response);
 
+        context.setServletContext(servletContext);
+        return context;
+    }
 }
