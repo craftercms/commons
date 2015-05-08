@@ -16,10 +16,8 @@
  */
 package org.craftercms.commons.mongo;
 
-import com.mongodb.CommandResult;
-import com.mongodb.DB;
-import com.mongodb.Mongo;
-
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -29,7 +27,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import com.mongodb.CommandResult;
+import com.mongodb.DB;
+import com.mongodb.Mongo;
 
 /**
  * Utility class for running Mongo scripts in JS.
@@ -96,20 +99,37 @@ public class MongoScriptRunner {
     private void runScript(DB db, Resource scriptPath) throws MongoDataException {
         String script;
         try {
-            script = IOUtils.toString(scriptPath.getInputStream(), "UTF-8");
-        } catch (IOException e) {
-            throw new MongoDataException("Unable to read script at " + scriptPath.getDescription());
+            if (scriptPath.getFile().isDirectory()) {
+                final File[] files = scriptPath.getFile().listFiles(new FilenameFilter() {
+                    @Override
+                    public boolean accept(final File dir, final String name) {
+                        return name.toLowerCase().endsWith(".js");
+                    }
+                });
+                for (File file : files) {
+                    runScript(db, new FileSystemResource(file.getPath()));
+                }
+            } else {
+
+                try {
+                    script = IOUtils.toString(scriptPath.getInputStream(), "UTF-8");
+                } catch (IOException e) {
+                    throw new MongoDataException("Unable to read script at " + scriptPath.getURI().toString());
+                }
+
+                CommandResult result = db.doEval(script);
+                if (!result.ok()) {
+                    Exception ex = result.getException();
+
+                    throw new MongoDataException("An error occurred while running script at " + scriptPath.getURI().toString(),
+                        ex);
+
+                }
+                logger.info("Mongo script at {} executed successfully", scriptPath.getDescription());
+            }
+        } catch (IOException ex) {
+            logger.error("Unable to read files from {}", ex);
         }
-
-        CommandResult result = db.doEval(script);
-        if (!result.ok()) {
-            Exception ex = result.getException();
-
-            throw new MongoDataException("An error occurred while running script at " + scriptPath.getDescription(),
-                ex);
-        }
-
-        logger.info("Mongo script at {} executed successfully", scriptPath.getDescription());
     }
 
     private DB getDB() throws MongoDataException {
