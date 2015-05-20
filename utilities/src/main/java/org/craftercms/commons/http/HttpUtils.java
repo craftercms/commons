@@ -110,6 +110,28 @@ public class HttpUtils {
     }
 
     /**
+     * Returns the full request URI, including scheme, server name, port number and server path. The query string
+     * is optional.
+     *
+     * @param request               the request object used to build the URI
+     * @param includeQueryString    if the query string should be appended to the URI
+     *
+     * @return the full request URI
+     */
+    public static final String getFullRequestUri(HttpServletRequest request, boolean includeQueryString) {
+        StringBuilder uri = getBaseRequestUrl(request, false).append(request.getRequestURI());
+
+        if (includeQueryString) {
+            String queryStr = request.getQueryString();
+            if (StringUtils.isNotEmpty(queryStr)) {
+                uri.append('?').append(queryStr);
+            }
+        }
+
+        return uri.toString();
+    }
+
+    /**
      * Returns the cookie with the given name for the given request
      *
      * @param name      the name of the cookie
