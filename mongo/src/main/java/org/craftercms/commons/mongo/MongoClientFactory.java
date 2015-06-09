@@ -35,7 +35,7 @@ import org.springframework.beans.factory.config.AbstractFactoryBean;
  * <p>Creates a Mongo Client based on a connection String </p>
  * <p>Connection String format <i>host:PORT,[host1:port1],[hostN,portN]</i> the port portion is optional default
  * one <i>27017</i> will be use. </p>
- * <p>If connection String is null or empty or whitespace only , this factory will
+ * <p>If connection String is null or empty or whitespace only, this factory will
  * use as if connection String value is "127.0.0.1:27017" </p>
  * <p><b>Will throw IllegalArgumentException if port number is not valid</b></p>
  */
@@ -43,7 +43,8 @@ public class MongoClientFactory extends AbstractFactoryBean<MongoClient> {
 
     public static final String DEFAULT_MONGO_HOST = "127.0.0.1";
     public static final int DEFAULT_MONGO_PORT = 27017;
-    private Logger log = LoggerFactory.getLogger(MongoClientFactory.class);
+
+    private Logger logger = LoggerFactory.getLogger(MongoClientFactory.class);
 
     private MongoClientOptions options;
     private String connectionString;
@@ -56,38 +57,54 @@ public class MongoClientFactory extends AbstractFactoryBean<MongoClient> {
     @Override
     protected MongoClient createInstance() throws Exception {
         if (StringUtils.isBlank(connectionString)) {
-            log.warn("Given connection string {} is not valid using \"{}:{}\"", connectionString, DEFAULT_MONGO_HOST,
-                DEFAULT_MONGO_PORT);
+            logger.info("No connection string specified, connecting to {}:{}", connectionString, DEFAULT_MONGO_HOST,
+                        DEFAULT_MONGO_PORT);
+
             return new MongoClient(new ServerAddress(DEFAULT_MONGO_HOST, DEFAULT_MONGO_PORT));
         }
+
         StringTokenizer st = new StringTokenizer(connectionString, ",");
         List<ServerAddress> addressList = new ArrayList<>();
+
         while (st.hasMoreElements()) {
-            final String server = st.nextElement().toString();
-            log.debug("Processing first Server found with string {}",server);
+            String server = st.nextElement().toString();
+
+            logger.debug("Processing first server found with string {}", server);
+
             String[] serverAndPort = server.split(":");
             if (serverAndPort.length == 2) {
-                log.debug("Server String defines host {} and port {}",serverAndPort[0],serverAndPort[1]);
+                logger.debug("Server string defines host {} and port {}", serverAndPort[0], serverAndPort[1]);
+
                 if (StringUtils.isBlank(serverAndPort[0])) {
                     throw new IllegalArgumentException("Given host can't be empty");
                 }
+
                 int portNumber = NumberUtils.toInt(serverAndPort[1]);
                 if (portNumber == 0) {
                     throw new IllegalArgumentException("Given port number " + portNumber + " is not valid");
                 }
+
                 addressList.add(new ServerAddress(serverAndPort[0], portNumber));
             } else if (serverAndPort.length == 1) {
-                log.debug("Server String defines host {} only using default port ",serverAndPort[0]);
+                logger.debug("Server string defines host {} only. Using default port ", serverAndPort[0]);
+
                 if (StringUtils.isBlank(serverAndPort[0])) {
                     throw new IllegalArgumentException("Given host can't be empty");
                 }
+
                 addressList.add(new ServerAddress(serverAndPort[0], DEFAULT_MONGO_PORT));
             } else {
-                throw new IllegalArgumentException("Given Connection is not a valid host ");
+                throw new IllegalArgumentException("Given connection string is not valid");
             }
         }
-        log.debug("Creating Mongo Client with {}",addressList);
-        return new MongoClient(addressList, options);
+
+        logger.debug("Creating MongoClient with addresses: {}", addressList);
+
+        if (options != null) {
+            return new MongoClient(addressList, options);
+        } else {
+            return new MongoClient(addressList);
+        }
     }
 
     public void setConnectionString(final String connectionString) {
@@ -97,4 +114,5 @@ public class MongoClientFactory extends AbstractFactoryBean<MongoClient> {
     public void setOptions(final MongoClientOptions options) {
         this.options = options;
     }
+
 }
