@@ -38,7 +38,10 @@ import org.springframework.beans.factory.config.AbstractFactoryBean;
  * <p>If connection String is null or empty or whitespace only, this factory will
  * use as if connection String value is "127.0.0.1:27017" </p>
  * <p><b>Will throw IllegalArgumentException if port number is not valid</b></p>
+ *
+ * @deprecated Use {@link MongoClientFromUriFactoryBean} instead.
  */
+@Deprecated
 public class MongoClientFactory extends AbstractFactoryBean<MongoClient> {
 
     public static final String DEFAULT_MONGO_HOST = "127.0.0.1";
