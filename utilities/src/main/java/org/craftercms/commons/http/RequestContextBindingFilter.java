@@ -88,8 +88,9 @@ public class RequestContextBindingFilter implements Filter {
      */
     protected RequestContext createRequestContext(HttpServletRequest request, HttpServletResponse response) {
         RequestContext context = new RequestContext(request, response);
-
         context.setServletContext(servletContext);
+
         return context;
     }
+
 }
