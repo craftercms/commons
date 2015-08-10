@@ -16,9 +16,9 @@
  */
 package org.craftercms.commons.http;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletContext;
 
 /**
  * Holds the current HTTP servlet request and response.
@@ -33,9 +33,10 @@ public class RequestContext {
     private HttpServletResponse response;
     private ServletContext servletContext;
 
-    public RequestContext(HttpServletRequest request, HttpServletResponse response) {
+    public RequestContext(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) {
         this.request = request;
         this.response = response;
+        this.servletContext = servletContext;
     }
 
     /**
@@ -79,8 +80,8 @@ public class RequestContext {
         return this.servletContext;
     }
 
-    public void setServletContext(ServletContext ctx) {
-        this.servletContext = ctx;
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
 
 }

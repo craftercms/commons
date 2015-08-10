@@ -3,8 +3,6 @@ package org.craftercms.commons.mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
-import javax.annotation.PreDestroy;
-
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
@@ -25,11 +23,6 @@ public class MongoClientFromUriFactoryBean extends AbstractFactoryBean<MongoClie
         this.uri = uri;
     }
 
-    @PreDestroy
-    public void destroy() throws Exception {
-        getObject().close();
-    }
-
     @Override
     public Class<?> getObjectType() {
         return MongoClient.class;
@@ -38,6 +31,11 @@ public class MongoClientFromUriFactoryBean extends AbstractFactoryBean<MongoClie
     @Override
     protected MongoClient createInstance() throws Exception {
         return new MongoClient(new MongoClientURI(uri));
+    }
+
+    @Override
+    protected void destroyInstance(MongoClient mongoClient) throws Exception {
+        mongoClient.close();
     }
 
 }

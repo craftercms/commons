@@ -39,8 +39,9 @@ public class RequestContextBindingFilter implements Filter {
 
     public static final String LOG_KEY_BINGING_CONTEXT = "http.requestContext.bindingContext";
     public static final String LOG_KEY_UNBINDING_CONTEXT = "http.requestContext.unbindingContext";
+
     private static final I10nLogger logger = new I10nLogger(RequestContextBindingFilter.class,
-        "crafter.commons.messages.logging");
+                                                            "crafter.commons.messages.logging");
 
     private ServletContext servletContext;
 
@@ -87,10 +88,7 @@ public class RequestContextBindingFilter implements Filter {
      * HttpServletResponse}.
      */
     protected RequestContext createRequestContext(HttpServletRequest request, HttpServletResponse response) {
-        RequestContext context = new RequestContext(request, response);
-        context.setServletContext(servletContext);
-
-        return context;
+        return new RequestContext(request, response, servletContext);
     }
 
 }
