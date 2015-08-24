@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,9 +17,6 @@ import org.jongo.Jongo;
 import org.jongo.marshall.jackson.JacksonMapper;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Creates a Jongo singleton for application wide use.
@@ -72,7 +73,8 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
         }
 
         JacksonMapper.Builder builder = new JacksonMapper.Builder();
-         builder.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        builder.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
         if (CollectionUtils.isNotEmpty(serializers) || MapUtils.isNotEmpty(deserializers)) {
             builder.registerModule(JacksonUtils.createModule(serializers, deserializers));
         }
