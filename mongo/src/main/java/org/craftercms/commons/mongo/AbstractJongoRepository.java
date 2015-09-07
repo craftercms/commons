@@ -17,6 +17,7 @@
 
 package org.craftercms.commons.mongo;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.CommandResult;
 import com.mongodb.MongoException;
 import com.mongodb.WriteResult;
@@ -27,6 +28,7 @@ import com.mongodb.gridfs.GridFSInputFile;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -507,6 +509,17 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
+    }
+
+    @Override
+    public List<FileInfo> listFilesByName(final String filename){
+        final List<GridFSDBFile> files = gridfs.find(new BasicDBObject("filename",new BasicDBObject("$regex",
+            ".*"+filename+".*")));
+        final ArrayList<FileInfo> toReturn = new ArrayList<FileInfo>();
+        for (GridFSDBFile file : files) {
+            toReturn.add(new FileInfo(file,false));
+        }
+        return toReturn;
     }
 
     @Override
