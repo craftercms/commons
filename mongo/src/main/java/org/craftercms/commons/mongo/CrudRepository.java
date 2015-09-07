@@ -19,6 +19,7 @@ package org.craftercms.commons.mongo;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.commons.io.FileExistsException;
 import org.bson.types.ObjectId;
@@ -387,6 +388,8 @@ public interface CrudRepository<T> {
      * @return A instance of the object with the given Id.
      */
     T findByStringId(String id) throws MongoDataException;
+
+    List<FileInfo> listFilesByName(String filename);
 
     /**
      * <p>Removes by the Id.</p>
