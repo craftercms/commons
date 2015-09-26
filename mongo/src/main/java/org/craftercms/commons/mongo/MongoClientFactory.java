@@ -48,6 +48,9 @@ public class MongoClientFactory extends AbstractFactoryBean<MongoClient> {
 
     private MongoClientOptions options;
     private String connectionString;
+    private String username;
+    private String password;
+
 
     @Override
     public Class<?> getObjectType() {
@@ -56,6 +59,7 @@ public class MongoClientFactory extends AbstractFactoryBean<MongoClient> {
 
     @Override
     protected MongoClient createInstance() throws Exception {
+
         if (StringUtils.isBlank(connectionString)) {
             logger.info("No connection string specified, connecting to {}:{}", connectionString, DEFAULT_MONGO_HOST,
                         DEFAULT_MONGO_PORT);
@@ -115,4 +119,11 @@ public class MongoClientFactory extends AbstractFactoryBean<MongoClient> {
         this.options = options;
     }
 
+    public void setUsername(final String username) {
+        this.username = username;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
+    }
 }
