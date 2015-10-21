@@ -17,27 +17,28 @@
 
 package org.craftercms.commons.jackson.mvc;
 
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.craftercms.commons.jackson.mvc.annotations.InjectValue;
 import org.craftercms.commons.jackson.mvc.annotations.InjectValueFactory;
+import org.craftercms.commons.jackson.mvc.annotations.SecureProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-
-import java.beans.PropertyDescriptor;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
+import com.fasterxml.jackson.core.JsonEncoding;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
 
 
 public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageConverter {
@@ -45,6 +46,7 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
     protected String jsonPrefix;
     protected FilterProvider filter;
     protected InjectValueFactory injectValueFactory;
+    protected SecurePropertyHandler securePropertyHandler;
     private Logger log = LoggerFactory.getLogger(CrafterJackson2MessageConverter.class);
 
 
@@ -65,9 +67,9 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
             if (this.jsonPrefix != null) {
                 jsonGenerator.writeRaw(this.jsonPrefix);
             }
-            if (injectValueFactory != null) {
-                injectValues(object);
-            }
+
+            runAnnotations(object);
+
             ObjectWriter writer = this.getObjectMapper().writer(filter);
             writer.writeValue(jsonGenerator, object);
         } catch (JsonProcessingException ex) {
@@ -75,23 +77,28 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
         }
     }
 
-    private void injectValues(final Object object) {
+    private void runAnnotations(final Object object) {
         try {
+
             if (Iterable.class.isInstance(object) && !Iterator.class.isInstance(object)) {
                 for (Object element : (Iterable)object) {
-                    injectValues(element);
+                    runAnnotations(element);
                 }
             }
-
             PropertyDescriptor[] propertiesDescriptor = PropertyUtils.getPropertyDescriptors(object);
             for (PropertyDescriptor propertyDescriptor : propertiesDescriptor) {
                 // Avoid the "getClass" as a property
                 if(propertyDescriptor.getPropertyType().equals(Class.class) ||
-                  (propertyDescriptor.getReadMethod() == null && propertyDescriptor.getWriteMethod() == null)){
+                    (propertyDescriptor.getReadMethod() == null && propertyDescriptor.getWriteMethod() == null)){
                     continue;
                 }
                 Field field = findField(object.getClass(), propertyDescriptor.getName());
-                if (field != null && field.isAnnotationPresent(InjectValue.class)) {
+
+                if (field != null && field.isAnnotationPresent(SecureProperty.class) && securePropertyHandler!=null) {
+                    secureProperty(object, field);
+                }
+
+                if (field != null && field.isAnnotationPresent(InjectValue.class) && injectValueFactory!=null) {
                     injectValue(object, field);
                     continue;
                 }
@@ -99,14 +106,27 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
                 Object fieldValue = PropertyUtils.getProperty(object, propertyDescriptor.getName());
                 if (Iterable.class.isInstance(fieldValue) && !Iterator.class.isInstance(object)) {
                     for (Object element : (Iterable)fieldValue) {
-                        injectValues(element);
+                        runAnnotations(element);
                     }
                 }
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            log.error("Unable to inject value for " + object.getClass(), e);
+            log.error("Unable to secure value for " + object.getClass(), e);
         }
     }
+
+    private void secureProperty(final Object object, final Field field) {
+        //Should be null due we ask before if the annotation exists !!
+        String[] roles = field.getAnnotation(SecureProperty.class).role();
+        try {
+            if (!securePropertyHandler.suppressProperty(object, roles)) {
+                PropertyUtils.setProperty(object, field.getName(), null);
+            }
+        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            log.error("Unable to inject value " + field.getName() + " for class " + object.getClass(), e);
+        }
+    }
+
 
 
     private Field findField(final Class<?> object, final String fieldName) {
@@ -145,6 +165,10 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
     public void setJsonPrefix(final String jsonPrefix) {
         this.jsonPrefix = jsonPrefix;
         super.setJsonPrefix(jsonPrefix);
+    }
+
+    public void setSecurePropertyHandler(final SecurePropertyHandler securePropertyHandler) {
+        this.securePropertyHandler = securePropertyHandler;
     }
 
     @Required()
