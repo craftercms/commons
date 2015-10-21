@@ -10,5 +10,5 @@ public interface SecurePropertyHandler {
      * @param propertyName Property name to check. (this will be a full class name + actual property name)
      * @return True if the property must be suppress from the output, False otherwise.
      */
-    boolean suppressProperty(final String propertyName, final String[] roles);
+    boolean suppressProperty(final Object propertyName, final String[] roles);
 }
