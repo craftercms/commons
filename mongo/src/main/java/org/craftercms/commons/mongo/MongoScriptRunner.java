@@ -19,38 +19,32 @@ package org.craftercms.commons.mongo;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URLDecoder;
 import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClientURI;
-import com.mongodb.MongoURI;
 
 /**
  * Utility class for running Mongo scripts in JS.
@@ -117,8 +111,9 @@ public class MongoScriptRunner {
 
     @PostConstruct
     public void init()  {
-
+        logger.debug("Running Scripts?",runOnInit);
         if (runOnInit) {
+            logger.debug("Using Mongo Client",useMongoClient);
             if(useMongoClient){
                 runScriptsWithMongoClient();
             }else {
@@ -154,6 +149,7 @@ public class MongoScriptRunner {
     public void runScripts() {
         try {
             DB db = getDB();
+            logger.debug("Running Scriptns in {}",db.getName());
             for (Resource scriptPath : scriptPaths) {
                 runScript(db, scriptPath);
             }
@@ -173,11 +169,19 @@ public class MongoScriptRunner {
                         return name.toLowerCase().endsWith(".js");
                     }
                 });
-                for (File file : files) {
+                List<File> orderFiles = Arrays.asList(files);
+                Collections.sort(orderFiles, new Comparator<File>() {
+                    @Override
+                    public int compare(final File o1, final File o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
+                logger.debug("Directory {} files to exec {}",scriptPath.getFile(),orderFiles);
+                for (File file : orderFiles) {
                     runScript(db, new FileSystemResource(file.getPath()));
                 }
             } else {
-
+                logger.debug("Running Script {}",scriptPath.getURI());
                 try {
                     script = IOUtils.toString(scriptPath.getInputStream(), "UTF-8");
                 } catch (IOException e) {
@@ -268,6 +272,7 @@ public class MongoScriptRunner {
 
     private DB getDB() throws MongoDataException {
         DB db = mongo.getDB(dbName);
+        logger.debug("Getting DB {}",dbName);
         if (!StringUtils.isBlank(password)) {
             if (!db.authenticate(username, password.toCharArray())) {
                 throw new MongoDataException("Unable to authenticate with given user/pwd");
