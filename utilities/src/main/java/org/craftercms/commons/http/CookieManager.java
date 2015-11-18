@@ -37,6 +37,9 @@ public class CookieManager {
     private String domain;
     private String path;
     private Integer maxAge;
+    private boolean httpOnly;
+    private boolean secure;
+
 
     public void setDomain(String domain) {
         this.domain = domain;
@@ -50,6 +53,14 @@ public class CookieManager {
         this.maxAge = maxAge;
     }
 
+    public void setHttpOnly(final boolean httpOnly) {
+        this.httpOnly = httpOnly;
+    }
+
+    public void setSecure(final boolean secure) {
+        this.secure = secure;
+    }
+
     /**
      * Add a new cookie, using the configured domain, path and max age, to the response.
      *
@@ -58,7 +69,8 @@ public class CookieManager {
      */
     public void addCookie(String name, String value, HttpServletResponse response) {
         Cookie cookie = new Cookie(name, value);
-
+        cookie.setHttpOnly(httpOnly);
+        cookie.setSecure(secure);
         if (StringUtils.isNotEmpty(domain)) {
             cookie.setDomain(domain);
         }
