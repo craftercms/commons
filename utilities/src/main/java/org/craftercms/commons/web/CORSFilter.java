@@ -43,6 +43,7 @@ public class CORSFilter extends OncePerRequestFilter {
     private String maxAge;
     private String allowHeaders;
     private String allowCredentials;
+    private boolean disableCORS=false;
 
     @Override
     public void destroy() {
@@ -69,15 +70,21 @@ public class CORSFilter extends OncePerRequestFilter {
         this.allowCredentials = allowCredentials;
     }
 
+    public void setDisableCORS(final boolean disableCORS) {
+        this.disableCORS = disableCORS;
+    }
+
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
         final HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(response);
-        responseWrapper.addHeader(ALLOW_ORIGIN, allowOrigins);
-        responseWrapper.addHeader(ALLOW_METHODS, allowMethods);
-        responseWrapper.addHeader(MAX_AGE, maxAge);
-        responseWrapper.addHeader(ALLOW_HEADERS, allowHeaders);
-        responseWrapper.addHeader(ALLOW_CREDENTIALS,allowCredentials);
+        if(!disableCORS) {
+            responseWrapper.addHeader(ALLOW_ORIGIN, allowOrigins);
+            responseWrapper.addHeader(ALLOW_METHODS, allowMethods);
+            responseWrapper.addHeader(MAX_AGE, maxAge);
+            responseWrapper.addHeader(ALLOW_HEADERS, allowHeaders);
+            responseWrapper.addHeader(ALLOW_CREDENTIALS, allowCredentials);
+        }
         filterChain.doFilter(request, responseWrapper);
     }
 
