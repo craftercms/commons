@@ -93,7 +93,8 @@ public class CookieManager {
      */
     public void deleteCookie(String name, HttpServletResponse response) {
         Cookie cookie = new Cookie(name, null);
-
+        cookie.setHttpOnly(httpOnly);
+        cookie.setSecure(secure);
         if (StringUtils.isNotEmpty(domain)) {
             cookie.setDomain(domain);
         }
