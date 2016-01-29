@@ -74,7 +74,13 @@ public class EmailFactoryImpl implements EmailFactory {
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String body,
                           boolean html) throws EmailException {
-        MimeMessage message = createMessage(from, to, cc, bcc, subject, body, html);
+        return getEmail(from, to, cc, bcc, null, subject, body, html);
+    }
+
+    @Override
+    public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String replyTo, String subject,
+                          String body, boolean html) throws EmailException {
+        MimeMessage message = createMessage(from, to, cc, bcc, replyTo, subject, body, html);
         Email email = new EmailImpl(mailSender, message);
 
         return email;
@@ -83,15 +89,17 @@ public class EmailFactoryImpl implements EmailFactory {
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String templateName,
                           Object templateModel, boolean html) throws EmailException {
-        String body = processTemplate(templateName, templateModel);
-        MimeMessage message = createMessage(from, to, cc, bcc, subject, body, html);
-        Email email = new EmailImpl(mailSender, message);
-
-        return email;
+        return getEmail(from, to, cc, bcc, null, subject, templateName, templateModel, html);
     }
 
-    protected MimeMessage createMessage(String from, String[] to, String[] cc, String[] bcc, String subject,
-                                        String body, boolean html) throws EmailException {
+    @Override
+    public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String replyTo, String subject,
+                          String templateName, Object templateModel, boolean html) throws EmailException {
+        return getEmail(from, to, cc, bcc, replyTo, subject, processTemplate(templateName, templateModel), html);
+    }
+
+    protected MimeMessage createMessage(String from, String[] to, String[] cc, String[] bcc, String replyTo,
+                                        String subject, String body, boolean html) throws EmailException {
         MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage());
 
         try {
@@ -105,6 +113,9 @@ public class EmailFactoryImpl implements EmailFactory {
             if (bcc != null) {
                 messageHelper.setBcc(bcc);
             }
+            if (replyTo != null) {
+                messageHelper.setReplyTo(replyTo);
+            }
             messageHelper.setSubject(subject);
             messageHelper.setText(body, html);
         } catch (AddressException e) {
@@ -114,7 +125,7 @@ public class EmailFactoryImpl implements EmailFactory {
         }
 
         logger.debug(LOG_KEY_MIME_MSG_CREATED, from, StringUtils.join(to, ','), StringUtils.join(cc, ','),
-            StringUtils.join(bcc, ','), subject, body);
+                     StringUtils.join(bcc, ','), subject, body);
 
         return messageHelper.getMimeMessage();
     }

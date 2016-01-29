@@ -34,6 +34,7 @@ public class EmailImpl implements Email {
 
     public static final String LOG_KEY_EMAIL_SENT = "mail.emailSent";
     private static final I10nLogger logger = new I10nLogger(EmailImpl.class, "crafter.commons.messages.logging");
+
     protected JavaMailSender mailSender;
     protected MimeMessage message;
 
