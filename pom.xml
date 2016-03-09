@@ -58,8 +58,9 @@
         <!-- Dependency Version Numbers -->
         <spring.version>4.0.3.RELEASE</spring.version>
         <commons.lang.version>3.2</commons.lang.version>
-        <commons.collections.version>4.0</commons.collections.version>
+        <commons.collections.version>4.1</commons.collections.version>
         <commons.codec.version>1.9</commons.codec.version>
+		<commons.collections3.version>3.2.2</commons.collections3.version>
         <commons.beanutils.version>1.9.2</commons.beanutils.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.httpclient.version>4.3.3</commons.httpclient.version>
