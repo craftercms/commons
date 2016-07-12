@@ -27,7 +27,7 @@ public interface GitRepositoryFactory {
 
     GitRepository open(File dir) throws GitException;
 
-    GitRepository init(File dir) throws GitException;
+    GitRepository init(File dir, boolean bare) throws GitException;
 
     GitRepository clone(String remoteUrl, File localDir) throws GitException;
 

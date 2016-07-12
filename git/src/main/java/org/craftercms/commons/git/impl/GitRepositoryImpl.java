@@ -48,7 +48,7 @@ public class GitRepositoryImpl implements GitRepository {
         try {
             git.add().addFilepattern(filePattern).call();
 
-            logger.debug("{} added to Git repository {}", filePattern, getRepoDir());
+            logger.debug("File '{}' added to Git repository {}", filePattern, getRepoDir());
         } catch (GitAPIException e) {
             throw new GitException("Error adding " + filePattern + " to Git repository " + getRepoDir(), e);
         }
@@ -59,7 +59,7 @@ public class GitRepositoryImpl implements GitRepository {
         try {
             git.rm().addFilepattern(filePattern).call();
 
-            logger.debug("{} removed from Git repository {}", filePattern, getRepoDir());
+            logger.debug("File '{}' removed from Git repository {}", filePattern, getRepoDir());
         } catch (GitAPIException e) {
             throw new GitException("Error removing " + filePattern + " from Git repository " + getRepoDir(), e);
         }

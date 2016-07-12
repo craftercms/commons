@@ -48,10 +48,11 @@ public class GitRepositoryFactoryImpl implements GitRepositoryFactory {
     }
 
     @Override
-    public GitRepository init(File dir) throws GitException {
+    public GitRepository init(File dir, boolean bare) throws GitException {
         try {
             Git git = Git.init()
                 .setDirectory(dir)
+                .setBare(bare)
                 .call();
 
             logger.info("New Git repository created at {}", git.getRepository().getDirectory());

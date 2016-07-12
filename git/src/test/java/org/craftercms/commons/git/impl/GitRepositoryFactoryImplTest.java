@@ -31,7 +31,7 @@ public class GitRepositoryFactoryImplTest {
 
     @Test
     public void testInit() throws Exception {
-        GitRepository repo = repositoryFactory.init(tmpDir.getRoot());
+        GitRepository repo = repositoryFactory.init(tmpDir.getRoot(), false);
 
         assertNotNull(repo);
 
