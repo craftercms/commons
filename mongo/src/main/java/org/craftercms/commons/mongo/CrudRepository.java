@@ -81,7 +81,7 @@ public interface CrudRepository<T> {
      * @param updateObject Object to be use to updated.
      * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
      */
-    void update(final String id, final T updateObject, final boolean multi,
+    void update(final String id, final Object updateObject, final boolean multi,
                 final boolean upsert) throws MongoDataException;
 
 
@@ -92,7 +92,7 @@ public interface CrudRepository<T> {
      * @param updateObject Object to be use to updated.
      * @throws org.craftercms.commons.mongo.MongoDataException if document can't be save.
      */
-    void update(final String id, final T updateObject) throws MongoDataException;
+    void update(final String id, final Object updateObject) throws MongoDataException;
     /**
      * Updates the given
      *

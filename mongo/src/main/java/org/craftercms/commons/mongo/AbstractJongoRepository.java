@@ -186,7 +186,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public void update(final String id, final T updateObject, final boolean multi, final boolean upsert) throws
+    public void update(final String id, final Object updateObject, final boolean multi, final boolean upsert) throws
         MongoDataException {
         try {
             Update update = getCollection().update(new ObjectId(id));
@@ -212,7 +212,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     }
 
     @Override
-    public void update(final String id, final T updateObject) throws MongoDataException {
+    public void update(final String id, final Object updateObject) throws MongoDataException {
         update(id, updateObject, false, false);
     }
 
