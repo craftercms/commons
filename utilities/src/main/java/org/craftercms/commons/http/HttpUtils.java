@@ -106,7 +106,12 @@ public class HttpUtils {
      * @param request   the request where to get the URI from
      */
     public static final String getRequestUriWithoutContextPath(HttpServletRequest request) {
-        return request.getRequestURI().substring(request.getContextPath().length());
+        String uri = request.getRequestURI().substring(request.getContextPath().length());
+        if (!uri.isEmpty()) {
+            return uri;
+        } else {
+            return "/";
+        }
     }
 
     /**
