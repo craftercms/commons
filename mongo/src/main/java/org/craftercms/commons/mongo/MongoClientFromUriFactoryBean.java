@@ -31,7 +31,7 @@ public class MongoClientFromUriFactoryBean extends AbstractFactoryBean<MongoClie
     @Override
     protected MongoClient createInstance() throws Exception {
         final MongoClientURI client = new MongoClientURI(uri);
-        logger.debug("Connectiong to :"+ client.getDatabase());
+        logger.debug("Connecting to :"+ client.getDatabase());
         return new MongoClient(client);
     }
 
