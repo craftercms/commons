@@ -13,6 +13,7 @@
         <module>ebus</module>
         <module>api-documentation</module>
         <module>audit</module>
+        <module>git</module>
     </modules>
 
     <name>Crafter Commons</name>
@@ -80,6 +81,7 @@
         <reactor.version>1.0.0.RELEASE</reactor.version>
         <quartz.version>2.2.1</quartz.version>
         <swagger.springmvc.version>0.8.8</swagger.springmvc.version>
+        <jgit.version>4.4.0.201606070830-r</jgit.version>
 
         <!-- Sonar -->
         <sonar.language>java</sonar.language>
