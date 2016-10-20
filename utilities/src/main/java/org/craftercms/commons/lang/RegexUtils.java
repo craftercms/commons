@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Utility methods for regex related operations.
@@ -24,7 +25,11 @@ public class RegexUtils {
      * @return true if the string matches one or more of the regexes
      */
     public static boolean matchesAny(String str, String... regexes) {
-        return matchesAny(str, Arrays.asList(regexes));
+        if (ArrayUtils.isNotEmpty(regexes)) {
+            return matchesAny(str, Arrays.asList(regexes));
+        } else {
+            return false;
+        }
     }
 
     /**
