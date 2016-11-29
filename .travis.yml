@@ -15,9 +15,9 @@ addons:
   sonarqube: true
 env:
   global:
-    - secure: xmXyyHpDFZtEW4+oQeb8E1lUQzbxAUcqUP8o8dUOVs3VW1QRRUZ9MC8tIRfh4Sbu19eqGCNP9bbeNELl3Aet+DTuJ4n0wHq4bushv4ai7OB42B/huWth1nooekE7vSjuBybx9kk+XiKJhPbTJi4KzsTqGONVPn7AzNckdxLlcE0=
-    - secure: "Z0iBsLQfoi4DFbB482Ak2GRcMSBmUiTmPN3Yd+VEGJdnZRF61ktgO9yWNhcmhnZnvEAa1X3UpGLA7Nrd+djD9+Qexvbt6b32Co7J94RU0qxr9bPn4LgVfAyrTuQ4vLUorwnQ74SMVC0vVJk2wkJjhrniI+0IFzcpjA2071ZPOfY="
-    - secure: "jpEeZMzjENrvVxCNd7eW0x06z7YyaZvAtFPfoKG3VQ48E/mSWw1uMicl/peZPLhl8x0C8at2XHR9oYNL6h5NjSgSEYKYieN07o46KN16/m5r/8pyAPYp1Gy/VjyNMRKnBWvBfYctrkDYa8xSQz2qEycSoOpZenDcaCyqSuT9zRE="
+    - secure: PmuPt7cO842V881rJ1/7QflXSP810uzGmhtQM8DZ91HfC8tpesauU9LjQFBGRh0Hu5HVjxU+FFad6ADjjscCdFkS0AmN8BCW3ddCoMKhYgb+gHuLdPF0Z0wNcdKpwL93JPj84oQcjS/QeG5Wx1S0wAx2LIluhKPDfXAIoONjixY=
+    - secure: YZzNy4zK2Yj+YyooEAVc/I1EA36UUS6oYS1eLG6CyY4fbhwklAvrgTUBZva2jpmafnoW2KFoxwINKqvMGBLGoI/4PxtYwMk+PsxXt7Xt1Rb4FdntMV+H7vqIrKbkFZSvkicB0y6mWDc8BPUtMkigPT/syLgAkR8FzYu658czDUc=
+    - secure: PWioVvBVkbi/9JkGDem5/0dMo/gyzfi1/BNgoUKOKgMZxP2hy1AdBQEuK763eN59Zqj/m41Lwjxz1AqsCdgIOMYMUR+aHsisfMRko1Fh4mbgdtGMIHcvnf18HbsnYwXdIbInrcgOZPKZWTW8iQAYiwzemSlD61xNcYnwL6Qdo2U=
 before_install: "git clone -b travis `git config --get remote.origin.url` target/travis"
 script:
   # other script steps might be done before running the actual SonarQube analysis
