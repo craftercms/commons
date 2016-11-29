@@ -20,12 +20,6 @@
 	<description>Crafter Commons</description>
 	<url>https://github.com/craftercms/commons</url>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
-
 	<organization>
 		<name>CrafterCMS</name>
 		<url>http://craftercms.org</url>
@@ -329,5 +323,14 @@
         </profile>
     </profiles>
 
-
+	<distributionManagement>
+  <snapshotRepository>
+    <id>sonatype-nexus-snapshots</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+  </snapshotRepository>
+  <repository>
+    <id>sonatype-nexus-staging</id>
+    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+  </repository>
+</distributionManagement>
 </project>
