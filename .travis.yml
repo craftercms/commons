@@ -20,5 +20,6 @@ env:
     - secure: PWioVvBVkbi/9JkGDem5/0dMo/gyzfi1/BNgoUKOKgMZxP2hy1AdBQEuK763eN59Zqj/m41Lwjxz1AqsCdgIOMYMUR+aHsisfMRko1Fh4mbgdtGMIHcvnf18HbsnYwXdIbInrcgOZPKZWTW8iQAYiwzemSlD61xNcYnwL6Qdo2U=
 before_install: "git clone -b travis `git config --get remote.origin.url` target/travis"
 script:
+        - 'if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then bash -c "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN -Dsonar.analysis.mode=preview  -Dsonar.github.pullRequest=$TRAVIS_PULL_REQUEST" -Dsonar.github.repository=$TRAVIS_REPO_SLUG  -Dsonar.projectVersion=$TRAVIS_BUILD_NUMBER -Dsonar.github.oauth=72115d2222971ea0acff3c17d78b218b5d33cff5";fi'
        - 'if [[ "$TRAVIS_PULL_REQUEST" = "false" ]]; then bash -c  "mvn deploy --settings target/travis/settings.xml";  fi'
        - 'if [[ "$TRAVIS_PULL_REQUEST" = "false" ]]; then bash -c "mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.login=$SONAR_TOKEN;" ;fi'
