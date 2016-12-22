@@ -16,18 +16,23 @@
  */
 package org.craftercms.commons.rest;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.context.request.ServletWebRequest;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.*;
 
 /**
  * Writes the response using a {@link org.springframework.http.converter.HttpMessageConverter} chosen depending on
@@ -39,7 +44,7 @@ import java.util.*;
 public class HttpMessageConvertingResponseWriter {
 
     private static final I10nLogger logger = new I10nLogger(HttpMessageConvertingResponseWriter.class,
-            "crafter.commons.messages.logging");
+                                                            I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
 
     public static final MediaType MEDIA_TYPE_APPLICATION = new MediaType("application");
 

@@ -16,6 +16,10 @@
  */
 package org.craftercms.commons.security.permissions.annotations;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Map;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -25,10 +29,6 @@ import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.springframework.core.annotation.Order;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * Aspect that handles {@link org.craftercms.commons.security.permissions.annotations.HasPermission} annotations,
@@ -41,7 +41,7 @@ import java.util.Map;
 public class HasPermissionAnnotationHandler {
 
     private static final I10nLogger logger = new I10nLogger(HasPermissionAnnotationHandler.class,
-        "crafter.security.messages.logging");
+                                                            "crafter.security.messages.logging");
 
     private static final String LOG_KEY_METHOD_INT = "security.permission.methodIntercepted";
     private static final String LOG_KEY_METHOD_INT_NO_SEC_OBJ = "security.permission.methodInterceptedNoSecObject";

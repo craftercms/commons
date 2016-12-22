@@ -19,6 +19,7 @@ package org.craftercms.commons.mail;
 import java.util.ResourceBundle;
 
 import org.craftercms.commons.i10n.AbstractI10nException;
+import org.craftercms.commons.i10n.I10nUtils;
 
 /**
  * Thrown when an email can't be sent for some reason.
@@ -26,8 +27,6 @@ import org.craftercms.commons.i10n.AbstractI10nException;
  * @author avasquez
  */
 public class EmailException extends AbstractI10nException {
-
-    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
 
     public EmailException(String key, Object... args) {
         super(key, args);
@@ -39,7 +38,7 @@ public class EmailException extends AbstractI10nException {
 
     @Override
     protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(BUNDLE_NAME);
+        return ResourceBundle.getBundle(I10nUtils.COMMONS_ERROR_MESSAGES_BUNDLE_NAME);
     }
 
 }

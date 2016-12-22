@@ -64,6 +64,7 @@
         <commons.codec.version>1.9</commons.codec.version>
         <commons.beanutils.version>1.9.2</commons.beanutils.version>
         <commons.io.version>2.4</commons.io.version>
+        <commons.configuration.version>2.1</commons.configuration.version>
         <httpcomponents.httpclient.version>4.3.3</httpcomponents.httpclient.version>
         <slf4j.version>1.7.7</slf4j.version>
         <servlet.api.version>3.0.1</servlet.api.version>
@@ -82,6 +83,7 @@
         <quartz.version>2.2.1</quartz.version>
         <swagger.springmvc.version>0.8.8</swagger.springmvc.version>
         <jgit.version>4.4.0.201606070830-r</jgit.version>
+        <snakeyaml.version>1.17</snakeyaml.version>
 
         <!-- Sonar -->
         <sonar.language>java</sonar.language>
