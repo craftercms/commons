@@ -20,12 +20,6 @@
 	<description>Crafter Commons</description>
 	<url>https://github.com/craftercms/commons</url>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
-
 	<organization>
 		<name>CrafterCMS</name>
 		<url>http://craftercms.org</url>
@@ -84,6 +78,7 @@
         <swagger.springmvc.version>0.8.8</swagger.springmvc.version>
         <jgit.version>4.4.0.201606070830-r</jgit.version>
         <snakeyaml.version>1.17</snakeyaml.version>
+        <java.version>1.8</java.version>
 
         <!-- Sonar -->
         <sonar.language>java</sonar.language>
@@ -152,8 +147,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -273,16 +268,14 @@
         <profile>
             <id>JDK8</id>
             <activation>
-                <jdk>
-                    1.8
-                </jdk>
+                <jdk>[1.8,)</jdk>
             </activation>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.9</version>
+                        <version>2.10.4</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -332,5 +325,14 @@
         </profile>
     </profiles>
 
-
+	<distributionManagement>
+  <snapshotRepository>
+    <id>sonatype-nexus-snapshots</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+  </snapshotRepository>
+  <repository>
+    <id>sonatype-nexus-staging</id>
+    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+  </repository>
+</distributionManagement>
 </project>
