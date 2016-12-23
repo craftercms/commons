@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletContext;
 
 import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 
 /**
  * Binds a new request context to the current thread before the chain is called, and then removes it after the chain
@@ -41,7 +42,7 @@ public class RequestContextBindingFilter implements Filter {
     public static final String LOG_KEY_UNBINDING_CONTEXT = "http.requestContext.unbindingContext";
 
     private static final I10nLogger logger = new I10nLogger(RequestContextBindingFilter.class,
-                                                            "crafter.commons.messages.logging");
+                                                            I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
 
     private ServletContext servletContext;
 

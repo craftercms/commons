@@ -27,6 +27,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 import org.craftercms.commons.mail.Email;
 import org.craftercms.commons.mail.EmailAddressException;
 import org.craftercms.commons.mail.EmailException;
@@ -48,7 +49,7 @@ public class EmailFactoryImpl implements EmailFactory {
     public static final String LOG_KEY_PROCESSING_EMAIL_TEMPLATE = "mail.processingEmailTemplate";
     public static final String ERROR_KEY_TEMPLATE_CONFIG_MISSING = "mail.templateConfigMissing";
 
-    private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
 
     protected JavaMailSender mailSender;
     protected Configuration freeMarkerConfig;

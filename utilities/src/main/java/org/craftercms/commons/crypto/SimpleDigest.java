@@ -22,6 +22,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 
 /**
  * Utility class for simplifying message digest generation, using the {@link java.security.MessageDigest}. Default
@@ -41,7 +42,7 @@ public class SimpleDigest {
     public static final int DEFAULT_ITERATIONS = 1000;
     public static final int DEFAULT_SALT_SIZE = 16;
 
-    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
 
     private MessageDigest digest;
     private int iterations;

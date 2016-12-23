@@ -26,6 +26,7 @@ import javax.crypto.spec.IvParameterSpec;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 
 /**
  * Utility class for simplifying encryption/decryption with the {@link javax.crypto.Cipher} class. By default, the
@@ -47,7 +48,7 @@ public class SimpleCipher {
     public static final String ERROR_KEY_ENC_ERROR = "crypto.cipher.encryptionError";
     public static final String ERROR_KEY_DEC_ERROR = "crypto.cipher.decryptionError";
 
-    private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
 
     private Key key;
     private byte[] iv;
