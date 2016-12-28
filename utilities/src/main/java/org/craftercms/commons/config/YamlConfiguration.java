@@ -24,12 +24,12 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.configuration2.BaseHierarchicalConfiguration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.configuration2.io.InputStreamSupport;
 import org.apache.commons.configuration2.tree.ImmutableNode;
-import org.craftercms.commons.crypto.SimpleCipher;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.i10n.I10nUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -71,7 +71,7 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
     public static final String ERROR_KEY_WRITE_NOT_SUPPORTED = "configuration.yaml.writeNotSupported";
     public static final String ERROR_KEY_LOAD_ERROR = "configuration.yaml.loadError";
 
-    private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(YamlConfiguration.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
 
     @Override
     public void read(Reader in) throws ConfigurationException, IOException {
@@ -108,7 +108,9 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
     protected void buildConfig(Map<String, Object> yamlObj) {
         ImmutableNode.Builder root = new ImmutableNode.Builder();
 
-        buildConfigFromMap(yamlObj, root);
+        if (MapUtils.isNotEmpty(yamlObj)) {
+            buildConfigFromMap(yamlObj, root);
+        }
 
         addNodes(null, root.create().getChildren());
     }
