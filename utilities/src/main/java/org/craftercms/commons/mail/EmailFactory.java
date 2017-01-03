@@ -16,6 +16,8 @@
  */
 package org.craftercms.commons.mail;
 
+import java.io.File;
+
 /**
  * Factory for creating {@link org.craftercms.commons.mail.Email}s.
  *
@@ -26,17 +28,19 @@ public interface EmailFactory {
     /**
      * Creates a new {@link org.craftercms.commons.mail.Email}.
      *
-     * @param from    the sender's address
-     * @param to      the recipients' addresses (optional)
-     * @param cc      the CC recipients' addresses (optional)
-     * @param bcc     the BCC recipients' addresses (optional)
-     * @param subject the subject of the email
-     * @param body    the text body of the email
-     * @param html    if the body is in HTML format
+     * @param from          the sender's address
+     * @param to            the recipients' addresses (optional)
+     * @param cc            the CC recipients' addresses (optional)
+     * @param bcc           the BCC recipients' addresses (optional)
+     * @param subject       the subject of the email
+     * @param body          the text body of the email
+     * @param html          if the body is in HTML format
+     * @param attachments   the attachments to add to the email
+     *
      * @return the created email
      */
     Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String body,
-                   boolean html) throws EmailException;
+                   boolean html, File... attachments) throws EmailException;
 
     /**
      * Creates a new {@link org.craftercms.commons.mail.Email}.
@@ -49,10 +53,11 @@ public interface EmailFactory {
      * @param subject   the subject of the email
      * @param body      the text body of the email
      * @param html      if the body is in HTML format
+     *
      * @return the created email
      */
     Email getEmail(String from, String[] to, String[] cc, String[] bcc, String replyTo, String subject, String body,
-                   boolean html) throws EmailException;
+                   boolean html, File... attachments) throws EmailException;
 
     /**
      * Creates a new {@link org.craftercms.commons.mail.Email}.
@@ -68,7 +73,7 @@ public interface EmailFactory {
      * @return the created email
      */
     Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String templateName,
-                   Object templateModel, boolean html) throws EmailException;
+                   Object templateModel, boolean html, File... attachments) throws EmailException;
 
     /**
      * Creates a new {@link org.craftercms.commons.mail.Email}.
@@ -85,6 +90,6 @@ public interface EmailFactory {
      * @return the created email
      */
     Email getEmail(String from, String[] to, String[] cc, String[] bcc, String replyTo, String subject,
-                   String templateName, Object templateModel, boolean html) throws EmailException;
+                   String templateName, Object templateModel, boolean html, File... attachments) throws EmailException;
 
 }

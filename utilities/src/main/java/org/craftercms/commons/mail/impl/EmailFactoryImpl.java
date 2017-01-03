@@ -16,6 +16,7 @@
  */
 package org.craftercms.commons.mail.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import javax.mail.MessagingException;
@@ -25,6 +26,7 @@ import javax.mail.internet.MimeMessage;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.i10n.I10nUtils;
@@ -74,14 +76,14 @@ public class EmailFactoryImpl implements EmailFactory {
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String body,
-                          boolean html) throws EmailException {
-        return getEmail(from, to, cc, bcc, null, subject, body, html);
+                          boolean html, File... attachments) throws EmailException {
+        return getEmail(from, to, cc, bcc, null, subject, body, html, attachments);
     }
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String replyTo, String subject,
-                          String body, boolean html) throws EmailException {
-        MimeMessage message = createMessage(from, to, cc, bcc, replyTo, subject, body, html);
+                          String body, boolean html, File... attachments) throws EmailException {
+        MimeMessage message = createMessage(from, to, cc, bcc, replyTo, subject, body, html, attachments);
         Email email = new EmailImpl(mailSender, message);
 
         return email;
@@ -89,21 +91,28 @@ public class EmailFactoryImpl implements EmailFactory {
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String templateName,
-                          Object templateModel, boolean html) throws EmailException {
-        return getEmail(from, to, cc, bcc, null, subject, templateName, templateModel, html);
+                          Object templateModel, boolean html, File... attachments) throws EmailException {
+        return getEmail(from, to, cc, bcc, null, subject, templateName, templateModel, html, attachments);
     }
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String replyTo, String subject,
-                          String templateName, Object templateModel, boolean html) throws EmailException {
-        return getEmail(from, to, cc, bcc, replyTo, subject, processTemplate(templateName, templateModel), html);
+                          String templateName, Object templateModel, boolean html, File... attachments) throws EmailException {
+        return getEmail(from, to, cc, bcc, replyTo, subject, processTemplate(templateName, templateModel), html, attachments);
     }
 
     protected MimeMessage createMessage(String from, String[] to, String[] cc, String[] bcc, String replyTo,
-                                        String subject, String body, boolean html) throws EmailException {
-        MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage());
+                                        String subject, String body, boolean html, File... attachments) throws EmailException {
+        boolean addAttachments = ArrayUtils.isNotEmpty(attachments);
+        MimeMessageHelper messageHelper;
 
         try {
+            if (addAttachments) {
+                messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
+            } else {
+                messageHelper = new MimeMessageHelper(mailSender.createMimeMessage());
+            }
+
             messageHelper.setFrom(from);
             if (to != null) {
                 messageHelper.setTo(to);
@@ -119,6 +128,12 @@ public class EmailFactoryImpl implements EmailFactory {
             }
             messageHelper.setSubject(subject);
             messageHelper.setText(body, html);
+
+            if (addAttachments) {
+                for (File attachment : attachments) {
+                    messageHelper.addAttachment(attachment.getName(), attachment);
+                }
+            }
         } catch (AddressException e) {
             throw new EmailAddressException(e);
         } catch (MessagingException e) {
