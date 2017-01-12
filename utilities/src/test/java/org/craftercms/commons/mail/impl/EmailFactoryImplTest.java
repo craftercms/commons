@@ -35,7 +35,8 @@ public class EmailFactoryImplTest {
     private static final String BODY = "This is a test email";
     
     private static final String ENCODING = "UTF-8";
-    private static final String TEMPLATE_NAME = "test.ftl";
+    private static final String TEMPLATE_NAME = "test";
+    private static final String TEMPLATE_SUFFIX = ".ftl";
 
     private JavaMailSenderImpl mailSender;
     private Configuration freeMarkerConfig;
@@ -49,6 +50,7 @@ public class EmailFactoryImplTest {
         emailFactory = new EmailFactoryImpl();
         emailFactory.setMailSender(mailSender);
         emailFactory.setFreeMarkerConfig(freeMarkerConfig);
+        emailFactory.setTemplateSuffix(TEMPLATE_SUFFIX);
         emailFactory.setTemplateEncoding(ENCODING);
     }
 
@@ -110,7 +112,7 @@ public class EmailFactoryImplTest {
     }
 
     protected String processTemplate(String templateName, Object templateModel) throws Exception {
-        Template template = freeMarkerConfig.getTemplate(templateName, ENCODING);
+        Template template = freeMarkerConfig.getTemplate(templateName + TEMPLATE_SUFFIX, ENCODING);
         StringWriter out = new StringWriter();
 
         template.process(templateModel, out);

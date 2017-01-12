@@ -55,9 +55,13 @@ public class EmailFactoryImpl implements EmailFactory {
 
     protected JavaMailSender mailSender;
     protected Configuration freeMarkerConfig;
+    protected String templatePrefix;
+    protected String templateSuffix;
     protected String templateEncoding;
 
     public EmailFactoryImpl() {
+        templatePrefix = "";
+        templateSuffix = "";
         templateEncoding = DEFAULT_ENCODING;
     }
 
@@ -68,6 +72,14 @@ public class EmailFactoryImpl implements EmailFactory {
 
     public void setFreeMarkerConfig(Configuration freeMarkerConfig) {
         this.freeMarkerConfig = freeMarkerConfig;
+    }
+
+    public void setTemplatePrefix(String templatePrefix) {
+        this.templatePrefix = templatePrefix;
+    }
+
+    public void setTemplateSuffix(String templateSuffix) {
+        this.templateSuffix = templateSuffix;
     }
 
     public void setTemplateEncoding(String templateEncoding) {
@@ -150,6 +162,8 @@ public class EmailFactoryImpl implements EmailFactory {
         if (freeMarkerConfig == null) {
             throw new EmailException(ERROR_KEY_TEMPLATE_CONFIG_MISSING);
         }
+
+        templateName = templatePrefix + templateName + templateSuffix;
 
         logger.debug(LOG_KEY_PROCESSING_EMAIL_TEMPLATE, templateName);
 
