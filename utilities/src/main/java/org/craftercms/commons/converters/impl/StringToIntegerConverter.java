@@ -3,7 +3,9 @@ package org.craftercms.commons.converters.impl;
 import org.craftercms.commons.converters.Converter;
 
 /**
- * Created by alfonsovasquez on 1/8/16.
+ * Converts String to Integer.
+ *
+ * @author avasquez
  */
 public class StringToIntegerConverter implements Converter<String, Integer> {
 

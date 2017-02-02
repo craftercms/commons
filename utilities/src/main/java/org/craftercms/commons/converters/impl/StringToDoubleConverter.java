@@ -3,7 +3,9 @@ package org.craftercms.commons.converters.impl;
 import org.craftercms.commons.converters.Converter;
 
 /**
- * Created by alfonsovasquez on 1/8/16.
+ * Converts String to Double.
+ *
+ * @author avasquez
  */
 public class StringToDoubleConverter implements Converter<String, Double> {
 
