@@ -28,7 +28,7 @@ import org.craftercms.commons.i10n.AbstractI10nRuntimeException;
 public class DateParseException extends AbstractI10nRuntimeException {
 
     public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
-    public static final String KEY = "mail.sendError";
+    public static final String KEY = "converters.stringToDate.parseFailed";
 
     public DateParseException(String dateStr, String pattern, Throwable cause) {
         super(KEY, cause, dateStr, pattern);
