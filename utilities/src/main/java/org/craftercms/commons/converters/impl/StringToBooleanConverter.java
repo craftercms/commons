@@ -3,7 +3,9 @@ package org.craftercms.commons.converters.impl;
 import org.craftercms.commons.converters.Converter;
 
 /**
- * Created by alfonsovasquez on 1/8/16.
+ * Converts String to Boolean.
+ *
+ * @author avasquez
  */
 public class StringToBooleanConverter implements Converter<String, Boolean> {
 
