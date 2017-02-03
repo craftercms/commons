@@ -3,7 +3,9 @@ package org.craftercms.commons.converters.impl;
 import org.craftercms.commons.converters.Converter;
 
 /**
- * Created by alfonsovasquez on 1/8/16.
+ * Converts String to Short.
+ *
+ * @author avasquez
  */
 public class StringToShortConverter implements Converter<String, Short> {
 
