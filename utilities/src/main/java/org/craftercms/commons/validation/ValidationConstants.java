@@ -17,7 +17,16 @@
 package org.craftercms.commons.validation;
 
 /**
- * Created by alfonsovasquez on 2/6/17.
+ * Contains constants related to validation.
+ *
+ * @author avasquez
  */
 public class ValidationConstants {
+
+    private ValidationConstants() {
+    }
+
+    public static final String VALIDATION_FAILED_MSG_KEY =  "validation.failed";
+    public static final String MISSING_FIELD_MSG_KEY =      "validation.field.missing";
+
 }

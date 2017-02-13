@@ -16,7 +16,7 @@ import org.craftercms.commons.i10n.I10nUtils;
  */
 public class NoOpTextEncryptor implements TextEncryptor {
 
-    private static final I10nLogger logger = new I10nLogger(NoOpTextEncryptor.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(NoOpTextEncryptor.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     public static final String LOG_KEY_NOOP_USED = "crypto.textEncryptor.noOpUsed";
 

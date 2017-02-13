@@ -29,21 +29,21 @@ import org.craftercms.commons.i10n.I10nUtils;
  *
  * @author avasquez
  */
-public class ValidationFailure {
+public class ValidationResult {
 
     protected ResourceBundle bundle;
     protected String message;
     protected List<FieldError> fieldErrors;
 
-    public ValidationFailure() {
-        this(ValidationConstants.MSG_KEY_VALIDATION_FAILED);
+    public ValidationResult() {
+        this(ValidationConstants.VALIDATION_FAILED_MSG_KEY);
     }
 
-    public ValidationFailure(String key, Object... args) {
+    public ValidationResult(String key, Object... args) {
         this(ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_BUNDLE_NAME), key, args);
     }
 
-    public ValidationFailure(ResourceBundle bundle, String key, Object... args) {
+    public ValidationResult(ResourceBundle bundle, String key, Object... args) {
         this.bundle = bundle;
         this.message = I10nUtils.getLocalizedMessage(bundle, key, args);
         this.fieldErrors = new ArrayList<>();

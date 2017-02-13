@@ -53,8 +53,7 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
     public static final String ERROR_KEY_GET_KEY_ERROR = "crypto.keyRepo.getKeyError";
     public static final String ERROR_KEY_SAVE_KEY_ERROR = "crypto.keyRepo.saveKeyError";
 
-    private static final I10nLogger logger = new I10nLogger(SecretKeyRepositoryImpl.class,
-        "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(SecretKeyRepositoryImpl.class);
 
     protected File keyStoreFile;
     protected char[] keyStorePassword;

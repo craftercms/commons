@@ -19,6 +19,7 @@ package org.craftercms.commons.exceptions;
 import java.util.ResourceBundle;
 
 import org.craftercms.commons.i10n.AbstractI10nRuntimeException;
+import org.craftercms.commons.i10n.I10nUtils;
 
 /**
  * Exception thrown when there's an error while parsing a date.
@@ -27,7 +28,6 @@ import org.craftercms.commons.i10n.AbstractI10nRuntimeException;
  */
 public class DateParseException extends AbstractI10nRuntimeException {
 
-    public static final String BUNDLE_NAME = "crafter.commons.messages.errors";
     public static final String KEY = "converters.stringToDate.parseFailed";
 
     public DateParseException(String dateStr, String pattern, Throwable cause) {
@@ -36,7 +36,7 @@ public class DateParseException extends AbstractI10nRuntimeException {
 
     @Override
     protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(BUNDLE_NAME);
+        return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_BUNDLE_NAME);
     }
 
 }

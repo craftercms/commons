@@ -48,7 +48,7 @@ public class SimpleCipher {
     public static final String ERROR_KEY_ENC_ERROR = "crypto.cipher.encryptionError";
     public static final String ERROR_KEY_DEC_ERROR = "crypto.cipher.decryptionError";
 
-    private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     private Key key;
     private byte[] iv;
