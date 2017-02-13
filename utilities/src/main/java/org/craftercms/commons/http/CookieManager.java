@@ -30,7 +30,7 @@ import org.craftercms.commons.i10n.I10nUtils;
  */
 public class CookieManager {
 
-    private static final I10nLogger logger = new I10nLogger(CookieManager.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(CookieManager.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     public static final String LOG_KEY_ADDED_COOKIE =   "http.cookie.addedCookie";
     public static final String LOG_KEY_DELETED_COOKIE = "http.cookie.deletedCookie";

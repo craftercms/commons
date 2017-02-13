@@ -42,7 +42,7 @@ public class SimpleDigest {
     public static final int DEFAULT_ITERATIONS = 1000;
     public static final int DEFAULT_SALT_SIZE = 16;
 
-    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     private MessageDigest digest;
     private int iterations;

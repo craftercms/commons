@@ -34,7 +34,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 public class EmailImpl implements Email {
 
     public static final String LOG_KEY_EMAIL_SENT = "mail.emailSent";
-    private static final I10nLogger logger = new I10nLogger(EmailImpl.class, I10nUtils.COMMONS_LOGGING_MESSAGES_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(EmailImpl.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     protected JavaMailSender mailSender;
     protected MimeMessage message;
