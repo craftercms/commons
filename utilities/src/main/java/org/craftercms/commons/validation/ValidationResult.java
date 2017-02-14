@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.i10n.I10nUtils;
 
 /**
@@ -36,22 +38,29 @@ public class ValidationResult {
     protected List<FieldError> fieldErrors;
 
     public ValidationResult() {
-        this(ValidationConstants.VALIDATION_FAILED_MSG_KEY);
+        this(ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_BUNDLE_NAME));
     }
 
-    public ValidationResult(String key, Object... args) {
-        this(ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_BUNDLE_NAME), key, args);
-    }
-
-    public ValidationResult(ResourceBundle bundle, String key, Object... args) {
+    public ValidationResult(ResourceBundle bundle) {
         this.bundle = bundle;
-        this.message = I10nUtils.getLocalizedMessage(bundle, key, args);
         this.fieldErrors = new ArrayList<>();
     }
 
     @JsonProperty("message")
     public String getMessage() {
+        if (StringUtils.isEmpty(message) && CollectionUtils.isNotEmpty(fieldErrors)) {
+            message = I10nUtils.getLocalizedMessage(bundle, ValidationConstants.VALIDATION_FAILED_MSG_KEY);
+        }
+
         return message;
+    }
+
+    public void setMessage(String key) {
+        this.message = I10nUtils.getLocalizedMessage(bundle, key);
+    }
+
+    public void setMessage(String key, Object... args) {
+        this.message = I10nUtils.getLocalizedMessage(bundle, key, args);
     }
 
     @JsonProperty("field_errors")
@@ -61,6 +70,10 @@ public class ValidationResult {
 
     public void addFieldError(String field, String key, Object... args) {
         fieldErrors.add(new FieldError(field, I10nUtils.getLocalizedMessage(bundle, key, args)));
+    }
+
+    public void addMissingFieldError(String field) {
+        fieldErrors.add(new FieldError(field, I10nUtils.getLocalizedMessage(bundle, ValidationConstants.MISSING_FIELD_MSG_KEY)));
     }
 
 }
