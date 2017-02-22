@@ -19,27 +19,36 @@ package org.craftercms.commons.rest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Very simple class that can be returned by REST API methods to indicate a successful result.
+ * Very simple class that can be returned by REST API methods to indicate a result with a message, generally for success.
  *
  * @author avasquez
  */
-public class OkResult {
+public class Result {
 
-    public static final OkResult INSTANCE = new OkResult();
+    public static final Result OK = new Result("OK");
 
     private String message;
 
-    public OkResult() {
-        this("OK");
+    public Result() {
     }
 
-    public OkResult(String message) {
+    public Result(String message) {
         this.message = message;
     }
 
     @JsonProperty("message")
     public String getMessage() {
         return message;
+    }
+
+    @JsonProperty("message")
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "Result{message='" + message + '\'' + '}';
     }
 
 }

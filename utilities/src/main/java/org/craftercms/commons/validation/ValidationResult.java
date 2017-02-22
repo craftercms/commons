@@ -25,13 +25,14 @@ import java.util.ResourceBundle;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.i10n.I10nUtils;
+import org.craftercms.commons.rest.Result;
 
 /**
  * DTO returned by classes that perform validation to indicate a result, generally when there are field errors.
  *
  * @author avasquez
  */
-public class ValidationResult {
+public class ValidationResult extends Result {
 
     protected ResourceBundle bundle;
     protected String message;
@@ -45,8 +46,7 @@ public class ValidationResult {
         this.bundle = bundle;
         this.fieldErrors = new ArrayList<>();
     }
-
-    @JsonProperty("message")
+    
     public String getMessage() {
         if (StringUtils.isEmpty(message) && CollectionUtils.isNotEmpty(fieldErrors)) {
             message = I10nUtils.getLocalizedMessage(bundle, ValidationConstants.VALIDATION_FAILED_MSG_KEY);
