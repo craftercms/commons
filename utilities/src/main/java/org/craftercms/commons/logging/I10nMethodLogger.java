@@ -16,9 +16,10 @@
  */
 package org.craftercms.commons.logging;
 
-import org.craftercms.commons.i10n.I10nLogger;
-
 import java.util.Arrays;
+
+import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 
 /**
  * {@link org.craftercms.commons.logging.MethodLogger} using I10n logging.
@@ -27,7 +28,7 @@ import java.util.Arrays;
  */
 public class I10nMethodLogger implements MethodLogger {
 
-    private static final I10nLogger logger = new I10nLogger(I10nMethodLogger.class, "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(I10nMethodLogger.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     public static final String LOG_KEY_ENTRY =      "logging.method.entry";
     public static final String LOG_KEY_EXIT =       "logging.method.exit";

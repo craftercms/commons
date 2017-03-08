@@ -16,11 +16,11 @@
  */
 package org.craftercms.commons.i10n;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Utility class for localization stuff.
@@ -28,8 +28,23 @@ import java.util.ResourceBundle;
  * @author avasquez
  */
 public class I10nUtils {
+    
+    public static final String DEFAULT_ERROR_BUNDLE_NAME = "crafter.commons.messages.errors";
+    public static final String DEFAULT_LOGGING_BUNDLE_NAME = "crafter.commons.messages.logging";
 
     private I10nUtils() {
+    }
+
+    /**
+     * Returns a formatted, localized message according to the specified resource bundle and key.
+     *
+     * @param bundleName    the name of the resource bundle where the message format should be
+     * @param key           the key of the message format
+     * @param args          the args of the message format
+     * @return the formatted, localized message
+     */
+    public static String getLocalizedMessage(String bundleName, String key, Object... args) {
+        return getLocalizedMessage(ResourceBundle.getBundle(bundleName), key, args);
     }
 
     /**
@@ -54,5 +69,4 @@ public class I10nUtils {
             return pattern;
         }
     }
-
 }

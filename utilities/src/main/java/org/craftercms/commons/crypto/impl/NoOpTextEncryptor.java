@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 import org.craftercms.commons.crypto.CryptoException;
 import org.craftercms.commons.crypto.TextEncryptor;
 import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 
 /**
  * {@link org.craftercms.commons.crypto.TextEncryptor} that does not actually encrypt or decrypt the text at all.
@@ -15,7 +16,7 @@ import org.craftercms.commons.i10n.I10nLogger;
  */
 public class NoOpTextEncryptor implements TextEncryptor {
 
-    private static final I10nLogger logger = new I10nLogger(NoOpTextEncryptor.class, "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(NoOpTextEncryptor.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     public static final String LOG_KEY_NOOP_USED = "crypto.textEncryptor.noOpUsed";
 

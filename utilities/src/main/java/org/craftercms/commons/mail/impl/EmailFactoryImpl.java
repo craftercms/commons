@@ -16,6 +16,7 @@
  */
 package org.craftercms.commons.mail.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import javax.mail.MessagingException;
@@ -25,8 +26,10 @@ import javax.mail.internet.MimeMessage;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 import org.craftercms.commons.mail.Email;
 import org.craftercms.commons.mail.EmailAddressException;
 import org.craftercms.commons.mail.EmailException;
@@ -48,13 +51,17 @@ public class EmailFactoryImpl implements EmailFactory {
     public static final String LOG_KEY_PROCESSING_EMAIL_TEMPLATE = "mail.processingEmailTemplate";
     public static final String ERROR_KEY_TEMPLATE_CONFIG_MISSING = "mail.templateConfigMissing";
 
-    private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     protected JavaMailSender mailSender;
     protected Configuration freeMarkerConfig;
+    protected String templatePrefix;
+    protected String templateSuffix;
     protected String templateEncoding;
 
     public EmailFactoryImpl() {
+        templatePrefix = "";
+        templateSuffix = "";
         templateEncoding = DEFAULT_ENCODING;
     }
 
@@ -67,20 +74,28 @@ public class EmailFactoryImpl implements EmailFactory {
         this.freeMarkerConfig = freeMarkerConfig;
     }
 
+    public void setTemplatePrefix(String templatePrefix) {
+        this.templatePrefix = templatePrefix;
+    }
+
+    public void setTemplateSuffix(String templateSuffix) {
+        this.templateSuffix = templateSuffix;
+    }
+
     public void setTemplateEncoding(String templateEncoding) {
         this.templateEncoding = templateEncoding;
     }
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String body,
-                          boolean html) throws EmailException {
-        return getEmail(from, to, cc, bcc, null, subject, body, html);
+                          boolean html, File... attachments) throws EmailException {
+        return getEmail(from, to, cc, bcc, null, subject, body, html, attachments);
     }
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String replyTo, String subject,
-                          String body, boolean html) throws EmailException {
-        MimeMessage message = createMessage(from, to, cc, bcc, replyTo, subject, body, html);
+                          String body, boolean html, File... attachments) throws EmailException {
+        MimeMessage message = createMessage(from, to, cc, bcc, replyTo, subject, body, html, attachments);
         Email email = new EmailImpl(mailSender, message);
 
         return email;
@@ -88,21 +103,28 @@ public class EmailFactoryImpl implements EmailFactory {
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String subject, String templateName,
-                          Object templateModel, boolean html) throws EmailException {
-        return getEmail(from, to, cc, bcc, null, subject, templateName, templateModel, html);
+                          Object templateModel, boolean html, File... attachments) throws EmailException {
+        return getEmail(from, to, cc, bcc, null, subject, templateName, templateModel, html, attachments);
     }
 
     @Override
     public Email getEmail(String from, String[] to, String[] cc, String[] bcc, String replyTo, String subject,
-                          String templateName, Object templateModel, boolean html) throws EmailException {
-        return getEmail(from, to, cc, bcc, replyTo, subject, processTemplate(templateName, templateModel), html);
+                          String templateName, Object templateModel, boolean html, File... attachments) throws EmailException {
+        return getEmail(from, to, cc, bcc, replyTo, subject, processTemplate(templateName, templateModel), html, attachments);
     }
 
     protected MimeMessage createMessage(String from, String[] to, String[] cc, String[] bcc, String replyTo,
-                                        String subject, String body, boolean html) throws EmailException {
-        MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage());
+                                        String subject, String body, boolean html, File... attachments) throws EmailException {
+        boolean addAttachments = ArrayUtils.isNotEmpty(attachments);
+        MimeMessageHelper messageHelper;
 
         try {
+            if (addAttachments) {
+                messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
+            } else {
+                messageHelper = new MimeMessageHelper(mailSender.createMimeMessage());
+            }
+
             messageHelper.setFrom(from);
             if (to != null) {
                 messageHelper.setTo(to);
@@ -118,6 +140,12 @@ public class EmailFactoryImpl implements EmailFactory {
             }
             messageHelper.setSubject(subject);
             messageHelper.setText(body, html);
+
+            if (addAttachments) {
+                for (File attachment : attachments) {
+                    messageHelper.addAttachment(attachment.getName(), attachment);
+                }
+            }
         } catch (AddressException e) {
             throw new EmailAddressException(e);
         } catch (MessagingException e) {
@@ -134,6 +162,8 @@ public class EmailFactoryImpl implements EmailFactory {
         if (freeMarkerConfig == null) {
             throw new EmailException(ERROR_KEY_TEMPLATE_CONFIG_MISSING);
         }
+
+        templateName = templatePrefix + templateName + templateSuffix;
 
         logger.debug(LOG_KEY_PROCESSING_EMAIL_TEMPLATE, templateName);
 

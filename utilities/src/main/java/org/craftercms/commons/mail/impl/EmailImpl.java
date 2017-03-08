@@ -19,6 +19,7 @@ package org.craftercms.commons.mail.impl;
 import javax.mail.internet.MimeMessage;
 
 import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 import org.craftercms.commons.mail.Email;
 import org.craftercms.commons.mail.EmailException;
 import org.craftercms.commons.mail.EmailSendException;
@@ -33,7 +34,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 public class EmailImpl implements Email {
 
     public static final String LOG_KEY_EMAIL_SENT = "mail.emailSent";
-    private static final I10nLogger logger = new I10nLogger(EmailImpl.class, "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(EmailImpl.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     protected JavaMailSender mailSender;
     protected MimeMessage message;

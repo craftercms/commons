@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2014 Crafter Software Corporation.
+ * Copyright (C) 2007-2017 Crafter Software Corporation.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,31 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.mail;
-
-import java.util.ResourceBundle;
-
-import org.craftercms.commons.i10n.AbstractI10nException;
-import org.craftercms.commons.i10n.I10nUtils;
+package org.craftercms.commons.validation;
 
 /**
- * Thrown when an email can't be sent for some reason.
+ * Exception thrown when validation fails.
  *
  * @author avasquez
  */
-public class EmailException extends AbstractI10nException {
+public class ValidationException extends Exception {
 
-    public EmailException(String key, Object... args) {
-        super(key, args);
+    protected ValidationResult result;
+
+    public ValidationException(ValidationResult result) {
+        super(result.getMessage());
+
+        this.result = result;
     }
 
-    public EmailException(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
-    }
-
-    @Override
-    protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_BUNDLE_NAME);
+    public ValidationResult getResult() {
+        return result;
     }
 
 }

@@ -22,7 +22,7 @@
     <parent>
         <artifactId>crafter-commons</artifactId>
         <groupId>org.craftercms</groupId>
-        <version>2.6.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

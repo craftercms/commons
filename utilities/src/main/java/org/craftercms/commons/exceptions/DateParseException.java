@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2014 Crafter Software Corporation.
+ * Copyright (C) 2007-2017 Crafter Software Corporation.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.mail;
+package org.craftercms.commons.exceptions;
 
 import java.util.ResourceBundle;
 
-import org.craftercms.commons.i10n.AbstractI10nException;
+import org.craftercms.commons.i10n.AbstractI10nRuntimeException;
 import org.craftercms.commons.i10n.I10nUtils;
 
 /**
- * Thrown when an email can't be sent for some reason.
+ * Exception thrown when there's an error while parsing a date.
  *
  * @author avasquez
  */
-public class EmailException extends AbstractI10nException {
+public class DateParseException extends AbstractI10nRuntimeException {
 
-    public EmailException(String key, Object... args) {
-        super(key, args);
-    }
+    public static final String KEY = "converters.stringToDate.parseFailed";
 
-    public EmailException(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
+    public DateParseException(String dateStr, String pattern, Throwable cause) {
+        super(KEY, cause, dateStr, pattern);
     }
 
     @Override

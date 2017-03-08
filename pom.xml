@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.craftercms</groupId>
-	<artifactId>crafter-commons</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.craftercms</groupId>
+    <artifactId>crafter-commons</artifactId>
     <packaging>pom</packaging>
-    <version>2.6.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 
     <modules>
         <module>utilities</module>
@@ -17,47 +17,48 @@
     </modules>
 
     <name>Crafter Commons</name>
-	<description>Crafter Commons</description>
-	<url>https://github.com/craftercms/commons</url>
+    <description>Crafter Commons</description>
+    <url>https://github.com/craftercms/commons</url>
 
-	<organization>
-		<name>CrafterCMS</name>
-		<url>http://craftercms.org</url>
-	</organization>
+    <organization>
+        <name>CrafterCMS</name>
+        <url>http://craftercms.org</url>
+    </organization>
 
-	<licenses>
-		<license>
-			<name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
-			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<developers>
-		<developer>
-			<id>sumerjabri</id>
-			<name>Sumer Jabri</name>
-			<email>sumer.jabri@craftercms.org</email>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <id>sumerjabri</id>
+            <name>Sumer Jabri</name>
+            <email>sumer.jabri@craftercms.org</email>
+        </developer>
+    </developers>
 
-	<scm>
-		<connection>scm:git:git://github.com/craftercms/commons</connection>
-		<developerConnection>scm:git:git://github.com/craftercms/commons</developerConnection>
-		<url>scm:git:git://github.com/craftercms/core</url>
-	</scm>
+    <scm>
+        <connection>scm:git:git://github.com/craftercms/commons</connection>
+        <developerConnection>scm:git:git://github.com/craftercms/commons</developerConnection>
+        <url>scm:git:git://github.com/craftercms/core</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependency Version Numbers -->
         <spring.version>4.0.3.RELEASE</spring.version>
-        <commons.lang3.version>3.4</commons.lang3.version>
+        <commons.lang3.version>3.5</commons.lang3.version>
         <commons.collections4.version>4.1</commons.collections4.version>
         <commons.collections.version>3.2.2</commons.collections.version>
         <commons.codec.version>1.9</commons.codec.version>
         <commons.beanutils.version>1.9.2</commons.beanutils.version>
-        <commons.io.version>2.4</commons.io.version>
+        <commons.io.version>2.5</commons.io.version>
+        <commons.configuration.version>2.1</commons.configuration.version>
         <httpcomponents.httpclient.version>4.3.3</httpcomponents.httpclient.version>
         <slf4j.version>1.7.7</slf4j.version>
         <servlet.api.version>3.0.1</servlet.api.version>
@@ -76,6 +77,7 @@
         <quartz.version>2.2.1</quartz.version>
         <swagger.springmvc.version>0.8.8</swagger.springmvc.version>
         <jgit.version>4.4.0.201606070830-r</jgit.version>
+        <snakeyaml.version>1.17</snakeyaml.version>
         <java.version>1.8</java.version>
 
         <!-- Sonar -->
@@ -87,7 +89,7 @@
         <!--sonar.jacoco.itReportPath>${basedir}/../target/itjacoco.exec</sonar.jacoco.itReportPath-->
     </properties>
 
-	<build>
+    <build>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -107,111 +109,111 @@
                 </plugin>
                 <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
                 <plugin>
-                	<groupId>org.eclipse.m2e</groupId>
-                	<artifactId>lifecycle-mapping</artifactId>
-                	<version>1.0.0</version>
-                	<configuration>
-                		<lifecycleMappingMetadata>
-                			<pluginExecutions>
-                				<pluginExecution>
-                					<pluginExecutionFilter>
-                						<groupId>
-                							org.codehaus.mojo
-                						</groupId>
-                						<artifactId>
-                							buildnumber-maven-plugin
-                						</artifactId>
-                						<versionRange>
-                							[1.2,)
-                						</versionRange>
-                						<goals>
-                							<goal>
-                								create-timestamp
-                							</goal>
-                						</goals>
-                					</pluginExecutionFilter>
-                					<action>
-                						<ignore></ignore>
-                					</action>
-                				</pluginExecution>
-                			</pluginExecutions>
-                		</lifecycleMappingMetadata>
-                	</configuration>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.codehaus.mojo
+                                        </groupId>
+                                        <artifactId>
+                                            buildnumber-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.2,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>
+                                                create-timestamp
+                                            </goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<id>validate</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.2</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>create</goal>
-							<goal>create-timestamp</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<doCheck>false</doCheck>
-					<doUpdate>false</doUpdate>
-					<revisionOnScmFailure>unknown</revisionOnScmFailure>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<manifestEntries>
-							<Implementation-Build>${buildNumber}</Implementation-Build>
-							<Build-On>${timestamp}</Build-On>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                            <goal>create-timestamp</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <revisionOnScmFailure>unknown</revisionOnScmFailure>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                            <Build-On>${timestamp}</Build-On>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
@@ -323,14 +325,14 @@
         </profile>
     </profiles>
 
-	<distributionManagement>
-  <snapshotRepository>
-    <id>sonatype-nexus-snapshots</id>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-  </snapshotRepository>
-  <repository>
-    <id>sonatype-nexus-staging</id>
-    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-  </repository>
-</distributionManagement>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 </project>

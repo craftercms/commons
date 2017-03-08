@@ -3,6 +3,7 @@ package org.craftercms.commons.lang;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -23,7 +24,7 @@ public class UrlUtils {
      *
      * @return mainPath + relativeUrl
      */
-    public static final String concat(String mainUrl, String relativeUrl) {
+    public static String concat(String mainUrl, String relativeUrl) {
         if (StringUtils.isEmpty(mainUrl)) {
             return relativeUrl;
         } else if (StringUtils.isEmpty(relativeUrl)) {
@@ -41,6 +42,27 @@ public class UrlUtils {
 
             return joinedUrl.toString();
         }
+    }
+
+
+    /**
+     * Concats two or more urls, adding any "/" needed between them.
+     *
+     * @param mainUrl       the main url
+     * @param relativeUrls  the array of relative urls
+     *
+     * @return mainPath + relativeUrls...
+     */
+    public static String concat(String mainUrl, String... relativeUrls) {
+        String concatenatedUrl = mainUrl;
+
+        if (ArrayUtils.isNotEmpty(relativeUrls)) {
+            for (String relativeUrl : relativeUrls) {
+                concatenatedUrl = concat(concatenatedUrl, relativeUrl);
+            }
+        }
+
+        return concatenatedUrl;
     }
 
     /**

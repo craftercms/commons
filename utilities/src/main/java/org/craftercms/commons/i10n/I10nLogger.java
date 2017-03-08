@@ -31,6 +31,10 @@ public class I10nLogger {
     protected Logger actualLogger;
     protected ResourceBundle resourceBundle;
 
+    public I10nLogger(Class<?> clazz) {
+        this(LoggerFactory.getLogger(clazz), I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
+    }
+
     public I10nLogger(Class<?> clazz, String bundleName) {
         this(LoggerFactory.getLogger(clazz), bundleName);
     }

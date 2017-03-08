@@ -16,11 +16,12 @@
  */
 package org.craftercms.commons.http;
 
-import org.apache.commons.lang3.StringUtils;
-import org.craftercms.commons.i10n.I10nLogger;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.i10n.I10nLogger;
+import org.craftercms.commons.i10n.I10nUtils;
 
 /**
  * Utility class to create and delete cookies with common domain, path and max age.
@@ -29,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CookieManager {
 
-    private static final I10nLogger logger = new I10nLogger(CookieManager.class, "crafter.commons.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(CookieManager.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
 
     public static final String LOG_KEY_ADDED_COOKIE =   "http.cookie.addedCookie";
     public static final String LOG_KEY_DELETED_COOKIE = "http.cookie.deletedCookie";
