@@ -22,27 +22,18 @@
                     <beans:bean class="org.craftercms.commons.jackson.mvc.SelectorFilterFactory">
                         <beans:property name="filters">
                             <beans:list>
-                                <beans:bean class="org.craftercms.commons.jackson.mvc.GDataPropertyFilter">
-                                    <beans:property name="selectorParameterName" value="selector"/>
-                                    <beans:property name="alias">
-                                        <beans:bean class="org.craftercms.commons.properties.OverrideProperties"
-                                                    init-method="init">
-                                            <beans:property name="resources">
-                                                <beans:list>
-                                                    <beans:value>
-                                                        classpath:/test-alias-selectors.properties
-                                                    </beans:value>
-                                                </beans:list>
-                                            </beans:property>
-                                        </beans:bean>
-                                    </beans:property>
-                                </beans:bean>
+                                <beans:ref bean="gdata"/>
                             </beans:list>
                         </beans:property>
                     </beans:bean>
                 </beans:property>
                 <beans:property name="objectMapper">
                     <beans:bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                        <beans:property name="filterProvider" >
+                            <beans:bean class="com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider">
+                                <beans:property name="defaultFilter" ref="gdata"/>
+                            </beans:bean>
+                        </beans:property>
                         <beans:property name="annotationIntrospector">
                             <beans:bean class="org.craftercms.commons.jackson.mvc.CrafterJacksonAnnotationIntrospector">
                                 <beans:property name="defaultFilter" value="gdata"/>
@@ -58,6 +49,22 @@
             </beans:bean>
         </message-converters>
     </annotation-driven>
+
+    <beans:bean id="gdata" class="org.craftercms.commons.jackson.mvc.GDataPropertyFilter">
+        <beans:property name="selectorParameterName" value="selector"/>
+        <beans:property name="alias">
+            <beans:bean class="org.craftercms.commons.properties.OverrideProperties"
+                        init-method="init">
+                <beans:property name="resources">
+                    <beans:list>
+                        <beans:value>
+                            classpath:/test-alias-selectors.properties
+                        </beans:value>
+                    </beans:list>
+                </beans:property>
+            </beans:bean>
+        </beans:property>
+    </beans:bean>
 
     <beans:bean id="contentNegotiationManager"
                 class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
