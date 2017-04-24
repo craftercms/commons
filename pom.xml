@@ -51,7 +51,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependency Version Numbers -->
-        <spring.version>4.0.3.RELEASE</spring.version>
+        <spring.version>4.3.7.RELEASE</spring.version>
         <commons.lang3.version>3.5</commons.lang3.version>
         <commons.collections4.version>4.1</commons.collections4.version>
         <commons.collections.version>3.2.2</commons.collections.version>
@@ -63,15 +63,15 @@
         <slf4j.version>1.7.7</slf4j.version>
         <servlet.api.version>3.0.1</servlet.api.version>
         <javax.mail.version>1.4.7</javax.mail.version>
-        <freemarker.version>2.3.20</freemarker.version>
-        <jackson.version>2.3.2</jackson.version>
+        <freemarker.version>2.3.23</freemarker.version>
+        <jackson.version>2.8.8</jackson.version>
         <mongo.version>2.13.0</mongo.version>
         <jongo.version>1.1</jongo.version>
         <ehcache.version>2.8.1</ehcache.version>
         <aspectj.version>1.7.2</aspectj.version>
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
         <mockito.version>1.9.5</mockito.version>
-        <jsonpath.version>0.8.1</jsonpath.version>
+        <jsonpath.version>2.2.0</jsonpath.version>
         <logback.version>1.0.13</logback.version>
         <reactor.version>1.0.0.RELEASE</reactor.version>
         <quartz.version>2.2.1</quartz.version>
