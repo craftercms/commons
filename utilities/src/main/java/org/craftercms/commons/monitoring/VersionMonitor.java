@@ -2,6 +2,7 @@ package org.craftercms.commons.monitoring;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
@@ -18,7 +19,7 @@ import java.util.jar.Manifest;
  * @since 3.0
  * @author Carlos Ortiz
  */
-public final class Version {
+public final class VersionMonitor {
 
     private final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ssZ");
     /**
@@ -30,9 +31,9 @@ public final class Version {
      */
     public static final String IMPLEMENTATION_TITLE = "Implementation-Title";
     /**
-     * Manifest key for Version of the code (usually matches Mvn packageVersion)
+     * Manifest key for VersionMonitor of the code (usually matches Mvn packageVersion)
      */
-    public static final String IMPLEMENTATION_VERSION = "Implementation-Version";
+    public static final String IMPLEMENTATION_VERSION = "Implementation-VersionMonitor";
     /**
      * Manifest key for codebase packageVersion (usually git hash or svn id).
      */
@@ -41,6 +42,10 @@ public final class Version {
      * System property key for File encoding setting.
      */
     public static final String FILE_ENCODING_SYSTEM_PROP_KEY = "file.encoding";
+    /**
+     * Manifest Default Path
+     */
+    public static final String MANIFEST_PATH="META-INF/MANIFEST.MF";
 
     private String name;
     private String packageVersion;
@@ -61,11 +66,11 @@ public final class Version {
     private String jvm_implementation_version;
 
     /**
-     * Create a Version pojo instance based on a given Manifest File.
+     * Create a VersionMonitor pojo instance based on a given Manifest File.
      * Empty values are assign if the keys in the manifest are missing.
-     * @param manifest Manifest File that contains the Version Information.
+     * @param manifest Manifest File that contains the VersionMonitor Information.
      */
-    private Version(Manifest manifest){
+    private VersionMonitor(Manifest manifest){
         Attributes mainAttrs = manifest.getMainAttributes();
         datetime=DATETIME_FORMATTER.format(new Date());
         initFromManifest(mainAttrs);
@@ -94,12 +99,24 @@ public final class Version {
     }
 
     /**
-     * Gets the current Version based on Manifest & current JVM information.
+     * Gets the current VersionMonitor based on Manifest & current JVM information.
      * @param manifest Manifest were to get the information.
-     * @return A Version pojo with information.
+     * @return A VersionMonitor pojo with information.
      */
-    public static Version getVersion (Manifest manifest){
-        return new Version(manifest);
+    public static VersionMonitor getVersion (Manifest manifest){
+        return new VersionMonitor(manifest);
+    }
+
+    /**
+     * Gets the current VersionMonitor base on a Class that will load it's manifest file.
+     * @param clazz Class that will load the manifest MF file
+     * @return A {@link VersionMonitor} pojo with the information.
+     * @throws IOException If Unable to read the Manifest file.
+     */
+    public static VersionMonitor getVersion(Class clazz) throws IOException {
+        Manifest manifest = new Manifest();
+        manifest.read(clazz.getResourceAsStream(MANIFEST_PATH));
+        return getVersion(manifest);
     }
 
     private void initTomcat() {
@@ -128,7 +145,7 @@ public final class Version {
 
     @Override
     public String toString() {
-        return "Version{" +
+        return "VersionMonitor{" +
                 ", name='" + name + '\'' +
                 ", packageVersion='" + packageVersion + '\'' +
                 ", build='" + build + '\'' +

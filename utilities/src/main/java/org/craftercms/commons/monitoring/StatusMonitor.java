@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit;
  * @since 3.0
  * @author Carlos Ortiz.
  */
-public final class Status {
+public final class StatusMonitor {
 
     /**
-     * Default Status Label name.
+     * Default StatusMonitor Label name.
      */
     private final static String DEFAULT_STATUS_LABEL ="healthy";
     private String statusLabel;
@@ -22,10 +22,10 @@ public final class Status {
     private String datetime;
     private final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ssZ");
     /**
-     * Creates the Status with current information and a custom statusLabel label.
+     * Creates the StatusMonitor with current information and a custom statusLabel label.
      * @param statusLabel Custom statusLabel label.
      */
-    private Status(String statusLabel){
+    private StatusMonitor(String statusLabel){
         long uptimeInMS = ManagementFactory.getRuntimeMXBean().getUptime();
         this.statusLabel = statusLabel;
         uptime=String.format("%sh %sm %ss", TimeUnit.MILLISECONDS.toHours(uptimeInMS),
@@ -36,18 +36,18 @@ public final class Status {
 
 
     /**
-     * Creates the Status with current information and a custom statusLabel label.
+     * Creates the StatusMonitor with current information and a custom statusLabel label.
      * @param statusLabel Custom statusLabel label.
      */
-    public static Status getCurrentStatus(String statusLabel){
-        return new Status(statusLabel);
+    public static StatusMonitor getCurrentStatus(String statusLabel){
+        return new StatusMonitor(statusLabel);
     }
     /**
-     * Creates the Status with current information and a custom statusLabel label.
+     * Creates the StatusMonitor with current information and a custom statusLabel label.
      * @param statusLabel Custom statusLabel label.
      */
-    public static Status getCurrentStatus(){
-        return new Status(DEFAULT_STATUS_LABEL);
+    public static StatusMonitor getCurrentStatus(){
+        return new StatusMonitor(DEFAULT_STATUS_LABEL);
     }
     public String getStatus() {
         return statusLabel;
@@ -63,7 +63,7 @@ public final class Status {
 
     @Override
     public String toString() {
-        return "Status{" +
+        return "StatusMonitor{" +
                 "statusLabel='" + statusLabel + '\'' +
                 ", uptime='" + uptime + '\'' +
                 ", datetime='" + datetime + '\'' +

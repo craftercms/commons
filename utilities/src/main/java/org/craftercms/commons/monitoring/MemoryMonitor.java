@@ -15,10 +15,10 @@ import java.util.List;
  * @author Carlos Ortiz
  * @since 3.0
  */
-public final class Memory {
+public final class MemoryMonitor {
 
-    private static final String NON_HEAP_MEMORY = "Non Heap Memory";
-    private static final String HEAP_MEMORY = "Heap Memory";
+    private static final String NON_HEAP_MEMORY = "Non Heap MemoryMonitor";
+    private static final String HEAP_MEMORY = "Heap MemoryMonitor";
     private String name;
     private String init;
     private String used;
@@ -26,11 +26,11 @@ public final class Memory {
     private String max;
 
     /**
-     * Private Constructor of the Memory POJO
-     * @param memName Type of Memory to get the information.
+     * Private Constructor of the MemoryMonitor POJO
+     * @param memName Type of MemoryMonitor to get the information.
      * @param memoryUsage {@link MemoryUsage} bean where the information is taken from.
      */
-    private Memory(String memName,MemoryUsage memoryUsage) {
+    private MemoryMonitor(String memName, MemoryUsage memoryUsage) {
         this.name=memName;
         this.init=FileUtils.byteCountToDisplaySize(memoryUsage.getInit());
         this.used=FileUtils.byteCountToDisplaySize(memoryUsage.getUsed());
@@ -40,18 +40,18 @@ public final class Memory {
 
 
     /**
-     * Query all register MemoryPools to get information and create a {@link Memory} Pojo
+     * Query all register MemoryPools to get information and create a {@link MemoryMonitor} Pojo
      * @return List with all the memory usage stats.
      */
-    public static List<Memory> getMemoryStats(){
-        ArrayList<Memory> memoryPoolInformation = new ArrayList<>();
+    public static List<MemoryMonitor> getMemoryStats(){
+        ArrayList<MemoryMonitor> memoryPoolInformation = new ArrayList<>();
         MemoryUsage heapMem = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-        memoryPoolInformation.add(new Memory(HEAP_MEMORY,heapMem));
+        memoryPoolInformation.add(new MemoryMonitor(HEAP_MEMORY,heapMem));
         MemoryUsage nonHeapMen = ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage();
-        memoryPoolInformation.add(new Memory(NON_HEAP_MEMORY,nonHeapMen));
+        memoryPoolInformation.add(new MemoryMonitor(NON_HEAP_MEMORY,nonHeapMen));
 
         for(MemoryPoolMXBean memMXBean :ManagementFactory.getMemoryPoolMXBeans()){
-            memoryPoolInformation.add(new Memory(memMXBean.getName(), memMXBean.getUsage()));
+            memoryPoolInformation.add(new MemoryMonitor(memMXBean.getName(), memMXBean.getUsage()));
         }
         return Collections.unmodifiableList(memoryPoolInformation);
     }
@@ -78,7 +78,7 @@ public final class Memory {
 
     @Override
     public String toString() {
-        return "Memory{" +
+        return "MemoryMonitor{" +
                 "name='" + name + '\'' +
                 ", init='" + init + '\'' +
                 ", used='" + used + '\'' +
