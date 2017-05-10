@@ -33,7 +33,7 @@ public final class VersionMonitor {
     /**
      * Manifest key for VersionMonitor of the code (usually matches Mvn packageVersion)
      */
-    public static final String IMPLEMENTATION_VERSION = "Implementation-VersionMonitor";
+    public static final String IMPLEMENTATION_VERSION = "Implementation-Version";
     /**
      * Manifest key for codebase packageVersion (usually git hash or svn id).
      */
@@ -80,22 +80,20 @@ public final class VersionMonitor {
     }
 
     private void initFromManifest(Attributes mainAttrs) {
-        if(mainAttrs.containsKey(BUILD_ON)) {
+
+        if (mainAttrs.getValue(BUILD_ON) != null) {
             build_date = DATETIME_FORMATTER.format(
                     new Date(
                             Long.parseLong(mainAttrs.getValue(BUILD_ON))
-                            )
-                    );
+                    )
+            );
+        } else {
+            build_date = DATETIME_FORMATTER.format(new Date(0));
         }
-        if(mainAttrs.containsKey(IMPLEMENTATION_TITLE)) {
-            name = mainAttrs.getValue(IMPLEMENTATION_TITLE);
-        }
-        if(mainAttrs.containsKey(IMPLEMENTATION_VERSION)) {
-            packageVersion =mainAttrs.getValue(IMPLEMENTATION_VERSION);
-        }
-        if(mainAttrs.containsKey(IMPLEMENTATION_BUILD)) {
-            build = mainAttrs.getValue(IMPLEMENTATION_BUILD);
-        }
+        name = mainAttrs.getValue(IMPLEMENTATION_TITLE);
+        packageVersion = mainAttrs.getValue(IMPLEMENTATION_VERSION);
+        build = mainAttrs.getValue(IMPLEMENTATION_BUILD);
+
     }
 
     /**
