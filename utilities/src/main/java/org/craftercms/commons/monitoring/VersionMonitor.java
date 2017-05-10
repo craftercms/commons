@@ -45,7 +45,7 @@ public final class VersionMonitor {
     /**
      * Manifest Default Path
      */
-    public static final String MANIFEST_PATH="META-INF/MANIFEST.MF";
+    public static final String MANIFEST_PATH="/META-INF/MANIFEST.MF";
 
     private String name;
     private String packageVersion;
