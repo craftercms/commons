@@ -12,9 +12,7 @@ notifications:
     skip_join: true
   slack: craftersoftware:7YiSb41ZG5rfMgiAY7Qgprc7
 addons:
-  sonarqube:
-    token:
-        secure: "e0j4hja+IB+4gYtmrhHqbv9zV31aZnieukkpdFm84XLTVvo2VL7CO3xGnsVJxfoQNXiCqEUFBO5GnfoZ4hru0BAQgGN748CXy86Lhzy1uedbdEYzcg75CP3STi3X5Kw4xTu0ptLoLD+sWKqfD0j0hkhTFB2evfAoGFm3S8kfNfA="
+  sonarqube: true
 env:
   global:
     - secure: PmuPt7cO842V881rJ1/7QflXSP810uzGmhtQM8DZ91HfC8tpesauU9LjQFBGRh0Hu5HVjxU+FFad6ADjjscCdFkS0AmN8BCW3ddCoMKhYgb+gHuLdPF0Z0wNcdKpwL93JPj84oQcjS/QeG5Wx1S0wAx2LIluhKPDfXAIoONjixY=
