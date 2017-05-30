@@ -19,6 +19,7 @@ package org.craftercms.commons.http;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -175,6 +176,49 @@ public class HttpUtils {
     }
 
     /**
+     * Adds a param value to a params map. If value is null, nothing is done.
+     *
+     * @param key    the param key
+     * @param value  the param value
+     * @param params the params map
+     */
+    public static void addValue(String key, Object value, MultiValueMap<String, String> params) {
+        if (value != null) {
+            params.add(key, value.toString());
+        }
+    }
+
+    /**
+     * Adds a collection of param values to a params map. If the collection is null, nothing is done.
+     *
+     * @param key    the param key
+     * @param values the collection of param values
+     * @param params the params map
+     */
+    public static void addValues(String key, Collection<String> values, MultiValueMap<String, String> params) {
+        if (values != null) {
+            for (String value : values) {
+                params.add(key, value);
+            }
+        }
+    }
+
+    /**
+     * Adds an array of param values to a params map. If the array is null, nothing is done.
+     *
+     * @param key    the param key
+     * @param values the array of param values
+     * @param params the params map
+     */
+    public static void addValues(String key, String[] values, MultiValueMap<String, String> params) {
+        if (values != null) {
+            for (String value : values) {
+                params.add(key, value);
+            }
+        }
+    }
+
+    /**
      * Returns a map with the extracted parameters from the specified query string. A multi value map is used
      * since there can be several values for the same param.
      *
@@ -199,16 +243,47 @@ public class HttpUtils {
     }
 
     /**
-     * Builds a query string from the specified params. The param name and value are also URL encoded before adding
-     * them to the query string.
+     * Builds a query string from the specified params. The param names and the values are always encoded. UTF-8 is used as the encoding
+     * charset.
+     *
+     * @param queryParams   the params to build the query string with
+     *
+     * @return the query string
+     */
+    public static String getQueryStringFromParams(MultiValueMap<String, String> queryParams) {
+        return getQueryStringFromParams(queryParams, true);
+    }
+
+    /**
+     * Builds a query string from the specified params. The param names are always encoded, but the values are only encoded
+     * if {@code encodeValues} is true. UTF-8 is used as the encoding charset.
+     *
+     * @param queryParams   the params to build the query string with
+     * @param encodeValues  if the param values should be encoded
+     *
+     * @return the query string
+     */
+    public static String getQueryStringFromParams(MultiValueMap<String, String> queryParams, boolean encodeValues) {
+        try {
+            return getQueryStringFromParams(queryParams, "UTF-8", encodeValues);
+        } catch (UnsupportedEncodingException e) {
+            // Should NEVER happen
+            throw new IllegalStateException("UTF-8 should always be supported by the JVM", e);
+        }
+    }
+
+    /**
+     * Builds a query string from the specified params. The param names are always encoded, but the values are only encoded
+     * if {@code encodeValues} is true.
      *
      * @param queryParams   the params to build the query string with
      * @param charset       the charset to use for URL encoding
+     * @param encodeValues  if the param values should be encoded
      *
      * @return the query string
      */
     public static String getQueryStringFromParams(MultiValueMap<String, String> queryParams,
-                                                  String charset) throws UnsupportedEncodingException {
+                                                  String charset, boolean encodeValues) throws UnsupportedEncodingException {
         StringBuilder queryString = new StringBuilder();
 
         if (MapUtils.isNotEmpty(queryParams)) {
@@ -220,7 +295,9 @@ public class HttpUtils {
                         queryString.append('&');
                     }
 
-                    paramValue = URLEncoder.encode(paramValue, charset);
+                    if (encodeValues) {
+                        paramValue = URLEncoder.encode(paramValue, charset);
+                    }
 
                     queryString.append(paramName).append('=').append(paramValue);
                 }

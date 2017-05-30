@@ -25,6 +25,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -57,13 +59,24 @@ public class BaseRestExceptionHandlers extends ResponseEntityExceptionHandler {
 
             return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
         } else {
-            return handleExceptionInternal(ex, "Invalid or missing request body", new HttpHeaders(),
-                                           HttpStatus.INTERNAL_SERVER_ERROR, webRequest);
+            return handleExceptionInternal(ex, "Invalid or missing request body", new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
         }
     }
 
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
+                                                                  HttpStatus status, WebRequest request) {
+        ValidationResult result = new ValidationResult();
+
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+            result.addFieldError(fieldError.getField(), "Missing required field");
+        }
+
+        return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGenericException(Exception ex, WebRequest webRequest) {
+    public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest webRequest) {
         Throwable cause = ex.getCause();
         if (cause instanceof ValidationException) {
             return handleValidationException((ValidationException)cause, webRequest);
