@@ -268,7 +268,7 @@ public class HttpUtils {
             return getQueryStringFromParams(queryParams, "UTF-8", encodeValues);
         } catch (UnsupportedEncodingException e) {
             // Should NEVER happen
-            throw new RuntimeException(e);
+            throw new IllegalStateException("UTF-8 should always be supported by the JVM", e);
         }
     }
 
