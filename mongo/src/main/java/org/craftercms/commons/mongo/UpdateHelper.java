@@ -60,6 +60,11 @@ public class UpdateHelper {
         pullValues = add(pullValues, field, Collections.singletonMap("$in", values));
     }
 
+    public void pullAllDocuments(String field, String embeddedField, Collection<?> values) {
+        pullValues = add(pullValues, field, Collections.singletonMap(embeddedField, Collections.singletonMap("$in",
+            values)));
+    }
+
     public void executeUpdate(String id, CrudRepository<?> repository) throws MongoDataException {
         List<String> modifiers = new ArrayList<>();
         List<Map<String, Object>> params = new ArrayList<>();
@@ -81,10 +86,12 @@ public class UpdateHelper {
             params.add(pullValues);
         }
 
-        String finalModifier = "{" + StringUtils.join(modifiers, ", ") + "}";
-        Object[] paramsArray = params.toArray(new Object[params.size()]);
+        if(!modifiers.isEmpty() && !params.isEmpty()) {
+            String finalModifier = "{" + StringUtils.join(modifiers, ", ") + "}";
+            Object[] paramsArray = params.toArray(new Object[params.size()]);
 
-        repository.update(id, finalModifier, false, false, paramsArray);
+            repository.update(id, finalModifier, false, false, paramsArray);
+        }
     }
 
     protected Map<String, Object> add(Map<String, Object> map, String field, Object value) {
