@@ -26,11 +26,11 @@ import static org.junit.Assert.assertNotNull;
  */
 public class EmailFactoryImplTest {
 
-    private static final String FROM = "noreply@craftersoftware.com";
-    private static final String[] TO = { "user1@craftersoftware.com" };
-    private static final String[] CC = { "user2@craftersoftware.com" };
-    private static final String[] BCC = { "user3@craftersoftware.com" };
-    private static final String REPLY_TO = "admin@craftersoftware.com";
+    private static final String FROM = "noreply@example.com";
+    private static final String[] TO = { "user1@example.com" };
+    private static final String[] CC = { "user2@example.com" };
+    private static final String[] BCC = { "user3@example.com" };
+    private static final String REPLY_TO = "admin@example.com";
     private static final String SUBJECT = "Test";
     private static final String BODY = "This is a test email";
     
