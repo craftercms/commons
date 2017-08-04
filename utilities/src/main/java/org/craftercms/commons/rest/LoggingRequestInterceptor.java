@@ -11,9 +11,14 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
+/**
+ * REST client request interceptor that logs the whole request and response. Useful for debugging.
+ *
+ * @author avasquez
+ */
 public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 
-    final static Logger logger = LoggerFactory.getLogger(LoggingRequestInterceptor.class);
+    private final static Logger logger = LoggerFactory.getLogger(LoggingRequestInterceptor.class);
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
