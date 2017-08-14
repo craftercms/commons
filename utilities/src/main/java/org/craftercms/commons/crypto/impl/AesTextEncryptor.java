@@ -5,7 +5,7 @@ import java.security.Key;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.craftercms.commons.crypto.CipherUtils;
+import org.craftercms.commons.crypto.CryptoUtils;
 import org.craftercms.commons.crypto.CryptoException;
 import org.craftercms.commons.crypto.SimpleCipher;
 import org.craftercms.commons.crypto.TextEncryptor;
@@ -38,8 +38,8 @@ public class AesTextEncryptor implements TextEncryptor {
     @Override
     public String decrypt(final String encrypted) throws CryptoException {
         byte[] decoded = Base64.decodeBase64(encrypted);
-        byte[] iv = ArrayUtils.subarray(decoded, 0, CipherUtils.AES_KEY_BYTE_SIZE);
-        byte[] encryptedBytes = ArrayUtils.subarray(decoded, CipherUtils.AES_KEY_BYTE_SIZE, decoded.length);
+        byte[] iv = ArrayUtils.subarray(decoded, 0, CryptoUtils.AES_KEY_BYTE_SIZE);
+        byte[] encryptedBytes = ArrayUtils.subarray(decoded, CryptoUtils.AES_KEY_BYTE_SIZE, decoded.length);
 
         SimpleCipher cipher = new SimpleCipher();
         cipher.setKey(key);

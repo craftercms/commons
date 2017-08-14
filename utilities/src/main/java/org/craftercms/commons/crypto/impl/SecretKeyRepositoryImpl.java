@@ -27,7 +27,7 @@ import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 
 import org.apache.commons.io.FileUtils;
-import org.craftercms.commons.crypto.CipherUtils;
+import org.craftercms.commons.crypto.CryptoUtils;
 import org.craftercms.commons.crypto.CryptoException;
 import org.craftercms.commons.crypto.SecretKeyRepository;
 import org.craftercms.commons.i10n.I10nLogger;
@@ -62,7 +62,7 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
     protected KeyStore keyStore;
 
     public SecretKeyRepositoryImpl() {
-        defaultKeyAlgorithm = CipherUtils.AES_CIPHER_ALGORITHM;
+        defaultKeyAlgorithm = CryptoUtils.AES_CIPHER_ALGORITHM;
     }
 
     @Required
@@ -92,7 +92,7 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
                 logger.debug(LOG_KEY_KEY_NOT_FOUND, name);
 
                 if (create) {
-                    key = CipherUtils.generateKey(defaultKeyAlgorithm);
+                    key = CryptoUtils.generateKey(defaultKeyAlgorithm);
                     saveKey(name, key);
 
                     logger.debug(LOG_KEY_KEY_CREATED, name);
