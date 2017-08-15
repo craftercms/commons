@@ -41,7 +41,7 @@ public class SimpleCipherTest {
         Key key = encryptionCipher.getKey();
         byte[] iv = encryptionCipher.getIv();
 
-        Cipher decryptionCipher = Cipher.getInstance(CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
+        Cipher decryptionCipher = Cipher.getInstance(CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
         decryptionCipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
 
         byte[] clearBytes = decryptionCipher.doFinal(Base64.decodeBase64(encrypted));
@@ -52,10 +52,10 @@ public class SimpleCipherTest {
 
     @Test
     public void testDecryption() throws Exception {
-        Key key = CipherUtils.generateAesKey();
-        byte[] iv = CipherUtils.generateAesIv();
+        Key key = CryptoUtils.generateAesKey();
+        byte[] iv = CryptoUtils.generateAesIv();
 
-        Cipher encryptionCipher = Cipher.getInstance(CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
+        Cipher encryptionCipher = Cipher.getInstance(CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
         encryptionCipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
 
         String encrypted = Base64.encodeBase64String(encryptionCipher.doFinal(StringUtils.getBytesUtf8(CLEAR_TEXT)));

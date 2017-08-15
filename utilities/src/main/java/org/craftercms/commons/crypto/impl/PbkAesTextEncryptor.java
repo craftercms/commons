@@ -8,7 +8,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.craftercms.commons.crypto.CipherUtils;
+import org.craftercms.commons.crypto.CryptoUtils;
 import org.craftercms.commons.crypto.CryptoException;
 
 /**
@@ -28,7 +28,7 @@ public class PbkAesTextEncryptor extends AesTextEncryptor {
             KeySpec keySpec = new PBEKeySpec(password.toCharArray(), Base64.decodeBase64(salt), PBK_ITER, PBK_LEN);
             SecretKeyFactory factory = SecretKeyFactory.getInstance(PBK_ALGORITHM);
 
-            return new SecretKeySpec(factory.generateSecret(keySpec).getEncoded(), CipherUtils.AES_CIPHER_ALGORITHM);
+            return new SecretKeySpec(factory.generateSecret(keySpec).getEncoded(), CryptoUtils.AES_CIPHER_ALGORITHM);
         } catch (GeneralSecurityException e) {
             throw new CryptoException("Unable to generate PBK key", e);
         }

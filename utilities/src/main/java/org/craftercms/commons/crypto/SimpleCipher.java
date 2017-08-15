@@ -84,17 +84,17 @@ public class SimpleCipher {
 
     public byte[] encrypt(byte[] clear) throws CryptoException {
         if (key == null) {
-            key = CipherUtils.generateAesKey();
+            key = CryptoUtils.generateAesKey();
 
             logger.debug(LOG_KEY_KEY_GEN);
         }
         if (iv == null) {
-            iv = CipherUtils.generateAesIv();
+            iv = CryptoUtils.generateAesIv();
 
             logger.debug(LOG_KEY_IV_GEN);
         }
         if (cipher == null) {
-            String cipherTransformation = CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
+            String cipherTransformation = CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
 
             try {
                 cipher = Cipher.getInstance(cipherTransformation);
@@ -129,10 +129,10 @@ public class SimpleCipher {
             throw new CryptoException(ERROR_KEY_IV_NOT_SET);
         }
         if (cipher == null) {
-            String cipherTransformation = CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
+            String cipherTransformation = CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
 
             try {
-                cipher = Cipher.getInstance(CipherUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
+                cipher = Cipher.getInstance(CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
             } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
                 // Should NEVER happen
                 throw new RuntimeException(e);

@@ -59,6 +59,7 @@
         <commons.beanutils.version>1.9.2</commons.beanutils.version>
         <commons.io.version>2.5</commons.io.version>
         <commons.configuration.version>2.1</commons.configuration.version>
+        <commons.cli.version>1.4</commons.cli.version>
         <httpcomponents.httpclient.version>4.3.3</httpcomponents.httpclient.version>
         <slf4j.version>1.7.7</slf4j.version>
         <servlet.api.version>3.0.1</servlet.api.version>
