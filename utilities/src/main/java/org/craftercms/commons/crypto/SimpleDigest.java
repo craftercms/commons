@@ -21,6 +21,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.i10n.I10nUtils;
 
@@ -93,12 +94,7 @@ public class SimpleDigest {
     }
 
     public String digestBase64(String clear) {
-        try {
-            return Base64.encodeBase64String(digest(clear.getBytes("UTF-8")));
-        } catch (UnsupportedEncodingException e) {
-            // Should NEVER happen
-            throw new RuntimeException(e);
-        }
+        return Base64.encodeBase64String(digest(StringUtils.getBytesUtf8(clear)));
     }
 
     public byte[] digest(byte[] clear) {
