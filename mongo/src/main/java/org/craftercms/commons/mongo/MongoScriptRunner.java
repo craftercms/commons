@@ -273,12 +273,6 @@ public class MongoScriptRunner {
     private DB getDB() throws MongoDataException {
         DB db = mongo.getDB(dbName);
         logger.debug("Getting DB {}",dbName);
-        if (!StringUtils.isBlank(password)) {
-            if (!db.authenticate(username, password.toCharArray())) {
-                throw new MongoDataException("Unable to authenticate with given user/pwd");
-            }
-        }
-
         return db;
     }
 

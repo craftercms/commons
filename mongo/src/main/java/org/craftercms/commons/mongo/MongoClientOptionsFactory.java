@@ -34,13 +34,10 @@ public class MongoClientOptionsFactory extends AbstractFactoryBean<MongoClientOp
     private static final int SECONDARY_READ_PREFERENCE = 3;
     private int readPreference;
     private boolean alwaysUseMBeans;
-    private boolean autoConnectRetry;
     private int connectionsPerHost;
     private boolean cursorFinalizerEnabled;
     private int connectTimeout;
-    private long maxAutoConnectRetryTime;
     private int maxWaitTime;
-    private boolean socketKeepAlive;
     private String writeConcern;
     private int threadsAllowedToBlockForConnectionMultiplier;
 
@@ -50,10 +47,6 @@ public class MongoClientOptionsFactory extends AbstractFactoryBean<MongoClientOp
 
     public void setAlwaysUseMBeans(final boolean alwaysUseMBeans) {
         this.alwaysUseMBeans = alwaysUseMBeans;
-    }
-
-    public void setAutoConnectRetry(final boolean autoConnectRetry) {
-        this.autoConnectRetry = autoConnectRetry;
     }
 
     public void setConnectionsPerHost(final int connectionsPerHost) {
@@ -68,16 +61,8 @@ public class MongoClientOptionsFactory extends AbstractFactoryBean<MongoClientOp
         this.connectTimeout = connectTimeout;
     }
 
-    public void setMaxAutoConnectRetryTime(final long maxAutoConnectRetryTime) {
-        this.maxAutoConnectRetryTime = maxAutoConnectRetryTime;
-    }
-
     public void setMaxWaitTime(final int maxWaitTime) {
         this.maxWaitTime = maxWaitTime;
-    }
-
-    public void setSocketKeepAlive(final boolean socketKeepAlive) {
-        this.socketKeepAlive = socketKeepAlive;
     }
 
     public void setWriteConcern(final String writeConcern) {
@@ -98,11 +83,9 @@ public class MongoClientOptionsFactory extends AbstractFactoryBean<MongoClientOp
     protected MongoClientOptions createInstance() throws Exception {
         MongoClientOptions.Builder builder = MongoClientOptions.builder();
         builder.alwaysUseMBeans(this.alwaysUseMBeans);
-        builder.autoConnectRetry(this.autoConnectRetry);
         builder.connectionsPerHost(this.connectionsPerHost);
         builder.cursorFinalizerEnabled(this.cursorFinalizerEnabled);
         builder.connectTimeout(this.connectTimeout);
-        builder.maxAutoConnectRetryTime(this.maxAutoConnectRetryTime);
         builder.maxWaitTime(this.maxWaitTime);
 
 
@@ -120,7 +103,6 @@ public class MongoClientOptionsFactory extends AbstractFactoryBean<MongoClientOp
                 builder.readPreference(ReadPreference.primary());
                 break;
         }
-        builder.socketKeepAlive(this.socketKeepAlive);
         builder.writeConcern(WriteConcern.valueOf(this.writeConcern));
         builder.threadsAllowedToBlockForConnectionMultiplier(this.threadsAllowedToBlockForConnectionMultiplier);
         return builder.build();
