@@ -9,6 +9,8 @@ import com.mongodb.Mongo;
 import java.util.List;
 import java.util.Map;
 
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +30,7 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
     private String dbName;
     private String username;
     private String password;
-    private Mongo mongo;
+    private MongoClient mongo;
     private List<JsonSerializer<?>> serializers;
     private Map<Class<?>, JsonDeserializer<?>> deserializers;
 
@@ -38,7 +40,7 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
     }
 
     @Required
-    public void setMongo(Mongo mongoClient) {
+    public void setMongo(MongoClient mongoClient) {
         this.mongo = mongoClient;
     }
 
@@ -66,19 +68,11 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
     @Override
     protected Jongo createInstance() throws Exception {
         DB db = mongo.getDB(dbName);
-        if (!StringUtils.isBlank(password)) {
-            if (!db.authenticate(username, password.toCharArray())) {
-                throw new MongoDataException("Unable to authenticate with given user/pwd");
-            }
-        }
-
         JacksonMapper.Builder builder = new JacksonMapper.Builder();
         builder.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-
         if (CollectionUtils.isNotEmpty(serializers) || MapUtils.isNotEmpty(deserializers)) {
             builder.registerModule(JacksonUtils.createModule(serializers, deserializers));
         }
-
         return new Jongo(db, builder.build());
     }
 

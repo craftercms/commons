@@ -91,9 +91,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @Override
     public void insert(T document) throws MongoDataException {
         try {
-            WriteResult result = getCollection().insert(document);
-            checkCommandResult(result);
-        } catch (MongoException.DuplicateKey ex) {
+            getCollection().insert(document);
+        } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for document " + document;
             log.error(msg, ex);
             throw new DuplicateKeyException(msg, ex);
@@ -113,34 +112,11 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
         return jongo.getCollection(collectionName);
     }
 
-    /**
-     * Internal checks if the CommandResult is ok , if not will throw a MongoRepositoryException with the last error
-     * message given by CommandResult#getErrorMessage as the exception  message.
-     *
-     * @param result Write Result.
-     * @throws MongoDataException if CommandResult#Ok is false.
-     */
-    protected void checkCommandResult(final WriteResult result) throws MongoDataException {
-        CommandResult lastError = result.getLastError();
-        log.debug("Saving send to mongodb checking result");
-        log.debug("Result is {}", lastError.ok()? "OK": lastError.getErrorMessage());
-        if (!lastError.ok()) {
-            MongoException ex = lastError.getException();
-            log.error("Unable to save into mongodb due to " + lastError.getErrorMessage(), ex);
-            if (ex instanceof MongoException.DuplicateKey) {
-                throw new DuplicateKeyException(ex.getMessage(), ex);
-            } else {
-                throw new MongoDataException(ex.getMessage(), ex);
-            }
-        }
-    }
-
     @Override
     public void insert(T... documents) throws MongoDataException {
         try {
-            WriteResult result = getCollection().insert(documents);
-            checkCommandResult(result);
-        } catch (MongoException.DuplicateKey ex) {
+            getCollection().insert(documents);
+        } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for documents " + Arrays.toString(documents);
             log.error(msg, ex);
             throw new DuplicateKeyException(msg, ex);
@@ -154,9 +130,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @Override
     public void save(final T document) throws MongoDataException {
         try {
-            WriteResult result = getCollection().save(document);
-            checkCommandResult(result);
-        } catch (MongoException.DuplicateKey ex) {
+            getCollection().save(document);
+        } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for document " + document;
             log.error(msg, ex);
             throw new DuplicateKeyException(msg, ex);
@@ -170,9 +145,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @Override
     public void save(final String query, final Object... queryParams) throws MongoDataException {
         try {
-            WriteResult writeResult = getCollection().insert(query, queryParams);
-            checkCommandResult(writeResult);
-        } catch (MongoException.DuplicateKey ex) {
+            getCollection().insert(query, queryParams);
+        } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for save query " + query + " of type " + clazz.getName() +
                 " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
@@ -196,9 +170,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             if (upsert) {
                 update.upsert();
             }
-            WriteResult result = update.with(updateObject);
-            checkCommandResult(result);
-        } catch (MongoException.DuplicateKey ex) {
+            update.with(updateObject);
+        } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for update with id='" + id + "', updatedObject=" + updateObject + ", multi=" +
                 multi + ", upsert=" + upsert;
             log.error(msg, ex);
@@ -227,9 +200,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             if (upsert) {
                 update.upsert();
             }
-            WriteResult result = update.with(modifier);
-            checkCommandResult(result);
-        } catch (MongoException.DuplicateKey ex) {
+            update.with(modifier);
+        } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for update with id='" + id + "', modifier=" + modifier + ", multi=" +
                 multi + ", upsert=" + upsert;
             log.error(msg, ex);
@@ -252,9 +224,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             if (upsert) {
                 update.upsert();
             }
-            WriteResult result = update.with(modifier, params);
-            checkCommandResult(result);
-        } catch (MongoException.DuplicateKey ex) {
+            update.with(modifier, params);
+        } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for update with id='" + id + "', modifier=" + modifier + ", multi=" +
                 multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
             log.error(msg, ex);
@@ -363,8 +334,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @Override
     public void remove(final String query, final Object... queryParams) throws MongoDataException {
         try {
-            WriteResult writeResult = getCollection().remove(query, queryParams);
-            checkCommandResult(writeResult);
+            getCollection().remove(query, queryParams);
         } catch (MongoException ex) {
             String msg = "Unable to remove document by query " + query + " of type " + clazz.getName() +
                 " with params " + Arrays.toString(queryParams);
@@ -394,8 +364,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @Override
     public void remove(final String query) throws MongoDataException {
         try {
-            WriteResult writeResult = getCollection().remove(query);
-            checkCommandResult(writeResult);
+            getCollection().remove(query);
         } catch (MongoException ex) {
             String msg = "Unable to remove document by query " + query + " of type " + clazz.getName();
             log.error(msg, ex);
@@ -406,8 +375,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @Override
     public void removeById(final String id) throws MongoDataException {
         try {
-            WriteResult writeResult = getCollection().remove(new ObjectId(id));
-            checkCommandResult(writeResult);
+            getCollection().remove(new ObjectId(id));
         } catch (MongoException ex) {
             String msg = "Unable to remove document of type " + clazz.getName() + " by id '" + id + "'";
             log.error(msg, ex);
@@ -525,8 +493,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @Override
     public void removeByStringId(final String id) throws MongoDataException {
         try {
-            WriteResult result = getCollection().remove("{_id:#}", id);
-            checkCommandResult(result);
+            getCollection().remove("{_id:#}", id);
         } catch (MongoException ex) {
             String msg = "Unable to remove document of type " + clazz.getName() + " by id '" + id + "'";
             log.error(msg, ex);
