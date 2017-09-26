@@ -227,6 +227,7 @@
                                     <goal>shade</goal>
                                 </goals>
                                 <configuration>
+                                    <minimizeJar>true</minimizeJar>
                                     <shadedArtifactAttached>true</shadedArtifactAttached>
                                     <shadedClassifierName>enctool</shadedClassifierName>
                                     <transformers>
@@ -234,6 +235,33 @@
                                             <mainClass>org.craftercms.commons.crypto.impl.EncryptionTool</mainClass>
                                         </transformer>
                                     </transformers>
+                                    <filters>
+                                        <filter>
+                                            <artifact>org.aspectj:aspectjweaver</artifact>
+                                            <excludes>
+                                                <exclude>org/aspectj/lang/annotation/Aspect.class</exclude>
+                                                <exclude> org/aspectj/lang/JoinPoint$StaticPart.class</exclude>
+                                                <exclude>org/aspectj/runtime/internal/AroundClosure.class</exclude>
+                                                <exclude>org/aspectj/lang/ProceedingJoinPoint.class</exclude>
+                                                <exclude>org/aspectj/lang/Signature.class</exclude>
+                                                <exclude>org/aspectj/lang/JoinPoint.class</exclude>
+                                                <exclude>org/aspectj/lang/JoinPoint$EnclosingStaticPart.class</exclude>
+                                                <exclude>org/aspectj/lang/annotation/Around.class</exclude>
+                                                <exclude>org/aspectj/lang/reflect/SourceLocation.class</exclude>
+                                                <exclude>org/aspectj/lang/JoinPoint</exclude>
+                                            </excludes>
+                                        </filter>
+                                        <filter>
+                                            <artifact>org.slf4j:jcl-over-slf4j</artifact>
+                                            <excludes>
+                                                <exclude>org/apache/commons/logging/Log.class</exclude>
+                                                <exclude>org/apache/commons/logging/LogConfigurationException.class</exclude>
+                                                <exclude>org/apache/commons/logging/impl/NoOpLog.class</exclude>
+                                                <exclude>org/apache/commons/logging/LogFactory.class</exclude>
+                                            </excludes>
+                                        </filter>
+                                    </filters>
+
                                 </configuration>
                             </execution>
                         </executions>

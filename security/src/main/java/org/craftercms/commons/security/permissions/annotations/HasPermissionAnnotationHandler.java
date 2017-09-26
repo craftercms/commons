@@ -51,10 +51,12 @@ public class HasPermissionAnnotationHandler {
 
     protected Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators;
 
+
     public void setPermissionEvaluators(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators) {
         this.permissionEvaluators = permissionEvaluators;
     }
 
+    @SuppressWarnings("unchecked") //cortiz, OK permissionEvaluator.isAllowed
     @Around("@within(org.craftercms.commons.security.permissions.annotations.HasPermission) || " +
             "@annotation(org.craftercms.commons.security.permissions.annotations.HasPermission)")
     public Object checkPermissions(ProceedingJoinPoint pjp) throws Throwable {
@@ -77,6 +79,7 @@ public class HasPermissionAnnotationHandler {
         }
 
         try {
+
             allowed = permissionEvaluator.isAllowed(securedObject, action);
         } catch (PermissionException e) {
             throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);

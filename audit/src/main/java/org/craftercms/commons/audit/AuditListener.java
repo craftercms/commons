@@ -39,6 +39,7 @@ public class AuditListener {
         event = Audit.AUDIT_EVENT,
         ebus = "@" + Audit.AUDIT_REACTOR,
         type = EventSelectorType.REGEX)
+    @SuppressWarnings("unchecked") // cortiz, OK raw is data is needed.
     public void onAudit(final Event<? extends AuditModel> auditModel) {
         log.debug("Auditing {}", auditModel);
         auditService.audit(auditModel.getData());

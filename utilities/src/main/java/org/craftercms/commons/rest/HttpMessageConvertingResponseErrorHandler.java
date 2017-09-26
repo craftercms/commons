@@ -86,7 +86,7 @@ public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorH
     }
 
     protected String getResponseBodyAsString(ClientHttpResponse response) throws IOException {
-        return IOUtils.toString(response.getBody(), response.getHeaders().getContentType().getCharSet());
+        return IOUtils.toString(response.getBody(), response.getHeaders().getContentType().getCharset());
     }
 
 }
