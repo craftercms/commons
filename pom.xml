@@ -14,6 +14,7 @@
         <module>api-documentation</module>
         <module>audit</module>
         <module>git</module>
+        <module>aws</module>
     </modules>
 
     <name>Crafter Commons</name>
@@ -80,6 +81,7 @@
         <jgit.version>4.4.0.201606070830-r</jgit.version>
         <snakeyaml.version>1.17</snakeyaml.version>
         <java.version>1.8</java.version>
+        <aws.sdk.version>1.11.202</aws.sdk.version>
 
         <!-- Sonar -->
         <sonar.language>java</sonar.language>
