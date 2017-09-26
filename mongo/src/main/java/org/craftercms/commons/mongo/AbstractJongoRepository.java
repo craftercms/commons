@@ -72,6 +72,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     protected JongoQueries queries;
     protected GridFS gridfs;
 
+    @SuppressWarnings("uncheck") // cortiz, OK no better way to do it.
     public void init() throws Exception {
         //Thru pure magic get parameter Class .
         this.clazz = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -535,6 +536,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
      * @param find Find object to transform.
      * @return a Iterable with the results <b>null</b> if nothing is found.
      */
+    @SuppressWarnings("uncheck")// cortiz, might change in jongo 1.4
     protected Iterable<T> returnList(final Find find) {
         return (Iterable<T>)find.as(clazz);
     }
@@ -576,7 +578,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
      * for the field, Respect order of the keys
      *
      * @param fields Keys are fields, true if asc, false desc
-     * @return
+     * @return Sorted Json string with the query.
      */
     protected String createSortQuery(final List<DefaultKeyValue<String, Boolean>> fields) {
         StringBuilder builder = new StringBuilder("{");

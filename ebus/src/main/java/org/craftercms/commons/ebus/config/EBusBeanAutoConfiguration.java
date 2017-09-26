@@ -156,6 +156,7 @@ public class EBusBeanAutoConfiguration implements ApplicationListener<ContextRef
         }
     }
 
+    @SuppressWarnings("uncheck") //cortiz, OK Generics are ok.
     private void wireBean(final Object bean, final Set<Method> methods) {
         if (methods == null || methods.isEmpty()) {
             return;
@@ -179,6 +180,7 @@ public class EBusBeanAutoConfiguration implements ApplicationListener<ContextRef
         }
     }
 
+    @SuppressWarnings("uncheck") //cortiz, OK
     private <T> T expression(String selector, Object bean) {
         if (selector == null) {
             return null;

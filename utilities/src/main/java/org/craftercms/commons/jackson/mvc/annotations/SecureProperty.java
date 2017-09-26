@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Check if this property will be serialize depending of the result of
- * {@link org.craftercms.commons.jackson.mvc.SecurePropertyHandler#suppressProperty(String,String)}.
+ * {@see org.craftercms.commons.jackson.mvc.SecurePropertyHandler#suppressProperty(String,String)}.
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

@@ -44,7 +44,7 @@ public final class StatusMonitor {
     }
     /**
      * Creates the StatusMonitor with current information and a custom statusLabel label.
-     * @param statusLabel Custom statusLabel label.
+     * @return  Custom statusLabel label.
      */
     public static StatusMonitor getCurrentStatus(){
         return new StatusMonitor(DEFAULT_STATUS_LABEL);

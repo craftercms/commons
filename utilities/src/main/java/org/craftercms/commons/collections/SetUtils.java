@@ -16,6 +16,7 @@
  */
 package org.craftercms.commons.collections;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,17 +37,12 @@ public class SetUtils {
      *
      * @return the set with the elements
      */
+    @SafeVarargs
     public static <T> Set<T> asSet(T... array) {
         Set<T> set = null;
-
         if (array != null) {
-            set = new HashSet<>(array.length);
-            for (T element : array) {
-                set.add(element);
-            }
+           set = new HashSet<>(Arrays.asList(array));
         }
-
         return set;
     }
-
 }
