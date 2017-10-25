@@ -57,7 +57,7 @@ public class HasPermissionAnnotationHandler {
     }
 
     @SuppressWarnings("unchecked") //cortiz, OK permissionEvaluator.isAllowed
-    @Around("@within(org.craftercms.commons.security.permissions.annotations.HasPermission) || " +
+    @Around("@target(org.craftercms.commons.security.permissions.annotations.HasPermission) || " +
             "@annotation(org.craftercms.commons.security.permissions.annotations.HasPermission)")
     public Object checkPermissions(ProceedingJoinPoint pjp) throws Throwable {
         boolean allowed;

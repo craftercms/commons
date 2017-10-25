@@ -17,16 +17,31 @@
 package org.craftercms.commons.validation;
 
 /**
- * Contains constants related to validation.
+ * Exception thrown when validation fails.
  *
  * @author avasquez
  */
-public class ValidationConstants {
+public class ValidationException extends Exception {
 
-    private ValidationConstants() {
+    protected ValidationResult result;
+
+    public ValidationException(String message) {
+        super(message);
     }
 
-    public static final String VALIDATION_FAILED_MSG_KEY =  "validation.failed";
-    public static final String MISSING_FIELD_MSG_KEY =      "validation.field.missing";
+    public ValidationException(ValidationResult result) {
+        super(result.getMessage());
+
+        this.result = result;
+    }
+
+    public ValidationResult getResult() {
+        return result;
+    }
+
+    @Override
+    public String getMessage() {
+        return super.getMessage() + "; validation errors: " + result.getErrors();
+    }
 
 }

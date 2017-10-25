@@ -16,23 +16,22 @@
  */
 package org.craftercms.commons.validation;
 
-/**
- * Exception thrown when validation fails.
- *
- * @author avasquez
- */
-public class ValidationException extends Exception {
+public class ValidationError {
 
-    protected ValidationResult result;
+    private String targetId;
+    private String message;
 
-    public ValidationException(ValidationResult result) {
-        super(result.getMessage());
-
-        this.result = result;
+    public ValidationError(String targetId, String message) {
+        this.targetId = targetId;
+        this.message = message;
     }
 
-    public ValidationResult getResult() {
-        return result;
+    public String getTargetId() {
+        return targetId;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
 }

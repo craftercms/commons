@@ -16,27 +16,43 @@
  */
 package org.craftercms.commons.validation;
 
-/**
- * DTO returned by classes to indicate a field error.
- *
- * @author avasquez
- */
-public class FieldError {
+import java.util.HashMap;
+import java.util.Map;
 
-    protected String name;
+import org.apache.commons.collections4.MapUtils;
+
+public class ValidationResult {
+
     protected String message;
+    protected Map<String, String> errors;
 
-    public FieldError(String name, String message) {
-        this.name = name;
-        this.message = message;
+    public ValidationResult() {
+        this.errors = new HashMap<>();
     }
 
-    public String getName() {
-        return name;
+    public ValidationResult(String message) {
+        this.message = message;
+        this.errors = new HashMap<>();
     }
 
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean hasErrors() {
+        return MapUtils.isNotEmpty(errors);
+    }
+
+    public Map<String, String> getErrors() {
+        return errors;
+    }
+
+    public void addError(String key, String message) {
+        errors.put(key, message);
     }
 
 }

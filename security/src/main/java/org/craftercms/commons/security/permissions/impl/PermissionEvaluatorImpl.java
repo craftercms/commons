@@ -31,8 +31,7 @@ import org.craftercms.commons.security.permissions.SubjectResolver;
  */
 public class PermissionEvaluatorImpl<S, O> implements PermissionEvaluator<S, O> {
 
-    private static final I10nLogger logger = new I10nLogger(PermissionEvaluatorImpl.class,
-        "crafter.security.messages.logging");
+    private static final I10nLogger logger = new I10nLogger(PermissionEvaluatorImpl.class, "crafter.security.messages.logging");
 
     private static final String LOG_KEY_RESOLVING_GLOBAL_PERM = "security.permission.resolvingGlobalPermission";
     private static final String LOG_KEY_RESOLVING_PERM = "security.permission.resolvingPermission";
