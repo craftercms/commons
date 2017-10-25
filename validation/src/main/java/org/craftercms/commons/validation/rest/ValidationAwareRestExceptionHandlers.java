@@ -21,12 +21,10 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.craftercms.commons.i10n.I10nUtils;
 import org.craftercms.commons.rest.BaseRestExceptionHandlers;
 import org.craftercms.commons.validation.ValidationException;
 import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationUtils;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +35,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import static org.craftercms.commons.validation.validators.ErrorCodes.*;
-import static org.craftercms.commons.validation.validators.ErrorCodes.FieldErrors.*;
+import static org.craftercms.commons.validation.validators.ErrorCodes.FieldErrors.MISSING_FIELD_ERROR_CODE;
+import static org.craftercms.commons.validation.validators.ErrorCodes.FieldErrors.UNRECOGNIZED_FIELD_ERROR_CODE;
+import static org.craftercms.commons.validation.validators.ErrorCodes.INVALID_REQUEST_BODY_ERROR_CODE;
 
 @ControllerAdvice
 public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandlers {

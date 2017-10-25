@@ -21,14 +21,17 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.craftercms.commons.i10n.I10nUtils;
 import org.craftercms.commons.lang.RegexUtils;
 import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationUtils;
 import org.craftercms.commons.validation.validators.Validator;
-import org.springframework.beans.factory.annotation.Required;
 
-import static org.craftercms.commons.validation.validators.ErrorCodes.StringErrors.*;
+import static org.craftercms.commons.validation.validators.ErrorCodes.StringErrors.MAX_LENGTH_ERROR_CODE;
+import static org.craftercms.commons.validation.validators.ErrorCodes.StringErrors.MIN_LENGTH_ERROR_CODE;
+import static org.craftercms.commons.validation.validators.ErrorCodes.StringErrors.NOT_BLANK_ERROR_CODE;
+import static org.craftercms.commons.validation.validators.ErrorCodes.StringErrors.NOT_EMPTY_ERROR_CODE;
+import static org.craftercms.commons.validation.validators.ErrorCodes.StringErrors.NOT_NULL_ERROR_CODE;
+import static org.craftercms.commons.validation.validators.ErrorCodes.StringErrors.REGEX_VALIDATION_FAILED_ERROR_CODE;
 
 public class StringValidator implements Validator<String> {
 
