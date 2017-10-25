@@ -24,6 +24,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.craftercms.commons.aop.AopUtils;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
@@ -61,7 +62,7 @@ public class HasPermissionAnnotationHandler {
             "@annotation(org.craftercms.commons.security.permissions.annotations.HasPermission)")
     public Object checkPermissions(ProceedingJoinPoint pjp) throws Throwable {
         boolean allowed;
-        Method method = getActualMethod(pjp);
+        Method method = AopUtils.getActualMethod(pjp);
         HasPermission hasPermission = getHasPermissionAnnotation(method, pjp);
         Class<?> type = hasPermission.type();
         String action = hasPermission.action();
@@ -92,23 +93,6 @@ public class HasPermissionAnnotationHandler {
         } else {
             throw new ActionDeniedException(hasPermission.action());
         }
-    }
-
-    protected Method getActualMethod(ProceedingJoinPoint pjp) {
-        MethodSignature ms = (MethodSignature)pjp.getSignature();
-        Method method = ms.getMethod();
-
-        if (method.getDeclaringClass().isInterface()) {
-            Class<?> targetClass = pjp.getTarget().getClass();
-            try {
-                method = targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
-            } catch (NoSuchMethodException e) {
-                // Should NEVER happen
-                throw new RuntimeException(e);
-            }
-        }
-
-        return method;
     }
 
     protected HasPermission getHasPermissionAnnotation(Method method, ProceedingJoinPoint pjp) {
