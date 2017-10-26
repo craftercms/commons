@@ -42,7 +42,7 @@ public class RequestContextBindingFilter implements Filter {
     public static final String LOG_KEY_UNBINDING_CONTEXT = "http.requestContext.unbindingContext";
 
     private static final I10nLogger logger = new I10nLogger(RequestContextBindingFilter.class,
-                                                            I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
+                                                            I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
     private ServletContext servletContext;
 

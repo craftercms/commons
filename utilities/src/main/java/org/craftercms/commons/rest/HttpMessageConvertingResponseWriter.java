@@ -44,7 +44,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 public class HttpMessageConvertingResponseWriter {
 
     private static final I10nLogger logger = new I10nLogger(HttpMessageConvertingResponseWriter.class,
-                                                            I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
+                                                            I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
     public static final MediaType MEDIA_TYPE_APPLICATION = new MediaType("application");
 

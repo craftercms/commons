@@ -32,7 +32,7 @@ import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFact
 import org.craftercms.commons.validation.validators.Validator;
 import org.springframework.beans.factory.annotation.Required;
 
-import static org.craftercms.commons.validation.validators.ErrorCodes.INVALID_METHOD_PARAMS_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.INVALID_METHOD_PARAMS_ERROR_CODE;
 
 @Aspect
 public class ValidateParamsAspect {
@@ -55,7 +55,7 @@ public class ValidateParamsAspect {
         Object[] args = joinPoint.getArgs();
         Method method = AopUtils.getActualMethod(joinPoint);
         Annotation[][] allParamAnnotations = method.getParameterAnnotations();
-        ValidationResult result = new ValidationResult();
+        ValidationResult result = new ValidationResult(errorMessageBundle);
 
         if (ArrayUtils.isNotEmpty(allParamAnnotations)) {
             for (int i = 0; i < args.length; i++) {
@@ -80,7 +80,7 @@ public class ValidateParamsAspect {
     protected void validateParam(Annotation annotation, Object param, ValidationResult result) {
         Validator<Object> validator = validatorFactory.getValidator(annotation);
         if (validator != null) {
-            validator.validate(param, result, errorMessageBundle);
+            validator.validate(param, result);
         }
     }
 

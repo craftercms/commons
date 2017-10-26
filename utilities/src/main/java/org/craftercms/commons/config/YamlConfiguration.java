@@ -71,7 +71,7 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
     public static final String ERROR_KEY_WRITE_NOT_SUPPORTED = "configuration.yaml.writeNotSupported";
     public static final String ERROR_KEY_LOAD_ERROR = "configuration.yaml.loadError";
 
-    private static final I10nLogger logger = new I10nLogger(YamlConfiguration.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(YamlConfiguration.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
     @Override
     public void read(Reader in) throws ConfigurationException, IOException {
@@ -85,7 +85,7 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
 
     @Override
     public void write(Writer out) throws ConfigurationException, IOException {
-        throw new UnsupportedOperationException(I10nUtils.getLocalizedMessage(I10nUtils.DEFAULT_ERROR_BUNDLE_NAME,
+        throw new UnsupportedOperationException(I10nUtils.getLocalizedMessage(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME,
                                                                               ERROR_KEY_WRITE_NOT_SUPPORTED));
     }
 
@@ -100,7 +100,7 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
 
             buildConfig(yamlObj);
         } catch (Exception e) {
-            throw new ConfigurationException(I10nUtils.getLocalizedMessage(I10nUtils.DEFAULT_ERROR_BUNDLE_NAME,
+            throw new ConfigurationException(I10nUtils.getLocalizedMessage(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME,
                                                                            ERROR_KEY_LOAD_ERROR), e);
         }
     }

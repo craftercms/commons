@@ -29,8 +29,8 @@ import org.apache.commons.lang3.ArrayUtils;
  */
 public class I10nUtils {
     
-    public static final String DEFAULT_ERROR_BUNDLE_NAME = "crafter.commons.messages.errors";
-    public static final String DEFAULT_LOGGING_BUNDLE_NAME = "crafter.commons.messages.logging";
+    public static final String DEFAULT_ERROR_MESSAGE_BUNDLE_NAME = "crafter.commons.messages.errors";
+    public static final String DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME = "crafter.commons.messages.logging";
 
     private I10nUtils() {
     }

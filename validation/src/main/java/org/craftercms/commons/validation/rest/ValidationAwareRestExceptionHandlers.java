@@ -35,9 +35,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import static org.craftercms.commons.validation.validators.ErrorCodes.FIELD_MISSING_ERROR_CODE;
-import static org.craftercms.commons.validation.validators.ErrorCodes.FIELD_UNRECOGNIZED_ERROR_CODE;
-import static org.craftercms.commons.validation.validators.ErrorCodes.INVALID_REQUEST_BODY_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.FIELD_MISSING_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.FIELD_UNRECOGNIZED_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.INVALID_REQUEST_BODY_ERROR_CODE;
 
 @ControllerAdvice
 public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandlers {

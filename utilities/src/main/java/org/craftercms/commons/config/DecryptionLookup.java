@@ -32,7 +32,7 @@ public class DecryptionLookup implements Lookup {
 
     public static final String LOG_KEY_DECRYPTION_ERROR = "configuration.lookup.decryption.error";
 
-    private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
     protected TextEncryptor encryptor;
 

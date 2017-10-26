@@ -16,7 +16,6 @@
  */
 package org.craftercms.commons.crypto;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -43,7 +42,7 @@ public class SimpleDigest {
     public static final int DEFAULT_ITERATIONS = 1000;
     public static final int DEFAULT_SALT_SIZE = 16;
 
-    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
     private MessageDigest digest;
     private int iterations;

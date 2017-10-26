@@ -36,7 +36,7 @@ public class DateParseException extends AbstractI10nRuntimeException {
 
     @Override
     protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_BUNDLE_NAME);
+        return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME);
     }
 
 }

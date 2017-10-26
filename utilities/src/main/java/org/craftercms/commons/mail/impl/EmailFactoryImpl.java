@@ -51,7 +51,7 @@ public class EmailFactoryImpl implements EmailFactory {
     public static final String LOG_KEY_PROCESSING_EMAIL_TEMPLATE = "mail.processingEmailTemplate";
     public static final String ERROR_KEY_TEMPLATE_CONFIG_MISSING = "mail.templateConfigMissing";
 
-    private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, I10nUtils.DEFAULT_LOGGING_BUNDLE_NAME);
+    private static final I10nLogger logger = new I10nLogger(EmailFactoryImpl.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
     protected JavaMailSender mailSender;
     protected Configuration freeMarkerConfig;
