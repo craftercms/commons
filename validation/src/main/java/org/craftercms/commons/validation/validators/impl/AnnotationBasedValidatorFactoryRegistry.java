@@ -20,6 +20,9 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.craftercms.commons.validation.annotations.param.ValidateDoubleParam;
+import org.craftercms.commons.validation.annotations.param.ValidateIntegerParam;
+import org.craftercms.commons.validation.annotations.param.ValidateLongParam;
 import org.craftercms.commons.validation.annotations.param.ValidateSecurePathParam;
 import org.craftercms.commons.validation.annotations.param.ValidateStringParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
@@ -32,6 +35,9 @@ public class AnnotationBasedValidatorFactoryRegistry implements AnnotationBasedV
     public AnnotationBasedValidatorFactoryRegistry() {
         registry = new HashMap<>(2);
         registry.put(ValidateStringParam.class, new StringParamValidatorFactory());
+        registry.put(ValidateIntegerParam.class, new IntegerParamValidatorFactory());
+        registry.put(ValidateLongParam.class, new LongParamValidatorFactory());
+        registry.put(ValidateDoubleParam.class, new DoubleParamValidatorFactory());
         registry.put(ValidateSecurePathParam.class, new SecurePathParamValidatorFactory());
     }
 

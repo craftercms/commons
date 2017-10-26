@@ -40,6 +40,12 @@ public class ErrorCodes {
     public static final String STRING_MAX_LENGTH_ERROR_CODE = "validation.error.string.maxLength";
     public static final String STRING_REGEX_VALIDATION_FAILED_ERROR_CODE = "validation.error.string.regexMatchingFailed";
 
+    /*
+     * Number errors
+     */
+    public static final String NUMBER_MIN_VALUE_ERROR = "validation.error.number.minValue";
+    public static final String NUMBER_MAX_VALUE_ERROR = "validation.error.number.maxValue";
+
     private ErrorCodes() {
     }
 
