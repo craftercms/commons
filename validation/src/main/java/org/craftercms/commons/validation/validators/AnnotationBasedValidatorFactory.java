@@ -14,29 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation;
+package org.craftercms.commons.validation.validators;
 
-/**
- * DTO returned by classes to indicate a field error.
- *
- * @author avasquez
- */
-public class FieldError {
+import java.lang.annotation.Annotation;
 
-    protected String name;
-    protected String message;
+public interface AnnotationBasedValidatorFactory<A extends Annotation, T> {
 
-    public FieldError(String name, String message) {
-        this.name = name;
-        this.message = message;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+    Validator<T> getValidator(A annotation);
 
 }

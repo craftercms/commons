@@ -14,19 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation;
+package org.craftercms.commons.validation.annotations.param;
 
-/**
- * Contains constants related to validation.
- *
- * @author avasquez
- */
-public class ValidationConstants {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    private ValidationConstants() {
-    }
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ValidateStringParam {
 
-    public static final String VALIDATION_FAILED_MSG_KEY =  "validation.failed";
-    public static final String MISSING_FIELD_MSG_KEY =      "validation.field.missing";
+    String name() default "";
+
+    boolean notNull() default false;
+
+    boolean notEmpty() default false;
+
+    boolean notBlank() default false;
+
+    int minLength() default 0;
+
+    int maxLength() default Integer.MAX_VALUE;
+
+    String[] whitelistedPatterns() default {};
+
+    String[] blacklistedPatterns() default {};
+
+    boolean matchFullInput() default true;
 
 }

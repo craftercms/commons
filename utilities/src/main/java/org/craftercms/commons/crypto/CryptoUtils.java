@@ -65,7 +65,7 @@ public class CryptoUtils {
             return generateKey(AES_CIPHER_ALGORITHM);
         } catch (NoSuchAlgorithmException e) {
             // Should NEVER happen
-            throw new RuntimeException(e);
+            throw new IllegalStateException("JVM doesn't support " + AES_CIPHER_ALGORITHM, e);
         }
     }
 

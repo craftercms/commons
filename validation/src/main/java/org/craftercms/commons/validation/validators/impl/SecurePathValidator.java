@@ -14,25 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation;
+package org.craftercms.commons.validation.validators.impl;
 
-/**
- * Exception thrown when validation fails.
- *
- * @author avasquez
- */
-public class ValidationException extends Exception {
+public class SecurePathValidator extends StringValidator {
 
-    protected ValidationResult result;
+    public static final String[] DEFAULT_BLACKLISTED_REGEXES = {"^[^:]+:", "[\\/](\\.+|~)", "(\\.+|~)[\\/]"};
 
-    public ValidationException(ValidationResult result) {
-        super(result.getMessage());
+    public SecurePathValidator(String targetKey) {
+        super(targetKey);
 
-        this.result = result;
-    }
-
-    public ValidationResult getResult() {
-        return result;
+        matchFullInput = false;
+        blacklistRegexes = DEFAULT_BLACKLISTED_REGEXES;
     }
 
 }

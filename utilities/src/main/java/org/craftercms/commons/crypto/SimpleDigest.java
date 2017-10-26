@@ -103,7 +103,7 @@ public class SimpleDigest {
                 digest = MessageDigest.getInstance(DEFAULT_ALGORITHM);
             } catch (NoSuchAlgorithmException e) {
                 // Should NEVER happen
-                throw new RuntimeException(e);
+                throw new IllegalStateException("JVM doesn't support " + DEFAULT_ALGORITHM, e);
             }
 
             logger.debug(LOG_KEY_DEF_DIGEST_CREATED, DEFAULT_ALGORITHM);

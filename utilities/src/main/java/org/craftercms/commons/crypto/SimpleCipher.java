@@ -94,16 +94,7 @@ public class SimpleCipher {
             logger.debug(LOG_KEY_IV_GEN);
         }
         if (cipher == null) {
-            String cipherTransformation = CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
-
-            try {
-                cipher = Cipher.getInstance(cipherTransformation);
-            } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
-                // Should NEVER happen
-                throw new RuntimeException(e);
-            }
-
-            logger.debug(LOG_KEY_DEF_CIPHER_CREATED, cipherTransformation);
+            cipher = createDefaultCipher();
         }
 
         try {
@@ -129,16 +120,7 @@ public class SimpleCipher {
             throw new CryptoException(ERROR_KEY_IV_NOT_SET);
         }
         if (cipher == null) {
-            String cipherTransformation = CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
-
-            try {
-                cipher = Cipher.getInstance(CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
-            } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
-                // Should NEVER happen
-                throw new RuntimeException(e);
-            }
-
-            logger.debug(LOG_KEY_DEF_CIPHER_CREATED, cipherTransformation);
+            cipher = createDefaultCipher();
         }
 
         try {
@@ -149,6 +131,19 @@ public class SimpleCipher {
             throw new CryptoException(ERROR_KEY_DEC_ERROR, e);
         } finally {
             logger.debug(LOG_KEY_DEC_SUCCESSFUL);
+        }
+    }
+
+    protected Cipher createDefaultCipher() {
+        String cipherTransformation = CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
+
+        try {
+            return Cipher.getInstance(cipherTransformation);
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
+            // Should NEVER happen
+            throw new IllegalStateException("JVM doesn't support " + cipherTransformation, e);
+        } finally {
+            logger.debug(LOG_KEY_DEF_CIPHER_CREATED, cipherTransformation);
         }
     }
 
