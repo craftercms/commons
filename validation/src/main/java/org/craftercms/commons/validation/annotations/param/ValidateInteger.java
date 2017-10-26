@@ -14,16 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators;
+package org.craftercms.commons.validation.annotations.param;
 
-import java.util.ResourceBundle;
+public @interface ValidateInteger {
 
-import org.craftercms.commons.validation.ValidationResult;
+    String name() default "";
 
-public interface Validator<T> {
-
-    boolean validate(T target, ValidationResult result);
-
-    boolean validate(T target, ValidationResult result, ResourceBundle errorMessageBundle);
+    boolean notNull() default false;
 
 }

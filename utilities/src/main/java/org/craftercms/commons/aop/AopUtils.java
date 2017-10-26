@@ -36,8 +36,7 @@ public class AopUtils {
             try {
                 method = targetClass.getMethod(method.getName(), method.getParameterTypes());
             } catch (NoSuchMethodException e) {
-                // Should NEVER happen
-                throw new RuntimeException(e);
+                throw new IllegalStateException("Couldn't find implementation of method in target class: " + method.toGenericString(), e);
             }
         }
 

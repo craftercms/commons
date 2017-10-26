@@ -35,8 +35,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import static org.craftercms.commons.validation.validators.ErrorCodes.FieldErrors.MISSING_FIELD_ERROR_CODE;
-import static org.craftercms.commons.validation.validators.ErrorCodes.FieldErrors.UNRECOGNIZED_FIELD_ERROR_CODE;
+import static org.craftercms.commons.validation.validators.ErrorCodes.FIELD_MISSING_ERROR_CODE;
+import static org.craftercms.commons.validation.validators.ErrorCodes.FIELD_UNRECOGNIZED_ERROR_CODE;
 import static org.craftercms.commons.validation.validators.ErrorCodes.INVALID_REQUEST_BODY_ERROR_CODE;
 
 @ControllerAdvice
@@ -62,7 +62,7 @@ public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandl
             String field = upe.getPropertyName();
 
             ValidationResult result = new ValidationResult();
-            result.addError(field, ValidationUtils.getErrorMessage(errorMessageBundle, UNRECOGNIZED_FIELD_ERROR_CODE));
+            result.addError(field, ValidationUtils.getErrorMessage(errorMessageBundle, FIELD_UNRECOGNIZED_ERROR_CODE));
 
             return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
         } else {
@@ -78,7 +78,7 @@ public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandl
         ValidationResult result = new ValidationResult();
 
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            result.addError(fieldError.getField(), ValidationUtils.getErrorMessage(errorMessageBundle, MISSING_FIELD_ERROR_CODE));
+            result.addError(fieldError.getField(), ValidationUtils.getErrorMessage(errorMessageBundle, FIELD_MISSING_ERROR_CODE));
         }
 
         return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
