@@ -16,13 +16,10 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import java.util.ResourceBundle;
-
 import org.craftercms.commons.validation.ValidationResult;
-import org.craftercms.commons.validation.ValidationUtils;
 import org.craftercms.commons.validation.validators.Validator;
 
-import static org.craftercms.commons.validation.validators.ErrorCodes.NOT_NULL_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.NOT_NULL_ERROR_CODE;
 
 public class BasicValidator<T> implements Validator<T> {
 
@@ -40,14 +37,8 @@ public class BasicValidator<T> implements Validator<T> {
 
     @Override
     public boolean validate(T target, ValidationResult result) {
-        return validate(target, result, null);
-    }
-
-    @Override
-    public boolean validate(T target, ValidationResult result, ResourceBundle errorMessageBundle) {
         if (notNull && target == null) {
-            result.addError(targetKey, ValidationUtils.getErrorMessage(errorMessageBundle, NOT_NULL_ERROR_CODE));
-
+            result.addError(targetKey, NOT_NULL_ERROR_CODE);
             return false;
         } else {
             return true;

@@ -25,15 +25,14 @@ import org.craftercms.commons.lang.RegexUtils;
 import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationUtils;
 
-import static org.craftercms.commons.validation.validators.ErrorCodes.STRING_MAX_LENGTH_ERROR_CODE;
-import static org.craftercms.commons.validation.validators.ErrorCodes.STRING_MIN_LENGTH_ERROR_CODE;
-import static org.craftercms.commons.validation.validators.ErrorCodes.STRING_NOT_BLANK_ERROR_CODE;
-import static org.craftercms.commons.validation.validators.ErrorCodes.STRING_NOT_EMPTY_ERROR_CODE;
-import static org.craftercms.commons.validation.validators.ErrorCodes.STRING_REGEX_VALIDATION_FAILED_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.STRING_MAX_LENGTH_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.STRING_MIN_LENGTH_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.STRING_NOT_BLANK_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.STRING_NOT_EMPTY_ERROR_CODE;
+import static org.craftercms.commons.validation.ErrorCodes.STRING_REGEX_VALIDATION_FAILED_ERROR_CODE;
 
 public class StringValidator extends BasicValidator<String> {
 
-    protected String targetKey;
     protected boolean notEmpty;
     protected boolean notBlank;
     protected Integer minLength;
@@ -84,23 +83,23 @@ public class StringValidator extends BasicValidator<String> {
 
 
     @Override
-    public boolean validate(String target, ValidationResult result, ResourceBundle errorMessageBundle) {
-        if (!super.validate(target, result, errorMessageBundle)) {
+    public boolean validate(String target, ValidationResult result) {
+        if (!super.validate(target, result)) {
             return false;
         } else if (notEmpty && StringUtils.isEmpty(target)) {
-            result.addError(targetKey, ValidationUtils.getErrorMessage(errorMessageBundle, STRING_NOT_EMPTY_ERROR_CODE));
+            result.addError(targetKey, STRING_NOT_EMPTY_ERROR_CODE);
             return false;
         } else if (notBlank && StringUtils.isBlank(target)) {
-            result.addError(targetKey, ValidationUtils.getErrorMessage(errorMessageBundle, STRING_NOT_BLANK_ERROR_CODE));
+            result.addError(targetKey, STRING_NOT_BLANK_ERROR_CODE);
             return false;
         } else if (minLength != null && target != null && target.length() < minLength) {
-            result.addError(targetKey, ValidationUtils.getErrorMessage(errorMessageBundle, STRING_MIN_LENGTH_ERROR_CODE, minLength));
+            result.addError(targetKey, STRING_MIN_LENGTH_ERROR_CODE, minLength);
             return false;
         } else if (maxLength != null && target != null && target.length() > maxLength) {
-            result.addError(targetKey, ValidationUtils.getErrorMessage(errorMessageBundle, STRING_MAX_LENGTH_ERROR_CODE, maxLength));
+            result.addError(targetKey, STRING_MAX_LENGTH_ERROR_CODE, maxLength);
             return false;
         } else if (target != null && !isWhitelistedAndNotBlacklisted(target)) {
-            result.addError(targetKey, ValidationUtils.getErrorMessage(errorMessageBundle, STRING_REGEX_VALIDATION_FAILED_ERROR_CODE));
+            result.addError(targetKey, STRING_REGEX_VALIDATION_FAILED_ERROR_CODE);
             return false;
         } else {
             return true;

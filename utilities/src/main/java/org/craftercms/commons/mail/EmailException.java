@@ -38,7 +38,7 @@ public class EmailException extends AbstractI10nException {
 
     @Override
     protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_BUNDLE_NAME);
+        return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME);
     }
 
 }

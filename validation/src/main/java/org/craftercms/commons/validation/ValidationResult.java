@@ -16,25 +16,41 @@
  */
 package org.craftercms.commons.validation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.collections4.MapUtils;
 
 public class ValidationResult {
 
     protected String message;
+    protected ResourceBundle errorMessageBundle;
     protected Map<String, String> errors;
 
     public ValidationResult() {
-        this.errors = new HashMap<>();
+        this("");
     }
 
     public ValidationResult(String message) {
+        this(message, ValidationUtils.getDefaultErrorMessageBundle());
+    }
+
+    public ValidationResult(ResourceBundle errorMessageBundle) {
+        this("", errorMessageBundle);
+    }
+
+    public ValidationResult(String message, ResourceBundle errorMessageBundle) {
         this.message = message;
+        this.errorMessageBundle = errorMessageBundle;
         this.errors = new HashMap<>();
     }
 
+
+    @JsonProperty("message")
     public String getMessage() {
         return message;
     }
@@ -43,16 +59,18 @@ public class ValidationResult {
         this.message = message;
     }
 
+    @JsonIgnore
     public boolean hasErrors() {
         return MapUtils.isNotEmpty(errors);
     }
 
+    @JsonProperty("errors")
     public Map<String, String> getErrors() {
         return errors;
     }
 
-    public void addError(String key, String message) {
-        errors.put(key, message);
+    public void addError(String key, String errorCode, Object... args) {
+        errors.put(key, ValidationUtils.getErrorMessage(errorMessageBundle, errorCode, args));
     }
 
 }

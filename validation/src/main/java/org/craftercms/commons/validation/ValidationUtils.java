@@ -22,17 +22,21 @@ import org.craftercms.commons.i10n.I10nUtils;
 
 public class ValidationUtils {
 
-    public static final String DEFAULT_ERROR_BUNDLE_NAME = "crafter.commons.validation.errors";
+    public static final String DEFAULT_ERROR_MESSAGE_BUNDLE_NAME = "crafter.commons.validation.errors";
 
     private ValidationUtils() {
     }
 
-    public static String getErrorMessage(ResourceBundle bundle, String errorCode, Object... args) {
-        if (bundle == null) {
-            bundle = ResourceBundle.getBundle(DEFAULT_ERROR_BUNDLE_NAME);
+    public static ResourceBundle getDefaultErrorMessageBundle() {
+        return ResourceBundle.getBundle(DEFAULT_ERROR_MESSAGE_BUNDLE_NAME);
+    }
+
+    public static String getErrorMessage(ResourceBundle messageBundle, String errorCode, Object... args) {
+        if (messageBundle == null) {
+            messageBundle = getDefaultErrorMessageBundle();
         }
 
-        return I10nUtils.getLocalizedMessage(bundle, errorCode, args);
+        return I10nUtils.getLocalizedMessage(messageBundle, errorCode, args);
     }
 
 }

@@ -5,8 +5,8 @@ import java.util.ResourceBundle;
 import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationUtils;
 
-import static org.craftercms.commons.validation.validators.ErrorCodes.NUMBER_MAX_VALUE_ERROR;
-import static org.craftercms.commons.validation.validators.ErrorCodes.NUMBER_MIN_VALUE_ERROR;
+import static org.craftercms.commons.validation.ErrorCodes.NUMBER_MAX_VALUE_ERROR;
+import static org.craftercms.commons.validation.ErrorCodes.NUMBER_MIN_VALUE_ERROR;
 
 public abstract class AbstractNumberValidator<T extends Number> extends BasicValidator<T> {
 
@@ -26,14 +26,14 @@ public abstract class AbstractNumberValidator<T extends Number> extends BasicVal
     }
 
     @Override
-    public boolean validate(T target, ValidationResult result, ResourceBundle errorMessageBundle) {
-        if (!super.validate(target, result, errorMessageBundle)) {
+    public boolean validate(T target, ValidationResult result) {
+        if (!super.validate(target, result)) {
             return false;
         } else if (target != null && isLessThanMinValue(target)) {
-            result.addError(targetKey, ValidationUtils.getErrorMessage(errorMessageBundle, NUMBER_MIN_VALUE_ERROR));
+            result.addError(targetKey, NUMBER_MIN_VALUE_ERROR);
             return false;
         } else if (target != null && isGreaterThanMaxValue(target)) {
-            result.addError(targetKey, ValidationUtils.getErrorMessage(errorMessageBundle, NUMBER_MAX_VALUE_ERROR));
+            result.addError(targetKey, NUMBER_MAX_VALUE_ERROR);
             return false;
         } else {
             return true;

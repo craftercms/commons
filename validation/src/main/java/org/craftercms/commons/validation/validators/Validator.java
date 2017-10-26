@@ -24,6 +24,4 @@ public interface Validator<T> {
 
     boolean validate(T target, ValidationResult result);
 
-    boolean validate(T target, ValidationResult result, ResourceBundle errorMessageBundle);
-
 }
