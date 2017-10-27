@@ -13,6 +13,7 @@
         <module>ebus</module>
         <module>api-documentation</module>
         <module>audit</module>
+        <module>validation</module>
     </modules>
 
     <name>Crafter Commons</name>
