@@ -18,7 +18,7 @@ package org.craftercms.commons.validation.validators.impl;
 
 public class NoTagsValidator extends StringValidator {
 
-    public static final String[] DEFAULT_BLACKLISTED_REGEXES = {"<[^>]*>"};
+    public static final String[] DEFAULT_BLACKLISTED_REGEXES = {"<[^>]*>", "&lt;((?!&gt;).)*&gt;"};
 
     public NoTagsValidator(String targetKey) {
         super(targetKey);
