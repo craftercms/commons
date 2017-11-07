@@ -36,6 +36,7 @@ public final class MapUtils {
      * @param src the map with the elements to merge
      * @return a deep merge of the two given maps.
      */
+    @SuppressWarnings("unchecked")
     public static Map deepMerge(Map dst, Map src) {
         if (dst != null && src != null) {
             for (Object key : src.keySet()) {

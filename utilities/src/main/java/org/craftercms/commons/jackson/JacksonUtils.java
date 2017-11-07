@@ -44,6 +44,7 @@ public class JacksonUtils {
      *
      * @return a non-reusable Jackson module composed of the specified serializers and deserializers
      */
+    @SuppressWarnings("unchecked")
     public static final Module createModule(List<JsonSerializer<?>> serializers,
                                             Map<Class<?>, JsonDeserializer<?>> deserializers) {
         SimpleModule module = new SimpleModule();
