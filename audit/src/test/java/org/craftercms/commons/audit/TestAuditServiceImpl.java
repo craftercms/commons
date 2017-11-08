@@ -28,6 +28,7 @@ import org.apache.commons.collections4.Predicate;
 /**
  * Simple "In memory" Audit Service impl for testing only.
  */
+@SuppressWarnings("unchecked")
 public class TestAuditServiceImpl<T extends AuditModel> extends AuditService<T> {
 
     HashMap<String, T> memoryPersistence;

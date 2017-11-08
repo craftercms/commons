@@ -39,6 +39,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author avasquez
  */
+@SuppressWarnings("unchecked")
 public class HasPermissionAnnotationHandlerTest {
 
     private MockSubjectResolver subjectResolver;

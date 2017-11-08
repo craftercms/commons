@@ -25,12 +25,13 @@ import org.springframework.http.converter.HttpMessageConverter;
 /**
  * Simple extension of {@link org.springframework.web.client.RestTemplate} that adds the following custom
  * functionality:
- * <p/>
+ * <p>
  * <ul>
  * <li>Forces the use of {@link org.springframework.http.client.HttpComponentsClientHttpRequestFactory},
  * to avoid issues with 40x responses.</li>
  * <li>{@link org.craftercms.commons.rest.HttpMessageConvertingResponseErrorHandler} is used by default.</li>
  * </ul>
+ * </p>
  *
  * @author avasquez
  */
