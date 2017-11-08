@@ -248,7 +248,10 @@
                                                 <exclude>org/aspectj/lang/JoinPoint$EnclosingStaticPart.class</exclude>
                                                 <exclude>org/aspectj/lang/annotation/Around.class</exclude>
                                                 <exclude>org/aspectj/lang/reflect/SourceLocation.class</exclude>
-                                                <exclude>org/aspectj/lang/JoinPoint</exclude>
+                                                <exclude>org/aspectj/lang/JoinPoint.class</exclude>
+                                                <exclude>org/aspectj/lang/reflect/MethodSignature.class</exclude>
+                                                <exclude>org/aspectj/lang/reflect/CodeSignature.class</exclude>
+                                                <exclude>org/aspectj/lang/reflect/MemberSignature.class</exclude>
                                             </excludes>
                                         </filter>
                                         <filter>
