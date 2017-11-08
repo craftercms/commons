@@ -38,6 +38,7 @@ import static org.craftercms.commons.validation.ErrorCodes.INVALID_METHOD_PARAMS
 public class ValidateParamsAspect {
 
     protected ResourceBundle errorMessageBundle;
+
     protected AnnotationBasedValidatorFactory<Annotation, Object> validatorFactory;
 
     public void setErrorMessageBundle(ResourceBundle errorMessageBundle) {
@@ -45,6 +46,7 @@ public class ValidateParamsAspect {
     }
 
     @Required
+    @SuppressWarnings("unchecked")
     public void setValidatorFactory(AnnotationBasedValidatorFactory validatorFactory) {
         this.validatorFactory = validatorFactory;
     }

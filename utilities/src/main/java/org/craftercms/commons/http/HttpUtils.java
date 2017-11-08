@@ -225,6 +225,7 @@ public class HttpUtils {
      * @param queryString the query string to extract the params from
      * @return the param map
      */
+    @SuppressWarnings("unchecked")
     public static MultiValueMap<String, String> getParamsFromQueryString(String queryString) {
         MultiValueMap queryParams = new LinkedMultiValueMap<>();
 

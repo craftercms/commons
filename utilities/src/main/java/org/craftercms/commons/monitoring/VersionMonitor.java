@@ -144,7 +144,7 @@ public final class VersionMonitor {
         system_encoding=System.getProperty(FILE_ENCODING_SYSTEM_PROP_KEY);
     }
 
-
+    @SuppressWarnings("unchecked")
     private void initRuntime(){
        RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
        java_version=runtime.getSpecVersion();

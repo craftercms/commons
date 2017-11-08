@@ -61,6 +61,7 @@ public class HttpMessageConvertingResponseWriter {
         this.allSupportedMediaTypes = getAllSupportedMediaTypes(messageConverters);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> void writeWithMessageConverters(T returnValue, HttpServletRequest request, HttpServletResponse response)
             throws IOException, HttpMediaTypeNotAcceptableException {
         Class<?> returnValueClass = returnValue.getClass();
