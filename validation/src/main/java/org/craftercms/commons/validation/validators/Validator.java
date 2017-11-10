@@ -16,8 +16,6 @@
  */
 package org.craftercms.commons.validation.validators;
 
-import java.util.ResourceBundle;
-
 import org.craftercms.commons.validation.ValidationResult;
 
 public interface Validator<T> {
