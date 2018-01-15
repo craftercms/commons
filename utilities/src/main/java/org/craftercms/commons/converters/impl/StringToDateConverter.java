@@ -16,13 +16,12 @@
  */
 package org.craftercms.commons.converters.impl;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.craftercms.commons.converters.Converter;
 import org.craftercms.commons.exceptions.DateParseException;
 import org.springframework.beans.factory.annotation.Required;
@@ -36,7 +35,7 @@ public class StringToDateConverter implements Converter<String, Date> {
 
     protected String datePattern;
     protected TimeZone timeZone;
-    protected DateFormat dateFormat;
+    protected FastDateFormat dateFormat;
 
     @Required
     public void setDatePattern(String datePattern) {
@@ -49,10 +48,7 @@ public class StringToDateConverter implements Converter<String, Date> {
 
     @PostConstruct
     public void init() {
-        dateFormat = new SimpleDateFormat(datePattern);
-        if (timeZone != null) {
-            dateFormat.setTimeZone(timeZone);
-        }
+        dateFormat = FastDateFormat.getInstance(datePattern, timeZone);
     }
 
     @Override
@@ -65,3 +61,4 @@ public class StringToDateConverter implements Converter<String, Date> {
     }
 
 }
+
