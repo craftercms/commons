@@ -26,6 +26,16 @@ import org.craftercms.commons.converters.Converter;
 public class StringToIntegerConverter implements Converter<String, Integer> {
 
     @Override
+    public Class<?> getSourceClass() {
+        return String.class;
+    }
+
+    @Override
+    public Class<?> getTargetClass() {
+        return Integer.class;
+    }
+
+    @Override
     public Integer convert(String source) {
         return Integer.valueOf(source);
     }
