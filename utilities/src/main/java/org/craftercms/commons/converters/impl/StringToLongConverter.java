@@ -26,6 +26,16 @@ import org.craftercms.commons.converters.Converter;
 public class StringToLongConverter implements Converter<String, Long> {
 
     @Override
+    public Class<?> getSourceClass() {
+        return String.class;
+    }
+
+    @Override
+    public Class<?> getTargetClass() {
+        return Long.class;
+    }
+
+    @Override
     public Long convert(String source) {
         return Long.valueOf(source);
     }

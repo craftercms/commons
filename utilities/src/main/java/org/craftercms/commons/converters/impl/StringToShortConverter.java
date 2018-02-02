@@ -26,6 +26,16 @@ import org.craftercms.commons.converters.Converter;
 public class StringToShortConverter implements Converter<String, Short> {
 
     @Override
+    public Class<?> getSourceClass() {
+        return String.class;
+    }
+
+    @Override
+    public Class<?> getTargetClass() {
+        return Short.class;
+    }
+
+    @Override
     public Short convert(String source) {
         return Short.valueOf(source);
     }

@@ -52,6 +52,16 @@ public class StringToDateConverter implements Converter<String, Date> {
     }
 
     @Override
+    public Class<?> getSourceClass() {
+        return String.class;
+    }
+
+    @Override
+    public Class<?> getTargetClass() {
+        return Date.class;
+    }
+
+    @Override
     public Date convert(String source) {
         try {
             return dateFormat.parse(source);
