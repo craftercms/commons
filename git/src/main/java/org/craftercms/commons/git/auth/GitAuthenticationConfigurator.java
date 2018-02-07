@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2016 Crafter Software Corporation.
+ * Copyright (C) 2007-2017 Crafter Software Corporation.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,27 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.git.api;
+package org.craftercms.commons.git.auth;
 
-import java.io.File;
-
-import org.craftercms.commons.git.exception.GitException;
+import org.eclipse.jgit.api.TransportCommand;
 
 /**
- * Created by alfonsovasquez on 6/7/16.
+ * Utility class that configures a Git connection based on an authentication strategy.
+ *
+ * @author avasquez
  */
-public interface GitRepository extends AutoCloseable {
+public interface GitAuthenticationConfigurator {
 
-    File getDirectory();
-
-    void add(String filePattern) throws GitException;
-
-    void remove(String filePattern) throws GitException;
-
-    void commit(String message) throws GitException;
-
-    void push() throws GitException;
-
-    void pull() throws GitException;
+    /**
+     * Configures the authentication of the given {@link TransportCommand} based on a specific authentication strategy,
+     * like HTTP basic authentication, SSH username/password authentication and SSH RSA key pair authentication.
+     *
+     * @param command the command to configure
+     */
+    void configureAuthentication(TransportCommand command);
 
 }
