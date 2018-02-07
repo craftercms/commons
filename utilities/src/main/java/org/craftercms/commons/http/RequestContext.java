@@ -60,26 +60,44 @@ public class RequestContext {
         threadLocal.remove();
     }
 
+    /**
+     * Returns the current request.
+     */
     public HttpServletRequest getRequest() {
         return request;
     }
 
+    /**
+     * Returns the current request.
+     */
     public void setRequest(HttpServletRequest request) {
         this.request = request;
     }
 
+    /**
+     * Returns the current response.
+     */
     public HttpServletResponse getResponse() {
         return response;
     }
 
+    /**
+     * Sets the current response.
+     */
     public void setResponse(HttpServletResponse response) {
         this.response = response;
     }
 
+    /**
+     * Returns the current servlet context.
+     */
     public ServletContext getServletContext() {
         return this.servletContext;
     }
 
+    /**
+     * Sets the current servlet context.
+     */
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
