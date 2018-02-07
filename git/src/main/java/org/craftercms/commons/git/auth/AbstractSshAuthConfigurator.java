@@ -42,8 +42,10 @@ public abstract class AbstractSshAuthConfigurator implements GitAuthenticationCo
     }
 
     /*
-     * Iterates through the known hosts (host key repository). If one of the know hosts matches the current host we're trying
-     * to connect too,
+     * Iterates through the known hosts (host key repository).
+     * If one of the know hosts matches the current host we're trying to connect too,
+     * it configures the session to use that key's algorithm
+     * (thus avoiding conflicts between JSch wanting RSA and the key being ECDSA)
      */
     protected void setHostKeyType(OpenSshConfig.Host host, Session session) {
         HostKey[] hostKeys = session.getHostKeyRepository().getHostKey();
