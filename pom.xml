@@ -11,7 +11,6 @@
         <module>security</module>
         <module>mongo</module>
         <module>ebus</module>
-        <module>api-documentation</module>
         <module>audit</module>
         <module>git</module>
         <module>validation</module>
