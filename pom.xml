@@ -4,7 +4,7 @@
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-commons</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.16-SNAPSHOT</version><!-- craftercms version flag -->
+    <version>3.0.16</version><!-- craftercms version flag -->
 
     <modules>
         <module>utilities</module>
