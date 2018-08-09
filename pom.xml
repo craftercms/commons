@@ -80,7 +80,7 @@
         <quartz.version>2.2.1</quartz.version>
         <jgit.version>4.4.0.201606070830-r</jgit.version>
         <snakeyaml.version>1.17</snakeyaml.version>
-        <bouncycastle.version>1.59</bouncycastle.version>
+        <bouncycastle.version>1.60</bouncycastle.version>
         <java.version>1.8</java.version>
 
         <!-- Sonar -->
