@@ -42,7 +42,7 @@ public interface EntitlementValidator {
      */
     default void validateEntitlement(Module module, EntitlementType entitlementType, int currentValue, int newAmount)
         throws EntitlementException {
-
+        // Do nothing by default
     }
 
     /**

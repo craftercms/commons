@@ -212,6 +212,44 @@ public abstract class PGPUtils {
         if(privateKey == null) {
             throw new IllegalArgumentException("Secret key for message not found.");
         }
+
+        decryptData(privateKey, data, calculator, targetStream);
+    }
+
+    /**
+     * Extracts the PGP private key from an encoded stream.
+     * @param keyStream stream providing the encoded private key
+     * @param keyId id of the secret key to extract
+     * @param password passphrase for the secret key
+     * @return the private key object
+     * @throws IOException if there is an error reading from the stream
+     * @throws PGPException if the secret key cannot be extracted
+     */
+    protected static PGPPrivateKey findSecretKey(InputStream keyStream, long keyId, char[] password) throws Exception {
+        PGPSecretKeyRingCollection keyRings = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(keyStream), new
+            BcKeyFingerprintCalculator());
+        PGPSecretKey secretKey = keyRings.getSecretKey(keyId);
+        if(secretKey == null) {
+            return null;
+        }
+        PBESecretKeyDecryptor decryptor = new JcePBESecretKeyDecryptorBuilder(
+            new JcaPGPDigestCalculatorProviderBuilder().setProvider(PROVIDER).build())
+            .setProvider(PROVIDER).build(password);
+        return secretKey.extractPrivateKey(decryptor);
+    }
+
+    /**
+     * Performs the decryption of the given data.
+     * @param privateKey PGP Private Key to decrypt
+     * @param data encrypted data
+     * @param calculator instance of {@link BcKeyFingerprintCalculator}
+     * @param targetStream stream to receive the decrypted data
+     * @throws PGPException if the decryption process fails
+     * @throws IOException if the stream write operation fails
+     */
+    protected static void decryptData(final PGPPrivateKey privateKey, final PGPPublicKeyEncryptedData data,
+                                      final BcKeyFingerprintCalculator calculator, final OutputStream targetStream)
+        throws PGPException, IOException {
         PublicKeyDataDecryptorFactory decryptorFactory = new JcePublicKeyDataDecryptorFactoryBuilder().setProvider
             (PROVIDER).setContentProvider(PROVIDER).build(privateKey);
 
@@ -241,28 +279,6 @@ public abstract class PGPUtils {
         if(data.isIntegrityProtected() && !data.verify()) {
             throw new PGPException("Message failed integrity check");
         }
-    }
-
-    /**
-     * Extracts the PGP private key from an encoded stream.
-     * @param keyStream stream providing the encoded private key
-     * @param keyId id of the secret key to extract
-     * @param password passphrase for the secret key
-     * @return the private key object
-     * @throws IOException if there is an error reading from the stream
-     * @throws PGPException if the secret key cannot be extracted
-     */
-    protected static PGPPrivateKey findSecretKey(InputStream keyStream, long keyId, char[] password) throws Exception {
-        PGPSecretKeyRingCollection keyRings = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(keyStream), new
-            BcKeyFingerprintCalculator());
-        PGPSecretKey secretKey = keyRings.getSecretKey(keyId);
-        if(secretKey == null) {
-            return null;
-        }
-        PBESecretKeyDecryptor decryptor = new JcePBESecretKeyDecryptorBuilder(
-            new JcaPGPDigestCalculatorProviderBuilder().setProvider(PROVIDER).build())
-            .setProvider(PROVIDER).build(password);
-        return secretKey.extractPrivateKey(decryptor);
     }
 
 }
