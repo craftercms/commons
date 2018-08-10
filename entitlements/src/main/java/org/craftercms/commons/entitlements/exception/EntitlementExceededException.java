@@ -25,7 +25,7 @@ import org.craftercms.commons.entitlements.model.Module;
  *
  * @author joseross
  */
-public class EntitlementExcededException extends EntitlementException {
+public class EntitlementExceededException extends EntitlementException {
 
     /**
      * The module that requested the validation.
@@ -47,8 +47,8 @@ public class EntitlementExcededException extends EntitlementException {
      */
     protected Number currentValue;
 
-    public EntitlementExcededException(final Module module, final EntitlementType entitlementType,
-                                       final Number entitlementValue, final Number currentValue) {
+    public EntitlementExceededException(final Module module, final EntitlementType entitlementType,
+                                        final Number entitlementValue, final Number currentValue) {
         super(String.format("Exceeded entitlement '%s' for module '%s': using %s but allowed is %s", entitlementType,
             module, currentValue, entitlementValue));
         this.module = module;
