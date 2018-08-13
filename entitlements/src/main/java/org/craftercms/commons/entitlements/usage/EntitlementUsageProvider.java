@@ -17,18 +17,19 @@
 
 package org.craftercms.commons.entitlements.usage;
 
+import java.util.List;
+
 import org.craftercms.commons.entitlements.model.Entitlement;
 import org.craftercms.commons.entitlements.model.Module;
 
 /**
  * Defines the operations to support entitlement usage data in a module.
  *
- * Each module should provide an implementation of this interface with the corresponding entitlement type.
+ * Each module must provide an implementation of this interface.
  *
  * @author joseross
- * @param <T> Type of entitlement that the class will provide.
  */
-public interface EntitlementUsageProvider<T extends Entitlement> {
+public interface EntitlementUsageProvider {
 
     /**
      * Identifies the current module running.
@@ -37,9 +38,9 @@ public interface EntitlementUsageProvider<T extends Entitlement> {
     Module getModule();
 
     /**
-     * Provides an object holding the current values for all entitlements supported by the current module.
-     * @return the entitlement object
+     * Provides an list holding the current values for all entitlements supported by the current module.
+     * @return the entitlement list
      */
-    T getCurrentUsage();
+    List<Entitlement> getCurrentUsage();
 
 }

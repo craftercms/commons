@@ -18,90 +18,34 @@
 package org.craftercms.commons.entitlements.model;
 
 /**
- * Holds all entitlement values for a given module.
+ * Holds the value for a given entitlement type.
  *
  * @author joseross
  */
 public class Entitlement {
 
-    protected Module module;
+    protected EntitlementType type;
+    protected int value;
 
-    protected int numberOfAssets;
-    protected int numberOfDescriptors;
-    protected int numberOfItems;
-    protected int numberOfUsers;
-    protected int numberOfSites;
-
-    public Entitlement() {
+    public EntitlementType getType() {
+        return type;
     }
 
-    public Entitlement(final Module module) {
-        this.module = module;
+    public void setType(final EntitlementType type) {
+        this.type = type;
     }
 
-    public Entitlement(final Module module, final int numberOfAssets, final int numberOfDescriptors, final int
-        numberOfItems, final int numberOfUsers, final int numberOfSites) {
-        this.module = module;
-        this.numberOfAssets = numberOfAssets;
-        this.numberOfDescriptors = numberOfDescriptors;
-        this.numberOfItems = numberOfItems;
-        this.numberOfUsers = numberOfUsers;
-        this.numberOfSites = numberOfSites;
+    public int getValue() {
+        return value;
     }
 
-    public Module getModule() {
-        return module;
-    }
-
-    public void setModule(final Module module) {
-        this.module = module;
-    }
-
-    public int getNumberOfAssets() {
-        return numberOfAssets;
-    }
-
-    public void setNumberOfAssets(final int numberOfAssets) {
-        this.numberOfAssets = numberOfAssets;
-    }
-
-    public int getNumberOfDescriptors() {
-        return numberOfDescriptors;
-    }
-
-    public void setNumberOfDescriptors(final int numberOfDescriptors) {
-        this.numberOfDescriptors = numberOfDescriptors;
-    }
-
-    public int getNumberOfItems() {
-        return numberOfItems;
-    }
-
-    public void setNumberOfItems(final int numberOfItems) {
-        this.numberOfItems = numberOfItems;
-    }
-
-    public int getNumberOfUsers() {
-        return numberOfUsers;
-    }
-
-    public void setNumberOfUsers(final int numberOfUsers) {
-        this.numberOfUsers = numberOfUsers;
-    }
-
-    public int getNumberOfSites() {
-        return numberOfSites;
-    }
-
-    public void setNumberOfSites(final int numberOfSites) {
-        this.numberOfSites = numberOfSites;
+    public void setValue(final int value) {
+        this.value = value;
     }
 
     @Override
     public String toString() {
-        return "Entitlement{" + "module=" + module + ", numberOfAssets=" + numberOfAssets + ", "
-            + "numberOfDescriptors=" + numberOfDescriptors + ", numberOfItems=" + numberOfItems + ", numberOfUsers="
-            + numberOfUsers + ", numberOfSites=" + numberOfSites + '}';
+        return "Entitlement{" + "type=" + type + ", value=" + value + '}';
     }
 
 }

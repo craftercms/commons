@@ -3,12 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- Crafter Community Edition -->
-
     <bean id="crafter.entitlementValidator"
-          class="org.craftercms.commons.entitlements.validator.impl.CommunityEntitlementValidator"/>
+          class="org.craftercms.commons.entitlements.validator.impl.DefaultEntitlementValidatorImpl"/>
 
     <bean id="crafter.databaseValidator"
-          class="org.craftercms.commons.entitlements.validator.impl.CommunityDbIntegrityValidator"/>
+          class="org.craftercms.commons.entitlements.validator.impl.DefaultDbIntegrityValidatorImpl"/>
 
 </beans>

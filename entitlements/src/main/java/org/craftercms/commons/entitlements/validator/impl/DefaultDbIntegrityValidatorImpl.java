@@ -27,11 +27,11 @@ import org.craftercms.commons.entitlements.exception.EntitlementException;
 import org.craftercms.commons.entitlements.validator.DbIntegrityValidator;
 
 /**
- * Implementation of {@link DbIntegrityValidator} for Crafter Community Edition.
+ * Default Implementation of {@link DbIntegrityValidator}.
  *
  * @author joseross
  */
-public class CommunityDbIntegrityValidator implements DbIntegrityValidator {
+public class DefaultDbIntegrityValidatorImpl implements DbIntegrityValidator {
 
     /**
      * SQL statement to update the validation value.

@@ -27,14 +27,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of {@link EntitlementValidator} for Crafter Community Edition.
+ * Default Implementation of {@link EntitlementValidator}.
  * No configuration required and all requested validations will be successful.
  *
  * @author joseross
  */
-public class CommunityEntitlementValidator implements EntitlementValidator {
+public class DefaultEntitlementValidatorImpl implements EntitlementValidator {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommunityEntitlementValidator.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultEntitlementValidatorImpl.class);
 
     private static final String DESCRIPTION = "UG93ZXJlZCBieSBDcmFmdGVyIENNUyB2JHt2ZXJzaW9ufS4gQ2hlY2sgaXQgb3V0IDxhIG"
         + "hyZWY9Imh0dHBzOi8vY3JhZnRlcmNtcy5vcmciPmhlcmU8L2E+LiBSZXBvcnQgYSA8YSBocmVmPSJodHRwczovL2dpdGh1Yi5jb20vY3Jh"
