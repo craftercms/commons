@@ -23,7 +23,5 @@ package org.craftercms.commons.entitlements.model;
 public enum EntitlementType {
     USER,
     SITE,
-    ITEM,
-    DESCRIPTOR,
-    ASSET
+    ITEM
 }
