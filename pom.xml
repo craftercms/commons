@@ -4,7 +4,7 @@
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-commons</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.16-SNAPSHOT</version><!-- craftercms version flag -->
+    <version>3.1.0-SNAPSHOT</version><!-- craftercms version flag -->
 
     <modules>
         <module>utilities</module>
@@ -13,6 +13,7 @@
         <module>ebus</module>
         <module>audit</module>
         <module>git</module>
+        <module>entitlements</module>
         <module>validation</module>
     </modules>
 
@@ -60,6 +61,7 @@
         <commons.io.version>2.5</commons.io.version>
         <commons.configuration.version>2.1</commons.configuration.version>
         <commons.cli.version>1.4</commons.cli.version>
+        <commons.text.version>1.4</commons.text.version>
         <httpcomponents.httpclient.version>4.3.3</httpcomponents.httpclient.version>
         <slf4j.version>1.7.7</slf4j.version>
         <servlet.api.version>3.0.1</servlet.api.version>
@@ -73,11 +75,12 @@
         <junit.version>4.12</junit.version>
         <mockito.version>1.9.5</mockito.version>
         <jsonpath.version>2.2.0</jsonpath.version>
-        <logback.version>1.0.13</logback.version>
+        <logback.version>1.2.3</logback.version>
         <reactor.version>1.0.0.RELEASE</reactor.version>
         <quartz.version>2.2.1</quartz.version>
         <jgit.version>4.4.0.201606070830-r</jgit.version>
         <snakeyaml.version>1.17</snakeyaml.version>
+        <bouncycastle.version>1.60</bouncycastle.version>
         <java.version>1.8</java.version>
 
         <!-- Sonar -->
