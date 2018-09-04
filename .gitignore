@@ -26,3 +26,9 @@ Thumbs.db
 
 # Maven build overlays #
 overlaysatlassian-ide-plugin.xml
+
+# VSCode
+.project
+.settings
+.classpath
+*.swp
