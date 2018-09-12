@@ -117,7 +117,7 @@ public class HasPermissionAnnotationHandlerTest {
 
     private void createTestAnnotationHandler() throws PermissionException {
         Map<Class<?>, PermissionEvaluator<?, ?>> evaluators = new HashMap<>(1);
-        evaluators.put(MockPermission.class, createTestPermissionEvaluator());
+        evaluators.put(DefaultPermission.class, createTestPermissionEvaluator());
 
         annotationHandler = new HasPermissionAnnotationHandler();
         annotationHandler.setPermissionEvaluators(evaluators);
@@ -143,9 +143,9 @@ public class HasPermissionAnnotationHandlerTest {
     }
 
     private PermissionResolver<String, Object> createTestPermissionResolver() throws PermissionException {
-        Permission permission1 = new MockPermission().allow("doSomething");
-        Permission permission2 = new MockPermission().allowAny();
-        Permission permission3 = new MockPermission().allow("doYetAnotherThing");
+        Permission permission1 = new DefaultPermission().allow("doSomething");
+        Permission permission2 = new DefaultPermission().allowAny();
+        Permission permission3 = new DefaultPermission().allow("doYetAnotherThing");
 
         PermissionResolver<String, Object> resolver = mock(PermissionResolver.class);
         when(resolver.getPermission(eq("user1"), any())).thenReturn(permission1);
@@ -178,10 +178,6 @@ public class HasPermissionAnnotationHandlerTest {
 
     }
 
-    private static class MockPermission extends PermissionBase {
-
-    }
-
     private static class MockSecuredObject {
 
         private long id;
@@ -195,7 +191,7 @@ public class HasPermissionAnnotationHandlerTest {
 
     }
 
-    @HasPermission(type = MockPermission.class, action = "doSomething")
+    @HasPermission(type = DefaultPermission.class, action = "doSomething")
     private static class MockSecuredServiceImpl implements MockSecuredService {
 
         @Override
@@ -204,13 +200,13 @@ public class HasPermissionAnnotationHandlerTest {
         }
 
         @Override
-        @HasPermission(type = MockPermission.class, action = "doAnotherThing")
+        @HasPermission(type = DefaultPermission.class, action = "doAnotherThing")
         public String doAnotherThingWithObjectId(@SecuredObject long id) {
             return String.format("I did another thing with object ID '%s'", id);
         }
 
         @Override
-        @HasPermission(type = MockPermission.class, action = "doYetAnotherThing")
+        @HasPermission(type = DefaultPermission.class, action = "doYetAnotherThing")
         public String doYetAnotherThingWithNoObject() {
             return "I did yet another thing";
         }

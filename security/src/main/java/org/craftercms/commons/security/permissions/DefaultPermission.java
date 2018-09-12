@@ -23,10 +23,12 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
- * Base for {@link org.craftercms.commons.security.permissions.Permission} that uses a set of allowed actions to
- * check
+ * Default {@link org.craftercms.commons.security.permissions.Permission} that uses a set of allowed actions to
+ * check if a subject is allowed to perform a specific action.
+ *
+ * @author avasquez
  */
-public abstract class PermissionBase implements Permission {
+public class DefaultPermission implements Permission {
 
     public static final String ANY_ACTION = "*";
 
@@ -46,13 +48,13 @@ public abstract class PermissionBase implements Permission {
         this.allowedActions = allowedActions;
     }
 
-    public PermissionBase allowAny() {
+    public DefaultPermission allowAny() {
         allow(ANY_ACTION);
 
         return this;
     }
 
-    public PermissionBase allow(String action) {
+    public DefaultPermission allow(String action) {
         if (allowedActions == null) {
             allowedActions = new HashSet<>();
         }
@@ -62,7 +64,7 @@ public abstract class PermissionBase implements Permission {
         return this;
     }
 
-    public PermissionBase allow(String... actions) {
+    public DefaultPermission allow(String... actions) {
         if (ArrayUtils.isNotEmpty(actions)) {
             for (String action : actions) {
                 allow(action);
@@ -88,7 +90,7 @@ public abstract class PermissionBase implements Permission {
             return false;
         }
 
-        PermissionBase that = (PermissionBase)o;
+        DefaultPermission that = (DefaultPermission)o;
 
         if (allowedActions != null? !allowedActions.equals(that.allowedActions): that.allowedActions != null) {
             return false;
