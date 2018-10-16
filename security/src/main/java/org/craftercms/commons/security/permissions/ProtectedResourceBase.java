@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base for secured object that provide already attached permissions.
+ * Base for protected resources that provide already attached permissions.
  *
  * @author avasquez
  */
-public class SecuredObjectBase<P extends Permission> {
+public class ProtectedResourceBase<P extends Permission> {
 
     protected List<P> permissions;
 

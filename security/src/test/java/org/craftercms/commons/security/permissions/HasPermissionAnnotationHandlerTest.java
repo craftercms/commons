@@ -23,7 +23,7 @@ import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.annotations.HasPermission;
 import org.craftercms.commons.security.permissions.annotations.HasPermissionAnnotationHandler;
-import org.craftercms.commons.security.permissions.annotations.SecuredObject;
+import org.craftercms.commons.security.permissions.annotations.ProtectedResource;
 import org.craftercms.commons.security.permissions.impl.PermissionEvaluatorImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,20 +55,20 @@ public class HasPermissionAnnotationHandlerTest {
 
     @Test
     public void testAllowed() throws Exception {
-        MockSecuredObject object1 = new MockSecuredObject();
+        MockProtectedResource object1 = new MockProtectedResource();
         object1.id = 1;
 
         subjectResolver.subject = "user1";
 
         String result = service.doSomethingWithObject(object1);
 
-        assertEquals(String.format("I did something with object '%s'", object1), result);
+        assertEquals(String.format("I did something with resource '%s'", object1), result);
 
         subjectResolver.subject = "user2";
 
         result = service.doAnotherThingWithObjectId(2);
 
-        assertEquals(String.format("I did another thing with object ID '%s'", 2), result);
+        assertEquals(String.format("I did another thing with resource ID '%s'", 2), result);
 
         result = service.doYetAnotherThingWithNoObject();
 
@@ -157,7 +157,7 @@ public class HasPermissionAnnotationHandlerTest {
 
     private interface MockSecuredService {
 
-        String doSomethingWithObject(MockSecuredObject object);
+        String doSomethingWithObject(MockProtectedResource object);
 
         String doAnotherThingWithObjectId(long id);
 
@@ -178,13 +178,13 @@ public class HasPermissionAnnotationHandlerTest {
 
     }
 
-    private static class MockSecuredObject {
+    private static class MockProtectedResource {
 
         private long id;
 
         @Override
         public String toString() {
-            return "MockSecuredObject{" +
+            return "MockProtectedResource{" +
                 "id='" + id + '\'' +
                 '}';
         }
@@ -195,14 +195,14 @@ public class HasPermissionAnnotationHandlerTest {
     private static class MockSecuredServiceImpl implements MockSecuredService {
 
         @Override
-        public String doSomethingWithObject(@SecuredObject MockSecuredObject object) {
-            return String.format("I did something with object '%s'", object);
+        public String doSomethingWithObject(@ProtectedResource MockProtectedResource object) {
+            return String.format("I did something with resource '%s'", object);
         }
 
         @Override
         @HasPermission(type = DefaultPermission.class, action = "doAnotherThing")
-        public String doAnotherThingWithObjectId(@SecuredObject long id) {
-            return String.format("I did another thing with object ID '%s'", id);
+        public String doAnotherThingWithObjectId(@ProtectedResource long id) {
+            return String.format("I did another thing with resource ID '%s'", id);
         }
 
         @Override
