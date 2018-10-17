@@ -18,12 +18,12 @@ package org.craftercms.commons.security.permissions.annotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.craftercms.commons.aop.AopUtils;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.security.exception.ActionDeniedException;
@@ -67,11 +67,15 @@ public class HasPermissionAnnotationHandler {
         HasPermission hasPermission = getHasPermissionAnnotation(method, pjp);
         Class<?> type = hasPermission.type();
         String action = hasPermission.action();
-        Object securedObject = getAnnotatedSecuredObject(method, pjp);
         PermissionEvaluator permissionEvaluator = permissionEvaluators.get(type);
 
-        if (securedObject != null) {
-            logger.debug(LOG_KEY_METHOD_INT, method, hasPermission, securedObject);
+        Object securedResource = getAnnotatedProtectedResource(method, pjp);
+        if (securedResource == null) {
+            securedResource = getAnnotatedProtectedResourceIds(method, pjp);
+        }
+
+        if (securedResource != null) {
+            logger.debug(LOG_KEY_METHOD_INT, method, hasPermission, securedResource);
         } else {
             logger.debug(LOG_KEY_METHOD_INT_NO_SEC_OBJ, method, hasPermission);
         }
@@ -81,15 +85,15 @@ public class HasPermissionAnnotationHandler {
         }
 
         try {
-            allowed = permissionEvaluator.isAllowed(securedObject, action);
+            allowed = permissionEvaluator.isAllowed(securedResource, action);
         } catch (PermissionException e) {
             throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
         }
 
         if (allowed) {
             return pjp.proceed();
-        } else if (securedObject != null) {
-            throw new ActionDeniedException(hasPermission.action(), securedObject);
+        } else if (securedResource != null) {
+            throw new ActionDeniedException(hasPermission.action(), securedResource);
         } else {
             throw new ActionDeniedException(hasPermission.action());
         }
@@ -106,19 +110,41 @@ public class HasPermissionAnnotationHandler {
         return hasPermission;
     }
 
-    protected Object getAnnotatedSecuredObject(Method method, ProceedingJoinPoint pjp) {
+    protected Object getAnnotatedProtectedResource(Method method, ProceedingJoinPoint pjp) {
         Annotation[][] paramAnnotations = method.getParameterAnnotations();
         Object[] params = pjp.getArgs();
 
         for (int i = 0; i < paramAnnotations.length; i++) {
             for (Annotation a : paramAnnotations[i]) {
-                if (a instanceof SecuredObject) {
+                if (a instanceof ProtectedResource) {
                     return params[i];
                 }
             }
         }
 
         return null;
+    }
+
+    protected Map<String, Object> getAnnotatedProtectedResourceIds(Method method, ProceedingJoinPoint pjp) {
+        Annotation[][] paramAnnotations = method.getParameterAnnotations();
+        Object[] params = pjp.getArgs();
+        Map<String, Object> resourceIds = null;
+
+        for (int i = 0; i < paramAnnotations.length; i++) {
+            for (Annotation a : paramAnnotations[i]) {
+                if (a instanceof ProtectedResourceId) {
+                    String idName = ((ProtectedResourceId) a).value();
+
+                    if (resourceIds == null) {
+                        resourceIds = new HashMap<>();
+                    }
+
+                    resourceIds.put(idName, params[i]);
+                }
+            }
+        }
+
+        return resourceIds;
     }
 
 }

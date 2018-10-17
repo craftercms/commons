@@ -23,28 +23,28 @@ import org.craftercms.commons.security.exception.PermissionException;
  *
  * @author avasquez
  */
-public interface PermissionEvaluator<S, O> {
+public interface PermissionEvaluator<S, R> {
 
     /**
      * Checks if the current subject (according to {@link org.craftercms.commons.security.permissions.SubjectResolver})
-     * is allowed to perform the specified action to the given object.
+     * is allowed to perform the specified action on the given resource.
      *
-     * @param object the object or ID of the object whose permissions should be checked. If null,
-     *               the global permission should be checked
+     * @param resource the resource or ID/IDs of the resource whose permissions should be checked. If null,
+     *                 the global permission should be checked
      * @param action the action the subject wants to perform (not null)
      * @return true if the subject is allowed to execute the action, false otherwise
      */
-    boolean isAllowed(O object, String action) throws PermissionException;
+    boolean isAllowed(R resource, String action) throws PermissionException;
 
     /**
-     * Checks if the given subject is allowed to perform the specified action to the given object
+     * Checks if the given subject is allowed to perform the specified action on the given resource
      *
      * @param subject the subject (not null)
-     * @param object  the object or ID of the object whose permissions should be checked. If null,
-     *                the global permission should be checked
-     * @param action  the action the subject wants to perform (not null)
+     * @param resource the resource or ID/IDs of the resource whose permissions should be checked. If null,
+     *                 the global permission should be checked
+     * @param action the action the subject wants to perform (not null)
      * @return true if the subject is allowed to execute the action, false otherwise
      */
-    boolean isAllowed(S subject, O object, String action) throws PermissionException;
+    boolean isAllowed(S subject, R resource, String action) throws PermissionException;
 
 }
