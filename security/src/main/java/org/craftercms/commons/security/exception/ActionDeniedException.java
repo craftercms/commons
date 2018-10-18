@@ -30,8 +30,8 @@ public class ActionDeniedException extends PermissionException {
         super(GLOBAL_ACTION_DENIED_KEY, action);
     }
 
-    public ActionDeniedException(String action, Object securedObject) {
-        super(ACTION_DENIED_KEY, action, securedObject);
+    public ActionDeniedException(String action, Object resource) {
+        super(ACTION_DENIED_KEY, action, resource);
     }
 
 }

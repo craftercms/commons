@@ -22,12 +22,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used in a method parameter to indicate the object or the ID of the object that should be secured through permission
- * checking.
+ * Used in a method parameter to indicate the resource or main ID of the resource to be protected. Only use it once per
+ * method, and can't be used in conjunction with {@link ProtectedResourceId}.
  *
  * @author avasquez
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SecuredObject {
+public @interface ProtectedResource {
 }

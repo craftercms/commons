@@ -18,7 +18,7 @@ package org.craftercms.commons.security.permissions;
 
 /**
  * Represents a permission that allows or denies a subject (a user, an application, etc.) the execution of an action
- * or set of actions on an object.
+ * or set of actions on a resource.
  *
  * @author avasquez
  */
