@@ -67,7 +67,7 @@
         <servlet.api.version>3.0.1</servlet.api.version>
         <javax.mail.version>1.4.7</javax.mail.version>
         <freemarker.version>2.3.23</freemarker.version>
-        <jackson.version>2.9.6</jackson.version>
+        <jackson.version>2.9.7</jackson.version>
         <mongo.version>3.5.0</mongo.version>
         <jongo.version>1.4.0</jongo.version>
         <ehcache.version>2.8.1</ehcache.version>
