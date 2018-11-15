@@ -1,12 +1,17 @@
-package org.craftercms.commons.file.impl;
+package org.craftercms.commons.file.stores.impl;
 
-import org.craftercms.commons.file.RemoteFileStore;
+import org.craftercms.commons.file.stores.RemoteFileStore;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
 
+/**
+ * Composite {@link RemoteFileStore} that matches and ID to a store based on a regex.
+ *
+ * @author avasquez
+ */
 public class RegexMappedCompositeFileStore implements RemoteFileStore {
 
     private Map<String, RemoteFileStore> regexMappedFileStores;
@@ -17,14 +22,14 @@ public class RegexMappedCompositeFileStore implements RemoteFileStore {
     }
 
     @Override
-    public Path downloadFile(String path) throws IOException {
+    public Path downloadFile(String id) throws IOException {
         for (Map.Entry<String, RemoteFileStore> entry : regexMappedFileStores.entrySet()) {
-            if (path.matches(entry.getKey())) {
-                return entry.getValue().downloadFile(path);
+            if (id.matches(entry.getKey())) {
+                return entry.getValue().downloadFile(id);
             }
         }
 
-        throw new IllegalArgumentException("Path " + path + " can't be mapped to a remote file store");
+        throw new IllegalArgumentException("File ID " + id + " can't be mapped to a remote file store");
     }
 
 }
