@@ -1,5 +1,7 @@
 package org.craftercms.commons.config.box;
 
+import org.craftercms.commons.config.ConfigurationProfile;
+
 /**
  * Holds the credentials to open a connection using the Box API. All values are provided by the Box Developer Console.
  *
@@ -7,7 +9,7 @@ package org.craftercms.commons.config.box;
  *
  * @author joseross
  */
-public class BoxProfile {
+public class BoxProfile extends ConfigurationProfile {
 
     /**
      * Box API Client ID

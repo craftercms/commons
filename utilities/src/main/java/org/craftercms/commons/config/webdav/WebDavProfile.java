@@ -1,11 +1,13 @@
 package org.craftercms.commons.config.webdav;
 
+import org.craftercms.commons.config.ConfigurationProfile;
+
 /**
  * Holds the necessary information to connect to a WebDAV server.
  *
  * @author joseross
  */
-public class WebDavProfile {
+public class WebDavProfile extends ConfigurationProfile {
 
     protected String baseUrl;
     protected String deliveryBaseUrl;

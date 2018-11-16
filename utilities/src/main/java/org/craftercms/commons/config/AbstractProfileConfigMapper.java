@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author avasquez
  */
-public abstract class AbstractProfileConfigMapper<T> implements ConfigurationMapper<T> {
+public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile> implements ConfigurationMapper<T> {
 
     private static final String CONFIG_KEY_PROFILE = "profile";
     private static final String CONFIG_KEY_ID = "id";
@@ -28,13 +28,15 @@ public abstract class AbstractProfileConfigMapper<T> implements ConfigurationMap
                             .findFirst()
                             .orElseThrow(() -> new ConfigurationException("Profile '" + profileId + "' not found"));
 
-            return (T) mapProfile(profileConfig);
+            ConfigurationProfile profile = mapProfile(profileConfig);
+            profile.setProfileId(profileId);
+
+            return (T) profile;
         } catch (org.apache.commons.configuration2.ex.ConfigurationException e) {
             throw new ConfigurationException("Error while loading configuration", e);
         }
     }
 
-    protected abstract T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig)
-            throws ConfigurationException;
+    protected abstract T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException;
 
 }
