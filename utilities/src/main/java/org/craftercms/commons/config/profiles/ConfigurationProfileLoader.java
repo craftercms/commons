@@ -18,8 +18,21 @@ package org.craftercms.commons.config.profiles;
 
 import org.craftercms.commons.config.ConfigurationException;
 
+/**
+ * Generic interfaces for classes that provide a way to load specific configuration profiles.
+ *
+ * @author avasquez
+ */
 public interface ConfigurationProfileLoader<T extends ConfigurationProfile> {
 
+    /**
+     * Loads the {@link ConfigurationProfile} that corresponds to the given ID.
+     *
+     * @param id the profile ID
+     * @return the configuration profile
+     *
+     * @throws ConfigurationException if an error occurs while trying to load the profile
+     */
     T loadProfile(String id) throws ConfigurationException;
 
 }

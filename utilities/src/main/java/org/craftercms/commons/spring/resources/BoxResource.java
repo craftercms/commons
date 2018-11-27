@@ -32,6 +32,11 @@ import static org.craftercms.commons.lang.UrlUtils.RANGE_HEADER_FORMAT;
 import static org.craftercms.commons.lang.UrlUtils.RANGE_HEADER_NAME;
 import static org.craftercms.commons.lang.UrlUtils.RANGE_NO_END_HEADER_FORMAT;
 
+/**
+ * Implementation of {@link Resource} for Box files.
+ *
+ * @author avasquez
+ */
 public class BoxResource implements RangeAwareResource {
 
     private static final Logger logger = LoggerFactory.getLogger(BoxResource.class);

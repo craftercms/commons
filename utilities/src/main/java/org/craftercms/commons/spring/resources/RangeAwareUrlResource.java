@@ -24,6 +24,12 @@ import java.net.*;
 
 import static org.craftercms.commons.lang.UrlUtils.*;
 
+/**
+ * {@link UrlResource} extension that implements {@link RangeAwareResource} in order to provide
+ * random access to content (range content queries).
+ *
+ * @author avasquez
+ */
 public class RangeAwareUrlResource extends UrlResource implements RangeAwareResource {
 
     public RangeAwareUrlResource(URI uri) throws MalformedURLException {

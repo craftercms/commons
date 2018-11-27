@@ -35,6 +35,11 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
+/**
+ * Implementation of {@link Resource} for S3 files.
+ *
+ * @author avasquez
+ */
 public class S3Resource implements RangeAwareResource {
 
     private static final Logger logger = LoggerFactory.getLogger(S3Resource.class);
