@@ -17,17 +17,22 @@
 package org.craftercms.commons.file.stores.impl;
 
 import org.craftercms.commons.file.stores.RemoteFile;
+import org.craftercms.commons.file.stores.RemoteFileResolver;
 import org.craftercms.commons.file.stores.RemoteFileStore;
 import org.craftercms.commons.file.stores.RemotePath;
-import org.craftercms.commons.file.stores.RemoteFileResolver;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Default implementation of {@link RemoteFileResolver}. Uses {@link RemotePathParser} to parse the path and determine
+ * the store type, and then resolves the file using the actual {@link RemoteFileStore}.
+ *
+ * @author avasquez
+ */
 public class RemoteFileResolverImpl implements RemoteFileResolver {
 
     protected Map<String, RemotePathParser> pathParsers;
@@ -44,7 +49,7 @@ public class RemoteFileResolverImpl implements RemoteFileResolver {
     }
 
     @Override
-    public RemoteFile resolve(String path) throws IOException {
+    public RemoteFile resolve(String path) throws IOException, IllegalArgumentException {
         RemotePath remotePath = null;
 
         for (Map.Entry<String, RemotePathParser> entry : pathParsers.entrySet()) {
@@ -62,11 +67,12 @@ public class RemoteFileResolverImpl implements RemoteFileResolver {
             if (store != null) {
                 return store.getFile(remotePath);
             } else {
-                throw new FileNotFoundException("Path " + path + " couldn't be matched to any of the supported " +
-                                                "remote file stores: " + stores.keySet());
+                throw new IllegalArgumentException("Path " + path + " couldn't be matched to any of the supported " +
+                                                   "remote file stores: " + stores.keySet());
             }
         } else {
-            return null;
+            throw new IllegalArgumentException("Path " + path + " couldn't be matched to any of the supported " +
+                                               "remote file stores: " + stores.keySet());
         }
     }
 

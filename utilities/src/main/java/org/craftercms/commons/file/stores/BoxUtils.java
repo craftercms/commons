@@ -16,7 +16,11 @@
  */
 package org.craftercms.commons.file.stores;
 
-import com.box.sdk.*;
+import com.box.sdk.BoxAPIConnection;
+import com.box.sdk.BoxConfig;
+import com.box.sdk.BoxDeveloperEditionAPIConnection;
+import com.box.sdk.EncryptionAlgorithm;
+import com.box.sdk.JWTEncryptionPreferences;
 import org.craftercms.commons.config.profiles.box.BoxProfile;
 
 /**

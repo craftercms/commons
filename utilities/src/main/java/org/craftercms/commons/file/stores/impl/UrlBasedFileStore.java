@@ -24,13 +24,12 @@ import org.craftercms.commons.spring.resources.RangeAwareUrlResource;
 import java.io.IOException;
 
 /**
- * Simple {@link org.craftercms.commons.file.stores.RemoteFileStore} where the IDs are basically URLs from where
+ * Simple {@link org.craftercms.commons.file.stores.RemoteFileStore} where the paths are basically URLs from where
  * the files can be accessed.
  *
  * @author avasquez
  */
 public class UrlBasedFileStore implements RemoteFileStore {
-
 
     @Override
     public RemoteFile getFile(RemotePath path) throws IOException {

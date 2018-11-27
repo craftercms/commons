@@ -18,6 +18,11 @@ package org.craftercms.commons.file.stores.impl;
 
 import org.craftercms.commons.file.stores.RemotePath;
 
+/**
+ * Extension of {@link RemotePath} that adds the concept of a remote configuration profile to the path.
+ *
+ * @author avasquez
+ */
 public class ProfileAwareRemotePath extends RemotePath {
 
     private String profile;

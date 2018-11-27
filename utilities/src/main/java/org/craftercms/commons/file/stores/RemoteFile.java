@@ -21,12 +21,30 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Represents a file stored remotely.
+ *
+ * @author avasquez
+ */
 public interface RemoteFile {
 
+    /**
+     * Returns information about the path of the file in the remote store.
+     */
     RemotePath getPath();
 
+    /**
+     * Returns an input stream to the content of the file.
+     *
+     * @throws IOException if an error occurs while trying to access the file content
+     */
     InputStream getInputStream() throws IOException;
 
+    /**
+     * Returns the remote file as a Spring {@code Resource}.
+     *
+     * @throws IOException if the file can't be resolved successfully as a resource
+     */
     Resource toResource() throws IOException;
 
 }

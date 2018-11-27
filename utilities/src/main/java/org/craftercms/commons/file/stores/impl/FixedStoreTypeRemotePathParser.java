@@ -21,6 +21,12 @@ import org.springframework.beans.factory.annotation.Required;
 
 import java.util.regex.Matcher;
 
+/**
+ * {@link RemotePathParser} that uses a fixed store type and the complete path string to build the
+ * {@link RemotePath}.
+ *
+ * @author avasquez
+ */
 public class FixedStoreTypeRemotePathParser implements RemotePathParser {
 
     private String storeType;

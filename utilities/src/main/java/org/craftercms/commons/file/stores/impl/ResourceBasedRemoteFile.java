@@ -23,6 +23,11 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Implementation of {@link RemoteFile} that basically is facade to a Spring {@code Resource}.
+ *
+ * @author avasquez
+ */
 public class ResourceBasedRemoteFile implements RemoteFile {
 
     private RemotePath path;

@@ -20,8 +20,22 @@ import org.craftercms.commons.file.stores.RemotePath;
 
 import java.util.regex.Matcher;
 
+/**
+ * Internal helper interface that parses a matched remote path.
+ *
+ * @author avasquez
+ */
 public interface RemotePathParser {
 
+    /**
+     * Parses the remote path string.
+     *
+     * @param pathStr the remote path str
+     * @param matcher the matcher used to match the paths. Can be used to get matched groups that represent
+     *                the path parts
+     *
+     * @return the parsed {@link RemotePath}
+     */
     RemotePath parse(String pathStr, Matcher matcher);
 
 }

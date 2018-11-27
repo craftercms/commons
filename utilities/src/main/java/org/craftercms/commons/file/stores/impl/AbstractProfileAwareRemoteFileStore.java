@@ -26,6 +26,12 @@ import org.springframework.beans.factory.annotation.Required;
 
 import java.io.IOException;
 
+/**
+ * Base {@link RemoteFileStore} for stores that are aware of configuration profiles that should be used to connect
+ * to the remote store.
+ *
+ * @author avasquez
+ */
 public abstract class AbstractProfileAwareRemoteFileStore<T extends ConfigurationProfile> implements RemoteFileStore {
 
     protected ConfigurationProfileLoader<T> profileLoader;

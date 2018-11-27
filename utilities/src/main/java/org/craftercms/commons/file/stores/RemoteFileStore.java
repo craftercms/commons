@@ -16,10 +16,7 @@
  */
 package org.craftercms.commons.file.stores;
 
-import org.springframework.core.io.Resource;
-
 import java.io.IOException;
-import java.nio.file.Path;
 
 /**
  * Interface for "proxies" to remote file stores.
@@ -28,29 +25,14 @@ import java.nio.file.Path;
  */
 public interface RemoteFileStore {
 
-//    /**
-//     * Downloads the remote file for the given ID. The downloaded file is temporary, so it should be deleted after
-//     * being used.
-//     *
-//     * @param path the path of the file in the remote store
-//     *
-//     * @return the path to the downloaded file
-//     *
-//     * @throws IOException if an error occurs while accessing file
-//     */
-//    Path downloadFile(RemotePath path) throws IOException;
-//
-//    /**
-//     * Returns the remote file as a Spring {@code resource}
-//     *
-//     * @param path the path of the file in the remote store
-//     *
-//     * @return the file as a {@code Resource}
-//     *
-//     * @throws IOException if an error occurs while retrieving the file
-//     */
-//    Resource getFileAsResource(RemotePath path) throws IOException;
-
+    /**
+     * Resolves the given {@link RemotePath} as a {@link RemoteFile}.
+     *
+     * @param path the path to the file in the remote store
+     *
+     * @return the remote file
+     * @throws IOException if an IO error occurs while trying to resolve the remote file
+     */
     RemoteFile getFile(RemotePath path) throws IOException;
 
 }

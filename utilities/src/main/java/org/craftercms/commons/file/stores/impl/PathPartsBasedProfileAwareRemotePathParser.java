@@ -20,7 +20,13 @@ import org.craftercms.commons.file.stores.RemotePath;
 
 import java.util.regex.Matcher;
 
-public class ProfileAwareRemotePathParser implements RemotePathParser {
+/**
+ * {@link RemotePathParser} that builds {@link ProfileAwareRemotePath}s based on the parts of the given path,
+ * returned by the groups of the regex matcher.
+ *
+ * @author avasquez
+ */
+public class PathPartsBasedProfileAwareRemotePathParser implements RemotePathParser {
 
     private static final int DEFAULT_STORE_TYPE_GROUP = 1;
     private static final int DEFAULT_PROFILE_GROUP = 2;
@@ -30,7 +36,7 @@ public class ProfileAwareRemotePathParser implements RemotePathParser {
     private int profileGroup;
     private int actualPathGroup;
 
-    public ProfileAwareRemotePathParser() {
+    public PathPartsBasedProfileAwareRemotePathParser() {
         storeTypeGroup = DEFAULT_STORE_TYPE_GROUP;
         profileGroup = DEFAULT_PROFILE_GROUP;
         actualPathGroup = DEFAULT_ACTUAL_PATH_GROUP;
@@ -47,7 +53,6 @@ public class ProfileAwareRemotePathParser implements RemotePathParser {
     public void setActualPathGroup(int actualPathGroup) {
         this.actualPathGroup = actualPathGroup;
     }
-
 
     @Override
     public RemotePath parse(String pathStr, Matcher matcher) {
