@@ -14,25 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.file.stores;
 
-public class DoubleValidator extends AbstractNumberValidator<Double> {
+import java.io.IOException;
 
-    public DoubleValidator(String targetKey) {
-        super(targetKey);
+/**
+ * Resolves special paths to files in remote stores.
+ *
+ * @author avasquez
+ */
+public interface RemoteFileResolver {
 
-        this.minValue = Double.MIN_VALUE;
-        this.maxValue = Double.MAX_VALUE;
-    }
-
-    @Override
-    protected boolean isLessThanMinValue(Double target) {
-        return target < minValue;
-    }
-
-    @Override
-    protected boolean isGreaterThanMaxValue(Double target) {
-        return target > maxValue;
-    }
+    /**
+     * Given the specified path, returns a {@link RemoteFile} associated to the path.
+     *
+     * @param path the path to the remote file
+     *
+     * @return the remote file
+     *
+     * @throws IOException if an IO error occurs while trying to resolve the file
+     * @throws IllegalArgumentException if the path can't be recognized as a remote path
+     */
+    RemoteFile resolve(String path) throws IOException, IllegalArgumentException;
 
 }

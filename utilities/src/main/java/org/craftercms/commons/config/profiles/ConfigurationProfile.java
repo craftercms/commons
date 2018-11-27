@@ -14,25 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.config.profiles;
 
-public class DoubleValidator extends AbstractNumberValidator<Double> {
+/**
+ * Represents a collection of configuration properties that are commonly used together, for example, to open a
+ * connection or accessing a server.
+ *
+ * @author avasquez
+ */
+public class ConfigurationProfile {
 
-    public DoubleValidator(String targetKey) {
-        super(targetKey);
+    private String profileId;
 
-        this.minValue = Double.MIN_VALUE;
-        this.maxValue = Double.MAX_VALUE;
+    public String getProfileId() {
+        return profileId;
     }
 
-    @Override
-    protected boolean isLessThanMinValue(Double target) {
-        return target < minValue;
-    }
-
-    @Override
-    protected boolean isGreaterThanMaxValue(Double target) {
-        return target > maxValue;
+    public void setProfileId(String profileId) {
+        this.profileId = profileId;
     }
 
 }

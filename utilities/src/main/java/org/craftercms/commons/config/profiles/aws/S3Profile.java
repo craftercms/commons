@@ -14,25 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.config.profiles.aws;
 
-public class DoubleValidator extends AbstractNumberValidator<Double> {
+/**
+ * Holds the information to connect to AWS S3.
+ *
+ * @author joseross
+ */
+public class S3Profile extends AbstractAwsProfile {
 
-    public DoubleValidator(String targetKey) {
-        super(targetKey);
+    /**
+     * Name of the bucket.
+     */
+    protected String bucketName;
 
-        this.minValue = Double.MIN_VALUE;
-        this.maxValue = Double.MAX_VALUE;
+    public String getBucketName() {
+        return bucketName;
     }
 
-    @Override
-    protected boolean isLessThanMinValue(Double target) {
-        return target < minValue;
-    }
-
-    @Override
-    protected boolean isGreaterThanMaxValue(Double target) {
-        return target > maxValue;
+    public void setBucketName(final String bucketName) {
+        this.bucketName = bucketName;
     }
 
 }
