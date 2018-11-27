@@ -14,22 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.file.stores.impl;
 
-import org.craftercms.commons.validation.annotations.param.ValidateLongParam;
-import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
-import org.craftercms.commons.validation.validators.Validator;
+import org.craftercms.commons.file.stores.RemoteFile;
+import org.craftercms.commons.file.stores.RemoteFileStore;
+import org.craftercms.commons.file.stores.RemotePath;
+import org.craftercms.commons.spring.resources.RangeAwareUrlResource;
 
-public class LongParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateLongParam, Long> {
+import java.io.IOException;
+
+/**
+ * Simple {@link org.craftercms.commons.file.stores.RemoteFileStore} where the paths are basically URLs from where
+ * the files can be accessed.
+ *
+ * @author avasquez
+ */
+public class UrlBasedFileStore implements RemoteFileStore {
 
     @Override
-    public Validator<Long> getValidator(ValidateLongParam annotation) {
-        LongValidator validator = new LongValidator(annotation.name());
-        validator.setNotNull(annotation.notNull());
-        validator.setMinValue(annotation.minValue());
-        validator.setMaxValue(annotation.maxValue());
-
-        return validator;
+    public RemoteFile getFile(RemotePath path) throws IOException {
+        return new ResourceBasedRemoteFile(path, new RangeAwareUrlResource(path.getPath()));
     }
 
 }

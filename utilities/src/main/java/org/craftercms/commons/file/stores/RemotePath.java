@@ -14,25 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.file.stores;
 
-public class DoubleValidator extends AbstractNumberValidator<Double> {
+/**
+ * Represents the path of a remote file.
+ *
+ * @author avasquez
+ */
+public class RemotePath {
 
-    public DoubleValidator(String targetKey) {
-        super(targetKey);
+    private String storeType;
+    private String path;
 
-        this.minValue = Double.MIN_VALUE;
-        this.maxValue = Double.MAX_VALUE;
+    public RemotePath(String storeType, String path) {
+        this.storeType = storeType;
+        this.path = path;
     }
 
-    @Override
-    protected boolean isLessThanMinValue(Double target) {
-        return target < minValue;
+    /**
+     * Returns the remote store type (s3, box, etc).
+     */
+    public String getStoreType() {
+        return storeType;
     }
 
-    @Override
-    protected boolean isGreaterThanMaxValue(Double target) {
-        return target > maxValue;
+    /**
+     * Returns the path or ID of file in the remote store.
+     */
+    public String getPath() {
+        return path;
     }
 
 }
