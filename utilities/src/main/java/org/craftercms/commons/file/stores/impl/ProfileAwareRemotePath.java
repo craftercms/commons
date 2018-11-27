@@ -14,25 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.file.stores.impl;
 
-public class DoubleValidator extends AbstractNumberValidator<Double> {
+import org.craftercms.commons.file.stores.RemotePath;
 
-    public DoubleValidator(String targetKey) {
-        super(targetKey);
+public class ProfileAwareRemotePath extends RemotePath {
 
-        this.minValue = Double.MIN_VALUE;
-        this.maxValue = Double.MAX_VALUE;
+    private String profile;
+
+    public ProfileAwareRemotePath(String storeType, String path, String profile) {
+        super(storeType, path);
+        this.profile = profile;
     }
 
-    @Override
-    protected boolean isLessThanMinValue(Double target) {
-        return target < minValue;
-    }
-
-    @Override
-    protected boolean isGreaterThanMaxValue(Double target) {
-        return target > maxValue;
+    public String getProfile() {
+        return profile;
     }
 
 }

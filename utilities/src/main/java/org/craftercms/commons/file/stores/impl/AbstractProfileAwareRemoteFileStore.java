@@ -1,43 +1,34 @@
+/*
+ * Copyright (C) 2007-2018 Crafter Software Corporation.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.craftercms.commons.file.stores.impl;
 
 import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.ConfigurationProfile;
-import org.craftercms.commons.config.ConfigurationProfileLoader;
+import org.craftercms.commons.config.profiles.ConfigurationProfile;
+import org.craftercms.commons.config.profiles.ConfigurationProfileLoader;
+import org.craftercms.commons.file.stores.RemoteFile;
+import org.craftercms.commons.file.stores.RemoteFileStore;
+import org.craftercms.commons.file.stores.RemotePath;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public abstract class AbstractProfileAwareRemoteFileStore<T extends ConfigurationProfile> extends AbstractRemoteFileStore {
+public abstract class AbstractProfileAwareRemoteFileStore<T extends ConfigurationProfile> implements RemoteFileStore {
 
-    private static final String DEFAULT_REMOTE_ID_WITH_PROFILE_PATTERN = "^/?([^/]+)/(.+)$";
-    private static final int DEFAULT_PROFILE_ID_MATCH_GROUP = 1;
-    private static final int DEFAULT_ACTUAL_REMOTE_ID_MATCH_GROUP = 2;
-
-    protected Pattern remoteIdWithProfilePattern;
-    protected int profileIdMatchGroup;
-    protected int actualRemoteIdMatchGroup;
     protected ConfigurationProfileLoader<T> profileLoader;
-
-    public AbstractProfileAwareRemoteFileStore() {
-        remoteIdWithProfilePattern = Pattern.compile(DEFAULT_REMOTE_ID_WITH_PROFILE_PATTERN);
-        profileIdMatchGroup = DEFAULT_PROFILE_ID_MATCH_GROUP;
-        actualRemoteIdMatchGroup = DEFAULT_ACTUAL_REMOTE_ID_MATCH_GROUP;
-    }
-
-    public void setRemoteIdWithProfilePattern(String remoteIdWithProfilePattern) {
-        this.remoteIdWithProfilePattern = Pattern.compile(remoteIdWithProfilePattern);
-    }
-
-    public void setProfileIdMatchGroup(int profileIdMatchGroup) {
-        this.profileIdMatchGroup = profileIdMatchGroup;
-    }
-
-    public void setActualRemoteIdMatchGroup(int actualRemoteIdMatchGroup) {
-        this.actualRemoteIdMatchGroup = actualRemoteIdMatchGroup;
-    }
 
     @Required
     public void setProfileLoader(ConfigurationProfileLoader<T> profileLoader) {
@@ -45,23 +36,24 @@ public abstract class AbstractProfileAwareRemoteFileStore<T extends Configuratio
     }
 
     @Override
-    protected void doDownload(String remoteId, Path downloadPath) throws IOException {
-        Matcher matcher = remoteIdWithProfilePattern.matcher(remoteId);
-        if (matcher.matches()) {
-            String profileId = matcher.group(profileIdMatchGroup);
-            String actualRemoteId = matcher.group(actualRemoteIdMatchGroup);
+    public RemoteFile getFile(RemotePath path) throws IOException {
+        if (path instanceof ProfileAwareRemotePath) {
+            ProfileAwareRemotePath p = (ProfileAwareRemotePath) path;
 
-            try {
-                doDownload(profileLoader.loadProfile(profileId), actualRemoteId, downloadPath);
-            } catch (ConfigurationException e) {
-                throw new IOException("Unable to load configuration profile with ID " + profileId);
-            }
+            return doGetFile(p, loadProfile(p.getProfile()));
         } else {
-            throw new IllegalArgumentException("Remote ID " + remoteId + " expected to match pattern " +
-                                               remoteIdWithProfilePattern);
+            throw new IllegalArgumentException(path + " expected to be an instance of " + ProfileAwareRemotePath.class);
         }
     }
 
-    protected abstract void doDownload(T profile, String remoteId, Path downloadPath) throws IOException;
+    protected abstract RemoteFile doGetFile(ProfileAwareRemotePath path, T profile) throws IOException;
+
+    protected T loadProfile(String profile) throws IOException {
+        try {
+            return profileLoader.loadProfile(profile);
+        } catch (ConfigurationException e) {
+            throw new IOException("Unable to load configuration profile with ID " + profile);
+        }
+    }
 
 }

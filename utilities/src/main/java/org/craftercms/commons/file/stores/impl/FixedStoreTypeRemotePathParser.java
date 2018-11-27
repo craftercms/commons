@@ -14,25 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.file.stores.impl;
 
-public class DoubleValidator extends AbstractNumberValidator<Double> {
+import org.craftercms.commons.file.stores.RemotePath;
+import org.springframework.beans.factory.annotation.Required;
 
-    public DoubleValidator(String targetKey) {
-        super(targetKey);
+import java.util.regex.Matcher;
 
-        this.minValue = Double.MIN_VALUE;
-        this.maxValue = Double.MAX_VALUE;
+public class FixedStoreTypeRemotePathParser implements RemotePathParser {
+
+    private String storeType;
+
+    @Required
+    public void setStoreType(String storeType) {
+        this.storeType = storeType;
     }
 
     @Override
-    protected boolean isLessThanMinValue(Double target) {
-        return target < minValue;
+    public RemotePath parse(String pathStr, Matcher matcher) {
+        return new RemotePath(storeType, pathStr);
     }
-
-    @Override
-    protected boolean isGreaterThanMaxValue(Double target) {
-        return target > maxValue;
-    }
-
 }

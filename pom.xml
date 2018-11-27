@@ -82,7 +82,7 @@
         <snakeyaml.version>1.17</snakeyaml.version>
         <bouncycastle.version>1.60</bouncycastle.version>
         <java.version>1.8</java.version>
-        <aws.sdk.version>1.11.370</aws.sdk.version>
+        <aws.sdk.version>1.11.435</aws.sdk.version>
         <box.sdk.version>2.23.0</box.sdk.version>
 
         <!-- Sonar -->

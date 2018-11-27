@@ -14,30 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.converters.impl;
+package org.craftercms.commons.file.stores.impl;
 
-import org.craftercms.commons.converters.Converter;
+import org.craftercms.commons.file.stores.RemoteFile;
+import org.craftercms.commons.file.stores.RemotePath;
+import org.springframework.core.io.Resource;
 
-/**
- * Simple dummy converter that just returns a String value.
- *
- * @author avasquez
- */
-public class StringToStringConverter implements Converter<String, String> {
+import java.io.IOException;
+import java.io.InputStream;
 
-    @Override
-    public Class<?> getSourceClass() {
-        return String.class;
+public class ResourceBasedRemoteFile implements RemoteFile {
+
+    private RemotePath path;
+    private Resource resource;
+
+    public ResourceBasedRemoteFile(RemotePath path, Resource resource) {
+        this.path = path;
+        this.resource = resource;
     }
 
     @Override
-    public Class<?> getTargetClass() {
-        return String.class;
+    public RemotePath getPath() {
+        return path;
     }
 
     @Override
-    public String convert(String source) {
-        return source;
+    public InputStream getInputStream() throws IOException {
+        return resource.getInputStream();
+    }
+
+    @Override
+    public Resource toResource() throws IOException {
+        return resource;
     }
 
 }

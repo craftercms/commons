@@ -1,14 +1,31 @@
+/*
+ * Copyright (C) 2007-2018 Crafter Software Corporation.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.craftercms.commons.file.stores.impl.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.S3Object;
-import org.apache.commons.io.FileUtils;
-import org.craftercms.commons.config.aws.S3Profile;
+import org.craftercms.commons.config.profiles.aws.S3Profile;
+import org.craftercms.commons.file.stores.RemoteFile;
 import org.craftercms.commons.file.stores.S3Utils;
 import org.craftercms.commons.file.stores.impl.AbstractProfileAwareRemoteFileStore;
+import org.craftercms.commons.file.stores.impl.ProfileAwareRemotePath;
+import org.craftercms.commons.file.stores.impl.ResourceBasedRemoteFile;
+import org.craftercms.commons.spring.resources.S3Resource;
+import org.springframework.core.io.Resource;
 
 import java.io.IOException;
-import java.nio.file.Path;
 
 /**
  * A {@link org.craftercms.commons.file.stores.RemoteFileStore} to S3.
@@ -17,17 +34,11 @@ import java.nio.file.Path;
  */
 public class S3FileStore extends AbstractProfileAwareRemoteFileStore<S3Profile> {
 
-
     @Override
-    protected void doDownload(S3Profile profile, String remoteId, Path downloadPath) throws IOException {
-        try {
-            AmazonS3 s3Client = S3Utils.createClient(profile);
-            S3Object s3Object = s3Client.getObject(profile.getBucketName(), remoteId);
+    protected RemoteFile doGetFile(ProfileAwareRemotePath path, S3Profile profile) throws IOException {
+        Resource resource = new S3Resource(S3Utils.createClient(profile), profile.getBucketName(), path.getPath());
 
-            FileUtils.copyInputStreamToFile(s3Object.getObjectContent(), downloadPath.toFile());
-        } catch (Exception e) {
-            throw new IOException("Error while downloading S3 file " + remoteId);
-        }
+        return new ResourceBasedRemoteFile(path, resource);
     }
 
 }
