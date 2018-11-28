@@ -58,9 +58,10 @@ public class RangeAwareUrlResource extends UrlResource implements RangeAwareReso
         conn.setDefaultUseCaches(false);
 
         if (end > 0) {
-            conn.setRequestProperty(RANGE_HEADER_NAME, String.format(RANGE_HEADER_FORMAT, start, end));
+            conn.setRequestProperty(RANGE_HEADER_NAME, String.format(RANGE_HEADER_FORMAT, Long.toString(start),
+                                                                     Long.toString(end)));
         } else {
-            conn.setRequestProperty(RANGE_HEADER_NAME, String.format(RANGE_NO_END_HEADER_FORMAT, start));
+            conn.setRequestProperty(RANGE_HEADER_NAME, String.format(RANGE_NO_END_HEADER_FORMAT, Long.toString(start)));
         }
 
         try {
