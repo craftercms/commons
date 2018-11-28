@@ -168,6 +168,18 @@
             <version>${snakeyaml.version}</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${aws.sdk.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.box</groupId>
+            <artifactId>box-java-sdk</artifactId>
+            <version>${box.sdk.version}</version>
+            <optional>true</optional>
+        </dependency>
 
         <!-- Testing -->
         <dependency>

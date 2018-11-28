@@ -14,25 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.config;
 
-public class DoubleValidator extends AbstractNumberValidator<Double> {
+/**
+ * Exception thrown by classes that handle configuration.
+ */
+public class ConfigurationException extends Exception {
 
-    public DoubleValidator(String targetKey) {
-        super(targetKey);
-
-        this.minValue = Double.MIN_VALUE;
-        this.maxValue = Double.MAX_VALUE;
+    public ConfigurationException(String message) {
+        super(message);
     }
 
-    @Override
-    protected boolean isLessThanMinValue(Double target) {
-        return target < minValue;
-    }
-
-    @Override
-    protected boolean isGreaterThanMaxValue(Double target) {
-        return target > maxValue;
+    public ConfigurationException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }
+
+

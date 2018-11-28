@@ -29,6 +29,10 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class UrlUtils {
 
+    public static final String RANGE_HEADER_NAME = "Range";
+    public static final String RANGE_HEADER_FORMAT = "bytes=%s-%s";
+    public static final String RANGE_NO_END_HEADER_FORMAT = "bytes=%s-";
+
     private UrlUtils() {
     }
 
