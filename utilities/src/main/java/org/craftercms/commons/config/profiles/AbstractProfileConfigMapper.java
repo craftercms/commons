@@ -38,22 +38,19 @@ public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile
     @Override
     @SuppressWarnings("unchecked")
     public T readConfig(InputStream inputStream, String encoding, String profileId) throws ConfigurationException {
-        try {
-            HierarchicalConfiguration<ImmutableNode> config = ConfigUtils.readXmlConfiguration(inputStream, encoding);
+        HierarchicalConfiguration<ImmutableNode> config = ConfigUtils.readXmlConfiguration(inputStream, encoding);
 
-            List<HierarchicalConfiguration<ImmutableNode>> profiles = config.configurationsAt(CONFIG_KEY_PROFILE);
-            HierarchicalConfiguration profileConfig = profiles.stream()
-                            .filter(c -> profileId.equals(c.getString(CONFIG_KEY_ID)))
-                            .findFirst()
-                            .orElseThrow(() -> new ConfigurationException("Profile '" + profileId + "' not found"));
+        List<HierarchicalConfiguration<ImmutableNode>> profiles = config.configurationsAt(CONFIG_KEY_PROFILE);
+        HierarchicalConfiguration profileConfig = profiles
+                .stream()
+                .filter(c -> profileId.equals(c.getString(CONFIG_KEY_ID)))
+                .findFirst()
+                .orElseThrow(() -> new ConfigurationException("Profile '" + profileId + "' not found"));
 
-            ConfigurationProfile profile = mapProfile(profileConfig);
-            profile.setProfileId(profileId);
+        ConfigurationProfile profile = mapProfile(profileConfig);
+        profile.setProfileId(profileId);
 
-            return (T) profile;
-        } catch (org.apache.commons.configuration2.ex.ConfigurationException e) {
-            throw new ConfigurationException("Error while loading configuration", e);
-        }
+        return (T) profile;
     }
 
     protected abstract T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException;

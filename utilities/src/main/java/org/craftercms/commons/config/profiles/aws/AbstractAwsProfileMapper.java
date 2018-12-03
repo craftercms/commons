@@ -24,6 +24,8 @@ import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.config.profiles.AbstractProfileConfigMapper;
 import org.craftercms.commons.config.ConfigurationException;
 
+import static org.craftercms.commons.config.ConfigUtils.*;
+
 /**
  * Base class for configuration mappers that map to {@link AbstractAwsProfile}s.
  *
@@ -41,8 +43,8 @@ public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> ext
     protected T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException {
         AbstractAwsProfile profile = createProfile();
         if (profileConfig.containsKey(CONFIG_KEY_ACCESS_KEY) && profileConfig.containsKey(CONFIG_KEY_SECRET_KEY)) {
-            String accessKey = profileConfig.getString(CONFIG_KEY_ACCESS_KEY);
-            String secretKey = profileConfig.getString(CONFIG_KEY_SECRET_KEY);
+            String accessKey = getStringProperty(profileConfig, CONFIG_KEY_ACCESS_KEY);
+            String secretKey = getStringProperty(profileConfig, CONFIG_KEY_SECRET_KEY);
 
             profile.setCredentialsProvider(
                     new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)));
@@ -50,9 +52,7 @@ public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> ext
             profile.setCredentialsProvider(new DefaultAWSCredentialsProviderChain());
         }
 
-        if (profileConfig.containsKey(CONFIG_KEY_REGION)) {
-            profile.setRegion(profileConfig.getString(CONFIG_KEY_REGION));
-        }
+        profile.setRegion(getStringProperty(profileConfig, CONFIG_KEY_REGION));
 
         return (T) profile;
     }
