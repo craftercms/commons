@@ -18,7 +18,10 @@ package org.craftercms.commons.config.profiles.webdav;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
+import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.profiles.AbstractProfileConfigMapper;
+
+import static org.craftercms.commons.config.ConfigUtils.*;
 
 /**
  * Configuration mapper for {@link WebDavProfile}s.
@@ -34,14 +37,14 @@ public class WebDavProfileMappper extends AbstractProfileConfigMapper<WebDavProf
     private static final String CONFIG_KEY_PASSWORD = "password";
 
     @Override
-    protected WebDavProfile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) {
+    protected WebDavProfile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException {
         WebDavProfile profile = new WebDavProfile();
-        profile.setBaseUrl(profileConfig.getString(CONFIG_KEY_BASE_URL));
+        profile.setBaseUrl(getRequiredStringProperty(profileConfig, CONFIG_KEY_BASE_URL));
         if(profileConfig.containsKey(CONFIG_KEY_DELIVERY_URL)) {
-            profile.setDeliveryBaseUrl(profileConfig.getString(CONFIG_KEY_DELIVERY_URL));
+            profile.setDeliveryBaseUrl(getStringProperty(profileConfig, CONFIG_KEY_DELIVERY_URL));
         }
-        profile.setUsername(profileConfig.getString(CONFIG_KEY_USERNAME));
-        profile.setPassword(profileConfig.getString(CONFIG_KEY_PASSWORD));
+        profile.setUsername(getRequiredStringProperty(profileConfig, CONFIG_KEY_USERNAME));
+        profile.setPassword(getRequiredStringProperty(profileConfig, CONFIG_KEY_PASSWORD));
 
         return profile;
     }
