@@ -67,12 +67,11 @@ public class RemoteFileResolverImpl implements RemoteFileResolver {
             if (store != null) {
                 return store.getFile(remotePath);
             } else {
-                throw new IllegalArgumentException("Path " + path + " couldn't be matched to any of the supported " +
-                                                   "remote file stores: " + stores.keySet());
+                throw new IllegalArgumentException("Store type '" + remotePath.getStoreType() + "' couldn't be matched " +
+                                                   "to any of the known remote file stores: " + stores.keySet());
             }
         } else {
-            throw new IllegalArgumentException("Path " + path + " couldn't be matched to any of the supported " +
-                                               "remote file stores: " + stores.keySet());
+            throw new IllegalArgumentException("Path " + path + " is not a supported remote file");
         }
     }
 

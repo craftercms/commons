@@ -58,7 +58,7 @@ public abstract class AbstractProfileAwareRemoteFileStore<T extends Configuratio
         try {
             return profileLoader.loadProfile(profile);
         } catch (ConfigurationException e) {
-            throw new IOException("Unable to load configuration profile with ID " + profile);
+            throw new IOException("Unable to load configuration profile with ID " + profile, e);
         }
     }
 
