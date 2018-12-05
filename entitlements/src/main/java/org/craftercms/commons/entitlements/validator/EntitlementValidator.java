@@ -90,4 +90,19 @@ public interface EntitlementValidator {
         }
     }
 
+    /**
+     * Provides the build of the containing JAR file.
+     * @return the build
+     */
+    default String getPackageBuild() {
+        try {
+            VersionMonitor versionMonitor = VersionMonitor.getVersion(
+                new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()))
+                    .getManifest());
+            return versionMonitor.getBuild();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
