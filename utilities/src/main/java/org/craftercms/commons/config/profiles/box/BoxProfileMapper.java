@@ -68,7 +68,7 @@ public class BoxProfileMapper extends AbstractProfileConfigMapper<BoxProfile> {
 
         boxProfile.setPrivateKeyPassword(getRequiredStringProperty(profileConfig, KEY_PRIVATE_KEY_PASS));
         boxProfile.setPublicKeyId(getRequiredStringProperty(profileConfig, KEY_PUBLIC_KEY_ID));
-        boxProfile.setUploadFolder(getRequiredStringProperty(profileConfig, KEY_UPLOAD_FOLDER));
+        boxProfile.setUploadFolder(getStringProperty(profileConfig, KEY_UPLOAD_FOLDER));
 
         return boxProfile;
     }

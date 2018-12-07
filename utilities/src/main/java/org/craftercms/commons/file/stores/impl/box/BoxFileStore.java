@@ -16,6 +16,7 @@
  */
 package org.craftercms.commons.file.stores.impl.box;
 
+import org.apache.commons.io.FilenameUtils;
 import org.craftercms.commons.config.profiles.box.BoxProfile;
 import org.craftercms.commons.file.stores.BoxUtils;
 import org.craftercms.commons.file.stores.RemoteFile;
@@ -36,7 +37,8 @@ public class BoxFileStore extends AbstractProfileAwareRemoteFileStore<BoxProfile
 
     @Override
     protected RemoteFile doGetFile(ProfileAwareRemotePath path, BoxProfile profile) throws IOException {
-        Resource resource = new BoxResource(BoxUtils.createConnection(profile), path.getPath());
+        String fileId = FilenameUtils.getBaseName(path.getPath());
+        Resource resource = new BoxResource(BoxUtils.createConnection(profile), fileId);
 
         return new ResourceBasedRemoteFile(path, resource);
     }
