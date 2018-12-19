@@ -15,21 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftercms.commons.jackson.search;
+package org.craftercms.commons.elasticsearch;
 
-import java.util.Map;
+import java.io.InputStream;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.springframework.util.MultiValueMap;
 
 /**
- * Jackson Module to support mapping XML documents that include repeated tags using the {@link MixedMultivaluedMap}
- * class
+ * Defines the operations to parse binary documents for indexing
  * @author joseross
  */
-public class CrafterMultivaluedModule extends SimpleModule {
+public interface DocumentParser {
 
-    public CrafterMultivaluedModule() {
-        addAbstractTypeMapping(Map.class, MixedMultivaluedMap.class);
-    }
+    /**
+     * Parses the given document and generates an XML file
+     * @param content the document to parse
+     * @param additionalFields additional fields to add
+     * @return an XML ready to be indexed
+     */
+    String parseToXml(InputStream content, MultiValueMap<String, String> additionalFields);
 
 }
