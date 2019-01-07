@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2018 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2019 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,20 +17,17 @@
 
 package org.craftercms.commons.elasticsearch.jackson;
 
-import java.util.Map;
-
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
- * Jackson Module to support mapping XML documents that include repeated tags using the {@link MixedMultivaluedMap}
- * class
+ * Custom XmlMapper that uses the {@link CrafterMultivaluedModule}.
+ *
  * @author joseross
  */
-public class CrafterMultivaluedModule extends SimpleModule {
+public class CrafterXmlMapper extends XmlMapper {
 
-    public CrafterMultivaluedModule() {
-        addAbstractTypeMapping(Map.class, MixedMultivaluedMap.class);
-        addDeserializer(Object.class, new RepeatingGroupDeserializer());
+    public CrafterXmlMapper() {
+        registerModule(new CrafterMultivaluedModule());
     }
 
 }
