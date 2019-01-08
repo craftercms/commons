@@ -36,17 +36,17 @@ public interface ElasticSearchAdminService {
     /**
      * Creates an index
      * @param indexName the name of the index
-     * @param includePreview if false only the authoring index will be created
+     * @param isAuthoring indicates if the index if for authoring
      * @throws ElasticSearchException if there is any error during the operation
      */
-    void createIndex(String indexName, boolean includePreview) throws ElasticSearchException;
+    void createIndex(String indexName, boolean isAuthoring) throws ElasticSearchException;
 
     /**
      * Deletes an index
      * @param indexName the name of the index
-     * @param includePreview if false only the authoring index will be deleted
+     * @param isAuthoring indicates if the index if for authoring
      * @throws ElasticSearchException if there is any error during the operation
      */
-    void deleteIndex(String indexName, boolean includePreview) throws ElasticSearchException;
+    void deleteIndex(String indexName, boolean isAuthoring) throws ElasticSearchException;
 
 }

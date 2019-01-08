@@ -102,8 +102,8 @@ public class ElasticSearchAdminServiceImpl implements ElasticSearchAdminService 
      * {@inheritDoc}
      */
     @Override
-    public void createIndex(final String indexName, boolean includePreview) throws ElasticSearchException {
-        try {
+    public void createIndex(final String indexName, boolean isAuthoring) throws ElasticSearchException {
+        if(isAuthoring) {
             String authoringName = getAuthoringIndexName(indexName);
             if(!exists(authoringName)) {
                 logger.info("Creating index {}", authoringName);
@@ -112,19 +112,22 @@ public class ElasticSearchAdminServiceImpl implements ElasticSearchAdminService 
                         new CreateIndexRequest(authoringName)
                             .source(IOUtils.toString(is, Charset.defaultCharset()), XContentType.JSON),
                         RequestOptions.DEFAULT);
+                } catch (Exception e) {
+                    throw new ElasticSearchException("Error creating index " + authoringName, e);
                 }
             }
-            if(includePreview && !exists(indexName)) {
+        } else {
+            if(!exists(indexName)) {
                 logger.info("Creating index {}", indexName);
                 try(InputStream is = previewIndexSettings.getInputStream()) {
                     elasticSearchClient.indices().create(
                         new CreateIndexRequest(indexName)
                             .source(IOUtils.toString(is, Charset.defaultCharset()), XContentType.JSON),
                         RequestOptions.DEFAULT);
+                } catch (Exception e) {
+                    throw new ElasticSearchException("Error creating index " + indexName, e);
                 }
             }
-        } catch (IOException e) {
-            throw new ElasticSearchException("Error creating index " + indexName, e);
         }
     }
 
@@ -132,12 +135,11 @@ public class ElasticSearchAdminServiceImpl implements ElasticSearchAdminService 
      * {@inheritDoc}
      */
     @Override
-    public void deleteIndex(final String indexName, boolean includePreview) throws ElasticSearchException {
-        String authoringName = getAuthoringIndexName(indexName);
-        String[] names = includePreview? new String[]{indexName, authoringName } : new String[] {authoringName};
+    public void deleteIndex(final String indexName, boolean isAuthoring) throws ElasticSearchException {
+        String[] name = new String[]{ isAuthoring? getAuthoringIndexName(indexName) : indexName };
         try {
-            logger.info("Deleting indices {}", names);
-            elasticSearchClient.indices().delete(new DeleteIndexRequest(names), RequestOptions.DEFAULT);
+            logger.info("Deleting index {}", indexName);
+            elasticSearchClient.indices().delete(new DeleteIndexRequest(name), RequestOptions.DEFAULT);
         } catch (IOException e) {
             throw new ElasticSearchException("Error deleting index " + indexName, e);
         }
