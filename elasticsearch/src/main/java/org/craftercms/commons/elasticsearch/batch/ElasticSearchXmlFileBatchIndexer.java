@@ -18,8 +18,8 @@
 package org.craftercms.commons.elasticsearch.batch;
 
 import org.craftercms.commons.elasticsearch.ElasticSearchService;
-import org.craftercms.search.batch.UpdateStatus;
-import org.craftercms.search.batch.impl.AbstractXmlFileBatchIndexer;
+import org.craftercms.commons.search.batch.UpdateStatus;
+import org.craftercms.commons.search.batch.impl.AbstractXmlFileBatchIndexer;
 import org.springframework.beans.factory.annotation.Required;
 
 /**

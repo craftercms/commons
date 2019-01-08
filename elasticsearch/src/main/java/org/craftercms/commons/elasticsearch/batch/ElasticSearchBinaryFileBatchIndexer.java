@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.craftercms.commons.elasticsearch.ElasticSearchService;
+import org.craftercms.commons.search.batch.UpdateStatus;
+import org.craftercms.commons.search.batch.impl.AbstractBinaryFileBatchIndexer;
 import org.craftercms.core.service.Content;
-import org.craftercms.search.batch.UpdateStatus;
-import org.craftercms.search.batch.impl.AbstractBinaryFileBatchIndexer;
 import org.craftercms.search.exception.SearchException;
 import org.springframework.beans.factory.annotation.Required;
 

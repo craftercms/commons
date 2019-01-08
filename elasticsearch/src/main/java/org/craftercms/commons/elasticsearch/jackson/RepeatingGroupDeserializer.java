@@ -42,7 +42,7 @@ import com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer;
 public class RepeatingGroupDeserializer extends UntypedObjectDeserializer {
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected Object mapObject(JsonParser p, DeserializationContext ctxt) throws IOException {
         String firstKey;
 
@@ -55,6 +55,7 @@ public class RepeatingGroupDeserializer extends UntypedObjectDeserializer {
         } else {
             if (t != JsonToken.END_OBJECT) {
                 throw ctxt.mappingException(handledType(), p.getCurrentToken());
+
             }
             firstKey = null;
         }

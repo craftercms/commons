@@ -21,7 +21,8 @@ import java.io.InputStream;
 
 import org.craftercms.commons.elasticsearch.ElasticSearchService;
 import org.craftercms.commons.elasticsearch.exception.ElasticSearchException;
-import org.craftercms.search.batch.UpdateStatus;
+import org.craftercms.commons.search.batch.UpdateStatus;
+import org.craftercms.commons.search.batch.utils.IndexingUtils;
 import org.craftercms.search.exception.SearchException;
 import org.springframework.util.MultiValueMap;
 
@@ -29,7 +30,7 @@ import org.springframework.util.MultiValueMap;
  * Utility class to perform ElasticSearch operations
  * @author joseross
  */
-public abstract class ElasticSearchIndexingUtils {
+public abstract class ElasticSearchIndexingUtils extends IndexingUtils {
 
     public static void doDelete(final ElasticSearchService elasticSearch, final String indexId,
                                 final String siteName, final String path, final UpdateStatus updateStatus) {
