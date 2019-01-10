@@ -15,28 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftercms.commons.entitlements.exception;
+package org.craftercms.commons.elasticsearch.jackson;
+
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
- * Base class for all entitlement related errors.
+ * Custom XmlMapper that uses the {@link CrafterMultivaluedModule}.
  *
  * @author joseross
  */
-public class EntitlementException extends Exception {
+public class CrafterXmlMapper extends XmlMapper {
 
-    public EntitlementException() {
-    }
-
-    public EntitlementException(final String message) {
-        super(message);
-    }
-
-    public EntitlementException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
-    public EntitlementException(final Throwable cause) {
-        super(cause);
+    public CrafterXmlMapper() {
+        registerModule(new CrafterMultivaluedModule());
     }
 
 }

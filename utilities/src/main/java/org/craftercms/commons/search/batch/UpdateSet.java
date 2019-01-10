@@ -14,29 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.craftercms.commons.search.batch;
 
-package org.craftercms.commons.entitlements.exception;
+import java.util.List;
 
 /**
- * Base class for all entitlement related errors.
+ * Set of files to add or delete from the index.
  *
- * @author joseross
+ * @author avasquez
  */
-public class EntitlementException extends Exception {
+public class UpdateSet {
 
-    public EntitlementException() {
+    private List<String> updatePaths;
+    private List<String> deletePaths;
+
+    public UpdateSet(List<String> updatePaths, List<String> deletePaths) {
+        this.updatePaths = updatePaths;
+        this.deletePaths = deletePaths;
     }
 
-    public EntitlementException(final String message) {
-        super(message);
+    public List<String> getUpdatePaths() {
+        return updatePaths;
     }
 
-    public EntitlementException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
-    public EntitlementException(final Throwable cause) {
-        super(cause);
+    public List<String> getDeletePaths() {
+        return deletePaths;
     }
 
 }

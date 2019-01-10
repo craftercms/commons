@@ -14,29 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package org.craftercms.commons.entitlements.exception;
+package org.craftercms.commons.search.batch.exception;
 
 /**
- * Base class for all entitlement related errors.
+ * Exception thrown when a batch indexing operation fails.
  *
- * @author joseross
+ * @author avasquez
  */
-public class EntitlementException extends Exception {
+public class BatchIndexingException extends RuntimeException {
 
-    public EntitlementException() {
+    public BatchIndexingException(String msg) {
+        super(msg);
     }
 
-    public EntitlementException(final String message) {
-        super(message);
-    }
-
-    public EntitlementException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
-    public EntitlementException(final Throwable cause) {
-        super(cause);
+    public BatchIndexingException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
 }

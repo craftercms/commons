@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftercms.commons.jackson.search;
+package org.craftercms.commons.elasticsearch.jackson;
 
 import java.util.HashMap;
 import java.util.LinkedList;

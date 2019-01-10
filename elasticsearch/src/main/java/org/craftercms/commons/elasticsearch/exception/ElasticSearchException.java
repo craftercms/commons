@@ -15,28 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftercms.commons.entitlements.exception;
+package org.craftercms.commons.elasticsearch.exception;
 
 /**
- * Base class for all entitlement related errors.
- *
+ * Base exception for all ElasticSearch errors
  * @author joseross
  */
-public class EntitlementException extends Exception {
+public class ElasticSearchException extends Exception {
 
-    public EntitlementException() {
-    }
-
-    public EntitlementException(final String message) {
+    public ElasticSearchException(final String message) {
         super(message);
     }
 
-    public EntitlementException(final String message, final Throwable cause) {
+    public ElasticSearchException(final String message, final Throwable cause) {
         super(message, cause);
-    }
-
-    public EntitlementException(final Throwable cause) {
-        super(cause);
     }
 
 }

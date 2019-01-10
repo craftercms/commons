@@ -32,6 +32,7 @@
         <module>git</module>
         <module>entitlements</module>
         <module>validation</module>
+        <module>elasticsearch</module>
     </modules>
 
     <name>Crafter Commons</name>
@@ -101,6 +102,8 @@
         <java.version>1.8</java.version>
         <aws.sdk.version>1.11.435</aws.sdk.version>
         <box.sdk.version>2.23.0</box.sdk.version>
+        <elasticsearch.version>6.5.3</elasticsearch.version>
+        <tika.version>1.19.1</tika.version>
 
         <!-- Sonar -->
         <sonar.language>java</sonar.language>

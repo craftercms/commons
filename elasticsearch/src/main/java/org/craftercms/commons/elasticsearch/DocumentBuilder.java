@@ -15,28 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftercms.commons.entitlements.exception;
+package org.craftercms.commons.elasticsearch;
 
 /**
- * Base class for all entitlement related errors.
- *
+ * Defines the operations to build native documents for a search provider
+ * @param <T> type for the native documents
  * @author joseross
  */
-public class EntitlementException extends Exception {
+public interface DocumentBuilder<T> {
 
-    public EntitlementException() {
-    }
-
-    public EntitlementException(final String message) {
-        super(message);
-    }
-
-    public EntitlementException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
-    public EntitlementException(final Throwable cause) {
-        super(cause);
-    }
+    /**
+     * Builds a document from the given XML
+     * @param site the site name
+     * @param id the local id for the document
+     * @param xml the XML for the document
+     * @return the native document
+     */
+    T build(String site, String id, String xml);
 
 }

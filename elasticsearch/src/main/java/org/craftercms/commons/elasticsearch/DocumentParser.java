@@ -15,28 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.craftercms.commons.entitlements.exception;
+package org.craftercms.commons.elasticsearch;
+
+import java.io.InputStream;
+
+import org.springframework.util.MultiValueMap;
 
 /**
- * Base class for all entitlement related errors.
- *
+ * Defines the operations to parse binary documents for indexing
  * @author joseross
  */
-public class EntitlementException extends Exception {
+public interface DocumentParser {
 
-    public EntitlementException() {
-    }
-
-    public EntitlementException(final String message) {
-        super(message);
-    }
-
-    public EntitlementException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-
-    public EntitlementException(final Throwable cause) {
-        super(cause);
-    }
+    /**
+     * Parses the given document and generates an XML file
+     * @param content the document to parse
+     * @param additionalFields additional fields to add
+     * @return an XML ready to be indexed
+     */
+    String parseToXml(InputStream content, MultiValueMap<String, String> additionalFields);
 
 }
