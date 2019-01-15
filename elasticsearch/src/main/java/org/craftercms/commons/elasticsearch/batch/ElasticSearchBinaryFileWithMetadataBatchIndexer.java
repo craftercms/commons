@@ -17,8 +17,6 @@
 
 package org.craftercms.commons.elasticsearch.batch;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -51,7 +49,8 @@ public class ElasticSearchBinaryFileWithMetadataBatchIndexer extends AbstractBin
     }
 
     @Override
-    protected void doDelete(final String indexId, final String siteName, final String previousBinaryPath, final UpdateStatus updateStatus) {
+    protected void doDelete(final String indexId, final String siteName, final String previousBinaryPath,
+                            final UpdateStatus updateStatus) {
         ElasticSearchIndexingUtils.doDelete(elasticSearchService, indexId, siteName, previousBinaryPath, updateStatus);
     }
 
@@ -92,22 +91,16 @@ public class ElasticSearchBinaryFileWithMetadataBatchIndexer extends AbstractBin
     protected void doUpdateContent(final String indexId, final String siteName, final String binaryPath,
                                    final Resource resource, final MultiValueMap<String, String> metadata,
                                    final UpdateStatus updateStatus) {
-        try(InputStream in = resource.getInputStream()) {
-            ElasticSearchIndexingUtils.doUpdateBinary(elasticSearchService, indexId, siteName, binaryPath, metadata, in, updateStatus);
-        } catch (IOException e) {
-            throw new SearchException(indexId, "Error opening document " + binaryPath, e);
-        }
+        ElasticSearchIndexingUtils.doUpdateBinary(elasticSearchService, indexId, siteName, binaryPath, metadata,
+                resource, updateStatus);
     }
 
     @Override
     protected void doUpdateContent(final String indexId, final String siteName, final String binaryPath,
                                    final Content content, final MultiValueMap<String, String> metadata,
                                    final UpdateStatus updateStatus) {
-        try(InputStream in = content.getInputStream()) {
-            ElasticSearchIndexingUtils.doUpdateBinary(elasticSearchService, indexId, siteName, binaryPath, metadata, in, updateStatus);
-        } catch (IOException e) {
-            throw new SearchException(indexId, "Error opening document " + binaryPath, e);
-        }
+        ElasticSearchIndexingUtils.doUpdateBinary(elasticSearchService, indexId, siteName, binaryPath, metadata,
+                content, updateStatus);
     }
 
     @Override
@@ -117,7 +110,8 @@ public class ElasticSearchBinaryFileWithMetadataBatchIndexer extends AbstractBin
     }
 
     @Override
-    protected void doUpdateContent(final String indexId, final String siteName, final String binaryPath, final Content content, final UpdateStatus updateStatus) {
+    protected void doUpdateContent(final String indexId, final String siteName, final String binaryPath,
+                                   final Content content, final UpdateStatus updateStatus) {
         doUpdateContent(indexId, siteName, binaryPath, content, null, updateStatus);
     }
 

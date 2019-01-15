@@ -20,6 +20,9 @@ package org.craftercms.commons.elasticsearch.jackson;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Implementation of {@link java.util.Map} that can hold a single value or a list for a given key.
@@ -29,7 +32,16 @@ public class MixedMultivaluedMap extends HashMap<String, Object> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Object put(final String key, final Object value) {
+    public Object put(final String key, Object value) {
+
+        // This is needed because of the way Jackson parses XML elements with attributes.
+        if(value instanceof Map) {
+            Map map = (Map) value;
+            if(map.containsKey(StringUtils.EMPTY)) {
+                value = map.get(StringUtils.EMPTY);
+            }
+        }
+
         if(containsKey(key)) {
             Object currentValue = get(key);
             if(currentValue instanceof List) {

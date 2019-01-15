@@ -17,21 +17,23 @@
 
 package org.craftercms.commons.elasticsearch;
 
+import java.util.Map;
+
 import org.springframework.core.io.Resource;
-import org.springframework.util.MultiValueMap;
 
 /**
- * Defines the operations to parse binary documents for indexing
+ * Defines the basic operation to process binary files and produce relevant metadata
+ * @param <T> the type of object that provides the metadata
  * @author joseross
  */
-public interface DocumentParser {
+public interface MetadataExtractor<T> {
 
     /**
-     * Parses the given document and generates an XML file
-     * @param resource the document to parse
-     * @param additionalFields additional fields to add
-     * @return an XML ready to be indexed
+     * Takes relevant metadata from the source object to the properties parameter
+     * @param resource the original file containing the metadata (in case any extra operation is needed)
+     * @param metadata the object that provides the metadata
+     * @param properties the properties that will be indexed
      */
-    String parseToXml(Resource resource, MultiValueMap<String, String> additionalFields);
+    void extract(Resource resource, T metadata, Map<String, Object> properties);
 
 }

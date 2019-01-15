@@ -17,13 +17,13 @@
 
 package org.craftercms.commons.elasticsearch.batch;
 
-import java.io.InputStream;
-
 import org.craftercms.commons.elasticsearch.ElasticSearchService;
 import org.craftercms.commons.elasticsearch.exception.ElasticSearchException;
 import org.craftercms.commons.search.batch.UpdateStatus;
 import org.craftercms.commons.search.batch.utils.IndexingUtils;
+import org.craftercms.core.service.Content;
 import org.craftercms.search.exception.SearchException;
+import org.springframework.core.io.Resource;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -56,7 +56,7 @@ public abstract class ElasticSearchIndexingUtils extends IndexingUtils {
     public static void doUpdateBinary(final ElasticSearchService elasticSearch, final String indexName,
                                       final String siteName, final String path,
                                       final MultiValueMap<String, String> additionalFields,
-                                      final InputStream content, final UpdateStatus updateStatus) {
+                                      final Content content, final UpdateStatus updateStatus) {
         try {
             elasticSearch.indexBinary(indexName, siteName, path, additionalFields, content);
             updateStatus.addSuccessfulUpdate(path);
@@ -65,4 +65,18 @@ public abstract class ElasticSearchIndexingUtils extends IndexingUtils {
         }
 
     }
+
+    public static void doUpdateBinary(final ElasticSearchService elasticSearch, final String indexName,
+                                      final String siteName, final String path,
+                                      final MultiValueMap<String, String> additionalFields,
+                                      final Resource resource, final UpdateStatus updateStatus) {
+        try {
+            elasticSearch.indexBinary(indexName, siteName, path, additionalFields, resource);
+            updateStatus.addSuccessfulUpdate(path);
+        } catch (ElasticSearchException e) {
+            throw new SearchException(indexName, "Error indexing binary document " + path, e);
+        }
+
+    }
+
 }

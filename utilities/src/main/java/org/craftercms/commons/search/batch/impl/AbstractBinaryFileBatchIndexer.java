@@ -16,10 +16,13 @@
  */
 package org.craftercms.commons.search.batch.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.craftercms.commons.search.batch.UpdateStatus;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.ContentStoreService;
 import org.craftercms.core.service.Context;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 
 import javax.activation.FileTypeMap;
@@ -38,8 +41,11 @@ import static org.craftercms.commons.search.batch.utils.IndexingUtils.isMimeType
  */
 public abstract class AbstractBinaryFileBatchIndexer extends AbstractBatchIndexer {
 
+    private static final Log logger = LogFactory.getLog(AbstractBinaryFileBatchIndexer.class);
+
     protected List<String> supportedMimeTypes;
     protected FileTypeMap mimeTypesMap;
+    protected long maxFileSize;
 
     public AbstractBinaryFileBatchIndexer() {
         mimeTypesMap = new ConfigurableMimeFileTypeMap();
@@ -49,6 +55,11 @@ public abstract class AbstractBinaryFileBatchIndexer extends AbstractBatchIndexe
         this.supportedMimeTypes = supportedMimeTypes;
     }
 
+    @Required
+    public void setMaxFileSize(final long maxFileSize) {
+        this.maxFileSize = maxFileSize;
+    }
+
     @Override
     protected void doSingleFileUpdate(String indexId, String siteName, ContentStoreService contentStoreService,
                                       Context context, String path, boolean delete, UpdateStatus updateStatus) {
@@ -56,7 +67,11 @@ public abstract class AbstractBinaryFileBatchIndexer extends AbstractBatchIndexe
             doDelete(indexId, siteName, path, updateStatus);
         } else {
             Content binaryContent = contentStoreService.getContent(context, path);
-            doUpdateContent(indexId, siteName, path, binaryContent, updateStatus);
+            if(binaryContent.getLength() > maxFileSize) {
+                logger.info("Skipping large binary file @ " + path);
+            } else {
+                doUpdateContent(indexId, siteName, path, binaryContent, updateStatus);
+            }
         }
     }
 

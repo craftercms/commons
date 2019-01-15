@@ -41,6 +41,12 @@ public interface RemoteFile {
     InputStream getInputStream() throws IOException;
 
     /**
+     * Returns the content length of the file.
+     * @throws IOException if an error occurs while trying to access the file
+     */
+    long getContentLength() throws IOException;
+
+    /**
      * Returns the remote file as a Spring {@code Resource}.
      *
      * @throws IOException if the file can't be resolved successfully as a resource

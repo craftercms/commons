@@ -17,11 +17,12 @@
 
 package org.craftercms.commons.elasticsearch;
 
-import java.io.InputStream;
 import java.util.List;
 
 import org.craftercms.commons.elasticsearch.exception.ElasticSearchException;
+import org.craftercms.core.service.Content;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.springframework.core.io.Resource;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -60,7 +61,10 @@ public interface ElasticSearchService {
      * @throws ElasticSearchException if there is any error during the operation
      */
     void indexBinary(String indexName, String siteName, String path, MultiValueMap<String, String> additionalFields,
-                     InputStream content) throws ElasticSearchException;
+                     Content content) throws ElasticSearchException;
+
+    void indexBinary(String indexName, String siteName, String path, MultiValueMap<String, String> additionalFields,
+                     Resource resource) throws ElasticSearchException;
 
     /**
      * Performs a delete for the given document

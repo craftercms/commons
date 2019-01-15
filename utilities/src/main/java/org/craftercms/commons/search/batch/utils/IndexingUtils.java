@@ -22,6 +22,7 @@ import javax.activation.FileTypeMap;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.MimeType;
 
 /**
  * @author joseross
@@ -31,7 +32,8 @@ public abstract class IndexingUtils {
     public static boolean isMimeTypeSupported(FileTypeMap mimeTypesMap, List<String> supportedMimeTypes,
                                               String filename) {
         if (mimeTypesMap != null && CollectionUtils.isNotEmpty(supportedMimeTypes)) {
-            return supportedMimeTypes.contains(mimeTypesMap.getContentType(filename.toLowerCase()));
+            MimeType mimeType = MimeType.valueOf(mimeTypesMap.getContentType(filename.toLowerCase()));
+            return supportedMimeTypes.stream().anyMatch(type -> MimeType.valueOf(type).isCompatibleWith(mimeType));
         } else {
             return true;
         }

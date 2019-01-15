@@ -18,15 +18,17 @@
 package org.craftercms.commons.elasticsearch.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.tika.io.FilenameUtils;
 import org.craftercms.commons.elasticsearch.DocumentBuilder;
 import org.craftercms.commons.elasticsearch.DocumentParser;
 import org.craftercms.commons.elasticsearch.ElasticSearchService;
 import org.craftercms.commons.elasticsearch.exception.ElasticSearchException;
+import org.craftercms.core.service.Content;
+import org.craftercms.search.service.utils.ContentResource;
 import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
@@ -39,6 +41,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.core.io.Resource;
 import org.springframework.util.MultiValueMap;
 
 /**
@@ -95,7 +98,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     @Override
     public List<String> searchField(final String indexName, final String field, final QueryBuilder queryBuilder)
         throws ElasticSearchException {
-        logger.info("[{}] Search values for field {} with filters: {}", indexName, field, queryBuilder);
+        logger.info("[{}] Search values for field {}", indexName, field);
+        logger.debug("Using filters: {}", queryBuilder);
         SearchRequest request = new SearchRequest(indexName).source(
             new SearchSourceBuilder()
                 .fetchSource(field, null)
@@ -137,11 +141,27 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
      */
     @Override
     public void indexBinary(final String indexName, final String siteName, final String path,
-                            MultiValueMap<String, String> additionalFields, final InputStream content)
+                            MultiValueMap<String, String> additionalFields, final Content content)
         throws ElasticSearchException {
         logger.info("[{}] Indexing binary document {}", indexName, path);
         try {
-            index(indexName, siteName, path, documentParser.parseToXml(content, additionalFields));
+            index(indexName, siteName, path, documentParser.parseToXml(new ContentResource(content,
+                    FilenameUtils.getName(path)), additionalFields));
+        } catch (Exception e) {
+            throw new ElasticSearchException("Error indexing binary document " + path, e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void indexBinary(final String indexName, final String siteName, final String path,
+                            MultiValueMap<String, String> additionalFields, final Resource resource)
+        throws ElasticSearchException {
+        logger.info("[{}] Indexing binary document {}", indexName, path);
+        try {
+            index(indexName, siteName, path, documentParser.parseToXml(resource, additionalFields));
         } catch (Exception e) {
             throw new ElasticSearchException("Error indexing binary document " + path, e);
         }
