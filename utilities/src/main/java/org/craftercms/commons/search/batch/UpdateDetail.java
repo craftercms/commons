@@ -14,31 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.craftercms.commons.search.batch;
 
-import java.util.List;
+import java.time.Instant;
 
 /**
- * Set of files to add or delete from the index.
- *
- * @author avasquez
+ * @author joseross
  */
-public class UpdateSet extends AbstractUpdateDetailProvider {
+public class UpdateDetail {
 
-    private List<String> updatePaths;
-    private List<String> deletePaths;
+    protected String author;
+    protected Instant date;
 
-    public UpdateSet(List<String> updatePaths, List<String> deletePaths) {
-        this.updatePaths = updatePaths;
-        this.deletePaths = deletePaths;
+    public String getAuthor() {
+        return author;
     }
 
-    public List<String> getUpdatePaths() {
-        return updatePaths;
+    public void setAuthor(final String author) {
+        this.author = author;
     }
 
-    public List<String> getDeletePaths() {
-        return deletePaths;
+    public Instant getDate() {
+        return date;
+    }
+
+    public void setDate(final Instant date) {
+        this.date = date;
     }
 
 }

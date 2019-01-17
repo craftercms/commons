@@ -18,6 +18,7 @@ package org.craftercms.commons.search.batch.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.search.batch.UpdateDetail;
 import org.craftercms.commons.search.batch.UpdateStatus;
 import org.craftercms.core.service.Content;
 import org.craftercms.core.service.ContentStoreService;
@@ -62,7 +63,8 @@ public abstract class AbstractBinaryFileBatchIndexer extends AbstractBatchIndexe
 
     @Override
     protected void doSingleFileUpdate(String indexId, String siteName, ContentStoreService contentStoreService,
-                                      Context context, String path, boolean delete, UpdateStatus updateStatus) {
+                                      Context context, String path, boolean delete, UpdateDetail updateDetail,
+                                      UpdateStatus updateStatus) {
         if (delete) {
             doDelete(indexId, siteName, path, updateStatus);
         } else {
@@ -70,7 +72,7 @@ public abstract class AbstractBinaryFileBatchIndexer extends AbstractBatchIndexe
             if(binaryContent.getLength() > maxFileSize) {
                 logger.info("Skipping large binary file @ " + path);
             } else {
-                doUpdateContent(indexId, siteName, path, binaryContent, updateStatus);
+                doUpdateContent(indexId, siteName, path, binaryContent, updateDetail, updateStatus);
             }
         }
     }
@@ -78,7 +80,7 @@ public abstract class AbstractBinaryFileBatchIndexer extends AbstractBatchIndexe
     protected abstract void doDelete(String indexId, String siteName, String path, UpdateStatus updateStatus);
 
     protected abstract void doUpdateContent(String indexId, String siteName, String path, Content binaryContent,
-                                            UpdateStatus updateStatus);
+                                            UpdateDetail updateDetail, UpdateStatus updateStatus);
 
     @Override
     protected boolean include(String path) {

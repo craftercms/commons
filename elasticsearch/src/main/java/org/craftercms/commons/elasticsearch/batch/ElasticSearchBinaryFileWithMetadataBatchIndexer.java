@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.commons.elasticsearch.ElasticSearchService;
 import org.craftercms.commons.elasticsearch.exception.ElasticSearchException;
+import org.craftercms.commons.search.batch.UpdateDetail;
 import org.craftercms.commons.search.batch.UpdateStatus;
 import org.craftercms.commons.search.batch.impl.AbstractBinaryFileWithMetadataBatchIndexer;
 import org.craftercms.core.service.Content;
@@ -90,29 +91,31 @@ public class ElasticSearchBinaryFileWithMetadataBatchIndexer extends AbstractBin
     @Override
     protected void doUpdateContent(final String indexId, final String siteName, final String binaryPath,
                                    final Resource resource, final MultiValueMap<String, String> metadata,
-                                   final UpdateStatus updateStatus) {
+                                   final UpdateDetail updateDetail, final UpdateStatus updateStatus) {
         ElasticSearchIndexingUtils.doUpdateBinary(elasticSearchService, indexId, siteName, binaryPath, metadata,
-                resource, updateStatus);
+                resource, updateDetail, updateStatus);
     }
 
     @Override
     protected void doUpdateContent(final String indexId, final String siteName, final String binaryPath,
                                    final Content content, final MultiValueMap<String, String> metadata,
-                                   final UpdateStatus updateStatus) {
+                                   final UpdateDetail updateDetail, final UpdateStatus updateStatus) {
         ElasticSearchIndexingUtils.doUpdateBinary(elasticSearchService, indexId, siteName, binaryPath, metadata,
-                content, updateStatus);
+                content, updateDetail, updateStatus);
     }
 
     @Override
     protected void doUpdateContent(final String indexId, final String siteName, final String binaryPath,
-                                   final Resource resource, final UpdateStatus updateStatus) {
-        doUpdateContent(indexId, siteName, binaryPath, resource, null, updateStatus);
+                                   final Resource resource, final UpdateDetail updateDetail,
+                                   final UpdateStatus updateStatus) {
+        doUpdateContent(indexId, siteName, binaryPath, resource, updateDetail, updateStatus);
     }
 
     @Override
     protected void doUpdateContent(final String indexId, final String siteName, final String binaryPath,
-                                   final Content content, final UpdateStatus updateStatus) {
-        doUpdateContent(indexId, siteName, binaryPath, content, null, updateStatus);
+                                   final Content content, final UpdateDetail updateDetail,
+                                   final UpdateStatus updateStatus) {
+        doUpdateContent(indexId, siteName, binaryPath, content, updateDetail, updateStatus);
     }
 
 }

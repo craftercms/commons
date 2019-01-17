@@ -17,6 +17,8 @@
 
 package org.craftercms.commons.elasticsearch;
 
+import org.springframework.util.MultiValueMap;
+
 /**
  * Defines the operations to build native documents for a search provider
  * @param <T> type for the native documents
@@ -31,6 +33,18 @@ public interface DocumentBuilder<T> {
      * @param xml the XML for the document
      * @return the native document
      */
-    T build(String site, String id, String xml);
+    default T build(String site, String id, String xml) {
+        return build(site, id, xml, null);
+    }
+
+    /**
+     * Builds a document from the given XML
+     * @param site the site name
+     * @param id the local id for the document
+     * @param xml the XML for the document
+     * @param additionalFields aditional fields to index
+     * @return the native document
+     */
+    T build(String site, String id, String xml, MultiValueMap<String, String> additionalFields);
 
 }

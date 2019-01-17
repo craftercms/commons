@@ -23,13 +23,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.activation.FileTypeMap;
+import javax.activation.MimetypesFileTypeMap;
+
 import org.apache.commons.collections4.MapUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.craftercms.commons.elasticsearch.MetadataExtractor;
 import org.craftercms.commons.elasticsearch.impl.AbstractDocumentParser;
-import org.craftercms.core.service.Content;
 import org.craftercms.search.exception.SearchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +70,8 @@ public class TikaDocumentParser extends AbstractDocumentParser {
      */
     protected Tika tika = new Tika();
 
+    protected FileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+
     public void setCharLimit(final int charLimit) {
         this.charLimit = charLimit;
     }
@@ -90,11 +94,12 @@ public class TikaDocumentParser extends AbstractDocumentParser {
      * {@inheritDoc}
      */
     @Override
-    public String parseToXml(final Resource resource, final MultiValueMap<String, String> additionalFields) {
+    public String parseToXml(final String filename, final Resource resource,
+                             final MultiValueMap<String, String> additionalFields) {
         Metadata metadata = new Metadata();
         try (InputStream in = resource.getInputStream()) {
             String parsedContent = tika.parseToString(in, metadata, charLimit);
-            return extractMetadata(resource, parsedContent, metadata, additionalFields);
+            return extractMetadata(filename, resource, parsedContent, metadata, additionalFields);
         } catch (IOException | TikaException e) {
             logger.error("Error parsing file", e);
             throw new SearchException("Error parsing file", e);
@@ -108,11 +113,22 @@ public class TikaDocumentParser extends AbstractDocumentParser {
      * @param additionalFields additional fields to be added
      * @return the XML ready to be indexed
      */
-    protected String extractMetadata(Resource resource, String parsedContent, Metadata metadata,
+    protected String extractMetadata(String filename, Resource resource, String parsedContent, Metadata metadata,
                                      MultiValueMap<String, String> additionalFields) {
         Map<String, Object> map = new HashMap<>();
 
         map.put(fieldNameContent, parsedContent);
+
+        String type = fileTypeMap.getContentType(filename);
+        if(!"pplication/octet-stream".equals(type)) {
+            map.put("contentType", type);
+        }
+
+        try {
+            map.put("contentLength", resource.contentLength());
+        } catch (IOException e) {
+            logger.warn("Could not find file size for {}", resource);
+        }
         metadataExtractors.forEach(extractor -> extractor.extract(resource, metadata, map));
 
         if(MapUtils.isNotEmpty(additionalFields)) {

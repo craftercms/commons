@@ -18,6 +18,7 @@
 package org.craftercms.commons.elasticsearch.batch;
 
 import org.craftercms.commons.elasticsearch.ElasticSearchService;
+import org.craftercms.commons.search.batch.UpdateDetail;
 import org.craftercms.commons.search.batch.UpdateStatus;
 import org.craftercms.commons.search.batch.impl.AbstractXmlFileBatchIndexer;
 import org.springframework.beans.factory.annotation.Required;
@@ -45,8 +46,9 @@ public class ElasticSearchXmlFileBatchIndexer extends AbstractXmlFileBatchIndexe
 
     @Override
     protected void doUpdate(final String indexId, final String siteName, final String path, final String xml,
-                            final UpdateStatus updateStatus) {
-        ElasticSearchIndexingUtils.doUpdate(elasticSearchService, indexId, siteName, path, xml, updateStatus);
+                            final UpdateDetail updateDetail, final UpdateStatus updateStatus) {
+        ElasticSearchIndexingUtils.doUpdate(elasticSearchService, indexId, siteName, path, xml, updateDetail,
+            updateStatus);
     }
 
 }

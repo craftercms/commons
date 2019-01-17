@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.craftercms.commons.search.batch.UpdateDetail;
 import org.craftercms.commons.search.batch.UpdateStatus;
 import org.craftercms.core.exception.CrafterException;
 import org.craftercms.core.exception.XmlException;
@@ -68,20 +69,21 @@ public abstract class AbstractXmlFileBatchIndexer extends AbstractBatchIndexer {
 
     @Override
     protected void doSingleFileUpdate(String indexId, String siteName, ContentStoreService contentStoreService,
-                                      Context context, String path, boolean delete, UpdateStatus updateStatus) {
+                                      Context context, String path, boolean delete,
+                                      UpdateDetail updateDetail, UpdateStatus updateStatus) {
         if (delete) {
             doDelete(indexId, siteName, path, updateStatus);
         } else {
             String xml = processXml(siteName, contentStoreService, context, path);
 
-            doUpdate(indexId, siteName, path, xml, updateStatus);
+            doUpdate(indexId, siteName, path, xml, updateDetail, updateStatus);
         }
     }
 
     protected abstract void doDelete(String indexId, String siteName, String path, UpdateStatus updateStatus);
 
     protected abstract void doUpdate(String indexId, String siteName, String path, String xml,
-                                     UpdateStatus updateStatus);
+                                     UpdateDetail updateDetail, UpdateStatus updateStatus);
 
     protected String processXml(String siteName, ContentStoreService contentStoreService, Context context,
                                 String path) throws CrafterException {
@@ -132,7 +134,7 @@ public abstract class AbstractXmlFileBatchIndexer extends AbstractBatchIndexer {
         }
 
         @Override
-        public InputStream getInputStream() throws IOException {
+        public InputStream getInputStream() {
             return new ByteArrayInputStream(new byte[0]);
         }
 

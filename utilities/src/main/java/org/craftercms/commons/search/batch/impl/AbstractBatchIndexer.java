@@ -22,6 +22,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.craftercms.commons.lang.RegexUtils;
+import org.craftercms.commons.search.batch.UpdateDetail;
 import org.craftercms.core.service.ContentStoreService;
 import org.craftercms.core.service.Context;
 import org.craftercms.commons.search.batch.BatchIndexer;
@@ -57,7 +58,8 @@ public abstract class AbstractBatchIndexer implements BatchIndexer {
         for (String path : updateSet.getUpdatePaths()) {
             if (include(path)) {
                 try {
-                    doSingleFileUpdate(indexId, siteName, contentStoreService, context, path, false, updateStatus);
+                    doSingleFileUpdate(indexId, siteName, contentStoreService, context, path, false,
+                        updateSet.getUpdateDetail(path), updateStatus);
                 } catch (Exception e) {
                     logger.error("Error while trying to perform update of file " + getSiteBasedPath(siteName, path), e);
 
@@ -69,7 +71,8 @@ public abstract class AbstractBatchIndexer implements BatchIndexer {
         for (String path : updateSet.getDeletePaths()) {
             if (include(path)) {
                 try {
-                    doSingleFileUpdate(indexId, siteName, contentStoreService, context, path, true, updateStatus);
+                    doSingleFileUpdate(indexId, siteName, contentStoreService, context, path, true, null,
+                        updateStatus);
                 } catch (Exception e) {
                     logger.error("Error while trying to perform delete of file " + getSiteBasedPath(siteName, path), e);
 
@@ -86,6 +89,7 @@ public abstract class AbstractBatchIndexer implements BatchIndexer {
 
     protected abstract void doSingleFileUpdate(String indexId, String siteName,
                                                ContentStoreService contentStoreService, Context context,
-                                               String path, boolean delete, UpdateStatus updateStatus) throws Exception;
+                                               String path, boolean delete, UpdateDetail updateDetail,
+                                               UpdateStatus updateStatus) throws Exception;
 
 }

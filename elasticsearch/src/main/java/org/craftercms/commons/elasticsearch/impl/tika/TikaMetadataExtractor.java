@@ -86,12 +86,16 @@ public class TikaMetadataExtractor implements MetadataExtractor<Metadata> {
         if(isSupported(metadata)) {
             logger.info("Extracting metadata");
             mapping.forEach((property, key) -> {
+                String value;
                 if(key instanceof String) {
-                    properties.put(property, metadata.get((String) key));
+                    value = metadata.get((String) key);
                 } else if(key instanceof Property) {
-                    properties.put(property, metadata.get((Property) key));
+                    value = metadata.get((Property) key);
                 } else {
                     throw new IllegalArgumentException("Invalid metadata key " + key);
+                }
+                if(!properties.containsKey(property) && StringUtils.isNotEmpty(value)) {
+                    properties.put(property, value);
                 }
             });
         }

@@ -17,17 +17,26 @@
 
 package org.craftercms.commons.search.batch.utils;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import javax.activation.FileTypeMap;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.search.batch.UpdateDetail;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MimeType;
+import org.springframework.util.MultiValueMap;
 
 /**
  * @author joseross
  */
 public abstract class IndexingUtils {
+
+    public static final String FIELD_NAME_EDITED_BY = "lastEditedBy";
+    public static final String FIELD_NAME_EDITED_ON = "lastEditedOn";
 
     public static boolean isMimeTypeSupported(FileTypeMap mimeTypesMap, List<String> supportedMimeTypes,
                                               String filename) {
@@ -45,6 +54,17 @@ public abstract class IndexingUtils {
 
     public static String getIndexNameStr(String indexId) {
         return StringUtils.isNotEmpty(indexId)? "'" + indexId + "'": "default";
+    }
+
+    public static MultiValueMap<String, String> getAdditionalFields(UpdateDetail updateDetail) {
+        MultiValueMap<String, String> additionalFields = null;
+        if(updateDetail != null) {
+            additionalFields = new LinkedMultiValueMap<>();
+            additionalFields.put(FIELD_NAME_EDITED_BY, Collections.singletonList(updateDetail.getAuthor()));
+            additionalFields.put(FIELD_NAME_EDITED_ON, Collections.singletonList(
+                DateTimeFormatter.ISO_INSTANT.format(updateDetail.getDate().atZone(ZoneId.of("UTC")))));
+        }
+        return additionalFields;
     }
 
 }

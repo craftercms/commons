@@ -18,8 +18,10 @@
 package org.craftercms.commons.elasticsearch.batch;
 
 import org.craftercms.commons.elasticsearch.ElasticSearchService;
+import org.craftercms.commons.search.batch.UpdateDetail;
 import org.craftercms.commons.search.batch.UpdateStatus;
 import org.craftercms.commons.search.batch.impl.AbstractBinaryFileBatchIndexer;
+import org.craftercms.commons.search.batch.utils.IndexingUtils;
 import org.craftercms.core.service.Content;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -45,9 +47,11 @@ public class ElasticSearchBinaryFileBatchIndexer extends AbstractBinaryFileBatch
     }
 
     @Override
-    protected void doUpdateContent(final String indexId, final String siteName, final String path, final Content binaryContent, final UpdateStatus updateStatus) {
-        ElasticSearchIndexingUtils.doUpdateBinary(elasticSearchService, indexId, siteName, path, null,
-            binaryContent, updateStatus);
+    protected void doUpdateContent(final String indexId, final String siteName, final String path,
+                                   final Content binaryContent, final UpdateDetail updateDetail,
+                                   final UpdateStatus updateStatus) {
+        ElasticSearchIndexingUtils.doUpdateBinary(elasticSearchService, indexId, siteName, path, null, binaryContent,
+            updateDetail, updateStatus);
     }
 
 }

@@ -49,7 +49,21 @@ public interface ElasticSearchService {
      * @param xml the content of the document
      * @throws ElasticSearchException if there is any error during the operation
      */
-    void index(String indexName, String siteId, String docId, String xml) throws ElasticSearchException;
+    default void index(String indexName, String siteId, String docId, String xml) throws ElasticSearchException {
+        index(indexName, siteId, docId, xml, null);
+    }
+
+    /**
+     * Performs an index for the given xml file
+     * @param indexName the name of the index
+     * @param siteId the name of the site
+     * @param docId the id of the document
+     * @param xml the content of the document
+     * @param additionalFields additional fields to index
+     * @throws ElasticSearchException if there is any error during the operation
+     */
+    void index(String indexName, String siteId, String docId, String xml,
+               MultiValueMap<String, String> additionalFields) throws ElasticSearchException;
 
     /**
      * Performs an index for the given binary file
