@@ -49,6 +49,11 @@ public class ResourceBasedRemoteFile implements RemoteFile {
     }
 
     @Override
+    public long getContentLength() throws IOException {
+        return resource.contentLength();
+    }
+
+    @Override
     public Resource toResource() throws IOException {
         return resource;
     }
