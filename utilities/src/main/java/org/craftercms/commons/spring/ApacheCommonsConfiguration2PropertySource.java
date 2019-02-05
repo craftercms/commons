@@ -38,7 +38,7 @@ public class ApacheCommonsConfiguration2PropertySource extends EnumerablePropert
 
     @Override
     public Object getProperty(String name) {
-        return source.getProperty(name);
+        return source.getString(name);
     }
 
 }
