@@ -20,7 +20,6 @@ import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.springframework.core.env.EnumerablePropertySource;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
