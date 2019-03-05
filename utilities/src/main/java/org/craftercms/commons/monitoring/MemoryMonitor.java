@@ -17,14 +17,14 @@
 package org.craftercms.commons.monitoring;
 
 
-import org.apache.commons.io.FileUtils;
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryUsage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.sun.management.OperatingSystemMXBean;
 
 /**
  * Holds basic JVM memory.
@@ -33,73 +33,70 @@ import java.util.List;
  */
 public final class MemoryMonitor {
 
-    private static final String NON_HEAP_MEMORY = "Non Heap MemoryMonitor";
-    private static final String HEAP_MEMORY = "Heap MemoryMonitor";
-    private String name;
-    private String init;
-    private String used;
-    private String committed;
-    private String max;
+    private long totalJvmMemory;
+    private long freeJvmMemory;
+    private long maxJvmMemory;
+    private long totalOsMemory;
+    private long freeOsMemory;
+    private long totalSwapMemory;
+    private long freeSwapMemory;
 
     /**
      * Private Constructor of the MemoryMonitor POJO
-     * @param memName Type of MemoryMonitor to get the information.
-     * @param memoryUsage {@link MemoryUsage} bean where the information is taken from.
      */
-    private MemoryMonitor(String memName, MemoryUsage memoryUsage) {
-        this.name=memName;
-        this.init=FileUtils.byteCountToDisplaySize(memoryUsage.getInit());
-        this.used=FileUtils.byteCountToDisplaySize(memoryUsage.getUsed());
-        this.committed=FileUtils.byteCountToDisplaySize(memoryUsage.getCommitted());
-        this.max=FileUtils.byteCountToDisplaySize(memoryUsage.getMax());
+    private MemoryMonitor() {
+        Runtime runtime = Runtime.getRuntime();
+        OperatingSystemMXBean os = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        totalJvmMemory = runtime.totalMemory();
+        freeJvmMemory = runtime.freeMemory();
+        maxJvmMemory = runtime.maxMemory();
+        totalOsMemory = os.getTotalPhysicalMemorySize();
+        freeOsMemory = os.getFreePhysicalMemorySize();
+        totalSwapMemory = os.getTotalSwapSpaceSize();
+        freeSwapMemory = os.getFreeSwapSpaceSize();
     }
 
-
-    /**
-     * Query all register MemoryPools to get information and create a {@link MemoryMonitor} Pojo
-     * @return List with all the memory usage stats.
-     */
-    public static List<MemoryMonitor> getMemoryStats(){
-        ArrayList<MemoryMonitor> memoryPoolInformation = new ArrayList<>();
-        MemoryUsage heapMem = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-        memoryPoolInformation.add(new MemoryMonitor(HEAP_MEMORY,heapMem));
-        MemoryUsage nonHeapMen = ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage();
-        memoryPoolInformation.add(new MemoryMonitor(NON_HEAP_MEMORY,nonHeapMen));
-
-        for(MemoryPoolMXBean memMXBean :ManagementFactory.getMemoryPoolMXBeans()){
-            memoryPoolInformation.add(new MemoryMonitor(memMXBean.getName(), memMXBean.getUsage()));
-        }
-        return Collections.unmodifiableList(memoryPoolInformation);
+    public static MemoryMonitor getCurrentMemory() {
+        return new MemoryMonitor();
     }
 
-    public String getName() {
-        return name;
+    public long getTotalJvmMemory() {
+        return totalJvmMemory;
     }
 
-    public String getInit() {
-        return init;
+    public long getFreeJvmMemory() {
+        return freeJvmMemory;
     }
 
-    public String getUsed() {
-        return used;
+    public long getMaxJvmMemory() {
+        return maxJvmMemory;
     }
 
-    public String getCommitted() {
-        return committed;
+    public long getTotalOsMemory() {
+        return totalOsMemory;
     }
 
-    public String getMax() {
-        return max;
+    public long getFreeOsMemory() {
+        return freeOsMemory;
+    }
+
+    public long getTotalSwapMemory() {
+        return totalSwapMemory;
+    }
+
+    public long getFreeSwapMemory() {
+        return freeSwapMemory;
     }
 
     @Override
     public String toString() {
         return "MemoryMonitor{" +
-                "name='" + name + '\'' +
-                ", init='" + init + '\'' +
-                ", used='" + used + '\'' +
-                ", committed='" + committed + '\'' +
-                ", max='" + max + '\'' +
-                '}';
+            "totalJvmMemory=" + totalJvmMemory +
+            ", freeJvmMemory=" + freeJvmMemory +
+            ", totalOsMemory=" + totalOsMemory +
+            ", freeOsMemory=" + freeOsMemory +
+            ", totalSwapMemory=" + totalSwapMemory +
+            ", freeSwapMemory=" + freeSwapMemory +
+            '}';
     }
 }

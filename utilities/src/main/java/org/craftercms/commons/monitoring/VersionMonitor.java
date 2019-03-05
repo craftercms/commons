@@ -19,67 +19,78 @@ package org.craftercms.commons.monitoring;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.jar.Attributes;
+import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 /**
- * Get's current packageVersion information about:
- * 1. Current VM packageVersion runs current code.
+ * Get's current version information about:
+ * 1. Current VM version runs current code.
  * 2. Build Information from a given manifest file.
- * 3. Name and packageVersion from a given manifest file.
+ * 3. Name and version from a given manifest file.
  * @since 3.0
  * @author Carlos Ortiz
  */
 public final class VersionMonitor {
 
-    private final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ssZ");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.of("UTC"));
+
     /**
      * Manifest key for the date in ms when the package was build.
      */
-    public static final String BUILD_ON = "Build-On";
+    public static final String KEY_BUILD_ON = "Build-On";
+
     /**
      * Manifest key for name of the Lib/app in the jar (usually maven name tag value).
      */
-    public static final String IMPLEMENTATION_TITLE = "Implementation-Title";
+    public static final String KEY_IMPLEMENTATION_TITLE = "Implementation-Title";
+
     /**
      * Manifest key for VersionMonitor of the code (usually matches Mvn packageVersion)
      */
-    public static final String IMPLEMENTATION_VERSION = "Implementation-Version";
+    public static final String KEY_IMPLEMENTATION_VERSION = "Implementation-Version";
+
     /**
      * Manifest key for codebase packageVersion (usually git hash or svn id).
      */
-    public static final String IMPLEMENTATION_BUILD = "Implementation-Build";
-    /**
-     * System property key for File encoding setting.
-     */
-    public static final String FILE_ENCODING_SYSTEM_PROP_KEY = "file.encoding";
+    public static final String KEY_IMPLEMENTATION_BUILD = "Implementation-Build";
+
     /**
      * Manifest Default Path
      */
-    public static final String MANIFEST_PATH="/META-INF/MANIFEST.MF";
+    public static final String MANIFEST_PATH = "/META-INF/MANIFEST.MF";
 
-    private String name;
+    /**
+     * The path for classes loaded from a WAR file
+     */
+    public static final String WAR_PATH = "/WEB-INF/classes/";
+
+    /**
+     * The path for classes loaded from a Spring Boot JAR file
+     */
+    public static final String SPRING_PATH = "!/BOOT-INF/classes!/";
+
+    private String packageName;
     private String packageVersion;
-    private String build;
-    private String build_date;
-    private String java_version;
-    private String java_vendor;
-    private String java_runtime;
-    private String java_vm;
-    private String system_encoding;
-    private String operating_system;
-    private String os_architecture;
-    private String application_server_container;
-    private String jvm_input_arguments;
-    private String datetime;
-    private String jvm_version;
-    private String jvm_vendor;
-    private String jvm_implementation_version;
+    private String packageBuild;
+    private String packageBuildDate;
+
+    private String osName;
+    private String osVersion;
+    private String osArch;
+
+    private String javaVersion;
+    private String javaVendor;
+    private String javaVm;
 
     /**
      * Create a VersionMonitor pojo instance based on a given Manifest File.
@@ -88,27 +99,22 @@ public final class VersionMonitor {
      */
     private VersionMonitor(Manifest manifest){
         Attributes mainAttrs = manifest.getMainAttributes();
-        datetime=DATETIME_FORMATTER.format(new Date());
         initFromManifest(mainAttrs);
         initRuntime();
         initOS();
-        initTomcat();
     }
 
     private void initFromManifest(Attributes mainAttrs) {
 
-        if (mainAttrs.getValue(BUILD_ON) != null) {
-            build_date = DATETIME_FORMATTER.format(
-                    new Date(
-                            Long.parseLong(mainAttrs.getValue(BUILD_ON))
-                    )
-            );
+        if (mainAttrs.getValue(KEY_BUILD_ON) != null) {
+            packageBuildDate = FORMATTER.format(
+                Instant.ofEpochMilli(Long.parseLong(mainAttrs.getValue(KEY_BUILD_ON))));
         } else {
-            build_date = DATETIME_FORMATTER.format(new Date(0));
+            packageBuildDate = StringUtils.EMPTY;
         }
-        name = mainAttrs.getValue(IMPLEMENTATION_TITLE);
-        packageVersion = mainAttrs.getValue(IMPLEMENTATION_VERSION);
-        build = mainAttrs.getValue(IMPLEMENTATION_BUILD);
+        packageName = mainAttrs.getValue(KEY_IMPLEMENTATION_TITLE);
+        packageVersion = mainAttrs.getValue(KEY_IMPLEMENTATION_VERSION);
+        packageBuild = mainAttrs.getValue(KEY_IMPLEMENTATION_BUILD);
 
     }
 
@@ -128,124 +134,95 @@ public final class VersionMonitor {
      * @throws IOException If Unable to read the Manifest file.
      */
     public static VersionMonitor getVersion(Class clazz) throws IOException {
-        Manifest manifest = new Manifest();
-        manifest.read(clazz.getResourceAsStream(MANIFEST_PATH));
-        return getVersion(manifest);
-    }
-
-    private void initTomcat() {
-        application_server_container=StringUtils.EMPTY;
+        String path = clazz.getProtectionDomain().getCodeSource().getLocation().getPath();
+        if(StringUtils.isEmpty(path)) {
+            return null;
+        }
+        if(StringUtils.contains(path, WAR_PATH)) {
+            path = StringUtils.removeEnd(path, WAR_PATH);
+            path = StringUtils.appendIfMissing(path, MANIFEST_PATH);
+            try (InputStream is = Files.newInputStream(Paths.get(path))) {
+                return getVersion(new Manifest(is));
+            }
+        } else if(StringUtils.contains(path, SPRING_PATH)) {
+            path = StringUtils.removeStart(path, "file:");
+            path = StringUtils.removeEnd(path, SPRING_PATH);
+            JarFile jarFile = new JarFile(path);
+            return VersionMonitor.getVersion(jarFile.getManifest());
+        }
+        return null;
     }
 
     private void initOS() {
         OperatingSystemMXBean os = ManagementFactory.getOperatingSystemMXBean();
-        operating_system=os.getName()+"-"+os.getVersion();
-        os_architecture=os.getArch();
-        system_encoding=System.getProperty(FILE_ENCODING_SYSTEM_PROP_KEY);
+        osName = os.getName();
+        osVersion = os.getVersion();
+        osArch = os.getArch();
     }
 
     @SuppressWarnings("unchecked")
     private void initRuntime(){
        RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
-       java_version=runtime.getSpecVersion();
-       java_vendor=runtime.getSpecVendor();
-       java_runtime=runtime.getSpecName();
-       java_vm=runtime.getVmName();
-       jvm_input_arguments=StringUtils.join(runtime.getInputArguments());
-       jvm_implementation_version=runtime.getVmVersion();
-       jvm_vendor=runtime.getVmVendor();
-       jvm_version=runtime.getSpecVersion();
+       javaVersion = runtime.getSpecVersion();
+       javaVendor = runtime.getSpecVendor();
+       javaVm = runtime.getVmName();
     }
 
     @Override
     public String toString() {
         return "VersionMonitor{" +
-                ", name='" + name + '\'' +
+                ", packageName='" + packageName + '\'' +
                 ", packageVersion='" + packageVersion + '\'' +
-                ", build='" + build + '\'' +
-                ", build_date='" + build_date + '\'' +
-                ", java_version='" + java_version + '\'' +
-                ", java_vendor='" + java_vendor + '\'' +
-                ", java_runtime='" + java_runtime + '\'' +
-                ", java_vm='" + java_vm + '\'' +
-                ", system_encoding='" + system_encoding + '\'' +
-                ", operating_system='" + operating_system + '\'' +
-                ", os_architecture='" + os_architecture + '\'' +
-                ", application_server_container='" + application_server_container + '\'' +
-                ", jvm_input_arguments='" + jvm_input_arguments + '\'' +
-                ", datetime='" + datetime + '\'' +
-                ", jvm_version='" + jvm_version + '\'' +
-                ", jvm_vendor='" + jvm_vendor + '\'' +
-                ", jvm_implementation_version='" + jvm_implementation_version + '\'' +
+                ", packageBuild='" + packageBuild + '\'' +
+                ", packageBuildDate='" + packageBuildDate + '\'' +
+                ", javaVersion='" + javaVersion + '\'' +
+                ", javaVendor='" + javaVendor + '\'' +
+                ", javaVm='" + javaVm + '\'' +
+                ", osName='" + osName + '\'' +
+                ", osVersion='" + osVersion + '\'' +
+                ", osArch='" + osArch + '\'' +
                 '}';
     }
 
-    public String getName() {
-        return name;
+    public String getPackageName() {
+        return packageName;
     }
 
     public String getPackageVersion() {
         return packageVersion;
     }
 
-    public String getBuild() {
-        return build;
+    public String getPackageBuild() {
+        return packageBuild;
     }
 
-    public String getBuild_date() {
-        return build_date;
+    public String getPackageBuildDate() {
+        return packageBuildDate;
     }
 
-    public String getJava_version() {
-        return java_version;
+    public String getJavaVersion() {
+        return javaVersion;
     }
 
-    public String getJava_vendor() {
-        return java_vendor;
+    public String getJavaVendor() {
+        return javaVendor;
     }
 
-    public String getJava_runtime() {
-        return java_runtime;
+    public String getJavaVm() {
+        return javaVm;
     }
 
-    public String getJava_vm() {
-        return java_vm;
+    public String getOsName() {
+        return osName;
     }
 
-    public String getSystem_encoding() {
-        return system_encoding;
+    public String getOsVersion() {
+        return osVersion;
     }
 
-    public String getOperating_system() {
-        return operating_system;
+    public String getOsArch() {
+        return osArch;
     }
 
-    public String getOs_architecture() {
-        return os_architecture;
-    }
-
-    public String getApplication_server_container() {
-        return application_server_container;
-    }
-
-    public String getJvm_input_arguments() {
-        return jvm_input_arguments;
-    }
-
-    public String getDatetime() {
-        return datetime;
-    }
-
-    public String getJvm_version() {
-        return jvm_version;
-    }
-
-    public String getJvm_vendor() {
-        return jvm_vendor;
-    }
-
-    public String getJvm_implementation_version() {
-        return jvm_implementation_version;
-    }
 }
 

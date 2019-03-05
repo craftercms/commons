@@ -99,7 +99,7 @@ public interface EntitlementValidator {
             VersionMonitor versionMonitor = VersionMonitor.getVersion(
                 new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()))
                     .getManifest());
-            return versionMonitor.getBuild();
+            return versionMonitor.getPackageBuild();
         } catch (Exception e) {
             return null;
         }

@@ -18,71 +18,55 @@ package org.craftercms.commons.monitoring;
 
 
 import java.lang.management.ManagementFactory;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.lang.management.RuntimeMXBean;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Get's current basic JVM statusLabel with a custom statusLabel label (default's to `healthy`)
+ * Get's current basic JVM status
  * @since 3.0
  * @author Carlos Ortiz.
  */
 public final class StatusMonitor {
 
-    /**
-     * Default StatusMonitor Label name.
-     */
-    private final static String DEFAULT_STATUS_LABEL ="healthy";
-    private String statusLabel;
-    private String uptime;
-    private String datetime;
-    private final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyy-MM-dd'T'HH:mm:ssZ");
-    /**
-     * Creates the StatusMonitor with current information and a custom statusLabel label.
-     * @param statusLabel Custom statusLabel label.
-     */
-    private StatusMonitor(String statusLabel){
-        long uptimeInMS = ManagementFactory.getRuntimeMXBean().getUptime();
-        this.statusLabel = statusLabel;
-        uptime=String.format("%sh %sm %ss", TimeUnit.MILLISECONDS.toHours(uptimeInMS),
-                TimeUnit.MILLISECONDS.toMinutes(uptimeInMS),
-                TimeUnit.MILLISECONDS.toSeconds(uptimeInMS));
-        datetime=DATETIME_FORMATTER.format(new Date());
-    }
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.of("UTC"));
 
+    private long uptime;
+
+    private String startup;
 
     /**
-     * Creates the StatusMonitor with current information and a custom statusLabel label.
-     * @param statusLabel Custom statusLabel label.
+     * Creates the StatusMonitor with current information.
      */
-    public static StatusMonitor getCurrentStatus(String statusLabel){
-        return new StatusMonitor(statusLabel);
+    private StatusMonitor() {
+        RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
+        startup = FORMATTER.format(Instant.ofEpochMilli(runtime.getStartTime()));
+        uptime = TimeUnit.MILLISECONDS.toSeconds(runtime.getUptime());
     }
+
     /**
-     * Creates the StatusMonitor with current information and a custom statusLabel label.
-     * @return  Custom statusLabel label.
+     * Creates the StatusMonitor with current information.
      */
     public static StatusMonitor getCurrentStatus(){
-        return new StatusMonitor(DEFAULT_STATUS_LABEL);
-    }
-    public String getStatus() {
-        return statusLabel;
+        return new StatusMonitor();
     }
 
-    public String getUptime() {
+    public long getUptime() {
         return uptime;
     }
 
-    public String getDatetime() {
-        return datetime;
+    public String getStartup() {
+        return startup;
     }
 
     @Override
     public String toString() {
         return "StatusMonitor{" +
-                "statusLabel='" + statusLabel + '\'' +
                 ", uptime='" + uptime + '\'' +
-                ", datetime='" + datetime + '\'' +
+                ", startup='" + startup + '\'' +
                 '}';
     }
+
 }
