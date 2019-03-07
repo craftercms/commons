@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  * @since 3.0
  * @author Carlos Ortiz.
  */
-public final class StatusMonitor {
+public final class StatusInfo {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.of("UTC"));
 
@@ -38,19 +38,19 @@ public final class StatusMonitor {
     private String startup;
 
     /**
-     * Creates the StatusMonitor with current information.
+     * Creates the StatusInfo with current information.
      */
-    private StatusMonitor() {
+    private StatusInfo() {
         RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
         startup = FORMATTER.format(Instant.ofEpochMilli(runtime.getStartTime()));
         uptime = TimeUnit.MILLISECONDS.toSeconds(runtime.getUptime());
     }
 
     /**
-     * Creates the StatusMonitor with current information.
+     * Creates the StatusInfo with current information.
      */
-    public static StatusMonitor getCurrentStatus(){
-        return new StatusMonitor();
+    public static StatusInfo getCurrentStatus(){
+        return new StatusInfo();
     }
 
     public long getUptime() {
@@ -63,7 +63,7 @@ public final class StatusMonitor {
 
     @Override
     public String toString() {
-        return "StatusMonitor{" +
+        return "StatusInfo{" +
                 ", uptime='" + uptime + '\'' +
                 ", startup='" + startup + '\'' +
                 '}';

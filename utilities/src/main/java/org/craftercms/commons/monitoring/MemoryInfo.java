@@ -18,11 +18,6 @@ package org.craftercms.commons.monitoring;
 
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryPoolMXBean;
-import java.lang.management.MemoryUsage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import com.sun.management.OperatingSystemMXBean;
 
@@ -31,7 +26,7 @@ import com.sun.management.OperatingSystemMXBean;
  * @author Carlos Ortiz
  * @since 3.0
  */
-public final class MemoryMonitor {
+public final class MemoryInfo {
 
     private long totalJvmMemory;
     private long freeJvmMemory;
@@ -42,9 +37,9 @@ public final class MemoryMonitor {
     private long freeSwapMemory;
 
     /**
-     * Private Constructor of the MemoryMonitor POJO
+     * Private Constructor of the MemoryInfo POJO
      */
-    private MemoryMonitor() {
+    private MemoryInfo() {
         Runtime runtime = Runtime.getRuntime();
         OperatingSystemMXBean os = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
         totalJvmMemory = runtime.totalMemory();
@@ -56,8 +51,8 @@ public final class MemoryMonitor {
         freeSwapMemory = os.getFreeSwapSpaceSize();
     }
 
-    public static MemoryMonitor getCurrentMemory() {
-        return new MemoryMonitor();
+    public static MemoryInfo getCurrentMemory() {
+        return new MemoryInfo();
     }
 
     public long getTotalJvmMemory() {
@@ -90,7 +85,7 @@ public final class MemoryMonitor {
 
     @Override
     public String toString() {
-        return "MemoryMonitor{" +
+        return "MemoryInfo{" +
             "totalJvmMemory=" + totalJvmMemory +
             ", freeJvmMemory=" + freeJvmMemory +
             ", totalOsMemory=" + totalOsMemory +

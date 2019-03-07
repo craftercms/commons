@@ -40,7 +40,7 @@ import java.util.jar.Manifest;
  * @since 3.0
  * @author Carlos Ortiz
  */
-public final class VersionMonitor {
+public final class VersionInfo {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.of("UTC"));
 
@@ -55,7 +55,7 @@ public final class VersionMonitor {
     public static final String KEY_IMPLEMENTATION_TITLE = "Implementation-Title";
 
     /**
-     * Manifest key for VersionMonitor of the code (usually matches Mvn packageVersion)
+     * Manifest key for VersionInfo of the code (usually matches Mvn packageVersion)
      */
     public static final String KEY_IMPLEMENTATION_VERSION = "Implementation-Version";
 
@@ -93,11 +93,11 @@ public final class VersionMonitor {
     private String javaVm;
 
     /**
-     * Create a VersionMonitor pojo instance based on a given Manifest File.
+     * Create a VersionInfo pojo instance based on a given Manifest File.
      * Empty values are assign if the keys in the manifest are missing.
-     * @param manifest Manifest File that contains the VersionMonitor Information.
+     * @param manifest Manifest File that contains the VersionInfo Information.
      */
-    private VersionMonitor(Manifest manifest){
+    private VersionInfo(Manifest manifest){
         Attributes mainAttrs = manifest.getMainAttributes();
         initFromManifest(mainAttrs);
         initRuntime();
@@ -119,21 +119,21 @@ public final class VersionMonitor {
     }
 
     /**
-     * Gets the current VersionMonitor based on Manifest & current JVM information.
+     * Gets the current VersionInfo based on Manifest & current JVM information.
      * @param manifest Manifest were to get the information.
-     * @return A VersionMonitor pojo with information.
+     * @return A VersionInfo pojo with information.
      */
-    public static VersionMonitor getVersion (Manifest manifest){
-        return new VersionMonitor(manifest);
+    public static VersionInfo getVersion (Manifest manifest){
+        return new VersionInfo(manifest);
     }
 
     /**
-     * Gets the current VersionMonitor base on a Class that will load it's manifest file.
+     * Gets the current VersionInfo base on a Class that will load it's manifest file.
      * @param clazz Class that will load the manifest MF file
-     * @return A {@link VersionMonitor} pojo with the information.
+     * @return A {@link VersionInfo} pojo with the information.
      * @throws IOException If Unable to read the Manifest file.
      */
-    public static VersionMonitor getVersion(Class clazz) throws IOException {
+    public static VersionInfo getVersion(Class clazz) throws IOException {
         String path = clazz.getProtectionDomain().getCodeSource().getLocation().getPath();
         if(StringUtils.isEmpty(path)) {
             return null;
@@ -148,7 +148,7 @@ public final class VersionMonitor {
             path = StringUtils.removeStart(path, "file:");
             path = StringUtils.removeEnd(path, SPRING_PATH);
             JarFile jarFile = new JarFile(path);
-            return VersionMonitor.getVersion(jarFile.getManifest());
+            return VersionInfo.getVersion(jarFile.getManifest());
         }
         return null;
     }
@@ -170,7 +170,7 @@ public final class VersionMonitor {
 
     @Override
     public String toString() {
-        return "VersionMonitor{" +
+        return "VersionInfo{" +
                 ", packageName='" + packageName + '\'' +
                 ", packageVersion='" + packageVersion + '\'' +
                 ", packageBuild='" + packageBuild + '\'' +

@@ -17,9 +17,9 @@
 
 package org.craftercms.commons.monitoring.rest;
 
-import org.craftercms.commons.monitoring.MemoryMonitor;
-import org.craftercms.commons.monitoring.StatusMonitor;
-import org.craftercms.commons.monitoring.VersionMonitor;
+import org.craftercms.commons.monitoring.MemoryInfo;
+import org.craftercms.commons.monitoring.StatusInfo;
+import org.craftercms.commons.monitoring.VersionInfo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,18 +36,18 @@ public abstract class MonitoringRestControllerBase {
     public final static String VERSION_URL = "/version";
 
     @GetMapping(ROOT_URL + MEMORY_URL)
-    public MemoryMonitor getCurrentMemory() {
-        return MemoryMonitor.getCurrentMemory();
+    public MemoryInfo getCurrentMemory() {
+        return MemoryInfo.getCurrentMemory();
     }
 
     @GetMapping(ROOT_URL + STATUS_URL)
-    public StatusMonitor getCurrentStatus() {
-        return StatusMonitor.getCurrentStatus();
+    public StatusInfo getCurrentStatus() {
+        return StatusInfo.getCurrentStatus();
     }
 
     @GetMapping(ROOT_URL + VERSION_URL)
-    public VersionMonitor getCurrentVersion() throws Exception {
-        return VersionMonitor.getVersion(this.getClass());
+    public VersionInfo getCurrentVersion() throws Exception {
+        return VersionInfo.getVersion(this.getClass());
     }
 
 }

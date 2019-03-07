@@ -23,7 +23,7 @@ import java.util.jar.JarFile;
 import org.craftercms.commons.entitlements.exception.EntitlementException;
 import org.craftercms.commons.entitlements.model.Module;
 import org.craftercms.commons.entitlements.model.EntitlementType;
-import org.craftercms.commons.monitoring.VersionMonitor;
+import org.craftercms.commons.monitoring.VersionInfo;
 
 /**
  * Defines the operations to perform entitlement validations.
@@ -81,10 +81,10 @@ public interface EntitlementValidator {
      */
     default String getPackageVersion() {
         try {
-            VersionMonitor versionMonitor = VersionMonitor.getVersion(
+            VersionInfo versionInfo = VersionInfo.getVersion(
                 new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()))
                     .getManifest());
-            return versionMonitor.getPackageVersion();
+            return versionInfo.getPackageVersion();
         } catch (Exception e) {
             return null;
         }
@@ -96,10 +96,10 @@ public interface EntitlementValidator {
      */
     default String getPackageBuild() {
         try {
-            VersionMonitor versionMonitor = VersionMonitor.getVersion(
+            VersionInfo versionInfo = VersionInfo.getVersion(
                 new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()))
                     .getManifest());
-            return versionMonitor.getPackageBuild();
+            return versionInfo.getPackageBuild();
         } catch (Exception e) {
             return null;
         }
