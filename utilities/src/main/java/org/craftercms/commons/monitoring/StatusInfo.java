@@ -25,9 +25,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Get's current basic JVM status
+ * Gets current basic JVM status
  * @since 3.0
- * @author Carlos Ortiz.
+ * @author Carlos Ortiz
+ * @author Jose Ross
  */
 public final class StatusInfo {
 
@@ -38,7 +39,7 @@ public final class StatusInfo {
     private String startup;
 
     /**
-     * Creates the StatusInfo with current information.
+     * Create the StatusInfo with current information.
      */
     private StatusInfo() {
         RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
@@ -47,7 +48,7 @@ public final class StatusInfo {
     }
 
     /**
-     * Creates the StatusInfo with current information.
+     * Create the StatusInfo with current information.
      */
     public static StatusInfo getCurrentStatus(){
         return new StatusInfo();
