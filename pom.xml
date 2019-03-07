@@ -92,7 +92,6 @@
         <junit.version>4.12</junit.version>
         <mockito.version>1.9.5</mockito.version>
         <jsonpath.version>2.2.0</jsonpath.version>
-        <logback.version>1.2.3</logback.version>
         <reactor.version>1.0.0.RELEASE</reactor.version>
         <quartz.version>2.2.1</quartz.version>
         <jgit.version>4.4.0.201606070830-r</jgit.version>
@@ -110,6 +109,15 @@
         <!-- Commented out because there are no integrations tests -->
         <!--sonar.jacoco.itReportPath>${basedir}/../target/itjacoco.exec</sonar.jacoco.itReportPath-->
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <pluginManagement>
