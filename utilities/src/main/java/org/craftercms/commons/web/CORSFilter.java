@@ -126,7 +126,6 @@ public class CORSFilter extends OncePerRequestFilter {
         List<String> requestHeaders = getRequestHeaders(request, isPreflight);
         String allowedHeaders = checkHeaders(requestHeaders);
 
-
         if(StringUtils.isEmpty(allowOrigin) || StringUtils.isEmpty(allowedMethods) ||
             (isPreflight && StringUtils.isEmpty(allowedHeaders))) {
             rejectRequest(response);
