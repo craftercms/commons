@@ -17,6 +17,7 @@
 package org.craftercms.commons.cache;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -44,6 +45,11 @@ public class EhCacheFactoryBean implements FactoryBean<Cache> {
         cache = new Cache(configuration);
 
         CacheManager.getInstance().addCache(cache);
+    }
+
+    @PreDestroy
+    public void destroy() {
+        CacheManager.getInstance().shutdown();
     }
 
     @Override
