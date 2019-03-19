@@ -31,12 +31,20 @@ import static org.craftercms.commons.config.ConfigUtils.getRequiredStringPropert
 public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
 
     private static final String CONFIG_KEY_BUCKET = "bucketName";
+    private static final String CONFIG_KEY_ENDPOINT = "endpoint";
 
     @Override
     protected S3Profile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig)
             throws ConfigurationException {
         S3Profile profile = super.mapProfile(profileConfig);
         profile.setBucketName(getRequiredStringProperty(profileConfig, CONFIG_KEY_BUCKET));
+
+        /**
+         * Check if <endpoint> is provided as it is optional
+         */
+        if(profileConfig.getString(CONFIG_KEY_ENDPOINT) != null && !profileConfig.getString(CONFIG_KEY_ENDPOINT).isEmpty()){
+            profile.setEndpoint(getRequiredStringProperty(profileConfig, CONFIG_KEY_ENDPOINT));
+        }
 
         return profile;
     }
