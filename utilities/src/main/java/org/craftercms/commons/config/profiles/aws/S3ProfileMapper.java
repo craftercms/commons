@@ -21,6 +21,7 @@ import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.config.ConfigurationException;
 
 import static org.craftercms.commons.config.ConfigUtils.getRequiredStringProperty;
+import static org.craftercms.commons.config.ConfigUtils.getStringProperty;
 
 /**
  * Configuration mapper for {@link S3Profile}s.
@@ -40,11 +41,9 @@ public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
         profile.setBucketName(getRequiredStringProperty(profileConfig, CONFIG_KEY_BUCKET));
 
         /**
-         * Check if <endpoint> is provided as it is optional
+         * Optional: <endpoint> is provided
          */
-        if(profileConfig.getString(CONFIG_KEY_ENDPOINT) != null && !profileConfig.getString(CONFIG_KEY_ENDPOINT).isEmpty()){
-            profile.setEndpoint(getRequiredStringProperty(profileConfig, CONFIG_KEY_ENDPOINT));
-        }
+        profile.setEndpoint(getStringProperty(profileConfig, CONFIG_KEY_ENDPOINT));
 
         return profile;
     }
