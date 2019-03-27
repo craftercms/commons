@@ -18,6 +18,7 @@
 package org.craftercms.commons.web;
 
 import java.io.IOException;
+import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Filter to add a header to all responses
+ * Filter to add headers to all responses
  * @author joseross
  * @since 3.1
  */
@@ -39,27 +40,17 @@ public class AddResponseHeaderFilter extends OncePerRequestFilter {
     protected boolean enabled = true;
 
     /**
-     * The name of the header to add
+     * Map of headers that to add
      */
-    protected String headerName;
-
-    /**
-     * The value of the header to add
-     */
-    protected String headerValue;
+    protected Map<String, String> headers;
 
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
     }
 
     @Required
-    public void setHeaderName(final String headerName) {
-        this.headerName = headerName;
-    }
-
-    @Required
-    public void setHeaderValue(final String headerValue) {
-        this.headerValue = headerValue;
+    public void setHeaders(final Map<String, String> headers) {
+        this.headers = headers;
     }
 
     /**
@@ -69,7 +60,7 @@ public class AddResponseHeaderFilter extends OncePerRequestFilter {
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
         if (enabled) {
-            response.setHeader(headerName, headerValue);
+            headers.forEach(response::setHeader);
         }
         filterChain.doFilter(request, response);
     }
