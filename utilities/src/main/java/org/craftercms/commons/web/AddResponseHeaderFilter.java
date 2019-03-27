@@ -35,12 +35,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class AddResponseHeaderFilter extends OncePerRequestFilter {
 
     /**
-     * Indicates if the header should be added
+     * Indicates if the headers should be added
      */
     protected boolean enabled = true;
 
     /**
-     * Map of headers that to add
+     * Map of headers to add
      */
     protected Map<String, String> headers;
 
