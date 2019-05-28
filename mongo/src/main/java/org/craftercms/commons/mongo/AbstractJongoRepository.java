@@ -62,6 +62,7 @@ import org.springframework.beans.factory.annotation.Required;
  *
  * @author Carlos Ortiz.
  */
+@SuppressWarnings("unchecked") // cortiz, OK no better way to do it.
 public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractJongoRepository.class);
@@ -72,7 +73,6 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     protected JongoQueries queries;
     protected GridFS gridfs;
 
-    @SuppressWarnings("uncheck") // cortiz, OK no better way to do it.
     public void init() throws Exception {
         //Thru pure magic get parameter Class .
         this.clazz = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];

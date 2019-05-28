@@ -27,6 +27,7 @@ import org.bson.types.ObjectId;
 /**
  * @author Carlos Ortiz.
  */
+@SuppressWarnings("unchecked")
 public interface CrudRepository<T> {
 
     /**

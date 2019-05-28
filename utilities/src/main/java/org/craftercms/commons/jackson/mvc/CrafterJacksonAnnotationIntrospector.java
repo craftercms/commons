@@ -44,11 +44,6 @@ public class CrafterJacksonAnnotationIntrospector extends JacksonAnnotationIntro
     }
 
     @Override
-    public boolean hasCreatorAnnotation(final Annotated a) {
-        return super.hasCreatorAnnotation(a);
-    }
-
-    @Override
     public boolean hasIgnoreMarker(final AnnotatedMember m) {
         if (m.getAnnotated().isAnnotationPresent(Exclude.class)) {
             return true;
