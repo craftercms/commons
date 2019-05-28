@@ -33,7 +33,7 @@ import static org.craftercms.commons.config.ConfigUtils.*;
  * Configuration mapper for {@link BoxProfile}s.
  *
  * @author joseross
- * @auhor avasquez
+ * @author avasquez
  */
 public class BoxProfileMapper extends AbstractProfileConfigMapper<BoxProfile> {
 

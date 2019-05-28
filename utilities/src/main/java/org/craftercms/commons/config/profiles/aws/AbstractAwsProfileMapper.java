@@ -30,7 +30,7 @@ import static org.craftercms.commons.config.ConfigUtils.*;
  * Base class for configuration mappers that map to {@link AbstractAwsProfile}s.
  *
  * @author joseross
- * @auhor avasquez
+ * @author avasquez
  */
 public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> extends AbstractProfileConfigMapper<T> {
 
