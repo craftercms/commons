@@ -33,7 +33,7 @@ public interface ConfigurationMapper<T> {
      * @param encoding the charset encoding of the configuration file
      * @param configId the ID of the specific sub-configuration to map
      *
-     * @return
+     * @return the configuration object
      *
      * @throws ConfigurationException if an error occurs
      */

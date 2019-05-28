@@ -27,7 +27,7 @@ import static org.craftercms.commons.config.ConfigUtils.getStringProperty;
  * Configuration mapper for {@link S3Profile}s.
  *
  * @author joseross
- * @auhor avasquez
+ * @author avasquez
  */
 public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
 

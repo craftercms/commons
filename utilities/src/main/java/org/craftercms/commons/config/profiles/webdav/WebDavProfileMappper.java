@@ -27,7 +27,7 @@ import static org.craftercms.commons.config.ConfigUtils.*;
  * Configuration mapper for {@link WebDavProfile}s.
  *
  * @author joseross
- * @auhor avasquez
+ * @author avasquez
  */
 public class WebDavProfileMappper extends AbstractProfileConfigMapper<WebDavProfile> {
 
