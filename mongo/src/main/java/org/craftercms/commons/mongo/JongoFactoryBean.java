@@ -82,6 +82,7 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     protected Jongo createInstance() throws Exception {
         DB db = mongo.getDB(dbName);
         JacksonMapper.Builder builder = new JacksonMapper.Builder();

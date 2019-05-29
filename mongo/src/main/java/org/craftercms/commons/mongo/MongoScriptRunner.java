@@ -51,6 +51,7 @@ import com.mongodb.MongoClientURI;
  *
  * @author avasquez
  */
+@SuppressWarnings("deprecation")
 public class MongoScriptRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(MongoScriptRunner.class);
