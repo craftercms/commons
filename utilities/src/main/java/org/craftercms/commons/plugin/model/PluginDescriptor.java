@@ -57,6 +57,7 @@ public class PluginDescriptor {
         this.plugin = plugin;
     }
 
+    @Deprecated
     public BlueprintDescriptor.Blueprint getBlueprint() {
         return blueprint;
     }
