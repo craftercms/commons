@@ -17,6 +17,8 @@
 
 package org.craftercms.commons.plugin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Holds all the metadata for a plugin
  *
@@ -58,6 +60,7 @@ public class PluginDescriptor {
     }
 
     @Deprecated
+    @JsonIgnore
     public BlueprintDescriptor.Blueprint getBlueprint() {
         return blueprint;
     }
