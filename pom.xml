@@ -32,6 +32,7 @@
         <module>git</module>
         <module>entitlements</module>
         <module>validation</module>
+        <module>plugin</module>
     </modules>
 
     <name>Crafter Commons</name>
