@@ -36,6 +36,7 @@ import static org.junit.Assert.assertNull;
 /**
  * @author joseross
  */
+@SuppressWarnings("deprecation")
 public class PluginDescriptorReaderImplTest {
 
     protected Resource descriptorV1 = new ClassPathResource("plugin/craftercms-plugin-v1.yaml");
