@@ -17,6 +17,8 @@
 
 package org.craftercms.commons.plugin.model;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -28,20 +30,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @SuppressWarnings("deprecation")
 public class PluginDescriptor {
 
+    public static PluginDescriptor of(Plugin plugin) {
+        PluginDescriptor descriptor = new PluginDescriptor();
+        descriptor.setPlugin(plugin);
+        return descriptor;
+    }
+
     /**
      * The version of the descriptor
      */
-    private String descriptorVersion;
+    protected String descriptorVersion = "2";
 
     /**
      * The actual metadata of the plugin
      */
-    private Plugin plugin;
+    protected Plugin plugin;
 
     /**
      * Used by a previous version, kept for backwards compatibility
      */
-    private BlueprintDescriptor.Blueprint blueprint;
+    protected BlueprintDescriptor.Blueprint blueprint;
 
     public String getDescriptorVersion() {
         return descriptorVersion;
@@ -67,6 +75,28 @@ public class PluginDescriptor {
 
     public void setBlueprint(BlueprintDescriptor.Blueprint plugin) {
         this.blueprint = plugin;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PluginDescriptor)) {
+            return false;
+        }
+        final PluginDescriptor that = (PluginDescriptor)o;
+        return Objects.equals(descriptorVersion, that.descriptorVersion) && Objects.equals(plugin, that.plugin);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(descriptorVersion, plugin);
+    }
+
+    @Override
+    public String toString() {
+        return "PluginDescriptor{" + "descriptorVersion='" + descriptorVersion + '\'' + ", plugin=" + plugin + '}';
     }
 
 }

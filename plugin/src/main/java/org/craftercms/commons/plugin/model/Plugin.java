@@ -18,6 +18,10 @@
 package org.craftercms.commons.plugin.model;
 
 import java.util.List;
+import java.util.Objects;
+
+import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
+import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 
 /**
  * Holds the metadata for a plugin
@@ -30,72 +34,72 @@ public class Plugin {
     /**
      * The type of plugin
      */
-    private String type;
+    protected String type;
 
     /**
      * The unique id of the plugin
      */
-    private String id;
+    protected String id;
 
     /**
      * The name of the plugin
      */
-    private String name;
+    protected String name;
 
     /**
      * The tags of the plugin
      */
-    private List<String> tags;
+    protected List<String> tags;
 
     /**
      * The version of the plugin
      */
-    private Version version;
+    protected Version version;
 
     /**
      * The description of the plugin
      */
-    private String description;
+    protected String description;
 
     /**
      * The website information of the plugin
      */
-    private Link website;
+    protected Link website;
 
     /**
      * The media assets of the plugin
      */
-    private Media media;
+    protected Media media;
 
     /**
      * The developer information of the plugin
      */
-    private Developer developer;
+    protected Developer developer;
 
     /**
      * The build information of the plugin
      */
-    private Build build;
+    protected Build build;
 
     /**
      * The license of the plugin
      */
-    private Link license;
+    protected Link license;
 
     /**
      * The supported Crafter CMS editions of the plugin
      */
-    private List<String> crafterCmsEditions;
+    protected List<String> crafterCmsEditions;
 
     /**
      * The supported Crafter CMS versions of the plugin
      */
-    private List<Version> crafterCmsVersions;
+    protected List<Version> crafterCmsVersions;
 
     /**
      * The search engine required by the plugin
      */
-    private String searchEngine = SearchEngines.ELASTICSEARCH;
+    protected String searchEngine = SearchEngines.ELASTICSEARCH;
 
     public String getType() {
         return type;
@@ -207,6 +211,41 @@ public class Plugin {
 
     public void setSearchEngine(final String searchEngine) {
         this.searchEngine = searchEngine;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Plugin)) {
+            return false;
+        }
+        final Plugin plugin = (Plugin)o;
+        return Objects.equals(type, plugin.type) && Objects.equals(id, plugin.id) && Objects.equals(name,
+            plugin.name) && isEqualCollection(emptyIfNull(tags), emptyIfNull(plugin.tags)) &&
+            Objects.equals(version, plugin.version) &&
+            Objects.equals(description, plugin.description) && Objects.equals(website, plugin.website) &&
+            Objects.equals(media, plugin.media) && Objects.equals(developer, plugin.developer) &&
+            Objects.equals(build, plugin.build) && Objects.equals(license, plugin.license) &&
+            isEqualCollection(emptyIfNull(crafterCmsEditions), emptyIfNull(plugin.crafterCmsEditions)) &&
+            isEqualCollection(emptyIfNull(crafterCmsVersions), emptyIfNull(plugin.crafterCmsVersions)) &&
+            Objects.equals(searchEngine, plugin.searchEngine);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, id, name, tags, version, description, website, media, developer, build, license,
+            crafterCmsEditions, crafterCmsVersions, searchEngine);
+    }
+
+    @Override
+    public String toString() {
+        return "Plugin{" + "type='" + type + '\'' + ", id='" + id + '\'' + ", name='" + name + '\'' + ", tags=" +
+            tags + ", version=" + version + ", description='" + description + '\'' + ", website=" + website +
+            ", media=" + media + ", developer=" + developer + ", build=" + build + ", license=" + license +
+            ", crafterCmsEditions=" + crafterCmsEditions + ", crafterCmsVersions=" + crafterCmsVersions +
+            ", searchEngine='" + searchEngine + '\'' + '}';
     }
 
 }

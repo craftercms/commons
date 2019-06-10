@@ -18,6 +18,10 @@
 package org.craftercms.commons.plugin.model;
 
 import java.util.List;
+import java.util.Objects;
+
+import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
+import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 
 /**
  * Holds all metadata about the developers
@@ -30,12 +34,12 @@ public class Developer {
     /**
      * The list of people that worked on the plugin
      */
-    private List<Contact> people;
+    protected List<Contact> people;
 
     /**
      * The company that worked on the plugin
      */
-    private Contact company;
+    protected Contact company;
 
     public List<Contact> getPeople() {
         return people;
@@ -52,4 +56,28 @@ public class Developer {
     public void setCompany(Contact company) {
         this.company = company;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Developer)) {
+            return false;
+        }
+        final Developer developer = (Developer)o;
+        return isEqualCollection(emptyIfNull(people), emptyIfNull(developer.people)) &&
+            Objects.equals(company, developer.company);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(people, company);
+    }
+
+    @Override
+    public String toString() {
+        return "Developer{" + "people=" + people + ", company=" + company + '}';
+    }
+
 }

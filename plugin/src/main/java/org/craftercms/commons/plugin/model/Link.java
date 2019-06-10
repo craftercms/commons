@@ -17,6 +17,8 @@
 
 package org.craftercms.commons.plugin.model;
 
+import java.util.Objects;
+
 /**
  * Holds the data about a single link
  *
@@ -28,12 +30,12 @@ public class Link {
     /**
      * The URL of the link
      */
-    private String url;
+    protected String url;
 
     /**
      * The name of the link
      */
-    private String name;
+    protected String name;
 
     public String getUrl() {
         return url;
@@ -49,6 +51,28 @@ public class Link {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Link)) {
+            return false;
+        }
+        final Link link = (Link)o;
+        return Objects.equals(url, link.url) && Objects.equals(name, link.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url, name);
+    }
+
+    @Override
+    public String toString() {
+        return "Link{" + "url='" + url + '\'' + ", name='" + name + '\'' + '}';
     }
 
 }
