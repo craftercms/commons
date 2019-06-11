@@ -21,7 +21,6 @@ import java.io.File;
 import java.util.jar.JarFile;
 
 import org.craftercms.commons.entitlements.exception.EntitlementException;
-import org.craftercms.commons.entitlements.model.Module;
 import org.craftercms.commons.entitlements.model.EntitlementType;
 import org.craftercms.commons.monitoring.VersionInfo;
 
@@ -34,13 +33,11 @@ public interface EntitlementValidator {
 
     /**
      * Checks that an entitlement is below the value indicated in the configuration file.
-     * @param module module requesting the validation
      * @param entitlementType entitlement to be validated
-     * @param currentValue current value provided by the module
      * @param newAmount amount of items to be created
      * @throws EntitlementException if the validation fails
      */
-    default void validateEntitlement(Module module, EntitlementType entitlementType, int currentValue, int newAmount)
+    default void validateEntitlement(EntitlementType entitlementType, int newAmount)
         throws EntitlementException {
         // Do nothing by default
     }
