@@ -30,12 +30,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @SuppressWarnings("deprecation")
 public class PluginDescriptor {
 
-    public static PluginDescriptor of(Plugin plugin) {
-        PluginDescriptor descriptor = new PluginDescriptor();
-        descriptor.setPlugin(plugin);
-        return descriptor;
-    }
-
     /**
      * The version of the descriptor
      */
@@ -75,6 +69,17 @@ public class PluginDescriptor {
 
     public void setBlueprint(BlueprintDescriptor.Blueprint plugin) {
         this.blueprint = plugin;
+    }
+
+    /**
+     * Wraps the plugin metadata in a descriptor object
+     * @param plugin the plugin to wrap
+     * @return the plugin descriptor
+     */
+    public static PluginDescriptor of(Plugin plugin) {
+        PluginDescriptor descriptor = new PluginDescriptor();
+        descriptor.setPlugin(plugin);
+        return descriptor;
     }
 
     @Override
