@@ -17,6 +17,8 @@
 
 package org.craftercms.commons.plugin.model;
 
+import java.util.Objects;
+
 /**
  * Holds the data about a version
  *
@@ -28,17 +30,17 @@ public class Version {
     /**
      * The major version
      */
-    private int major;
+    protected int major;
 
     /**
      * The minor version
      */
-    private int minor;
+    protected int minor;
 
     /**
      * The patch version
      */
-    private int patch;
+    protected int patch;
 
     public int getMajor() {
         return major;
@@ -62,6 +64,28 @@ public class Version {
 
     public void setPatch(int patch) {
         this.patch = patch;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Version)) {
+            return false;
+        }
+        final Version version = (Version)o;
+        return major == version.major && minor == version.minor && patch == version.patch;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(major, minor, patch);
+    }
+
+    @Override
+    public String toString() {
+        return "Version{" + "major=" + major + ", minor=" + minor + ", patch=" + patch + '}';
     }
 
 }

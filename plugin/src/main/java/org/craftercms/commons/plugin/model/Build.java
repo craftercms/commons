@@ -17,6 +17,8 @@
 
 package org.craftercms.commons.plugin.model;
 
+import java.util.Objects;
+
 /**
  * Holds the build information
  *
@@ -28,12 +30,12 @@ public class Build {
     /**
      * The id of the build
      */
-    private String id;
+    protected String id;
 
     /**
      * The date of the build
      */
-    private String date;
+    protected String date;
 
     public String getId() {
         return id;
@@ -50,4 +52,27 @@ public class Build {
     public void setDate(String date) {
         this.date = date;
     }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Build)) {
+            return false;
+        }
+        final Build build = (Build)o;
+        return Objects.equals(id, build.id) && Objects.equals(date, build.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, date);
+    }
+
+    @Override
+    public String toString() {
+        return "Build{" + "id='" + id + '\'' + ", date='" + date + '\'' + '}';
+    }
+
 }

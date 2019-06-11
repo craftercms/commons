@@ -17,6 +17,8 @@
 
 package org.craftercms.commons.plugin.model;
 
+import java.util.Objects;
+
 /**
  * Holds the metadata of a single asset
  *
@@ -28,12 +30,12 @@ public class Asset {
     /**
      * The title of the asset
      */
-    private String title;
+    protected String title;
 
     /**
      * The description of the asset
      */
-    private String description;
+    protected String description;
 
     /**
      * The URL of the asset
@@ -62,6 +64,30 @@ public class Asset {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Asset)) {
+            return false;
+        }
+        final Asset asset = (Asset)o;
+        return Objects.equals(title, asset.title) && Objects.equals(description, asset.description) &&
+            Objects.equals(url, asset.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, url);
+    }
+
+    @Override
+    public String toString() {
+        return "Asset{" + "title='" + title + '\'' + ", description='" + description + '\'' + ", url='" + url + '\'' +
+            '}';
     }
 
 }

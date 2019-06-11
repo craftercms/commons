@@ -18,6 +18,10 @@
 package org.craftercms.commons.plugin.model;
 
 import java.util.List;
+import java.util.Objects;
+
+import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
+import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 
 /**
  * Holds all data about assets for a plugin
@@ -27,8 +31,8 @@ import java.util.List;
  */
 public class Media {
 
-    private List<Asset> screenshots;
-    private List<Asset> videos;
+    protected List<Asset> screenshots;
+    protected List<Asset> videos;
 
     public List<Asset> getScreenshots() {
         return screenshots;
@@ -44,6 +48,29 @@ public class Media {
 
     public void setVideos(List<Asset> videos) {
         this.videos = videos;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Media)) {
+            return false;
+        }
+        final Media media = (Media)o;
+        return isEqualCollection(emptyIfNull(screenshots), emptyIfNull(media.screenshots)) &&
+            isEqualCollection(emptyIfNull(videos), emptyIfNull(media.videos));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(screenshots, videos);
+    }
+
+    @Override
+    public String toString() {
+        return "Media{" + "screenshots=" + screenshots + ", videos=" + videos + '}';
     }
 
 }

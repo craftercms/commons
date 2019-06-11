@@ -17,6 +17,8 @@
 
 package org.craftercms.commons.plugin.model;
 
+import java.util.Objects;
+
 /**
  * Holds the information of a single contact
  *
@@ -28,12 +30,12 @@ public class Contact {
     /**
      * The name of the contact
      */
-    private String name;
+    protected String name;
 
     /**
      * The email of the contact
      */
-    private String email;
+    protected String email;
 
     /**
      * The URL of the contact
@@ -62,6 +64,28 @@ public class Contact {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Contact)) {
+            return false;
+        }
+        final Contact contact = (Contact)o;
+        return name.equals(contact.name) && email.equals(contact.email) && url.equals(contact.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email, url);
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" + "name='" + name + '\'' + ", email='" + email + '\'' + ", url='" + url + '\'' + '}';
     }
 
 }
