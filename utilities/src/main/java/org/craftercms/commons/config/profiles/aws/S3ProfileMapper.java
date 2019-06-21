@@ -31,8 +31,13 @@ import static org.craftercms.commons.config.ConfigUtils.getStringProperty;
  */
 public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
 
+    private static final String CONFIG_KEY_S3 = "s3";
     private static final String CONFIG_KEY_BUCKET = "bucketName";
     private static final String CONFIG_KEY_ENDPOINT = "endpoint";
+
+    public S3ProfileMapper() {
+        super(CONFIG_KEY_S3);
+    }
 
     @Override
     protected S3Profile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig)

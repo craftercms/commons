@@ -38,6 +38,10 @@ public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> ext
     private static final String CONFIG_KEY_ACCESS_KEY = "credentials.accessKey";
     private static final String CONFIG_KEY_SECRET_KEY = "credentials.secretKey";
 
+    public AbstractAwsProfileMapper(final String serviceName) {
+        super(serviceName);
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException {

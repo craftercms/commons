@@ -37,6 +37,7 @@ import static org.craftercms.commons.config.ConfigUtils.*;
  */
 public class BoxProfileMapper extends AbstractProfileConfigMapper<BoxProfile> {
 
+    private static final String KEY_BOX = "box";
     private static final String KEY_CLIENT_ID = "clientId";
     private static final String KEY_CLIENT_SECRET = "clientSecret";
     private static final String KEY_ENTERPRISE_ID = "enterpriseId";
@@ -45,6 +46,10 @@ public class BoxProfileMapper extends AbstractProfileConfigMapper<BoxProfile> {
     private static final String KEY_PRIVATE_KEY_PATH = "privateKeyPath";
     private static final String KEY_PRIVATE_KEY = "privateKey";
     private static final String KEY_UPLOAD_FOLDER = "uploadFolder";
+
+    public BoxProfileMapper() {
+        super(KEY_BOX);
+    }
 
     @Override
     protected BoxProfile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig)

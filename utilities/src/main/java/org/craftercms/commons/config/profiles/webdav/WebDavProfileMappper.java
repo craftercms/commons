@@ -31,10 +31,15 @@ import static org.craftercms.commons.config.ConfigUtils.*;
  */
 public class WebDavProfileMappper extends AbstractProfileConfigMapper<WebDavProfile> {
 
+    private static final String CONFIG_KEY_WEBDAV = "webdav";
     private static final String CONFIG_KEY_BASE_URL = "baseUrl";
     private static final String CONFIG_KEY_DELIVERY_URL = "deliveryBaseUrl";
     private static final String CONFIG_KEY_USERNAME = "username";
     private static final String CONFIG_KEY_PASSWORD = "password";
+
+    public WebDavProfileMappper() {
+        super(CONFIG_KEY_WEBDAV);
+    }
 
     @Override
     protected WebDavProfile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException {

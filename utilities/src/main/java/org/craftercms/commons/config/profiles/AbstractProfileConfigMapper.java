@@ -35,12 +35,19 @@ public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile
     private static final String CONFIG_KEY_PROFILE = "profile";
     private static final String CONFIG_KEY_ID = "id";
 
+    protected String serviceName;
+
+    public AbstractProfileConfigMapper(final String serviceName) {
+        this.serviceName = serviceName;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public T readConfig(InputStream inputStream, String encoding, String profileId) throws ConfigurationException {
         HierarchicalConfiguration<ImmutableNode> config = ConfigUtils.readXmlConfiguration(inputStream, encoding);
 
-        List<HierarchicalConfiguration<ImmutableNode>> profiles = config.configurationsAt(CONFIG_KEY_PROFILE);
+        List<HierarchicalConfiguration<ImmutableNode>> profiles =
+            config.configurationsAt(serviceName + "." + CONFIG_KEY_PROFILE);
         HierarchicalConfiguration profileConfig = profiles
                 .stream()
                 .filter(c -> profileId.equals(c.getString(CONFIG_KEY_ID)))
