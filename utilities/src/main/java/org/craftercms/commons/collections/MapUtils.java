@@ -17,6 +17,8 @@
 
 package org.craftercms.commons.collections;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,4 +54,32 @@ public final class MapUtils {
 
         return dst;
     }
+
+    /**
+     * Adds the value under the specified key in the map. If there's no value in the map with the key, the value is
+     * put as is. If there's already a value, the original and the new value are added to a collection and put under
+     * the key.
+     *
+     * @param map the map
+     * @param key the key
+     * @param value the value to add
+     */
+    @SuppressWarnings("unchecked")
+    public static <K> void add(Map<K, Object> map,  K key, Object value) {
+        Object currentVal = map.get(key);
+        if (currentVal != null) {
+            if (currentVal instanceof List) {
+                ((List<Object>) currentVal).add(value);
+            } else {
+                List<Object> list = new ArrayList<>();
+                list.add(currentVal);
+                list.add(value);
+
+                map.put(key, list);
+            }
+        } else {
+            map.put(key, value);
+        }
+    }
+
 }
