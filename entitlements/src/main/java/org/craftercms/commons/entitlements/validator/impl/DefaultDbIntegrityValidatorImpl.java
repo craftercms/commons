@@ -46,9 +46,29 @@ public class DefaultDbIntegrityValidatorImpl implements DbIntegrityValidator {
     /**
      * SQL statement to generate the validation value.
      */
-    protected String query = "select crc32(group_concat(concat(table_name, column_name))) from "
-        + "information_schema.columns where table_schema = 'crafter'";
+    protected String query = "select crc32(group_concat(concat(table_name, column_name) order by table_name, " +
+            "column_name)) from information_schema.columns where table_schema = 'crafter'";
 
+    protected String oldquery = "select crc32(group_concat(concat(table_name, column_name))) from "
+            + "information_schema.columns where table_schema = 'crafter'";
+
+    private static final String UPGRADE_DBMS_INTEGRITY_FAIL_CHECK_QUERY =
+            "select crc32(SUBSTRING(group_concat(concat(table_name, column_name) order by field(concat(table_name, " +
+                    "column_name), 'item_metadatamodified', 'item_metadataname', 'item_metadatapath', " +
+                    "'item_metadatasite', 'item_metadataid', 'group_userrecord_last_updated', 'group_usergroup_id', " +
+                    "'group_useruser_id', 'groupgroup_description', 'groupgroup_name', 'grouporg_id', " +
+                    "'grouprecord_last_updated', 'groupid', 'gitlogprocessed', 'gitlogcommit_id', 'gitlogsite_id', " +
+                    "'gitlogid', 'dependencytype', 'dependencytarget_path', 'dependencysource_path', " +
+                    "'dependencysite', 'dependencyid', 'clusterheartbeat', 'clustergit_private_key', " +
+                    "'clustergit_token', 'clustergit_password', 'clustergit_username', 'clustergit_auth_type', " +
+                    "'clustergit_remote_name', 'clustergit_url', 'clusterstate', 'clusterlocal_address', 'clusterid'," +
+                    " 'audit_parameterstarget_value', 'audit_parameterstarget_subtype', " +
+                    "'audit_parameterstarget_type', 'audit_parameterstarget_id', 'audit_parametersaudit_id', " +
+                    "'audit_parametersid', 'auditcluster_node_id', 'auditactor_details', 'auditactor_id', " +
+                    "'auditprimary_target_value', 'auditprimary_target_subtype', 'auditprimary_target_type', " +
+                    "'auditprimary_target_id', 'auditorigin', 'auditoperation_timestamp', 'auditoperation', " +
+                    "'auditsite_id', 'auditorganization_id', 'auditid', '_metastudio_id', '_metaintegrity', " +
+                    "'_metaversion') DESC), 1, 1024)) from information_schema.columns where table_schema = 'crafter' ;";
 
     /**
      * {@inheritDoc}
@@ -81,6 +101,19 @@ public class DefaultDbIntegrityValidatorImpl implements DbIntegrityValidator {
                 if(result.next()) {
                     long actual = result.getLong(1);
                     if(stored != actual) {
+                        result = statement.executeQuery(UPGRADE_DBMS_INTEGRITY_FAIL_CHECK_QUERY);
+                        if (result.next()) {
+                            actual = result.getLong(1);
+                            if(stored == actual) {
+                                return;
+                            } else {
+                                result = statement.executeQuery(oldquery);
+                                actual = result.getLong(1);
+                                if(stored == actual) {
+                                    return;
+                                }
+                            }
+                        }
                         throw new EntitlementException("Incompatible database detected, unable to start");
                     }
                 }
