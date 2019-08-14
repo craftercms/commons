@@ -27,6 +27,22 @@ import java.util.Objects;
  */
 public class Version {
 
+    public static Version of(String v) {
+        String[] values = v.split("\\.");
+        if (values.length != 3) {
+            throw new IllegalArgumentException("String '" + v + "' does not contain a valid version");
+        }
+        return of(Integer.parseInt(values[0]), Integer.parseInt(values[1]), Integer.parseInt(values[2]));
+    }
+
+    public static Version of(int major, int minor, int patch) {
+        Version version = new Version();
+        version.major = major;
+        version.minor = minor;
+        version.patch = patch;
+        return version;
+    }
+
     /**
      * The major version
      */
