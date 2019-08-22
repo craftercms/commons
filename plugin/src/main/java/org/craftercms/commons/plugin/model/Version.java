@@ -18,6 +18,13 @@
 package org.craftercms.commons.plugin.model;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
+
+import static org.craftercms.commons.plugin.model.CrafterCmsEditions.COMMUNITY;
+import static org.craftercms.commons.plugin.model.CrafterCmsEditions.ENTERPRISE;
 
 /**
  * Holds the data about a version
@@ -26,6 +33,8 @@ import java.util.Objects;
  * @since 3.1.1
  */
 public class Version {
+
+    private static Pattern PATTERN = Pattern.compile("(\\d\\.\\d\\.\\d)(\\w)?.*");
 
     public static Version of(String v) {
         String[] values = v.split("\\.");
@@ -41,6 +50,27 @@ public class Version {
         version.minor = minor;
         version.patch = patch;
         return version;
+    }
+
+    public static String getVersion(String v) {
+        Matcher matcher = PATTERN.matcher(v);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        throw new IllegalArgumentException("String '" + v + "' does not contain a valid version");
+    }
+
+    public static String getEdition(String v) {
+        Matcher matcher = PATTERN.matcher(v);
+        if (matcher.matches()) {
+            String edition = matcher.group(2);
+            if (StringUtils.isNotEmpty(edition) && StringUtils.equalsIgnoreCase(edition, "e")) {
+                return ENTERPRISE;
+            } else {
+                return COMMUNITY;
+            }
+        }
+        throw new IllegalArgumentException("String '" + v + "' does not contain a valid version");
     }
 
     /**
