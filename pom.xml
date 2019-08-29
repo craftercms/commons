@@ -21,7 +21,7 @@
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-commons</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.1-SNAPSHOT</version><!-- craftercms version flag -->
+    <version>3.1.1</version><!-- craftercms version flag -->
 
     <modules>
         <module>utilities</module>
