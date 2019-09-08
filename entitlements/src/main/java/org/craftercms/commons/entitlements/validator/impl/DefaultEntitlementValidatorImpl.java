@@ -36,10 +36,11 @@ public class DefaultEntitlementValidatorImpl implements EntitlementValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultEntitlementValidatorImpl.class);
 
-    private static final String DESCRIPTION = "UG93ZXJlZCBieSBDcmFmdGVyIENNUyB2JHt2ZXJzaW9ufS4gQ2hlY2sgaXQgb3V0IDxhIG"
-        + "hyZWY9Imh0dHBzOi8vY3JhZnRlcmNtcy5vcmciPmhlcmU8L2E+LiBSZXBvcnQgYSA8YSBocmVmPSJodHRwczovL2dpdGh1Yi5jb20vY3Jh"
-        + "ZnRlcmNtcy9jcmFmdGVyY21zL2lzc3VlcyI+YnVnPC9hPi4gPGEgaHJlZj0iaHR0cHM6Ly9jcmFmdGVyY21zLm9yZy9ibG9nIj5DcmFmdG"
-        + "VyIE5ld3M8L2E+Lg==";
+    private static final String DESCRIPTION = "UG93ZXJlZCBieSBDcmFmdGVyIENNUyB2JHt2ZXJzaW9ufS4gQ2hlY2sgaXQgb3V0IDxhIGhyZWY9Imh"
+        + "0dHBzOi8vY3JhZnRlcmNtcy5vcmciIHRhcmdldD0iX2JsYW5rIj5oZXJlPC9hPi4gUmVwb3J0IGEgPGEgaH"
+        + "JlZj0iaHR0cHM6Ly9naXRodWIuY29tL2NyYWZ0ZXJjbXMvY3JhZnRlcmNtcy9pc3N1ZXMiIHRhcmdldD0i"
+        + "X2JsYW5rIj5idWc8L2E+LiA8YSBocmVmPSJodHRwczovL2NyYWZ0ZXJjbXMub3JnL2Jsb2ciIHRhcmdld"
+        + "D0iX2JsYW5rIj5DcmFmdGVyIE5ld3M8L2E+Lg==";
 
     @PostConstruct
     protected void init() {
