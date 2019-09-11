@@ -197,6 +197,13 @@
             <version>${box.sdk.version}</version>
             <optional>true</optional>
         </dependency>
+        <!-- WebDAV -->
+        <dependency>
+            <groupId>com.github.lookfirst</groupId>
+            <artifactId>sardine</artifactId>
+            <version>${sardine.version}</version>
+            <optional>true</optional>
+        </dependency>
 
         <!-- Testing -->
         <dependency>

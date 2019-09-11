@@ -46,14 +46,18 @@ public class WebDavProfile extends ConfigurationProfile {
 
     /**
      * Returns the base url to generate asset urls.
+     * @deprecated The new service will ignore this property and use a /remote-assets/... URL instead
      */
+    @Deprecated
     public String getDeliveryBaseUrl() {
         return deliveryBaseUrl;
     }
 
     /**
      * Sets the base url to generate asset urls.
+     * @deprecated The new service will ignore this property and use a /remote-assets/... URL instead
      */
+    @Deprecated
     public void setDeliveryBaseUrl(final String deliveryBaseUrl) {
         this.deliveryBaseUrl = deliveryBaseUrl;
     }
