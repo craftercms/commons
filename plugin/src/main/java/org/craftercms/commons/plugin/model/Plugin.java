@@ -101,6 +101,11 @@ public class Plugin {
      */
     protected String searchEngine = SearchEngines.ELASTICSEARCH;
 
+    /**
+     * The parameters supported by the plugin
+     */
+    protected List<Parameter> parameters;
+
     public String getType() {
         return type;
     }
@@ -213,6 +218,14 @@ public class Plugin {
         this.searchEngine = searchEngine;
     }
 
+    public List<Parameter> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(final List<Parameter> parameters) {
+        this.parameters = parameters;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -230,13 +243,14 @@ public class Plugin {
             Objects.equals(build, plugin.build) && Objects.equals(license, plugin.license) &&
             isEqualCollection(emptyIfNull(crafterCmsEditions), emptyIfNull(plugin.crafterCmsEditions)) &&
             isEqualCollection(emptyIfNull(crafterCmsVersions), emptyIfNull(plugin.crafterCmsVersions)) &&
-            Objects.equals(searchEngine, plugin.searchEngine);
+            Objects.equals(searchEngine, plugin.searchEngine) &&
+            isEqualCollection(emptyIfNull(parameters), emptyIfNull(plugin.parameters));
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(type, id, name, tags, version, description, website, media, developer, build, license,
-            crafterCmsEditions, crafterCmsVersions, searchEngine);
+            crafterCmsEditions, crafterCmsVersions, searchEngine, parameters);
     }
 
     @Override
@@ -245,7 +259,7 @@ public class Plugin {
             tags + ", version=" + version + ", description='" + description + '\'' + ", website=" + website +
             ", media=" + media + ", developer=" + developer + ", build=" + build + ", license=" + license +
             ", crafterCmsEditions=" + crafterCmsEditions + ", crafterCmsVersions=" + crafterCmsVersions +
-            ", searchEngine='" + searchEngine + '\'' + '}';
+            ", searchEngine='" + searchEngine + '\'' + ", parameters=" + parameters + '}';
     }
 
 }
