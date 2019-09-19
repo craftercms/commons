@@ -244,7 +244,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-shade-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>3.2.1</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
@@ -265,7 +265,7 @@
                                             <artifact>org.aspectj:aspectjweaver</artifact>
                                             <excludes>
                                                 <exclude>org/aspectj/lang/annotation/Aspect.class</exclude>
-                                                <exclude> org/aspectj/lang/JoinPoint$StaticPart.class</exclude>
+                                                <exclude>org/aspectj/lang/JoinPoint$StaticPart.class</exclude>
                                                 <exclude>org/aspectj/runtime/internal/AroundClosure.class</exclude>
                                                 <exclude>org/aspectj/lang/ProceedingJoinPoint.class</exclude>
                                                 <exclude>org/aspectj/lang/Signature.class</exclude>
