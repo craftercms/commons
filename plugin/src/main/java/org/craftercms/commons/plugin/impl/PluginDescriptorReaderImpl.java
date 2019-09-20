@@ -25,6 +25,8 @@ import org.craftercms.commons.plugin.model.PluginDescriptor;
 import org.craftercms.commons.plugin.PluginDescriptorReader;
 import org.craftercms.commons.plugin.exception.PluginException;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.representer.Representer;
 
 /**
  * Default implementation of {@link PluginDescriptorReader} that parses YAML files.
@@ -48,7 +50,9 @@ public class PluginDescriptorReaderImpl implements PluginDescriptorReader {
     @Override
     public PluginDescriptor read(final Reader reader) throws PluginException {
         try {
-            Yaml yaml = new Yaml();
+            Representer representer = new Representer();
+            representer.getPropertyUtils().setSkipMissingProperties(true);
+            Yaml yaml = new Yaml(new Constructor(PluginDescriptor.class), representer);
             return yaml.loadAs(reader, PluginDescriptor.class);
         } catch (Exception e) {
             throw new PluginException("Error reading plugin descriptor from reader", e);
