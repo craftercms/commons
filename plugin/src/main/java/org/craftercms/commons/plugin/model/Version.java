@@ -37,6 +37,9 @@ public class Version {
     private static Pattern PATTERN = Pattern.compile("(\\d\\.\\d\\.\\d)(\\w)?.*");
 
     public static Version of(String v) {
+        if (StringUtils.isEmpty(v)) {
+            return null;
+        }
         String[] values = v.split("\\.");
         if (values.length != 3) {
             throw new IllegalArgumentException("String '" + v + "' does not contain a valid version");
