@@ -42,6 +42,16 @@ public class Parameter {
     protected String name;
 
     /**
+     * The description of the parameter
+     */
+    protected String description;
+
+    /**
+     * The default value of the parameter
+     */
+    protected String defaultValue;
+
+    /**
      * The type of the parameter
      */
     protected Type type = Type.STRING;
@@ -70,6 +80,22 @@ public class Parameter {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(final String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
     public Type getType() {
         return type;
     }
@@ -95,19 +121,20 @@ public class Parameter {
             return false;
         }
         final Parameter parameter = (Parameter)o;
-        return required == parameter.required && label.equals(parameter.label) && name.equals(parameter.name) &&
-            type.equals(parameter.type);
+        return required == parameter.required && Objects.equals(label, parameter.label) && Objects.equals(name,
+            parameter.name) && Objects.equals(description, parameter.description) && Objects.equals(defaultValue,
+            parameter.defaultValue) && type == parameter.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(label, name, type, required);
+        return Objects.hash(label, name, description, defaultValue, type, required);
     }
 
     @Override
     public String toString() {
-        return "Parameter{" + "label='" + label + '\'' + ", name='" + name + '\'' + ", type='" + type + '\'' + ", "
-            + "required=" + required + '}';
+        return "Parameter{" + "label='" + label + '\'' + ", name='" + name + '\'' + ", description='" + description +
+            '\'' + ", defaultValue='" + defaultValue + '\'' + ", type=" + type + ", required=" + required + '}';
     }
 
     /**
