@@ -27,10 +27,6 @@ public class S3Profile extends AbstractAwsProfile {
      * Name of the bucket.
      */
     protected String bucketName;
-    /**
-     * Endpoint to allow for connection to S3 compatible cloud storage service (ex: Openstack Swift)
-     */
-    protected String endpoint;
 
     public String getBucketName() {
         return bucketName;
@@ -38,14 +34,6 @@ public class S3Profile extends AbstractAwsProfile {
 
     public void setBucketName(final String bucketName) {
         this.bucketName = bucketName;
-    }
-
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(final String endpoint) {
-        this.endpoint = endpoint;
     }
 
 }

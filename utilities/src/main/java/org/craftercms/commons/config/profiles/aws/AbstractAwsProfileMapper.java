@@ -18,7 +18,6 @@ package org.craftercms.commons.config.profiles.aws;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.config.profiles.AbstractProfileConfigMapper;
@@ -37,6 +36,7 @@ public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> ext
     private static final String CONFIG_KEY_REGION = "region";
     private static final String CONFIG_KEY_ACCESS_KEY = "credentials.accessKey";
     private static final String CONFIG_KEY_SECRET_KEY = "credentials.secretKey";
+    private static final String CONFIG_KEY_ENDPOINT = "endpoint";
 
     public AbstractAwsProfileMapper(final String serviceName) {
         super(serviceName);
@@ -52,11 +52,15 @@ public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> ext
 
             profile.setCredentialsProvider(
                     new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)));
-        } else {
-            profile.setCredentialsProvider(new DefaultAWSCredentialsProviderChain());
         }
 
-        profile.setRegion(getStringProperty(profileConfig, CONFIG_KEY_REGION));
+        if (profileConfig.containsKey(CONFIG_KEY_REGION)) {
+            profile.setRegion(getStringProperty(profileConfig, CONFIG_KEY_REGION));
+        }
+
+        if (profileConfig.containsKey(CONFIG_KEY_ENDPOINT)) {
+            profile.setEndpoint(getStringProperty(profileConfig, CONFIG_KEY_ENDPOINT));
+        }
 
         return (T) profile;
     }
