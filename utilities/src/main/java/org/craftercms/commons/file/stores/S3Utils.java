@@ -41,8 +41,8 @@ public class S3Utils {
 
         if (useCustomEndpoint && StringUtils.isNotEmpty(profile.getEndpoint()) &&
             StringUtils.isNotEmpty(profile.getRegion())) {
-          builder.withEndpointConfiguration(
-              new AmazonS3ClientBuilder.EndpointConfiguration(profile.getEndpoint(), profile.getRegion()));
+            builder.withEndpointConfiguration(
+                new AmazonS3ClientBuilder.EndpointConfiguration(profile.getEndpoint(), profile.getRegion()));
         } else if (StringUtils.isNotEmpty(profile.getRegion())) {
             builder.withRegion(profile.getRegion());
         }
