@@ -19,7 +19,7 @@ package org.craftercms.commons.file.stores;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.apache.commons.lang3.StringUtils;
-import org.craftercms.commons.config.profiles.aws.S3Profile;
+import org.craftercms.commons.config.profiles.aws.AbstractAwsProfile;
 
 /**
  * Utility methods for S3.
@@ -35,14 +35,23 @@ public class S3Utils {
      *
      * @return a client to an Amazon S3 account
      */
-    public static final AmazonS3 createClient(S3Profile profile) {
+    public static final AmazonS3 createClient(AbstractAwsProfile profile, boolean useCustomEndpoint) {
         AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard()
                                                              .withCredentials(profile.getCredentialsProvider());
-        if(StringUtils.isNotEmpty(profile.getRegion())) {
+
+        if (useCustomEndpoint && StringUtils.isNotEmpty(profile.getEndpoint()) &&
+            StringUtils.isNotEmpty(profile.getRegion())) {
+          builder.withEndpointConfiguration(
+              new AmazonS3ClientBuilder.EndpointConfiguration(profile.getEndpoint(), profile.getRegion()));
+        } else if (StringUtils.isNotEmpty(profile.getRegion())) {
             builder.withRegion(profile.getRegion());
         }
 
         return builder.build();
+    }
+
+    public static final AmazonS3 createClient(AbstractAwsProfile profile) {
+        return createClient(profile, true);
     }
 
 }
