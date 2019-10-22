@@ -19,12 +19,15 @@ package org.craftercms.commons.plugin.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Holds the data about a single link
  *
  * @author joseross
  * @since 3.1.1
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Link {
 
     /**

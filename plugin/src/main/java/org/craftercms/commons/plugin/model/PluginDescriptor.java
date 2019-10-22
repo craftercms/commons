@@ -20,6 +20,7 @@ package org.craftercms.commons.plugin.model;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Holds all the metadata for a plugin
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since 3.1.1
  */
 @SuppressWarnings("deprecation")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PluginDescriptor {
 
     /**

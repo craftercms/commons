@@ -20,6 +20,8 @@ package org.craftercms.commons.plugin.model;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 
@@ -29,6 +31,7 @@ import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
  * @author joseross
  * @since 3.1.1
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Plugin {
 
     /**
