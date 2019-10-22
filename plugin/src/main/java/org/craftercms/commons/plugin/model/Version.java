@@ -23,6 +23,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import static org.craftercms.commons.plugin.model.CrafterCmsEditions.COMMUNITY;
 import static org.craftercms.commons.plugin.model.CrafterCmsEditions.ENTERPRISE;
 
@@ -32,6 +34,7 @@ import static org.craftercms.commons.plugin.model.CrafterCmsEditions.ENTERPRISE;
  * @author joseross
  * @since 3.1.1
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Version {
 
     private static Pattern PATTERN = Pattern.compile("(\\d\\.\\d\\.\\d)(\\w)?.*");

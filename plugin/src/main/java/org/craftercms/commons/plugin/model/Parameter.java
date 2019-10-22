@@ -20,6 +20,7 @@ package org.craftercms.commons.plugin.model;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Holds the information for a parameter
@@ -27,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author joseross
  * @since 3.1.4
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Parameter {
 
     public static String NAME_REGEX = "[a-z]+([A-Z][a-z0-9]+)+";
