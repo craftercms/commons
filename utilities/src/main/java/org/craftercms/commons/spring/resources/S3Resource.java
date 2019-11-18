@@ -23,6 +23,8 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import org.apache.commons.io.FilenameUtils;
+import org.craftercms.commons.config.profiles.aws.S3Profile;
+import org.craftercms.commons.file.stores.S3ClientPoolingFactory;
 import org.craftercms.commons.lang.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,20 +46,20 @@ public class S3Resource implements RangeAwareResource {
 
     private static final Logger logger = LoggerFactory.getLogger(S3Resource.class);
 
-    private AmazonS3 s3Client;
-    private String bucket;
+    private S3ClientPoolingFactory clientPoolingFactory;
+    private S3Profile profile;
     private String key;
 
-    public S3Resource(AmazonS3 s3Client, String bucket, String key) {
-        this.s3Client = s3Client;
-        this.bucket = bucket;
+    public S3Resource(S3ClientPoolingFactory clientPoolingFactory, S3Profile profile, String key) {
+        this.clientPoolingFactory = clientPoolingFactory;
+        this.profile = profile;
         this.key = key;
     }
 
     @Override
     public boolean exists() {
         try {
-            return s3Client.doesObjectExist(bucket, key);
+            return getClient().doesObjectExist(profile.getBucketName(), key);
         } catch (Exception e) {
             logger.error("Error while checking if object " + getDescription() + " exists", e);
 
@@ -102,7 +104,7 @@ public class S3Resource implements RangeAwareResource {
 
     @Override
     public Resource createRelative(String relativePath) throws IOException {
-        return new S3Resource(s3Client, bucket, UrlUtils.concat(key, relativePath));
+        return new S3Resource(clientPoolingFactory, profile, UrlUtils.concat(key, relativePath));
     }
 
     @Override
@@ -112,16 +114,13 @@ public class S3Resource implements RangeAwareResource {
 
     @Override
     public String getDescription() {
-        return "S3Resource{" +
-               "bucket='" + bucket + '\'' +
-               ", key='" + key + '\'' +
-               '}';
+        return toString();
     }
 
     @Override
     public InputStream getInputStream() throws IOException {
         try {
-            return s3Client.getObject(bucket, key).getObjectContent();
+            return getClient().getObject(profile.getBucketName(), key).getObjectContent();
         } catch (AmazonServiceException e) {
             if (e.getStatusCode() == 404) {
                 throw new FileNotFoundException(getDescription() + " not found");
@@ -136,7 +135,8 @@ public class S3Resource implements RangeAwareResource {
     @Override
     public InputStream getInputStream(long start, long end) throws IOException {
         try {
-            return s3Client.getObject(new GetObjectRequest(bucket, key).withRange(start, end)).getObjectContent();
+            return getClient().getObject(new GetObjectRequest(profile.getBucketName(), key).withRange(start, end))
+                              .getObjectContent();
         } catch (AmazonServiceException e) {
             if (e.getStatusCode() == 404) {
                 throw new FileNotFoundException(getDescription() + " not found");
@@ -150,12 +150,19 @@ public class S3Resource implements RangeAwareResource {
 
     @Override
     public String toString() {
-        return getDescription();
+        return "S3Resource{" +
+               "profile=" + profile +
+               ", key='" + key + '\'' +
+               '}';
+    }
+
+    private AmazonS3 getClient() {
+        return clientPoolingFactory.getClient(profile);
     }
 
     private ObjectMetadata getMetadata() throws IOException {
         try {
-            return s3Client.getObjectMetadata(bucket, key);
+            return getClient().getObjectMetadata(profile.getBucketName(), key);
         } catch (AmazonServiceException e) {
             if (e.getStatusCode() == 404) {
                 throw new FileNotFoundException(getDescription() + " not found");
