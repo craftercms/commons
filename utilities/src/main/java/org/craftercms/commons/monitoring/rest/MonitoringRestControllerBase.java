@@ -17,11 +17,16 @@
 
 package org.craftercms.commons.monitoring.rest;
 
+import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.exceptions.InvalidMonitoringTokenException;
 import org.craftercms.commons.monitoring.MemoryInfo;
 import org.craftercms.commons.monitoring.StatusInfo;
 import org.craftercms.commons.monitoring.VersionInfo;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 /**
  * Base controller for all monitoring related APIs
@@ -36,18 +41,34 @@ public abstract class MonitoringRestControllerBase {
     public final static String VERSION_URL = "/version";
 
     @GetMapping(ROOT_URL + MEMORY_URL)
-    public MemoryInfo getCurrentMemory() {
-        return MemoryInfo.getCurrentMemory();
+    public MemoryInfo getCurrentMemory(@RequestParam(name = "token", required = true) String token)
+            throws InvalidMonitoringTokenException {
+        if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
+            return MemoryInfo.getCurrentMemory();
+        } else {
+            throw new InvalidMonitoringTokenException("Invalid token for monitoring authorization");
+        }
     }
 
     @GetMapping(ROOT_URL + STATUS_URL)
-    public StatusInfo getCurrentStatus() {
-        return StatusInfo.getCurrentStatus();
+    public StatusInfo getCurrentStatus(@RequestParam(name = "token", required = true) String token)
+            throws InvalidMonitoringTokenException {
+        if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
+            return StatusInfo.getCurrentStatus();
+        } else {
+            throw new InvalidMonitoringTokenException("Invalid token for monitoring authorization");
+        }
     }
 
     @GetMapping(ROOT_URL + VERSION_URL)
-    public VersionInfo getCurrentVersion() throws Exception {
-        return VersionInfo.getVersion(this.getClass());
+    public VersionInfo getCurrentVersion(@RequestParam(name = "token", required = true) String token)
+            throws InvalidMonitoringTokenException, IOException {
+        if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
+            return VersionInfo.getVersion(this.getClass());
+        } else {
+            throw new InvalidMonitoringTokenException("Invalid token for monitoring authorization");
+        }
     }
 
+    protected abstract String getConfiguredToken();
 }
