@@ -17,6 +17,7 @@
 package org.craftercms.commons.config.profiles.aws;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import org.craftercms.commons.config.profiles.ConfigurationProfile;
 
 /**
@@ -29,12 +30,17 @@ public abstract class AbstractAwsProfile extends ConfigurationProfile {
     /**
      * Provides the credentials to authenticate in AWS services.
      */
-    private AWSCredentialsProvider credentialsProvider;
+    private AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
 
     /**
      * Region to use in AWS services.
      */
     private String region;
+
+    /**
+     * Endpoint to connect to compatible services (eg. Openstack Swift)
+     */
+    protected String endpoint;
 
     public AWSCredentialsProvider getCredentialsProvider() {
         return credentialsProvider;
@@ -50,6 +56,14 @@ public abstract class AbstractAwsProfile extends ConfigurationProfile {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(final String endpoint) {
+        this.endpoint = endpoint;
     }
 
 }

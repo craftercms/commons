@@ -14,26 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.config.profiles.aws;
+
+package org.craftercms.commons.file.stores;
+
+import org.craftercms.commons.config.profiles.webdav.WebDavProfile;
+import com.github.sardine.Sardine;
+import com.github.sardine.SardineFactory;
 
 /**
- * Holds the information to connect to AWS S3.
+ * Utility methods for WebDAV
  *
  * @author joseross
+ * @since 3.1.4
  */
-public class S3Profile extends AbstractAwsProfile {
+public class WebDavUtils {
 
     /**
-     * Name of the bucket.
+     * Creates a WebDAV client based on the given profile config
+     * @param profile the configuration profile
+     * @return a WebDAV client
      */
-    protected String bucketName;
-
-    public String getBucketName() {
-        return bucketName;
-    }
-
-    public void setBucketName(final String bucketName) {
-        this.bucketName = bucketName;
+    public static Sardine createClient(WebDavProfile profile) {
+        return SardineFactory.begin(profile.getUsername(), profile.getPassword());
     }
 
 }

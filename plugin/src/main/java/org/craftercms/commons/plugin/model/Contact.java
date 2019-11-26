@@ -19,12 +19,15 @@ package org.craftercms.commons.plugin.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Holds the information of a single contact
  *
  * @author joseross
  * @since 3.1.1
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact {
 
     /**

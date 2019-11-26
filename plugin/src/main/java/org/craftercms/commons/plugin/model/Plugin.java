@@ -20,6 +20,8 @@ package org.craftercms.commons.plugin.model;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 
@@ -29,6 +31,7 @@ import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
  * @author joseross
  * @since 3.1.1
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Plugin {
 
     /**
@@ -100,6 +103,11 @@ public class Plugin {
      * The search engine required by the plugin
      */
     protected String searchEngine = SearchEngines.ELASTICSEARCH;
+
+    /**
+     * The parameters supported by the plugin
+     */
+    protected List<Parameter> parameters;
 
     public String getType() {
         return type;
@@ -213,6 +221,14 @@ public class Plugin {
         this.searchEngine = searchEngine;
     }
 
+    public List<Parameter> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(final List<Parameter> parameters) {
+        this.parameters = parameters;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -230,13 +246,14 @@ public class Plugin {
             Objects.equals(build, plugin.build) && Objects.equals(license, plugin.license) &&
             isEqualCollection(emptyIfNull(crafterCmsEditions), emptyIfNull(plugin.crafterCmsEditions)) &&
             isEqualCollection(emptyIfNull(crafterCmsVersions), emptyIfNull(plugin.crafterCmsVersions)) &&
-            Objects.equals(searchEngine, plugin.searchEngine);
+            Objects.equals(searchEngine, plugin.searchEngine) &&
+            isEqualCollection(emptyIfNull(parameters), emptyIfNull(plugin.parameters));
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(type, id, name, tags, version, description, website, media, developer, build, license,
-            crafterCmsEditions, crafterCmsVersions, searchEngine);
+            crafterCmsEditions, crafterCmsVersions, searchEngine, parameters);
     }
 
     @Override
@@ -245,7 +262,7 @@ public class Plugin {
             tags + ", version=" + version + ", description='" + description + '\'' + ", website=" + website +
             ", media=" + media + ", developer=" + developer + ", build=" + build + ", license=" + license +
             ", crafterCmsEditions=" + crafterCmsEditions + ", crafterCmsVersions=" + crafterCmsVersions +
-            ", searchEngine='" + searchEngine + '\'' + '}';
+            ", searchEngine='" + searchEngine + '\'' + ", parameters=" + parameters + '}';
     }
 
 }

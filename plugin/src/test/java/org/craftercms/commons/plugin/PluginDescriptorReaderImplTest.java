@@ -23,6 +23,7 @@ import java.io.InputStream;
 import org.craftercms.commons.plugin.exception.PluginException;
 import org.craftercms.commons.plugin.impl.PluginDescriptorReaderImpl;
 import org.craftercms.commons.plugin.model.BlueprintDescriptor;
+import org.craftercms.commons.plugin.model.Parameter;
 import org.craftercms.commons.plugin.model.Plugin;
 import org.craftercms.commons.plugin.model.PluginDescriptor;
 import org.junit.Test;
@@ -41,6 +42,7 @@ public class PluginDescriptorReaderImplTest {
 
     protected Resource descriptorV1 = new ClassPathResource("plugin/craftercms-plugin-v1.yaml");
     protected Resource descriptorV2 = new ClassPathResource("plugin/craftercms-plugin-v2.yaml");
+    protected Resource descriptorParams = new ClassPathResource("plugin/craftercms-plugin-params.yaml");
     protected PluginDescriptorReader reader = new PluginDescriptorReaderImpl();
 
     @Test
@@ -72,6 +74,29 @@ public class PluginDescriptorReaderImplTest {
             assertEquals(2, plugin.getCrafterCmsEditions().size());
             assertEquals(6, plugin.getMedia().getScreenshots().size());
             assertEquals("Crafter Software", plugin.getDeveloper().getCompany().getName());
+        }
+    }
+
+    @Test
+    public void testParameters() throws IOException, PluginException {
+        Parameter param = new Parameter();
+        param.setLabel("Optional Key");
+        param.setName("optionalKey");
+        param.setRequired(false);
+        param.setType(Parameter.Type.PASSWORD);
+
+        try (InputStream is = descriptorParams.getInputStream()) {
+            PluginDescriptor descriptor = reader.read(is);
+            assertNull(descriptor.getBlueprint());
+            assertNotNull(descriptor.getPlugin());
+
+            Plugin plugin = descriptor.getPlugin();
+            assertNotNull(plugin.getParameters());
+            assertEquals(3, plugin.getParameters().size());
+            assertEquals("AWS Access Key", plugin.getParameters().get(0).getLabel());
+            assertEquals("awsAccessKey", plugin.getParameters().get(0).getName());
+
+            assertEquals(param, plugin.getParameters().get(2));
         }
     }
 
