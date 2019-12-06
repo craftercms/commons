@@ -46,7 +46,7 @@ public abstract class MonitoringRestControllerBase {
         if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
             return MemoryInfo.getCurrentMemory();
         } else {
-            throw new InvalidMonitoringTokenException("Invalid token for monitoring authorization");
+            throw new InvalidMonitoringTokenException("Monitoring authorization failed, invalid token.");
         }
     }
 
@@ -56,7 +56,7 @@ public abstract class MonitoringRestControllerBase {
         if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
             return StatusInfo.getCurrentStatus();
         } else {
-            throw new InvalidMonitoringTokenException("Invalid token for monitoring authorization");
+            throw new InvalidMonitoringTokenException("Monitoring authorization failed, invalid token.");
         }
     }
 
@@ -66,7 +66,7 @@ public abstract class MonitoringRestControllerBase {
         if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
             return VersionInfo.getVersion(this.getClass());
         } else {
-            throw new InvalidMonitoringTokenException("Invalid token for monitoring authorization");
+            throw new InvalidMonitoringTokenException("Monitoring authorization failed, invalid token.");
         }
     }
 
