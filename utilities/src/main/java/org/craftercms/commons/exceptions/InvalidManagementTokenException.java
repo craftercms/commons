@@ -3,9 +3,9 @@ package org.craftercms.commons.exceptions;
 /**
  * Exception thrown when monitoring API is called with invalid authorization token
  */
-public class InvalidMonitoringTokenException extends Exception {
+public class InvalidManagementTokenException extends Exception {
 
-    public InvalidMonitoringTokenException(String message) {
+    public InvalidManagementTokenException(String message) {
         super(message);
     }
 }

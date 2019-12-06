@@ -18,7 +18,7 @@
 package org.craftercms.commons.monitoring.rest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.craftercms.commons.exceptions.InvalidMonitoringTokenException;
+import org.craftercms.commons.exceptions.InvalidManagementTokenException;
 import org.craftercms.commons.monitoring.MemoryInfo;
 import org.craftercms.commons.monitoring.StatusInfo;
 import org.craftercms.commons.monitoring.VersionInfo;
@@ -42,31 +42,31 @@ public abstract class MonitoringRestControllerBase {
 
     @GetMapping(ROOT_URL + MEMORY_URL)
     public MemoryInfo getCurrentMemory(@RequestParam(name = "token", required = true) String token)
-            throws InvalidMonitoringTokenException {
+            throws InvalidManagementTokenException {
         if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
             return MemoryInfo.getCurrentMemory();
         } else {
-            throw new InvalidMonitoringTokenException("Monitoring authorization failed, invalid token.");
+            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
         }
     }
 
     @GetMapping(ROOT_URL + STATUS_URL)
     public StatusInfo getCurrentStatus(@RequestParam(name = "token", required = true) String token)
-            throws InvalidMonitoringTokenException {
+            throws InvalidManagementTokenException {
         if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
             return StatusInfo.getCurrentStatus();
         } else {
-            throw new InvalidMonitoringTokenException("Monitoring authorization failed, invalid token.");
+            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
         }
     }
 
     @GetMapping(ROOT_URL + VERSION_URL)
     public VersionInfo getCurrentVersion(@RequestParam(name = "token", required = true) String token)
-            throws InvalidMonitoringTokenException, IOException {
+            throws InvalidManagementTokenException, IOException {
         if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
             return VersionInfo.getVersion(this.getClass());
         } else {
-            throw new InvalidMonitoringTokenException("Monitoring authorization failed, invalid token.");
+            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
         }
     }
 
