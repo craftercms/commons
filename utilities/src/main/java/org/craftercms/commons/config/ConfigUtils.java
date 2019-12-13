@@ -16,19 +16,26 @@
  */
 package org.craftercms.commons.config;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.XMLConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.builder.fluent.XMLBuilderParameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
+import org.apache.commons.configuration2.interpol.Lookup;
 import org.apache.commons.configuration2.io.FileHandler;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.Resource;
 
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Utility methods for Apache Commons based configuration.
@@ -48,9 +55,10 @@ public class ConfigUtils {
      *
      * @throws ConfigurationException if an error occurs while reading the configuration
      */
-    public static HierarchicalConfiguration<ImmutableNode> readXmlConfiguration(InputStream input)
+    public static HierarchicalConfiguration<ImmutableNode> readXmlConfiguration(InputStream input,
+                                                                                Map<String, Lookup> prefixLookups)
             throws ConfigurationException {
-        return readXmlConfiguration(input, null);
+        return readXmlConfiguration(input, prefixLookups, null);
     }
 
     /**
@@ -63,21 +71,70 @@ public class ConfigUtils {
      *
      * @throws ConfigurationException if an error occurs while reading the configuration
      */
-    public static HierarchicalConfiguration<ImmutableNode> readXmlConfiguration(InputStream input, String fileEncoding)
+    public static HierarchicalConfiguration<ImmutableNode> readXmlConfiguration(InputStream input,
+                                                                                Map<String, Lookup> prefixLookups,
+                                                                                String fileEncoding)
             throws ConfigurationException {
-        try {
-            Parameters params = new Parameters();
-            FileBasedConfigurationBuilder<XMLConfiguration> builder =
-                    new FileBasedConfigurationBuilder<>(XMLConfiguration.class);
-            XMLConfiguration config = builder.configure(params.xml()).getConfiguration();
-            FileHandler fileHandler = new FileHandler(config);
+        Parameters params = new Parameters();
+        FileBasedConfigurationBuilder<XMLConfiguration> builder =
+            new FileBasedConfigurationBuilder<>(XMLConfiguration.class);
 
+        try {
+            XMLBuilderParameters xmlParams = params.xml();
+
+            if (MapUtils.isNotEmpty(prefixLookups)) {
+                xmlParams = xmlParams.setPrefixLookups(prefixLookups);
+            }
+
+            builder.configure(xmlParams);
+            XMLConfiguration config = builder.getConfiguration();
+
+            FileHandler fileHandler = new FileHandler(config);
             fileHandler.setEncoding(StringUtils.isNotBlank(fileEncoding) ? fileEncoding : DEFAULT_ENCODING);
             fileHandler.load(input);
 
             return config;
         } catch (Exception e) {
             throw new ConfigurationException("Unable to read XML configuration", e);
+        }
+    }
+
+    public static XMLConfiguration readXmlConfiguration(Resource resource, char listDelimiter,
+                                                        Map<String, Lookup> prefixLookups)
+        throws ConfigurationException {
+        Parameters params = new Parameters();
+        FileBasedConfigurationBuilder<XMLConfiguration> builder =
+            new FileBasedConfigurationBuilder<>(XMLConfiguration.class);
+
+        try {
+            XMLBuilderParameters xmlParams = params
+                .xml()
+                .setURL(resource.getURL())
+                .setListDelimiterHandler(new DefaultListDelimiterHandler(listDelimiter));
+
+            if (MapUtils.isNotEmpty(prefixLookups)) {
+                xmlParams = xmlParams.setPrefixLookups(prefixLookups);
+            }
+
+            builder.configure(xmlParams);
+
+            return builder.getConfiguration();
+        } catch (Exception e) {
+            throw new ConfigurationException("Unable to get URL of resource " + resource, e);
+        }
+    }
+
+    public static HierarchicalConfiguration<?> readYamlConfiguration(Reader reader,
+                                                                     Map<String, Lookup> prefixLookups)
+        throws ConfigurationException {
+        YamlConfiguration configuration = new YamlConfiguration();
+        configuration.setPrefixLookups(prefixLookups);
+
+        try {
+            configuration.read(reader);
+            return configuration;
+        } catch (Exception e) {
+            throw new ConfigurationException("Error loading YAML configuration", e);
         }
     }
 
