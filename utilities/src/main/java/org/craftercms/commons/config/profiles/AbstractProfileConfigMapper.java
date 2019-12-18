@@ -18,9 +18,9 @@ package org.craftercms.commons.config.profiles;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
-import org.craftercms.commons.config.ConfigUtils;
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.ConfigurationMapper;
+import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
 
 import java.io.InputStream;
 import java.util.List;
@@ -37,27 +37,32 @@ public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile
 
     protected String serviceName;
 
-    public AbstractProfileConfigMapper(final String serviceName) {
+    protected EncryptionAwareConfigurationReader configurationReader;
+
+    public AbstractProfileConfigMapper(final String serviceName,
+                                       final EncryptionAwareConfigurationReader configurationReader) {
         this.serviceName = serviceName;
+        this.configurationReader = configurationReader;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public T readConfig(InputStream inputStream, String encoding, String profileId) throws ConfigurationException {
-        HierarchicalConfiguration<ImmutableNode> config = ConfigUtils.readXmlConfiguration(inputStream, encoding);
+        HierarchicalConfiguration<ImmutableNode> config =
+            (HierarchicalConfiguration<ImmutableNode>) configurationReader.readXmlConfiguration(inputStream, encoding);
 
         List<HierarchicalConfiguration<ImmutableNode>> profiles =
             config.configurationsAt(serviceName + "." + CONFIG_KEY_PROFILE);
-        HierarchicalConfiguration profileConfig = profiles
+        HierarchicalConfiguration<ImmutableNode> profileConfig = profiles
                 .stream()
                 .filter(c -> profileId.equals(c.getString(CONFIG_KEY_ID)))
                 .findFirst()
                 .orElseThrow(() -> new ConfigurationException("Profile '" + profileId + "' not found"));
 
-        ConfigurationProfile profile = mapProfile(profileConfig);
+        T profile = mapProfile(profileConfig);
         profile.setProfileId(profileId);
 
-        return (T) profile;
+        return profile;
     }
 
     protected abstract T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException;

@@ -19,6 +19,7 @@ package org.craftercms.commons.config.profiles.box;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
 import org.craftercms.commons.config.profiles.AbstractProfileConfigMapper;
 import org.craftercms.commons.config.ConfigurationException;
 
@@ -47,8 +48,8 @@ public class BoxProfileMapper extends AbstractProfileConfigMapper<BoxProfile> {
     private static final String KEY_PRIVATE_KEY = "privateKey";
     private static final String KEY_UPLOAD_FOLDER = "uploadFolder";
 
-    public BoxProfileMapper() {
-        super(KEY_BOX);
+    public BoxProfileMapper(final EncryptionAwareConfigurationReader configurationReader) {
+        super(KEY_BOX, configurationReader);
     }
 
     @Override
