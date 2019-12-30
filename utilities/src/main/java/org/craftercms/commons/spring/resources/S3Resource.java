@@ -23,7 +23,7 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import org.apache.commons.io.FilenameUtils;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
-import org.craftercms.commons.file.stores.S3ClientCachingFactory;
+import org.craftercms.commons.aws.S3ClientCachingFactory;
 import org.craftercms.commons.lang.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,12 +45,12 @@ public class S3Resource implements RangeAwareResource {
 
     private static final Logger logger = LoggerFactory.getLogger(S3Resource.class);
 
-    private S3ClientCachingFactory clientPoolingFactory;
+    private S3ClientCachingFactory clientFactory;
     private S3Profile profile;
     private String key;
 
-    public S3Resource(S3ClientCachingFactory clientPoolingFactory, S3Profile profile, String key) {
-        this.clientPoolingFactory = clientPoolingFactory;
+    public S3Resource(S3ClientCachingFactory clientFactory, S3Profile profile, String key) {
+        this.clientFactory = clientFactory;
         this.profile = profile;
         this.key = key;
     }
@@ -103,7 +103,7 @@ public class S3Resource implements RangeAwareResource {
 
     @Override
     public Resource createRelative(String relativePath) throws IOException {
-        return new S3Resource(clientPoolingFactory, profile, UrlUtils.concat(key, relativePath));
+        return new S3Resource(clientFactory, profile, UrlUtils.concat(key, relativePath));
     }
 
     @Override
@@ -156,7 +156,7 @@ public class S3Resource implements RangeAwareResource {
     }
 
     private AmazonS3 getClient() {
-        return clientPoolingFactory.getClient(profile);
+        return clientFactory.getClient(profile);
     }
 
     private ObjectMetadata getMetadata() throws IOException {
