@@ -19,12 +19,11 @@ package org.craftercms.commons.spring.resources;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import org.apache.commons.io.FilenameUtils;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
-import org.craftercms.commons.file.stores.S3ClientPoolingFactory;
+import org.craftercms.commons.file.stores.S3ClientCachingFactory;
 import org.craftercms.commons.lang.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,11 +45,11 @@ public class S3Resource implements RangeAwareResource {
 
     private static final Logger logger = LoggerFactory.getLogger(S3Resource.class);
 
-    private S3ClientPoolingFactory clientPoolingFactory;
+    private S3ClientCachingFactory clientPoolingFactory;
     private S3Profile profile;
     private String key;
 
-    public S3Resource(S3ClientPoolingFactory clientPoolingFactory, S3Profile profile, String key) {
+    public S3Resource(S3ClientCachingFactory clientPoolingFactory, S3Profile profile, String key) {
         this.clientPoolingFactory = clientPoolingFactory;
         this.profile = profile;
         this.key = key;

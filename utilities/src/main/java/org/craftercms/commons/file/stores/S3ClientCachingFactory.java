@@ -31,11 +31,15 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.ehcache.EhCacheFactoryBean;
 
 import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Factory class that creates {@code AmazonS3} clients using {@link S3Profile}s. It also manages a pool of clients so
+ * Factory class that creates {@code AmazonS3} clients using {@link S3Profile}s. It also caches the clients so
  * instead of creating a new client for the same profile, it will reuse a previous client. Clients that haven't been
- * used for a while will be shutdown.
+ * used for a while will be evicted from the cache and shutdown.
  *
  * <p>
  *     <strong>WARNING: </strong> the {@link AbstractAwsProfile}s that you pass to
@@ -45,19 +49,21 @@ import java.util.Collections;
  *
  * @author avasquez
  */
-public class S3ClientPoolingFactory extends CacheEventListenerAdapter implements BeanNameAware, InitializingBean,
+public class S3ClientCachingFactory extends CacheEventListenerAdapter implements BeanNameAware, InitializingBean,
                                                                                  DisposableBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(S3ClientPoolingFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(S3ClientCachingFactory.class);
 
-    public static final int DEFAULT_CLIENT_TIME_TO_IDLE = 900;
+    public static final int DEFAULT_SHUTDOWN_CLIENT_AFTER_IDLE_SECS = 900;
 
     private String beanName;
-    private int clientTimeToIdle;
-    private Ehcache pool;
+    private int shutdownClientAfterIdleSecs;
+    private Ehcache cache;
+    private ScheduledExecutorService evictionService;
 
-    public S3ClientPoolingFactory() {
-        clientTimeToIdle = DEFAULT_CLIENT_TIME_TO_IDLE;
+    public S3ClientCachingFactory() {
+        shutdownClientAfterIdleSecs = DEFAULT_SHUTDOWN_CLIENT_AFTER_IDLE_SECS;
+        evictionService = Executors.newSingleThreadScheduledExecutor();
     }
 
     @Override
@@ -65,8 +71,8 @@ public class S3ClientPoolingFactory extends CacheEventListenerAdapter implements
         this.beanName = name;
     }
 
-    public void setClientTimeToIdle(int clientTimeToIdle) {
-        this.clientTimeToIdle = clientTimeToIdle;
+    public void setShutdownClientAfterIdleSecs(int shutdownClientAfterIdleSecs) {
+        this.shutdownClientAfterIdleSecs = shutdownClientAfterIdleSecs;
     }
 
     @Override
@@ -86,8 +92,8 @@ public class S3ClientPoolingFactory extends CacheEventListenerAdapter implements
 
     @Override
     public void dispose() {
-        for (Object key : pool.getKeys()) {
-            Element element = pool.get(key);
+        for (Object key : cache.getKeys()) {
+            Element element = cache.get(key);
             if (element != null) {
                 shutdownClient(element);
             }
@@ -95,8 +101,10 @@ public class S3ClientPoolingFactory extends CacheEventListenerAdapter implements
     }
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
         dispose();
+
+        evictionService.shutdownNow();
     }
 
     @Override
@@ -105,23 +113,26 @@ public class S3ClientPoolingFactory extends CacheEventListenerAdapter implements
         factoryBean.setCacheEventListeners(Collections.singleton(this));
         factoryBean.setBeanName(beanName);
         factoryBean.setTimeToLive(0);
-        factoryBean.setTimeToIdle(clientTimeToIdle);
+        factoryBean.setTimeToIdle(shutdownClientAfterIdleSecs);
         factoryBean.afterPropertiesSet();
 
-        pool = factoryBean.getObject();
+        cache = factoryBean.getObject();
+
+        // Schedule eviction of expired items every minute
+        evictionService.scheduleAtFixedRate(cache::evictExpiredElements, 1, 1, TimeUnit.MINUTES);
     }
 
     public AmazonS3 getClient(AbstractAwsProfile profile) {
-        Element element = pool.get(profile);
+        Element element = cache.get(profile);
         if (element == null) {
-            synchronized (pool) {
+            synchronized (cache) {
                 // Check again, just in case the element was added by another concurrent thread
-                element = pool.get(profile);
+                element = cache.get(profile);
                 if (element == null) {
                     logger.info("Creating AmazonS3 client for {}", profile);
 
                     element = new Element(profile, S3Utils.createClient(profile));
-                    pool.put(element);
+                    cache.put(element);
                 }
             }
         }
