@@ -16,6 +16,8 @@
  */
 package org.craftercms.commons.config.profiles.aws;
 
+import java.util.Objects;
+
 /**
  * Holds the information to connect to AWS S3.
  *
@@ -36,4 +38,27 @@ public class S3Profile extends AbstractAwsProfile {
         this.bucketName = bucketName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        S3Profile s3Profile = (S3Profile) o;
+        return bucketName.equals(s3Profile.bucketName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), bucketName);
+    }
+
+    @Override
+    public String toString() {
+        return "S3Profile{" +
+               "profileId='" + profileId + '\'' +
+               ", region='" + region + '\'' +
+               ", endpoint='" + endpoint + '\'' +
+               ", bucketName='" + bucketName + '\'' +
+               '}';
+    }
 }
