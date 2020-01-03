@@ -16,6 +16,8 @@
  */
 package org.craftercms.commons.config.profiles;
 
+import java.util.Objects;
+
 /**
  * Represents a collection of configuration properties that are commonly used together, for example, to open a
  * connection or accessing a server.
@@ -24,7 +26,7 @@ package org.craftercms.commons.config.profiles;
  */
 public class ConfigurationProfile {
 
-    private String profileId;
+    protected String profileId;
 
     public String getProfileId() {
         return profileId;
@@ -32,6 +34,19 @@ public class ConfigurationProfile {
 
     public void setProfileId(String profileId) {
         this.profileId = profileId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ConfigurationProfile that = (ConfigurationProfile) o;
+        return profileId.equals(that.profileId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(profileId);
     }
 
 }
