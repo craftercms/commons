@@ -8,7 +8,7 @@ package org.craftercms.commons.concurrent.locks;
  *            implementation can be used.
  *
  * @author avasquez
- * @
+ * @since 3.1.5
  */
 public interface KeyBasedLockFactory<L> {
 
