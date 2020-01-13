@@ -21,6 +21,7 @@ import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
 
+import static org.craftercms.commons.config.ConfigUtils.getBooleanProperty;
 import static org.craftercms.commons.config.ConfigUtils.getRequiredStringProperty;
 
 /**
@@ -33,6 +34,7 @@ public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
 
     private static final String CONFIG_KEY_S3 = "s3";
     private static final String CONFIG_KEY_BUCKET = "bucketName";
+    private static final String CONFIG_KEY_PATH_STYLE = "pathStyleAccess";
 
     public S3ProfileMapper(final EncryptionAwareConfigurationReader configurationReader) {
         super(CONFIG_KEY_S3, configurationReader);
@@ -43,6 +45,7 @@ public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
             throws ConfigurationException {
         S3Profile profile = super.mapProfile(profileConfig);
         profile.setBucketName(getRequiredStringProperty(profileConfig, CONFIG_KEY_BUCKET));
+        profile.setPathStyleAccessEnabled(getBooleanProperty(profileConfig, CONFIG_KEY_PATH_STYLE, false));
 
         return profile;
     }
