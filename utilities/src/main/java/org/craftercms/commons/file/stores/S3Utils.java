@@ -20,6 +20,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.config.profiles.aws.AbstractAwsProfile;
+import org.craftercms.commons.config.profiles.aws.S3Profile;
 
 /**
  * Utility methods for S3.
@@ -43,6 +44,9 @@ public class S3Utils {
             StringUtils.isNotEmpty(profile.getRegion())) {
             builder.withEndpointConfiguration(
                 new AmazonS3ClientBuilder.EndpointConfiguration(profile.getEndpoint(), profile.getRegion()));
+            if (profile instanceof S3Profile) {
+                builder.withPathStyleAccessEnabled(((S3Profile) profile).isPathStyleAccessEnabled());
+            }
         } else if (StringUtils.isNotEmpty(profile.getRegion())) {
             builder.withRegion(profile.getRegion());
         }

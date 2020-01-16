@@ -28,12 +28,25 @@ public class S3Profile extends AbstractAwsProfile {
      */
     protected String bucketName;
 
+    /**
+     * Indicates if path style access should be used for all request
+     */
+    protected boolean pathStyleAccessEnabled;
+
     public String getBucketName() {
         return bucketName;
     }
 
     public void setBucketName(final String bucketName) {
         this.bucketName = bucketName;
+    }
+
+    public boolean isPathStyleAccessEnabled() {
+        return pathStyleAccessEnabled;
+    }
+
+    public void setPathStyleAccessEnabled(final boolean pathStyleAccessEnabled) {
+        this.pathStyleAccessEnabled = pathStyleAccessEnabled;
     }
 
 }
