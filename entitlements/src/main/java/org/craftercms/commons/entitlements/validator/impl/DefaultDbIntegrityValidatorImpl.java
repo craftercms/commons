@@ -56,7 +56,7 @@ public class DefaultDbIntegrityValidatorImpl implements DbIntegrityValidator {
     private static final String UPGRADE_DBMS_INTEGRITY_FAIL_CHECK_QUERY =
             "select crc32(SUBSTRING(group_concat(concat(table_name, column_name) order by field(table_name, '_meta') " +
                     "DESC, TABLE_NAME ASC, ORDINAL_POSITION ASC), 1, 1024)) from information_schema.columns " +
-                    "where table_schema = 'crafter' ;";
+                    "where table_schema = '{schema}' ;";
 
     /**
      * {@inheritDoc}
