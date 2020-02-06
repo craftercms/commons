@@ -33,6 +33,7 @@
         <module>entitlements</module>
         <module>validation</module>
         <module>plugin</module>
+        <module>upgrade-manager</module>
     </modules>
 
     <name>Crafter Commons</name>
