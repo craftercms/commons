@@ -41,59 +41,58 @@ import org.springframework.core.io.Resource;
 @SuppressWarnings("rawtypes")
 public abstract class AbstractUpgradeOperation implements UpgradeOperation, ApplicationContextAware {
 
- protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
- /**
-  * The current version.
-  */
- protected String currentVersion;
+    /**
+     * The current version.
+     */
+    protected String currentVersion;
 
- /**
-  * The next version.
-  */
- protected String nextVersion;
+    /**
+     * The next version.
+     */
+    protected String nextVersion;
 
 
- /**
-  * The application context
-  */
- protected ApplicationContext applicationContext;
+    /**
+     * The application context
+     */
+    protected ApplicationContext applicationContext;
 
- @Override
- public void setApplicationContext(final ApplicationContext applicationContext) {
-  this.applicationContext = applicationContext;
- }
+    @Override
+    public void setApplicationContext(final ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
- @Override
- public void init(final String currentVersion, final String nextVersion, final HierarchicalConfiguration config)
-     throws ConfigurationException {
-  this.currentVersion = currentVersion;
-  this.nextVersion = nextVersion;
+    @Override
+    public void init(final String currentVersion, final String nextVersion, final HierarchicalConfiguration config) throws ConfigurationException {
+        this.currentVersion = currentVersion;
+        this.nextVersion = nextVersion;
 
-  doInit(config);
- }
+        doInit(config);
+    }
 
- protected void doInit(final HierarchicalConfiguration<?> config) throws ConfigurationException  {
-  // do nothing by default
- }
+    protected void doInit(final HierarchicalConfiguration<?> config) throws ConfigurationException {
+        // do nothing by default
+    }
 
- @Override
- public void execute(final Object target) throws UpgradeException {
-  logger.debug("Starting execution for target {}", target);
-  try {
-   doExecute(target);
-  } catch (Exception e) {
-   throw new UpgradeException("Error executing upgrade operation " + getClass(), e);
-  } finally {
-   logger.debug("Execution completed for target {}", target);
-  }
- }
+    @Override
+    public void execute(final Object target) throws UpgradeException {
+        logger.debug("Starting execution for target {}", target);
+        try {
+            doExecute(target);
+        } catch (Exception e) {
+            throw new UpgradeException("Error executing upgrade operation " + getClass(), e);
+        } finally {
+            logger.debug("Execution completed for target {}", target);
+        }
+    }
 
- protected abstract void doExecute(Object target) throws Exception;
+    protected abstract void doExecute(Object target) throws Exception;
 
- protected Resource loadResource(String path) {
-  return applicationContext.getResource(path);
- }
+    protected Resource loadResource(String path) {
+        return applicationContext.getResource(path);
+    }
 
 }
 

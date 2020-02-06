@@ -28,80 +28,81 @@ import org.springframework.util.StopWatch;
 
 /**
  * Default implementation for {@link UpgradePipeline}.
+ *
  * @author joseross
  * @since 3.1.5
  */
 public class DefaultUpgradePipelineImpl implements UpgradePipeline {
 
- private static final Logger logger = LoggerFactory.getLogger(DefaultUpgradePipelineImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultUpgradePipelineImpl.class);
 
- public DefaultUpgradePipelineImpl(final String name, final List<UpgradeOperation> operations) {
-  this.name = name;
-  this.operations = operations;
- }
-
- /**
-  * Name of the pipeline.
-  */
- protected String name;
-
- /**
-  * Indicates if the pipeline should continue executing after an operation fails
-  */
- protected boolean continueOnFailure = false;
-
- /**
-  * List of all upgrade operations to be executed.
-  */
- protected List<UpgradeOperation> operations;
-
- public void setContinueOnFailure(final boolean continueOnFailure) {
-  this.continueOnFailure = continueOnFailure;
- }
-
- /**
-  * {@inheritDoc}
-  */
- @Override
- public void execute(final Object target) throws UpgradeException {
-  if(isEmpty()) {
-   logger.debug("Pipeline '{}' is empty, skipping execution", name);
-   return;
-  }
-  StopWatch watch = new StopWatch("pipeline " + name);
-  logger.info("============================================================");
-  logger.info("Starting execution of upgrade pipeline: {}", name);
-  for(UpgradeOperation operation : operations) {
-   String operationName = operation.getClass().getSimpleName();
-   logger.info("------- Starting execution of operation {} -------", operationName);
-   watch.start(operationName);
-   try {
-    operation.execute(target);
-   } catch (UpgradeException e) {
-    if (continueOnFailure) {
-     logger.error("Execution of operation {} failed", operationName, e);
-    } else {
-     throw e;
+    public DefaultUpgradePipelineImpl(final String name, final List<UpgradeOperation> operations) {
+        this.name = name;
+        this.operations = operations;
     }
-   } finally {
-    watch.stop();
-    logger.info("------- Execution of operation {} completed -------", operationName);
-   }
-  }
-  logger.info("Execution of pipeline {} completed", name);
-  logger.info("============================================================");
 
-  if(logger.isDebugEnabled()) {
-   logger.debug("Pipeline Duration:\n" + watch.prettyPrint());
-  }
- }
+    /**
+     * Name of the pipeline.
+     */
+    protected String name;
 
- /**
-  * {@inheritDoc}
-  */
- @Override
- public boolean isEmpty() {
-  return CollectionUtils.isEmpty(operations);
- }
+    /**
+     * Indicates if the pipeline should continue executing after an operation fails
+     */
+    protected boolean continueOnFailure = false;
+
+    /**
+     * List of all upgrade operations to be executed.
+     */
+    protected List<UpgradeOperation> operations;
+
+    public void setContinueOnFailure(final boolean continueOnFailure) {
+        this.continueOnFailure = continueOnFailure;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void execute(final Object target) throws UpgradeException {
+        if (isEmpty()) {
+            logger.debug("Pipeline '{}' is empty, skipping execution", name);
+            return;
+        }
+        StopWatch watch = new StopWatch("pipeline " + name);
+        logger.info("============================================================");
+        logger.info("Starting execution of upgrade pipeline: {}", name);
+        for (UpgradeOperation operation : operations) {
+            String operationName = operation.getClass().getSimpleName();
+            logger.info("------- Starting execution of operation {} -------", operationName);
+            watch.start(operationName);
+            try {
+                operation.execute(target);
+            } catch (UpgradeException e) {
+                if (continueOnFailure) {
+                    logger.error("Execution of operation {} failed", operationName, e);
+                } else {
+                    throw e;
+                }
+            } finally {
+                watch.stop();
+                logger.info("------- Execution of operation {} completed -------", operationName);
+            }
+        }
+        logger.info("Execution of pipeline {} completed", name);
+        logger.info("============================================================");
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Pipeline Duration:\n" + watch.prettyPrint());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty() {
+        return CollectionUtils.isEmpty(operations);
+    }
 
 }

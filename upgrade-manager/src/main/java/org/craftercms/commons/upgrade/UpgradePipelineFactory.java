@@ -21,22 +21,24 @@ import org.craftercms.commons.upgrade.exception.UpgradeException;
 
 /**
  * Builds an {@link UpgradePipeline} with all the required operations
+ *
  * @author joseross
  * @since 3.1.5
  */
 public interface UpgradePipelineFactory {
 
- String CONFIG_KEY_CURRENT_VERSION = "currentVersion";
- String CONFIG_KEY_NEXT_VERSION = "nextVersion";
- String CONFIG_KEY_OPERATIONS = "operations";
- String CONFIG_KEY_TYPE = "type";
+    String CONFIG_KEY_CURRENT_VERSION = "currentVersion";
+    String CONFIG_KEY_NEXT_VERSION = "nextVersion";
+    String CONFIG_KEY_OPERATIONS = "operations";
+    String CONFIG_KEY_TYPE = "type";
 
- /**
-  * Retrieves the needed upgrade operations for the given target
-  * @param target the target
-  * @return the upgrade pipeline
-  * @throws UpgradeException if there is any error retrieving the operations
-  */
- UpgradePipeline getPipeline(Object target) throws UpgradeException, ConfigurationException;
+    /**
+     * Retrieves the needed upgrade operations for the given target
+     *
+     * @param target the target
+     * @return the upgrade pipeline
+     * @throws UpgradeException if there is any error retrieving the operations
+     */
+    UpgradePipeline getPipeline(Object target) throws UpgradeException, ConfigurationException;
 
 }

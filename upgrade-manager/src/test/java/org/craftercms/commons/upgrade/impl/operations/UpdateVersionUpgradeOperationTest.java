@@ -21,7 +21,6 @@
  import org.junit.Before;
  import org.junit.Test;
 
- import static org.junit.Assert.assertEquals;
  import static org.mockito.Matchers.any;
  import static org.mockito.Matchers.eq;
  import static org.mockito.Mockito.mock;
@@ -33,28 +32,28 @@
   */
  public class UpdateVersionUpgradeOperationTest {
 
-  public static final String INITIAL_VERSION = "1.0";
-  public static final String FINAL_VERSION = "2.0";
+     public static final String INITIAL_VERSION = "1.0";
+     public static final String FINAL_VERSION = "2.0";
 
-  private VersionProvider versionProvider;
+     private VersionProvider versionProvider;
 
-  private UpdateVersionUpgradeOperation operation;
+     private UpdateVersionUpgradeOperation operation;
 
-  @Before
-  public void setUp() throws UpgradeException, ConfigurationException {
-   versionProvider = mock(VersionProvider.class);
+     @Before
+     public void setUp() throws UpgradeException, ConfigurationException {
+         versionProvider = mock(VersionProvider.class);
 
-   operation = new UpdateVersionUpgradeOperation(versionProvider);
-   operation.init(INITIAL_VERSION, FINAL_VERSION, null);
-  }
+         operation = new UpdateVersionUpgradeOperation(versionProvider);
+         operation.init(INITIAL_VERSION, FINAL_VERSION, null);
+     }
 
-  @Test
-  public void versionShouldBeUpdated() throws UpgradeException {
-   when(versionProvider.getVersion(any())).thenReturn(INITIAL_VERSION);
+     @Test
+     public void versionShouldBeUpdated() throws UpgradeException {
+         when(versionProvider.getVersion(any())).thenReturn(INITIAL_VERSION);
 
-   operation.execute(null);
+         operation.execute(null);
 
-   verify(versionProvider).setVersion(any(), eq(FINAL_VERSION));
-  }
+         verify(versionProvider).setVersion(any(), eq(FINAL_VERSION));
+     }
 
  }

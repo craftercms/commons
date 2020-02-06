@@ -22,25 +22,27 @@ import org.craftercms.commons.upgrade.exception.UpgradeException;
 
 /**
  * Defines the basic operations for a single upgrade
+ *
  * @author joseross
  * @since 3.1.5
  */
 public interface UpgradeOperation {
 
- /**
-  * Initializes the instance with the given configuration
-  * @param currentVersion the current version
-  * @param nextVersion the next version
-  * @param config the operation configuration
-  */
- void init(String currentVersion, String nextVersion, HierarchicalConfiguration<?> config)
-     throws ConfigurationException;
+    /**
+     * Initializes the instance with the given configuration
+     *
+     * @param currentVersion the current version
+     * @param nextVersion    the next version
+     * @param config         the operation configuration
+     */
+    void init(String currentVersion, String nextVersion, HierarchicalConfiguration<?> config) throws ConfigurationException;
 
- /**
-  * Performs a single upgrade operation.
-  * @param target the target
-  * @throws UpgradeException if there is any error performing the upgrade
-  */
- void execute(Object target) throws UpgradeException;
+    /**
+     * Performs a single upgrade operation.
+     *
+     * @param target the target
+     * @throws UpgradeException if there is any error performing the upgrade
+     */
+    void execute(Object target) throws UpgradeException;
 
 }

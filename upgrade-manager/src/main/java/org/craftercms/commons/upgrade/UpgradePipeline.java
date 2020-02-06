@@ -20,22 +20,25 @@ import org.craftercms.commons.upgrade.exception.UpgradeException;
 
 /**
  * Groups any number of {@link UpgradeOperation} instances
+ *
  * @author joseross
  * @since 3.1.5
  */
 public interface UpgradePipeline {
 
- /**
-  * Executes each {@link UpgradeOperation} for the given target
-  * @param target the target
-  * @throws UpgradeException if any of the {@link UpgradeOperation}s fails
-  */
- void execute(Object target) throws UpgradeException;
+    /**
+     * Executes each {@link UpgradeOperation} for the given target
+     *
+     * @param target the target
+     * @throws UpgradeException if any of the {@link UpgradeOperation}s fails
+     */
+    void execute(Object target) throws UpgradeException;
 
- /**
-  * Indicates if the pipeline doesn't contain any operations
-  * @return true if there are no operations
-  */
- boolean isEmpty();
+    /**
+     * Indicates if the pipeline doesn't contain any operations
+     *
+     * @return true if there are no operations
+     */
+    boolean isEmpty();
 
 }

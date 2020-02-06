@@ -24,16 +24,16 @@ package org.craftercms.commons.upgrade.exception;
  */
 public class UpgradeException extends Exception {
 
- public UpgradeException(final String message) {
-  super(message);
- }
+    public UpgradeException(final String message) {
+        super(message);
+    }
 
- public UpgradeException(final Throwable cause) {
-  super(cause);
- }
+    public UpgradeException(final Throwable cause) {
+        super(cause);
+    }
 
- public UpgradeException(final String message, final Throwable cause) {
-  super(message, cause);
- }
+    public UpgradeException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
 }

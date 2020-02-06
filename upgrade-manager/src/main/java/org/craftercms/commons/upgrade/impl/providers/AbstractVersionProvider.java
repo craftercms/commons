@@ -31,45 +31,45 @@ import static org.springframework.util.StringUtils.isEmpty;
  */
 public abstract class AbstractVersionProvider implements VersionProvider {
 
- protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
- /**
-  * The default value to use when no version is found, defaults to {@link VersionProvider#SKIP}
-  */
- protected String defaultValue = SKIP;
+    /**
+     * The default value to use when no version is found, defaults to {@link VersionProvider#SKIP}
+     */
+    protected String defaultValue = SKIP;
 
- public void setDefaultValue(final String defaultValue) {
-  this.defaultValue = defaultValue;
- }
+    public void setDefaultValue(final String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
 
- @Override
- public String getVersion(final Object target) throws UpgradeException {
-  logger.debug("Getting current version for {}", target);
-  try {
-   String currentValue = doGetVersion(target);
-   logger.debug("Found version {} for {}", currentValue, target);
-   if (isEmpty(currentValue)) {
-    currentValue = defaultValue;
-   }
-   return currentValue;
-  } catch (Exception e) {
-   throw new UpgradeException("Error getting current version for " + target, e);
-  }
- }
+    @Override
+    public String getVersion(final Object target) throws UpgradeException {
+        logger.debug("Getting current version for {}", target);
+        try {
+            String currentValue = doGetVersion(target);
+            logger.debug("Found version {} for {}", currentValue, target);
+            if (isEmpty(currentValue)) {
+                currentValue = defaultValue;
+            }
+            return currentValue;
+        } catch (Exception e) {
+            throw new UpgradeException("Error getting current version for " + target, e);
+        }
+    }
 
- protected abstract String doGetVersion(Object target) throws Exception;
+    protected abstract String doGetVersion(Object target) throws Exception;
 
- @Override
- public void setVersion(final Object target, final String version) throws UpgradeException {
-  logger.debug("Updating current version for {} to {}", target, version);
-  try {
-   doSetVersion(target, version);
-   logger.debug("Version successfully updated for {}", target);
-  } catch (Exception e) {
-   throw new UpgradeException("Error updating version for " + target, e);
-  }
- }
+    @Override
+    public void setVersion(final Object target, final String version) throws UpgradeException {
+        logger.debug("Updating current version for {} to {}", target, version);
+        try {
+            doSetVersion(target, version);
+            logger.debug("Version successfully updated for {}", target);
+        } catch (Exception e) {
+            throw new UpgradeException("Error updating version for " + target, e);
+        }
+    }
 
- protected abstract void doSetVersion(Object target, String version) throws Exception;
+    protected abstract void doSetVersion(Object target, String version) throws Exception;
 
 }

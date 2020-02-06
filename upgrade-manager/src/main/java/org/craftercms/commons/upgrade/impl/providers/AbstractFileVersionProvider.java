@@ -27,32 +27,32 @@
   */
  public abstract class AbstractFileVersionProvider extends AbstractVersionProvider {
 
-  protected Path getFile(Object target) {
-   if (target instanceof String) {
-    return Paths.get((String) target);
-   } else if (target instanceof File) {
-    return ((File) target).toPath();
-   } else if (target instanceof Path) {
-    return (Path) target;
-   } else {
-    throw new IllegalArgumentException("Target can't be converted to Path: " + target);
-   }
-  }
+     protected Path getFile(Object target) {
+         if (target instanceof String) {
+             return Paths.get((String)target);
+         } else if (target instanceof File) {
+             return ((File)target).toPath();
+         } else if (target instanceof Path) {
+             return (Path)target;
+         } else {
+             throw new IllegalArgumentException("Target can't be converted to Path: " + target);
+         }
+     }
 
-  @Override
-  protected String doGetVersion(final Object target) throws Exception {
-   Path file = getFile(target);
-   return readVersionFromFile(file);
-  }
+     @Override
+     protected String doGetVersion(final Object target) throws Exception {
+         Path file = getFile(target);
+         return readVersionFromFile(file);
+     }
 
-  @Override
-  protected void doSetVersion(final Object target, final String version) throws Exception {
-   Path file = getFile(target);
-   writeVersionToFile(file, version);
-  }
+     @Override
+     protected void doSetVersion(final Object target, final String version) throws Exception {
+         Path file = getFile(target);
+         writeVersionToFile(file, version);
+     }
 
-  protected abstract String readVersionFromFile(Path file) throws Exception;
+     protected abstract String readVersionFromFile(Path file) throws Exception;
 
-  protected abstract void writeVersionToFile(Path file, String version) throws Exception;
+     protected abstract void writeVersionToFile(Path file, String version) throws Exception;
 
  }

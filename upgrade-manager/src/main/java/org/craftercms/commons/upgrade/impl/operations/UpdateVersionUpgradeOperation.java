@@ -27,18 +27,18 @@ import org.craftercms.commons.upgrade.VersionProvider;
  */
 public class UpdateVersionUpgradeOperation extends AbstractUpgradeOperation {
 
- /**
-  * The version provider
-  */
- protected VersionProvider versionProvider;
+    /**
+     * The version provider
+     */
+    protected VersionProvider versionProvider;
 
- public UpdateVersionUpgradeOperation(final VersionProvider versionProvider) {
-  this.versionProvider = versionProvider;
- }
+    public UpdateVersionUpgradeOperation(final VersionProvider versionProvider) {
+        this.versionProvider = versionProvider;
+    }
 
- @Override
- protected void doExecute(final Object target) throws Exception {
-  versionProvider.setVersion(target, nextVersion);
- }
+    @Override
+    protected void doExecute(final Object target) throws Exception {
+        versionProvider.setVersion(target, nextVersion);
+    }
 
 }

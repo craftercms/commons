@@ -20,35 +20,38 @@ import org.craftercms.commons.upgrade.exception.UpgradeException;
 
 /**
  * Provides the current version of a specific target
+ *
  * @author joseross
  * @since 3.1.5
  */
 public interface VersionProvider {
 
- /**
-  * Keyword used to retrieve the version
-  */
- String VERSION = "version";
+    /**
+     * Keyword used to retrieve the version
+     */
+    String VERSION = "version";
 
- /**
-  * Value used when a file is missing from the repository
-  */
- String SKIP = "SKIP";
+    /**
+     * Value used when a file is missing from the repository
+     */
+    String SKIP = "SKIP";
 
- /**
-  * Returns the current version
-  * @param target the target
-  * @return version number
-  * @throws UpgradeException if there is any error getting the current version
-  */
- String getVersion(Object target) throws UpgradeException;
+    /**
+     * Returns the current version
+     *
+     * @param target the target
+     * @return version number
+     * @throws UpgradeException if there is any error getting the current version
+     */
+    String getVersion(Object target) throws UpgradeException;
 
- /**
-  * Updates the current version
-  * @param target the target
-  * @param version the new version
-  * @throws UpgradeException if there is any error setting the current version
-  */
- void setVersion(Object target, String version) throws UpgradeException;
+    /**
+     * Updates the current version
+     *
+     * @param target  the target
+     * @param version the new version
+     * @throws UpgradeException if there is any error setting the current version
+     */
+    void setVersion(Object target, String version) throws UpgradeException;
 
 }

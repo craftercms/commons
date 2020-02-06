@@ -34,34 +34,34 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class YamlFileVersionProvider extends AbstractFileVersionProvider {
 
- protected final Yaml yaml;
+    protected final Yaml yaml;
 
- public YamlFileVersionProvider() {
-  DumperOptions options = new DumperOptions();
-  options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-  options.setPrettyFlow(true);
-  yaml = new Yaml(options);
- }
+    public YamlFileVersionProvider() {
+        DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        options.setPrettyFlow(true);
+        yaml = new Yaml(options);
+    }
 
- @SuppressWarnings("unchecked")
- protected Map<String, Object> loadFile(Path file) throws IOException {
-  try (InputStream is = Files.newInputStream(file)) {
-   return yaml.loadAs(is, Map.class);
-  }
- }
+    @SuppressWarnings("unchecked")
+    protected Map<String, Object> loadFile(Path file) throws IOException {
+        try (InputStream is = Files.newInputStream(file)) {
+            return yaml.loadAs(is, Map.class);
+        }
+    }
 
- @Override
- protected String readVersionFromFile(final Path file) throws Exception {
-  Map<String, Object> values = loadFile(file);
-  return (String) values.get(VERSION);
- }
+    @Override
+    protected String readVersionFromFile(final Path file) throws Exception {
+        Map<String, Object> values = loadFile(file);
+        return (String)values.get(VERSION);
+    }
 
- @Override
- protected void writeVersionToFile(final Path file, final String version) throws Exception {
-  Map<String, Object> values = loadFile(file);
-  values.put(VERSION, version);
-  try (Writer writer = Files.newBufferedWriter(file)) {
-   yaml.dump(values, writer);
-  }
- }
+    @Override
+    protected void writeVersionToFile(final Path file, final String version) throws Exception {
+        Map<String, Object> values = loadFile(file);
+        values.put(VERSION, version);
+        try (Writer writer = Files.newBufferedWriter(file)) {
+            yaml.dump(values, writer);
+        }
+    }
 }
