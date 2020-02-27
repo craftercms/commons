@@ -54,23 +54,9 @@ public class DefaultDbIntegrityValidatorImpl implements DbIntegrityValidator {
             + "information_schema.columns where table_schema = '{schema}'";
 
     private static final String UPGRADE_DBMS_INTEGRITY_FAIL_CHECK_QUERY =
-            "select crc32(SUBSTRING(group_concat(concat(table_name, column_name) order by field(concat(table_name, " +
-                    "column_name), 'item_metadatamodified', 'item_metadataname', 'item_metadatapath', " +
-                    "'item_metadatasite', 'item_metadataid', 'group_userrecord_last_updated', 'group_usergroup_id', " +
-                    "'group_useruser_id', 'groupgroup_description', 'groupgroup_name', 'grouporg_id', " +
-                    "'grouprecord_last_updated', 'groupid', 'gitlogprocessed', 'gitlogcommit_id', 'gitlogsite_id', " +
-                    "'gitlogid', 'dependencytype', 'dependencytarget_path', 'dependencysource_path', " +
-                    "'dependencysite', 'dependencyid', 'clusterheartbeat', 'clustergit_private_key', " +
-                    "'clustergit_token', 'clustergit_password', 'clustergit_username', 'clustergit_auth_type', " +
-                    "'clustergit_remote_name', 'clustergit_url', 'clusterstate', 'clusterlocal_address', 'clusterid'," +
-                    " 'audit_parameterstarget_value', 'audit_parameterstarget_subtype', " +
-                    "'audit_parameterstarget_type', 'audit_parameterstarget_id', 'audit_parametersaudit_id', " +
-                    "'audit_parametersid', 'auditcluster_node_id', 'auditactor_details', 'auditactor_id', " +
-                    "'auditprimary_target_value', 'auditprimary_target_subtype', 'auditprimary_target_type', " +
-                    "'auditprimary_target_id', 'auditorigin', 'auditoperation_timestamp', 'auditoperation', " +
-                    "'auditsite_id', 'auditorganization_id', 'auditid', '_metastudio_id', '_metaintegrity', " +
-                    "'_metaversion') DESC), 1, 1024)) from information_schema.columns where table_schema = '{schema}'" +
-                    " ;";
+            "select crc32(SUBSTRING(group_concat(concat(table_name, column_name) order by field(table_name, '_meta') " +
+                    "DESC, TABLE_NAME ASC, ORDINAL_POSITION ASC), 1, 1024)) from information_schema.columns " +
+                    "where table_schema = '{schema}' ;";
 
     /**
      * {@inheritDoc}

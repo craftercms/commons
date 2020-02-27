@@ -137,7 +137,7 @@ public class Version {
 
     @Override
     public String toString() {
-        return "Version{" + "major=" + major + ", minor=" + minor + ", patch=" + patch + '}';
+        return major + "." + minor + "." + patch;
     }
 
 }

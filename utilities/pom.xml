@@ -22,7 +22,7 @@
     <parent>
         <artifactId>crafter-commons</artifactId>
         <groupId>org.craftercms</groupId>
-        <version>3.1.4</version><!-- craftercms version flag -->
+        <version>3.1.6-SNAPSHOT</version><!-- craftercms version flag -->
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -260,6 +260,15 @@
                                         </transformer>
                                     </transformers>
                                     <filters>
+                                        <!-- Excludes signatures from dependencies -->
+                                        <filter>
+                                            <artifact>*:*</artifact>
+                                            <excludes>
+                                                <exclude>META-INF/*.SF</exclude>
+                                                <exclude>META-INF/*.DSA</exclude>
+                                                <exclude>META-INF/*.RSA</exclude>
+                                            </excludes>
+                                        </filter>
                                         <filter>
                                             <artifact>org.aspectj:aspectjweaver</artifact>
                                             <excludes>
