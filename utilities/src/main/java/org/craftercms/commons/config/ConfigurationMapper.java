@@ -15,6 +15,9 @@
  */
 package org.craftercms.commons.config;
 
+import org.apache.commons.configuration2.HierarchicalConfiguration;
+import org.apache.commons.configuration2.tree.ImmutableNode;
+
 import java.io.InputStream;
 
 /**
@@ -37,5 +40,16 @@ public interface ConfigurationMapper<T> {
      * @throws ConfigurationException if an error occurs
      */
     T readConfig(InputStream inputStream, String encoding, String configId) throws ConfigurationException;
+
+    /**
+     * Reads a single profile from the given configuration
+     *
+     * @param config the profile configuration
+     *
+     * @return the configuration object
+     *
+     * @throws ConfigurationException if an error occurs
+     */
+    T processConfig(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException;
 
 }
