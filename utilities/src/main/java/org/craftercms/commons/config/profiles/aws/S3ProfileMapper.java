@@ -20,8 +20,7 @@ import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
 
-import static org.craftercms.commons.config.ConfigUtils.getBooleanProperty;
-import static org.craftercms.commons.config.ConfigUtils.getRequiredStringProperty;
+import static org.craftercms.commons.config.ConfigUtils.*;
 
 /**
  * Configuration mapper for {@link S3Profile}s.
@@ -43,7 +42,7 @@ public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
     protected S3Profile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig)
             throws ConfigurationException {
         S3Profile profile = super.mapProfile(profileConfig);
-        profile.setBucketName(getRequiredStringProperty(profileConfig, CONFIG_KEY_BUCKET));
+        profile.setBucketName(getStringProperty(profileConfig, CONFIG_KEY_BUCKET));
         profile.setPathStyleAccessEnabled(getBooleanProperty(profileConfig, CONFIG_KEY_PATH_STYLE, false));
 
         return profile;

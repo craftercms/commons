@@ -24,6 +24,8 @@ import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
 import java.io.InputStream;
 import java.util.List;
 
+import static org.craftercms.commons.config.ConfigUtils.getRequiredStringProperty;
+
 /**
  * Base class for configuration mappers that read configuration profiles and map them to profile classes.
  *
@@ -58,10 +60,14 @@ public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile
                 .findFirst()
                 .orElseThrow(() -> new ConfigurationException("Profile '" + profileId + "' not found"));
 
-        T profile = mapProfile(profileConfig);
+        T profile = processConfig(profileConfig);
         profile.setProfileId(profileId);
-
         return profile;
+    }
+
+    @Override
+    public T processConfig(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException {
+        return mapProfile(config);
     }
 
     protected abstract T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException;

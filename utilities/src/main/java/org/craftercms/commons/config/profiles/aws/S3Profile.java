@@ -56,7 +56,7 @@ public class S3Profile extends AbstractAwsProfile {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         S3Profile s3Profile = (S3Profile) o;
-        return bucketName.equals(s3Profile.bucketName);
+        return Objects.equals(bucketName, s3Profile.bucketName);
     }
 
     @Override
