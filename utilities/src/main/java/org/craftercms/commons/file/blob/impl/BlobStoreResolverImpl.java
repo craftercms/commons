@@ -27,6 +27,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.function.Function;
@@ -85,20 +86,23 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
         return null;
     }
 
-    protected HierarchicalConfiguration getConfiguration(Function<String, InputStream> configGetter) {
+    protected HierarchicalConfiguration getConfiguration(Function<String, InputStream> configGetter)
+            throws IOException, ConfigurationException {
         logger.debug("Reading blob store configuration");
         try (InputStream is = configGetter.apply(configurationPath)) {
             if (is != null) {
                 return configurationReader.readXmlConfiguration(is, "utf-8");
             }
-        } catch (Exception e) {
+        } catch (IOException | ConfigurationException e) {
             logger.error("Error reading blob store configuration", e);
+            throw e;
         }
         return null;
     }
 
     @Override
-    public BlobStore getById(Function<String, InputStream> configGetter, String storeId) throws ConfigurationException {
+    public BlobStore getById(Function<String, InputStream> configGetter, String storeId)
+            throws ConfigurationException, IOException {
         logger.debug("Looking blob store with id {}", storeId);
         HierarchicalConfiguration config = getConfiguration(configGetter);
         if (config != null) {
