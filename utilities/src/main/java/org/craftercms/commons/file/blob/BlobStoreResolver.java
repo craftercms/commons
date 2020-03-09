@@ -15,6 +15,8 @@
  */
 package org.craftercms.commons.file.blob;
 
+import org.craftercms.commons.config.ConfigurationException;
+
 import java.io.InputStream;
 import java.util.function.Function;
 
@@ -32,6 +34,6 @@ public interface BlobStoreResolver {
      * @param storeId the id
      * @return the blob store
      */
-    BlobStore getById(Function<String, InputStream> configGetter, String storeId);
+    BlobStore getById(Function<String, InputStream> configGetter, String storeId) throws ConfigurationException;
 
 }

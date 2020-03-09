@@ -98,16 +98,12 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
     }
 
     @Override
-    public BlobStore getById(Function<String, InputStream> configGetter, String storeId) {
+    public BlobStore getById(Function<String, InputStream> configGetter, String storeId) throws ConfigurationException {
         logger.debug("Looking blob store with id {}", storeId);
-        try {
-            HierarchicalConfiguration config = getConfiguration(configGetter);
-            if (config != null) {
-                return findStore(config, store ->
-                        StringUtils.equals(storeId, store.getString(CONFIG_KEY_ID)));
-            }
-        } catch (ConfigurationException e) {
-            logger.error("Error reading blob store configuration", e);
+        HierarchicalConfiguration config = getConfiguration(configGetter);
+        if (config != null) {
+            return findStore(config, store ->
+                    StringUtils.equals(storeId, store.getString(CONFIG_KEY_ID)));
         }
         return null;
     }
