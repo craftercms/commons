@@ -66,7 +66,7 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
     protected Resource doGetContent(Mapping mapping, Blob blob) {
         String key = blob.getUrl();
         if (isNotEmpty(mapping.prefix)) {
-            key = removeStart(mapping.prefix, "/") + prependIfMissing("/", key);
+            key = removeStart(mapping.prefix, "/") + prependIfMissing(key, "/");
         }
         return new S3Resource(clientFactory, profile, mapping.target, key);
     }
