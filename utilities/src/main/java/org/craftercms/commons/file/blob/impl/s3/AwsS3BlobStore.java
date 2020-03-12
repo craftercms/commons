@@ -25,8 +25,7 @@ import org.craftercms.commons.file.blob.impl.AbstractBlobStore;
 import org.craftercms.commons.spring.resources.S3Resource;
 import org.springframework.core.io.Resource;
 
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.apache.commons.lang3.StringUtils.prependIfMissing;
+import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * Implementation of {@link org.craftercms.commons.file.blob.BlobStore} for AWS S3
@@ -65,7 +64,11 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
 
     @Override
     protected Resource doGetContent(Mapping mapping, Blob blob) {
-        return new S3Resource(clientFactory, profile, mapping.target, blob.getUrl());
+        String key = blob.getUrl();
+        if (isNotEmpty(mapping.prefix)) {
+            key = removeStart(mapping.prefix, "/") + prependIfMissing("/", key);
+        }
+        return new S3Resource(clientFactory, profile, mapping.target, key);
     }
 
 }
