@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
  * @author avasquez
  */
 public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProfile, C>
-        extends CacheEventListenerAdapter implements BeanNameAware, InitializingBean, DisposableBean {
+        extends CacheEventListenerAdapter implements BeanNameAware, InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(S3ClientCachingFactory.class);
 
@@ -89,19 +89,16 @@ public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProf
 
     @Override
     public void dispose() {
+        logger.info("Shutting down {}", getClass().getSimpleName());
+
+        evictionService.shutdownNow();
+
         for (Object key : cache.getKeys()) {
             Element element = cache.get(key);
             if (element != null) {
                 shutdownClient(element);
             }
         }
-    }
-
-    @Override
-    public void destroy() {
-        dispose();
-
-        evictionService.shutdownNow();
     }
 
     @Override
@@ -140,7 +137,7 @@ public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProf
 
     protected void shutdownClient(Element element) {
         if (element.getObjectValue() instanceof AmazonS3) {
-            logger.info("Shutting down client for {}", element.getObjectKey());
+            logger.info("Shutting down AWS client for {}", element.getObjectKey());
 
             AmazonS3 client = (AmazonS3) element.getObjectValue();
             client.shutdown();
