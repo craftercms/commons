@@ -29,9 +29,10 @@ public class Blob {
     public Blob() {
     }
 
-    public Blob(String storeId, String url) {
+    public Blob(String storeId, String url, String hash) {
         this.storeId = storeId;
         this.url = url;
+        this.hash = hash;
     }
 
     /**
@@ -43,6 +44,11 @@ public class Blob {
      * The url of the file in the blob store
      */
     protected String url;
+
+    /**
+     * A hash that can be used to detect the specific version of the blobs
+     */
+    protected String hash;
 
     public String getStoreId() {
         return storeId;
@@ -58,6 +64,14 @@ public class Blob {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
 }
