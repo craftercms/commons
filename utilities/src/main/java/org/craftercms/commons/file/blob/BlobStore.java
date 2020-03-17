@@ -59,9 +59,10 @@ public interface BlobStore {
 
     /**
      * Resolves the given blob to a readable resource
+     * @param path the path of the resource
      * @param blob the blob file
      * @return the resource object
      */
-    Resource getResource(Blob blob);
+    Resource getResource(String path, Blob blob);
 
 }
