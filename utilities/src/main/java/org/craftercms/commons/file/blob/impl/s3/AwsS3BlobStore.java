@@ -20,7 +20,6 @@ import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.aws.S3ClientCachingFactory;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
-import org.craftercms.commons.file.blob.Blob;
 import org.craftercms.commons.file.blob.impl.AbstractBlobStore;
 import org.craftercms.commons.spring.resources.S3Resource;
 import org.springframework.core.io.Resource;
@@ -63,12 +62,8 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
     }
 
     @Override
-    protected Resource doGetContent(Mapping mapping, Blob blob) {
-        String key = blob.getUrl();
-        if (isNotEmpty(mapping.prefix)) {
-            key = removeStart(mapping.prefix, "/") + prependIfMissing(key, "/");
-        }
-        return new S3Resource(clientFactory, profile, mapping.target, key);
+    protected Resource doGetContent(Mapping mapping, String site, String path) {
+        return new S3Resource(clientFactory, profile, mapping.target, getKey(mapping, site, path));
     }
 
 }

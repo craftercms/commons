@@ -15,6 +15,7 @@
  */
 package org.craftercms.commons.file.blob;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
@@ -24,16 +25,13 @@ import com.fasterxml.jackson.annotation.JsonRootName;
  * @since 3.1.6
  */
 @JsonRootName("blob")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Blob {
 
-    public Blob() {
-    }
-
-    public Blob(String storeId, String url, String hash) {
-        this.storeId = storeId;
-        this.url = url;
-        this.hash = hash;
-    }
+    /**
+     * The id of the site
+     */
+    protected String siteId;
 
     /**
      * The id of the blob store
@@ -41,14 +39,26 @@ public class Blob {
     protected String storeId;
 
     /**
-     * The url of the file in the blob store
-     */
-    protected String url;
-
-    /**
      * A hash that can be used to detect the specific version of the blobs
      */
     protected String hash;
+
+    public Blob() {
+    }
+
+    public Blob(String siteId, String storeId, String hash) {
+        this.siteId = siteId;
+        this.storeId = storeId;
+        this.hash = hash;
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
+    }
 
     public String getStoreId() {
         return storeId;
@@ -56,14 +66,6 @@ public class Blob {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getHash() {

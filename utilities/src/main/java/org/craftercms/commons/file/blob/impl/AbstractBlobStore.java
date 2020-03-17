@@ -115,11 +115,11 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
     protected abstract void doInit(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException;
 
     @Override
-    public Resource getResource(Blob blob) {
-        return doGetContent(getMapping(environmentResolver.getEnvironment()), blob);
+    public Resource getResource(String path, Blob blob) {
+        return doGetContent(getMapping(environmentResolver.getEnvironment()), blob.getSiteId(), path);
     }
 
-    protected abstract Resource doGetContent(Mapping mapping, Blob blob);
+    protected abstract Resource doGetContent(Mapping mapping, String site, String path);
 
     protected Mapping getMapping(String environment) {
         return mappings.get(environment);
