@@ -29,11 +29,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 public class Blob {
 
     /**
-     * The id of the site
-     */
-    protected String siteId;
-
-    /**
      * The id of the blob store
      */
     protected String storeId;
@@ -46,18 +41,9 @@ public class Blob {
     public Blob() {
     }
 
-    public Blob(String siteId, String storeId, String hash) {
-        this.siteId = siteId;
+    public Blob(String storeId, String hash) {
         this.storeId = storeId;
         this.hash = hash;
-    }
-
-    public String getSiteId() {
-        return siteId;
-    }
-
-    public void setSiteId(String siteId) {
-        this.siteId = siteId;
     }
 
     public String getStoreId() {
