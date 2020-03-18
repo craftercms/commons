@@ -116,10 +116,10 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
 
     @Override
     public Resource getResource(String path, Blob blob) {
-        return doGetContent(getMapping(environmentResolver.getEnvironment()), blob.getSiteId(), path);
+        return doGetContent(getMapping(environmentResolver.getEnvironment()), path);
     }
 
-    protected abstract Resource doGetContent(Mapping mapping, String site, String path);
+    protected abstract Resource doGetContent(Mapping mapping, String path);
 
     protected Mapping getMapping(String environment) {
         return mappings.get(environment);

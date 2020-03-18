@@ -47,12 +47,12 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
         return clientFactory.getClient(profile);
     }
 
-    protected String getKey(Mapping mapping, String site, String path) {
+    protected String getKey(Mapping mapping, String path) {
         StringBuilder sb = new StringBuilder();
         if (isNotEmpty(mapping.prefix)) {
-            sb.append(mapping.prefix).append("/");
+            sb.append(removeEnd(removeStart(mapping.prefix, "/"), "/"));
         }
-        sb.append(site).append(prependIfMissing(path, "/"));
+        sb.append(prependIfMissing(path, "/"));
         return  sb.toString();
     }
 
@@ -62,8 +62,8 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
     }
 
     @Override
-    protected Resource doGetContent(Mapping mapping, String site, String path) {
-        return new S3Resource(clientFactory, profile, mapping.target, getKey(mapping, site, path));
+    protected Resource doGetContent(Mapping mapping, String path) {
+        return new S3Resource(clientFactory, profile, mapping.target, getKey(mapping, path));
     }
 
 }
