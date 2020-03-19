@@ -128,7 +128,7 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
     /**
      * Internal class used when loading the configuration
      */
-    protected static class Mapping {
+    public static class Mapping {
 
         /**
          * The target in the store
