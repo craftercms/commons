@@ -50,9 +50,9 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
     protected String getKey(Mapping mapping, String path) {
         StringBuilder sb = new StringBuilder();
         if (isNotEmpty(mapping.prefix)) {
-            sb.append(removeEnd(removeStart(mapping.prefix, "/"), "/"));
+            sb.append(appendIfMissing(removeStart(mapping.prefix, "/"), "/"));
         }
-        sb.append(prependIfMissing(path, "/"));
+        sb.append(removeStart(path, "/"));
         return  sb.toString();
     }
 
