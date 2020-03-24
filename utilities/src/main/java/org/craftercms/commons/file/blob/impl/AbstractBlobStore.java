@@ -101,9 +101,9 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
         mappings = new LinkedHashMap<>();
         config.configurationsAt(CONFIG_KEY_MAPPING).forEach(bucketConfig -> {
             Mapping mapping = new Mapping();
-            mapping.target = bucketConfig.getString(CONFIG_KEY_MAPPING_TARGET);
+            mapping.target = bucketConfig.getString(CONFIG_KEY_MAPPING_STORE_TARGET);
             mapping.prefix = bucketConfig.getString(CONFIG_KEY_MAPPING_PREFIX);
-            mappings.put(bucketConfig.getString(CONFIG_KEY_MAPPING_ENVIRONMENT), mapping);
+            mappings.put(bucketConfig.getString(CONFIG_KEY_MAPPING_PUBLISHING_TARGET), mapping);
         });
 
         profile = profileMapper.processConfig(config.configurationAt(CONFIG_KEY_CONFIGURATION));
@@ -121,8 +121,8 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
 
     protected abstract Resource doGetContent(Mapping mapping, String path);
 
-    protected Mapping getMapping(String environment) {
-        return mappings.get(environment);
+    protected Mapping getMapping(String publishingTarget) {
+        return mappings.get(publishingTarget);
     }
 
     /**

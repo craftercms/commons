@@ -31,8 +31,8 @@ public interface BlobStore {
     String CONFIG_KEY_ID = "id";
     String CONFIG_KEY_PATTERN = "pattern";
     String CONFIG_KEY_MAPPING = "mappings.mapping";
-    String CONFIG_KEY_MAPPING_ENVIRONMENT = "environment";
-    String CONFIG_KEY_MAPPING_TARGET = "target";
+    String CONFIG_KEY_MAPPING_PUBLISHING_TARGET = "publishingTarget";
+    String CONFIG_KEY_MAPPING_STORE_TARGET = "storeTarget";
     String CONFIG_KEY_MAPPING_PREFIX = "prefix";
     String CONFIG_KEY_CONFIGURATION = "configuration";
 

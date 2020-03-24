@@ -14,18 +14,18 @@
         </configuration>
         <mappings>
             <mapping>
-                <environment>preview</environment>
-                <target>my-mapping</target>
+                <publishingTarget>preview</publishingTarget>
+                <storeTarget>my-mapping</storeTarget>
                 <prefix>sandbox</prefix>
             </mapping>
             <mapping>
-                <environment>staging</environment>
-                <target>my-mapping</target>
+                <publishingTarget>staging</publishingTarget>
+                <storeTarget>my-mapping</storeTarget>
                 <prefix>stage</prefix>
             </mapping>
             <mapping>
-                <environment>live</environment>
-                <target>my-mapping-live</target>
+                <publishingTarget>live</publishingTarget>
+                <storeTarget>my-mapping-live</storeTarget>
             </mapping>
         </mappings>
     </blobStore>
