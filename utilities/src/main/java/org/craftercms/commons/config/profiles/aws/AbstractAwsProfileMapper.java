@@ -19,7 +19,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
-import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
+import org.craftercms.commons.config.ConfigurationResolver;
 import org.craftercms.commons.config.profiles.AbstractProfileConfigMapper;
 import org.craftercms.commons.config.ConfigurationException;
 
@@ -38,9 +38,8 @@ public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> ext
     private static final String CONFIG_KEY_SECRET_KEY = "credentials.secretKey";
     private static final String CONFIG_KEY_ENDPOINT = "endpoint";
 
-    public AbstractAwsProfileMapper(final String serviceName,
-                                    final EncryptionAwareConfigurationReader configurationReader) {
-        super(serviceName, configurationReader);
+    public AbstractAwsProfileMapper(String serviceName, ConfigurationResolver configurationResolver) {
+        super(serviceName, configurationResolver);
     }
 
     @Override

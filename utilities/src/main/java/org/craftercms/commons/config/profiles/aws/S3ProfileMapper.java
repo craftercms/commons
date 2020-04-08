@@ -18,7 +18,7 @@ package org.craftercms.commons.config.profiles.aws;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
+import org.craftercms.commons.config.ConfigurationResolver;
 
 import static org.craftercms.commons.config.ConfigUtils.*;
 
@@ -34,8 +34,8 @@ public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
     private static final String CONFIG_KEY_BUCKET = "bucketName";
     private static final String CONFIG_KEY_PATH_STYLE = "pathStyleAccess";
 
-    public S3ProfileMapper(final EncryptionAwareConfigurationReader configurationReader) {
-        super(CONFIG_KEY_S3, configurationReader);
+    public S3ProfileMapper(ConfigurationResolver configurationResolver) {
+        super(CONFIG_KEY_S3, configurationResolver);
     }
 
     @Override

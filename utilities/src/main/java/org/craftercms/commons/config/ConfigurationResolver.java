@@ -13,27 +13,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.file.blob;
+package org.craftercms.commons.config;
 
-import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.ConfigurationProvider;
-
-import java.io.IOException;
+import org.apache.commons.configuration2.HierarchicalConfiguration;
 
 /**
- * Provides access to all known implementations of {@link BlobStore}
+ * Provides access to configuration files taking into account the active environment
  *
  * @author joseross
  * @since 3.1.6
  */
-public interface BlobStoreResolver {
+public interface ConfigurationResolver {
 
     /**
-     * Returns the {@link BlobStore} for the given id
-     * @param provider provider to read the configuration file
-     * @param storeId the id
-     * @return the blob store
+     * Get the content of a given configuration file
+     *
+     * @param module the name of the module
+     * @param path the path of the file
+     * @param provider the provider to read the file
+     * @return the configuration instance
+     * @throws ConfigurationException if there is any error reading the configuration
      */
-    BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException, IOException;
+    HierarchicalConfiguration<?> getXmlConfiguration(String module, String path, ConfigurationProvider provider)
+            throws ConfigurationException;
 
 }

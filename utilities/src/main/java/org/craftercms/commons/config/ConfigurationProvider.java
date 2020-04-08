@@ -13,27 +13,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.file.blob;
-
-import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.ConfigurationProvider;
+package org.craftercms.commons.config;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
- * Provides access to all known implementations of {@link BlobStore}
+ * Defines the operations to access configuration files
  *
  * @author joseross
  * @since 3.1.6
  */
-public interface BlobStoreResolver {
+public interface ConfigurationProvider {
 
     /**
-     * Returns the {@link BlobStore} for the given id
-     * @param provider provider to read the configuration file
-     * @param storeId the id
-     * @return the blob store
+     * Checks if the given configuration path exists
+     * @param path the configuration path
+     * @return true if the configuration exists
      */
-    BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException, IOException;
+    boolean configExists(String path);
+
+    /**
+     * Get the content of the given configuration file
+     * @param path the configuration path
+     * @return the content of the configuration
+     * @throws IOException if there is any error reading the configuration
+     */
+    InputStream getConfig(String path) throws IOException;
 
 }

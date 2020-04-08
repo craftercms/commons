@@ -17,14 +17,9 @@ package org.craftercms.commons.config.profiles;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
-import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.ConfigurationMapper;
-import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
+import org.craftercms.commons.config.*;
 
-import java.io.InputStream;
 import java.util.List;
-
-import static org.craftercms.commons.config.ConfigUtils.getRequiredStringProperty;
 
 /**
  * Base class for configuration mappers that read configuration profiles and map them to profile classes.
@@ -38,19 +33,20 @@ public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile
 
     protected String serviceName;
 
-    protected EncryptionAwareConfigurationReader configurationReader;
+    protected ConfigurationResolver configurationResolver;
 
-    public AbstractProfileConfigMapper(final String serviceName,
-                                       final EncryptionAwareConfigurationReader configurationReader) {
+    public AbstractProfileConfigMapper(String serviceName, ConfigurationResolver configurationResolver) {
         this.serviceName = serviceName;
-        this.configurationReader = configurationReader;
+        this.configurationResolver = configurationResolver;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public T readConfig(InputStream inputStream, String encoding, String profileId) throws ConfigurationException {
+    public T readConfig(ConfigurationProvider provider, String module, String path, String encoding, String profileId)
+            throws ConfigurationException {
         HierarchicalConfiguration<ImmutableNode> config =
-            (HierarchicalConfiguration<ImmutableNode>) configurationReader.readXmlConfiguration(inputStream, encoding);
+                (HierarchicalConfiguration<ImmutableNode>)
+                        configurationResolver.getXmlConfiguration(module, path, provider);
 
         List<HierarchicalConfiguration<ImmutableNode>> profiles =
             config.configurationsAt(serviceName + "." + CONFIG_KEY_PROFILE);
