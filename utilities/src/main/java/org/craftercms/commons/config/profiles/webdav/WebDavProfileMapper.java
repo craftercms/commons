@@ -18,7 +18,7 @@ package org.craftercms.commons.config.profiles.webdav;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
+import org.craftercms.commons.config.ConfigurationResolver;
 import org.craftercms.commons.config.profiles.AbstractProfileConfigMapper;
 
 import static org.craftercms.commons.config.ConfigUtils.*;
@@ -37,12 +37,12 @@ public class WebDavProfileMapper extends AbstractProfileConfigMapper<WebDavProfi
     private static final String CONFIG_KEY_USERNAME = "username";
     private static final String CONFIG_KEY_PASSWORD = "password";
 
-    public WebDavProfileMapper(final EncryptionAwareConfigurationReader configurationReader) {
-        super(CONFIG_KEY_WEBDAV, configurationReader);
+    public WebDavProfileMapper(ConfigurationResolver configurationResolver) {
+        super(CONFIG_KEY_WEBDAV, configurationResolver);
     }
 
     @Override
-    @SuppressWarnings("deprecated")
+    @SuppressWarnings("deprecation")
     protected WebDavProfile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException {
         WebDavProfile profile = new WebDavProfile();
         profile.setBaseUrl(getRequiredStringProperty(profileConfig, CONFIG_KEY_BASE_URL));

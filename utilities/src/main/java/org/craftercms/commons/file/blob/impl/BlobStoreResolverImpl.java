@@ -18,7 +18,8 @@ package org.craftercms.commons.file.blob.impl;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.EncryptionAwareConfigurationReader;
+import org.craftercms.commons.config.ConfigurationProvider;
+import org.craftercms.commons.config.ConfigurationResolver;
 import org.craftercms.commons.file.blob.BlobStore;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
 import org.slf4j.Logger;
@@ -27,10 +28,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static org.craftercms.commons.file.blob.BlobStore.CONFIG_KEY_ID;
@@ -51,11 +49,16 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
+     * The module of the configuration file
+     */
+    protected String configModule;
+
+    /**
      * The path of the configuration file
      */
-    protected String configurationPath;
+    protected String configPath;
 
-    protected EncryptionAwareConfigurationReader configurationReader;
+    protected ConfigurationResolver configurationResolver;
 
     protected ApplicationContext applicationContext;
 
@@ -64,12 +67,16 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
         this.applicationContext = applicationContext;
     }
 
-    public void setConfigurationPath(String configurationPath) {
-        this.configurationPath = configurationPath;
+    public void setConfigModule(String configModule) {
+        this.configModule = configModule;
     }
 
-    public void setConfigurationReader(EncryptionAwareConfigurationReader configurationReader) {
-        this.configurationReader = configurationReader;
+    public void setConfigPath(String configPath) {
+        this.configPath = configPath;
+    }
+
+    public void setConfigurationResolver(ConfigurationResolver configurationResolver) {
+        this.configurationResolver = configurationResolver;
     }
 
     protected BlobStore findStore(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate)
@@ -86,25 +93,20 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
         return null;
     }
 
-    protected HierarchicalConfiguration getConfiguration(Function<String, InputStream> configGetter)
-            throws IOException, ConfigurationException {
+    protected HierarchicalConfiguration getConfiguration(ConfigurationProvider provider) throws ConfigurationException {
         logger.debug("Reading blob store configuration");
-        try (InputStream is = configGetter.apply(configurationPath)) {
-            if (is != null) {
-                return configurationReader.readXmlConfiguration(is, "utf-8");
-            }
-        } catch (IOException | ConfigurationException e) {
+        try {
+            return configurationResolver.getXmlConfiguration(configModule, configPath, provider);
+        } catch (ConfigurationException e) {
             logger.error("Error reading blob store configuration", e);
             throw e;
         }
-        return null;
     }
 
     @Override
-    public BlobStore getById(Function<String, InputStream> configGetter, String storeId)
-            throws ConfigurationException, IOException {
+    public BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException {
         logger.debug("Looking blob store with id {}", storeId);
-        HierarchicalConfiguration config = getConfiguration(configGetter);
+        HierarchicalConfiguration config = getConfiguration(provider);
         if (config != null) {
             return findStore(config, store ->
                     StringUtils.equals(storeId, store.getString(CONFIG_KEY_ID)));
