@@ -263,16 +263,15 @@
                                         <filter>
                                             <artifact>*:*</artifact>
                                             <excludes>
-                                                <exclude>META-INF/*.SF</exclude>
-                                                <exclude>META-INF/*.DSA</exclude>
-                                                <exclude>META-INF/*.RSA</exclude>
+                                                <exclude>META-INF/**</exclude>
+                                                <exclude>module-info.class</exclude>
                                             </excludes>
                                         </filter>
                                         <filter>
                                             <artifact>org.aspectj:aspectjweaver</artifact>
                                             <excludes>
                                                 <exclude>org/aspectj/lang/annotation/Aspect.class</exclude>
-                                                <exclude> org/aspectj/lang/JoinPoint$StaticPart.class</exclude>
+                                                <exclude>org/aspectj/lang/JoinPoint$StaticPart.class</exclude>
                                                 <exclude>org/aspectj/runtime/internal/AroundClosure.class</exclude>
                                                 <exclude>org/aspectj/lang/ProceedingJoinPoint.class</exclude>
                                                 <exclude>org/aspectj/lang/Signature.class</exclude>

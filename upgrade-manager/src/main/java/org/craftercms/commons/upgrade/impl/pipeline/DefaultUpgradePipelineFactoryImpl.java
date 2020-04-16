@@ -45,6 +45,7 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
  * @author joseross
  * @since 3.1.5
  */
+@SuppressWarnings("unchecked, rawtypes")
 public class DefaultUpgradePipelineFactoryImpl implements UpgradePipelineFactory, ApplicationContextAware {
 
     public static final String DEFAULT_PIPELINE_PREFIX = "pipelines.";
@@ -62,7 +63,7 @@ public class DefaultUpgradePipelineFactoryImpl implements UpgradePipelineFactory
     protected Resource configurationFile;
 
     /**
-     * The prefix for the pipelines in the configuration file, defaults to {@link this#DEFAULT_PIPELINE_PREFIX}
+     * The prefix for the pipelines in the configuration file, defaults to {@code DEFAULT_PIPELINE_PREFIX}
      */
     protected String pipelinePrefix = DEFAULT_PIPELINE_PREFIX;
 
@@ -100,7 +101,6 @@ public class DefaultUpgradePipelineFactoryImpl implements UpgradePipelineFactory
         this.applicationContext = applicationContext;
     }
 
-    @SuppressWarnings("rawtypes")
     protected HierarchicalConfiguration loadUpgradeConfiguration() throws UpgradeException {
         YamlConfiguration configuration = new YamlConfiguration();
         try (InputStream is = configurationFile.getInputStream()) {
@@ -120,7 +120,6 @@ public class DefaultUpgradePipelineFactoryImpl implements UpgradePipelineFactory
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked, rawtypes")
     public UpgradePipeline getPipeline(Object target) throws UpgradeException, ConfigurationException {
         logger.debug("Building pipeline for target '{}'", target);
         String currentVersion = versionProvider.getVersion(target);
