@@ -22,7 +22,7 @@ import org.craftercms.commons.config.ConfigurationMapper;
 import org.craftercms.commons.config.profiles.ConfigurationProfile;
 import org.craftercms.commons.file.blob.Blob;
 import org.craftercms.commons.file.blob.BlobStore;
-import org.craftercms.commons.file.blob.EnvironmentResolver;
+import org.craftercms.commons.config.TargetResolver;
 import org.springframework.core.io.Resource;
 
 import java.util.LinkedHashMap;
@@ -66,7 +66,7 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
     /**
      * The environment resolver
      */
-    protected EnvironmentResolver environmentResolver;
+    protected TargetResolver targetResolver;
 
     public String getId() {
         return id;
@@ -84,8 +84,8 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
         this.profileMapper = profileMapper;
     }
 
-    public void setEnvironmentResolver(EnvironmentResolver environmentResolver) {
-        this.environmentResolver = environmentResolver;
+    public void setTargetResolver(TargetResolver targetResolver) {
+        this.targetResolver = targetResolver;
     }
 
     @Override
@@ -116,7 +116,7 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
 
     @Override
     public Resource getResource(String path, Blob blob) {
-        return doGetContent(getMapping(environmentResolver.getEnvironment()), path);
+        return doGetContent(getMapping(targetResolver.getTarget()), path);
     }
 
     protected abstract Resource doGetContent(Mapping mapping, String path);

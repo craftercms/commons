@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.file.blob;
+package org.craftercms.commons.config;
 
 /**
  * Provides access to the current environment
@@ -21,7 +21,7 @@ package org.craftercms.commons.file.blob;
  * @author joseross
  * @since 3.1.6
  */
-public interface EnvironmentResolver {
+public interface TargetResolver {
 
     String PREVIEW = "preview";
 
@@ -33,6 +33,6 @@ public interface EnvironmentResolver {
      * Returns the current environment
      * @return the environment
      */
-    String getEnvironment();
+    String getTarget();
 
 }
