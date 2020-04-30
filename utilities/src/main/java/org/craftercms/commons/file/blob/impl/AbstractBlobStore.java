@@ -22,7 +22,7 @@ import org.craftercms.commons.config.ConfigurationMapper;
 import org.craftercms.commons.config.profiles.ConfigurationProfile;
 import org.craftercms.commons.file.blob.Blob;
 import org.craftercms.commons.file.blob.BlobStore;
-import org.craftercms.commons.file.blob.EnvironmentResolver;
+import org.craftercms.commons.config.PublishingTargetResolver;
 import org.springframework.core.io.Resource;
 
 import java.util.LinkedHashMap;
@@ -64,9 +64,9 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
     protected ConfigurationMapper<T> profileMapper;
 
     /**
-     * The environment resolver
+     * The publishing target resolver
      */
-    protected EnvironmentResolver environmentResolver;
+    protected PublishingTargetResolver publishingTargetResolver;
 
     public String getId() {
         return id;
@@ -84,8 +84,8 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
         this.profileMapper = profileMapper;
     }
 
-    public void setEnvironmentResolver(EnvironmentResolver environmentResolver) {
-        this.environmentResolver = environmentResolver;
+    public void setPublishingTargetResolver(PublishingTargetResolver publishingTargetResolver) {
+        this.publishingTargetResolver = publishingTargetResolver;
     }
 
     @Override
@@ -116,7 +116,7 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
 
     @Override
     public Resource getResource(String path, Blob blob) {
-        return doGetContent(getMapping(environmentResolver.getEnvironment()), path);
+        return doGetContent(getMapping(publishingTargetResolver.getPublishingTarget()), path);
     }
 
     protected abstract Resource doGetContent(Mapping mapping, String path);
