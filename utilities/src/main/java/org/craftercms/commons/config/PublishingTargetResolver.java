@@ -16,25 +16,23 @@
 package org.craftercms.commons.config;
 
 /**
- * Implementation of {@link TargetResolver} that always returns the configured target
+ * Provides access to the current publishing target
  *
  * @author joseross
  * @since 3.1.6
  */
-public class FixedTargetResolver implements TargetResolver {
+public interface PublishingTargetResolver {
+
+    String PREVIEW = "preview";
+
+    String STAGING = "staging";
+
+    String LIVE = "live";
 
     /**
-     * The target to use
+     * Returns the current publishing target
+     * @return the publishing target
      */
-    protected String target;
-
-    public FixedTargetResolver(String target) {
-        this.target = target;
-    }
-
-    @Override
-    public String getTarget() {
-        return target;
-    }
+    String getPublishingTarget();
 
 }
