@@ -13,30 +13,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.file.blob.impl;
-
-import org.craftercms.commons.file.blob.EnvironmentResolver;
+package org.craftercms.commons.config;
 
 /**
- * Implementation of {@link EnvironmentResolver} that always returns the configured environment
+ * Provides access to the current publishing target
  *
  * @author joseross
  * @since 3.1.6
  */
-public class FixedEnvironmentResolver implements EnvironmentResolver {
+public interface PublishingTargetResolver {
+
+    String PREVIEW = "preview";
+
+    String STAGING = "staging";
+
+    String LIVE = "live";
 
     /**
-     * The environment to uses
+     * Returns the current publishing target
+     * @return the publishing target
      */
-    protected String environment;
-
-    public FixedEnvironmentResolver(String environment) {
-        this.environment = environment;
-    }
-
-    @Override
-    public String getEnvironment() {
-        return environment;
-    }
+    String getPublishingTarget();
 
 }
