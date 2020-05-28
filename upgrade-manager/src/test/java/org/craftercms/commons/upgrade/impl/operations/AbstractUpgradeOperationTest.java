@@ -13,50 +13,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.craftercms.commons.upgrade.impl.operations;
 
-import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.upgrade.VersionProvider;
 import org.craftercms.commons.upgrade.exception.UpgradeException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * @author joseross
  */
 @RunWith(MockitoJUnitRunner.class)
-public class UpdateVersionUpgradeOperationTest {
+public class AbstractUpgradeOperationTest {
 
-    public static final String INITIAL_VERSION = "1.0";
-    public static final String FINAL_VERSION = "2.0";
+    @Spy
+    private DummyUpgradeOperation operation;
 
-    @Mock
-    private VersionProvider versionProvider;
+    @Test
+    public void testEnabled() throws UpgradeException {
+        operation.setEnabled(true);
+        operation.execute(null);
 
-    @InjectMocks
-    private UpdateVersionUpgradeOperation<?> operation;
-
-    @Before
-    public void setUp() throws ConfigurationException {
-        operation.init(INITIAL_VERSION, FINAL_VERSION, null);
+        verify(operation).doExecute(null);
     }
 
     @Test
-    public void versionShouldBeUpdated() throws UpgradeException {
-        when(versionProvider.getVersion(any())).thenReturn(INITIAL_VERSION);
-
+    public void testDisabled() throws UpgradeException {
+        operation.setEnabled(false);
         operation.execute(null);
 
-        verify(versionProvider).setVersion(any(), eq(FINAL_VERSION));
+        verify(operation, never()).doExecute(null);
+    }
+
+    private static class DummyUpgradeOperation extends AbstractUpgradeOperation<Object> {
+
+        @Override
+        protected void doExecute(Object target) {
+            // do nothing
+        }
+
     }
 
 }

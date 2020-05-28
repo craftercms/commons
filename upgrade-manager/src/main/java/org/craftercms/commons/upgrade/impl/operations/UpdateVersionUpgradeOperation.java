@@ -22,10 +22,11 @@ import org.craftercms.commons.upgrade.VersionProvider;
  * Implementation of {@link org.craftercms.commons.upgrade.UpgradeOperation} that updates the current version for
  * the given target
  *
+ * @param <T> The target type supported
  * @author joseross
  * @since 3.1.5
  */
-public class UpdateVersionUpgradeOperation extends AbstractUpgradeOperation {
+public class UpdateVersionUpgradeOperation<T> extends AbstractUpgradeOperation<T> {
 
     /**
      * The version provider
@@ -37,7 +38,7 @@ public class UpdateVersionUpgradeOperation extends AbstractUpgradeOperation {
     }
 
     @Override
-    protected void doExecute(final Object target) throws Exception {
+    protected void doExecute(final T target) throws Exception {
         versionProvider.setVersion(target, nextVersion);
     }
 

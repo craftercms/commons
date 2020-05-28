@@ -29,14 +29,15 @@ import org.springframework.util.StopWatch;
 /**
  * Default implementation for {@link UpgradePipeline}.
  *
+ * @param <T> The target type supported
  * @author joseross
  * @since 3.1.5
  */
-public class DefaultUpgradePipelineImpl implements UpgradePipeline {
+public class DefaultUpgradePipelineImpl<T> implements UpgradePipeline<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultUpgradePipelineImpl.class);
 
-    public DefaultUpgradePipelineImpl(final String name, final List<UpgradeOperation> operations) {
+    public DefaultUpgradePipelineImpl(final String name, final List<UpgradeOperation<T>> operations) {
         this.name = name;
         this.operations = operations;
     }
@@ -54,7 +55,7 @@ public class DefaultUpgradePipelineImpl implements UpgradePipeline {
     /**
      * List of all upgrade operations to be executed.
      */
-    protected List<UpgradeOperation> operations;
+    protected List<UpgradeOperation<T>> operations;
 
     public void setContinueOnFailure(final boolean continueOnFailure) {
         this.continueOnFailure = continueOnFailure;
@@ -64,7 +65,7 @@ public class DefaultUpgradePipelineImpl implements UpgradePipeline {
      * {@inheritDoc}
      */
     @Override
-    public void execute(final Object target) throws UpgradeException {
+    public void execute(final T target) throws UpgradeException {
         if (isEmpty()) {
             logger.debug("Pipeline '{}' is empty, skipping execution", name);
             return;
@@ -72,7 +73,7 @@ public class DefaultUpgradePipelineImpl implements UpgradePipeline {
         StopWatch watch = new StopWatch("pipeline " + name);
         logger.info("============================================================");
         logger.info("Starting execution of upgrade pipeline: {}", name);
-        for (UpgradeOperation operation : operations) {
+        for (UpgradeOperation<T> operation : operations) {
             String operationName = operation.getClass().getSimpleName();
             logger.info("------- Starting execution of operation {} -------", operationName);
             watch.start(operationName);

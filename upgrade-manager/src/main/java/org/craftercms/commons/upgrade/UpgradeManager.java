@@ -23,10 +23,11 @@ import org.craftercms.commons.upgrade.exception.UpgradeException;
 /**
  * Manages the current version and applies the required upgrades
  *
+ * @param <T> The target type supported
  * @author joseross
  * @since 3.1.5
  */
-public interface UpgradeManager {
+public interface UpgradeManager<T> {
 
     /**
      * Executes all required upgrades for the system
@@ -41,7 +42,7 @@ public interface UpgradeManager {
      * @param target the target
      * @throws UpgradeException if any of the upgrades fails
      */
-    void upgrade(Object target) throws UpgradeException;
+    void upgrade(T target) throws UpgradeException;
 
     /**
      * Returns all targets to be upgraded
@@ -49,6 +50,6 @@ public interface UpgradeManager {
      * @return the list of targets
      * @throws UpgradeException if there is any error finding the targets
      */
-    List<Object> getTargets() throws UpgradeException;
+    List<T> getTargets() throws UpgradeException;
 
 }
