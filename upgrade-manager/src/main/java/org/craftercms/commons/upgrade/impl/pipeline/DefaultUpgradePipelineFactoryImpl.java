@@ -42,11 +42,12 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 /**
  * Default implementation of {@link UpgradePipelineFactory}
  *
+ * @param <T> The target type supported
  * @author joseross
  * @since 3.1.5
  */
 @SuppressWarnings("unchecked, rawtypes")
-public class DefaultUpgradePipelineFactoryImpl implements UpgradePipelineFactory, ApplicationContextAware {
+public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFactory<T>, ApplicationContextAware {
 
     public static final String DEFAULT_PIPELINE_PREFIX = "pipelines.";
 
@@ -111,7 +112,7 @@ public class DefaultUpgradePipelineFactoryImpl implements UpgradePipelineFactory
         return configuration;
     }
 
-    protected UpgradePipeline createPipeline(String name, List<UpgradeOperation> operations) {
+    protected UpgradePipeline createPipeline(String name, List<UpgradeOperation<T>> operations) {
         logger.debug("Creating pipeline instance for '{}'", name);
         return new DefaultUpgradePipelineImpl(name, operations);
     }
@@ -120,14 +121,14 @@ public class DefaultUpgradePipelineFactoryImpl implements UpgradePipelineFactory
      * {@inheritDoc}
      */
     @Override
-    public UpgradePipeline getPipeline(Object target) throws UpgradeException, ConfigurationException {
+    public UpgradePipeline getPipeline(T target) throws UpgradeException, ConfigurationException {
         logger.debug("Building pipeline for target '{}'", target);
         String currentVersion = versionProvider.getVersion(target);
         if (VersionProvider.SKIP.equals(currentVersion)) {
             // Return an empty pipeline to avoid errors & warnings in the log
             return new DefaultUpgradePipelineImpl(pipelineName, Collections.emptyList());
         }
-        List<UpgradeOperation> operations = new LinkedList<>();
+        List<UpgradeOperation<T>> operations = new LinkedList<>();
         HierarchicalConfiguration config = loadUpgradeConfiguration();
         List<HierarchicalConfiguration> pipeline = config.configurationsAt(pipelinePrefix + pipelineName);
 

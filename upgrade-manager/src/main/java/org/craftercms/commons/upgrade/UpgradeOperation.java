@@ -23,10 +23,11 @@ import org.craftercms.commons.upgrade.exception.UpgradeException;
 /**
  * Defines the basic operations for a single upgrade
  *
+ * @param <T> The target type supported
  * @author joseross
  * @since 3.1.5
  */
-public interface UpgradeOperation {
+public interface UpgradeOperation<T> {
 
     /**
      * Initializes the instance with the given configuration
@@ -43,6 +44,6 @@ public interface UpgradeOperation {
      * @param target the target
      * @throws UpgradeException if there is any error performing the upgrade
      */
-    void execute(Object target) throws UpgradeException;
+    void execute(T target) throws UpgradeException;
 
 }
