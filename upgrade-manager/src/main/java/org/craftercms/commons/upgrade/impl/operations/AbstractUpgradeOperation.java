@@ -35,11 +35,12 @@ import org.springframework.core.io.Resource;
  * </ul>
  * </p>
  *
+ * @param <T> The target type supported
  * @author joseross
  * @since 3.1.5
  */
 @SuppressWarnings("rawtypes")
-public abstract class AbstractUpgradeOperation implements UpgradeOperation, ApplicationContextAware {
+public abstract class AbstractUpgradeOperation<T> implements UpgradeOperation<T>, ApplicationContextAware {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -53,6 +54,10 @@ public abstract class AbstractUpgradeOperation implements UpgradeOperation, Appl
      */
     protected String nextVersion;
 
+    /**
+     * Indicates if the operation should be executed, true by default
+     */
+    protected boolean enabled = true;
 
     /**
      * The application context
@@ -62,6 +67,10 @@ public abstract class AbstractUpgradeOperation implements UpgradeOperation, Appl
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
@@ -77,7 +86,11 @@ public abstract class AbstractUpgradeOperation implements UpgradeOperation, Appl
     }
 
     @Override
-    public void execute(final Object target) throws UpgradeException {
+    public void execute(final T target) throws UpgradeException {
+        if (!enabled) {
+            logger.info("This operation is disabled, skipping execution");
+            return;
+        }
         logger.debug("Starting execution for target {}", target);
         try {
             doExecute(target);
@@ -88,7 +101,7 @@ public abstract class AbstractUpgradeOperation implements UpgradeOperation, Appl
         }
     }
 
-    protected abstract void doExecute(Object target) throws Exception;
+    protected abstract void doExecute(T target) throws Exception;
 
     protected Resource loadResource(String path) {
         return applicationContext.getResource(path);

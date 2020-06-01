@@ -21,10 +21,11 @@ import org.craftercms.commons.upgrade.exception.UpgradeException;
 /**
  * Groups any number of {@link UpgradeOperation} instances
  *
+ * @param <T> The target type supported
  * @author joseross
  * @since 3.1.5
  */
-public interface UpgradePipeline {
+public interface UpgradePipeline<T> {
 
     /**
      * Executes each {@link UpgradeOperation} for the given target
@@ -32,7 +33,7 @@ public interface UpgradePipeline {
      * @param target the target
      * @throws UpgradeException if any of the {@link UpgradeOperation}s fails
      */
-    void execute(Object target) throws UpgradeException;
+    void execute(T target) throws UpgradeException;
 
     /**
      * Indicates if the pipeline doesn't contain any operations
