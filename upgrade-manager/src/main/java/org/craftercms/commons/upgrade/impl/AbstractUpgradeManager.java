@@ -32,10 +32,11 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * Base class for all {@link UpgradeManager} implementations
  *
+ * @param <T> The target type supported
  * @author joseross
  * @since 3.1.5
  */
-public abstract class AbstractUpgradeManager implements UpgradeManager, ApplicationContextAware {
+public abstract class AbstractUpgradeManager<T> implements UpgradeManager<T>, ApplicationContextAware {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -56,7 +57,7 @@ public abstract class AbstractUpgradeManager implements UpgradeManager, Applicat
     }
 
     @Override
-    public void upgrade(final Object target) throws UpgradeException {
+    public void upgrade(final T target) throws UpgradeException {
         logger.info("Starting upgrade for target '{}'", target);
         try {
             doUpgrade(target);
@@ -75,14 +76,14 @@ public abstract class AbstractUpgradeManager implements UpgradeManager, Applicat
     @Override
     public void upgrade() throws UpgradeException {
         logger.info("Starting system upgrade");
-        List<Object> targets = getTargets();
-        for (Object target : targets) {
+        List<T> targets = getTargets();
+        for (T target : targets) {
             upgrade(target);
         }
     }
 
     @Override
-    public List<Object> getTargets() throws UpgradeException {
+    public List<T> getTargets() throws UpgradeException {
         logger.debug("Collecting target names");
         try {
             return doGetTargets();
@@ -91,12 +92,13 @@ public abstract class AbstractUpgradeManager implements UpgradeManager, Applicat
         }
     }
 
-    protected abstract List<Object> doGetTargets() throws Exception;
+    protected abstract List<T> doGetTargets() throws Exception;
 
-    protected abstract void doUpgrade(Object target) throws Exception;
+    protected abstract void doUpgrade(T target) throws Exception;
 
-    protected void executePipeline(Object target, UpgradePipelineFactory pipelineFactory) throws ConfigurationException, UpgradeException {
-        UpgradePipeline pipeline = pipelineFactory.getPipeline(target);
+    protected void executePipeline(T target, UpgradePipelineFactory<T> pipelineFactory)
+            throws ConfigurationException, UpgradeException {
+        UpgradePipeline<T> pipeline = pipelineFactory.getPipeline(target);
         pipeline.execute(target);
     }
 
