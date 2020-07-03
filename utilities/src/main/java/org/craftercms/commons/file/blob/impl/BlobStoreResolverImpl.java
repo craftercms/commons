@@ -79,6 +79,16 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
         this.configurationResolver = configurationResolver;
     }
 
+    protected String findStoreId(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate) {
+        Optional<HierarchicalConfiguration> storeConfig =
+                config.configurationsAt(CONFIG_KEY_STORE).stream().filter(predicate).findFirst();
+        if (storeConfig.isPresent()) {
+            HierarchicalConfiguration store = storeConfig.get();
+            return store.getString(CONFIG_KEY_ID);
+        }
+        return null;
+    }
+
     protected BlobStore findStore(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate)
             throws ConfigurationException {
         Optional<HierarchicalConfiguration> storeConfig =
@@ -105,8 +115,11 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
 
     @Override
     public BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException {
+        return getById(getConfiguration(provider), storeId);
+    }
+
+    protected BlobStore getById(HierarchicalConfiguration config, String storeId) throws ConfigurationException {
         logger.debug("Looking blob store with id {}", storeId);
-        HierarchicalConfiguration config = getConfiguration(provider);
         if (config != null) {
             return findStore(config, store ->
                     StringUtils.equals(storeId, store.getString(CONFIG_KEY_ID)));
