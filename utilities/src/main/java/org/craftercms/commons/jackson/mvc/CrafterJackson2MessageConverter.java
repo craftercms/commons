@@ -20,6 +20,7 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.Iterator;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -50,9 +51,8 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
 
 
     @Override
-    protected void writeInternal(Object object, HttpOutputMessage outputMessage) throws IOException,
-        HttpMessageNotWritableException {
-
+    protected void writeInternal(Object object, Type type, HttpOutputMessage outputMessage) throws IOException,
+            HttpMessageNotWritableException {
         JsonEncoding encoding = getJsonEncoding(outputMessage.getHeaders().getContentType());
         JsonGenerator jsonGenerator = this.getObjectMapper().getFactory().createGenerator(outputMessage.getBody(),
                 encoding);
