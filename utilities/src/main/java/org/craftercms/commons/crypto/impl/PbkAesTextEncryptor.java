@@ -26,6 +26,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.craftercms.commons.crypto.CryptoUtils;
 import org.craftercms.commons.crypto.CryptoException;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.removeStartIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
+
 /**
  * Extension of {@link org.craftercms.commons.crypto.impl.AesTextEncryptor} that generates the encryption key based
  * on a password and salt.
@@ -37,10 +41,13 @@ public class PbkAesTextEncryptor extends AesTextEncryptor {
     private static final String PBK_ALGORITHM = "PBKDF2WithHmacSHA1";
     private static final int PBK_ITER = 65536;
     private static final int PBK_LEN = 128;
+    private static final String NO_ENCODE_PREFIX = "CCE-V1#";
 
-    private static Key generateKey(String password, String salt) throws CryptoException {
+    private Key noEncodeKey;
+
+    private static Key generateKey(String password, byte[] salt) throws CryptoException {
         try {
-            KeySpec keySpec = new PBEKeySpec(password.toCharArray(), Base64.decodeBase64(salt), PBK_ITER, PBK_LEN);
+            KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, PBK_ITER, PBK_LEN);
             SecretKeyFactory factory = SecretKeyFactory.getInstance(PBK_ALGORITHM);
 
             return new SecretKeySpec(factory.generateSecret(keySpec).getEncoded(), CryptoUtils.AES_CIPHER_ALGORITHM);
@@ -50,7 +57,21 @@ public class PbkAesTextEncryptor extends AesTextEncryptor {
     }
 
     public PbkAesTextEncryptor(String password, String salt) throws CryptoException {
-        super(generateKey(password, salt));
+        super(generateKey(password, Base64.decodeBase64(salt)));
+        noEncodeKey = generateKey(password, salt.getBytes());
     }
 
+    @Override
+    public String encrypt(String clear) throws CryptoException {
+        return NO_ENCODE_PREFIX + doEncrypt(clear, noEncodeKey);
+    }
+
+    @Override
+    public String decrypt(String encrypted) throws CryptoException {
+        if (startsWithIgnoreCase(encrypted, NO_ENCODE_PREFIX)) {
+            return doDecrypt(removeStartIgnoreCase(encrypted, NO_ENCODE_PREFIX), noEncodeKey);
+        } else {
+            return doDecrypt(encrypted, null);
+        }
+    }
 }
