@@ -19,8 +19,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isAnyEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.substringAfter;
+import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 /**
  * Utility class for handling locale codes
@@ -35,12 +37,20 @@ public abstract class LocaleUtils {
     public static final String CONFIG_KEY_LOCALE_RESOLVER = "localeResolvers.localeResolver";
     public static final String CONFIG_KEY_FALLBACK = "fallbackToDefaultLocale";
 
+    public static final String LOCALE_SEPARATOR = "_";
+
     public static Locale parseLocale(String localeValue) {
         Locale locale = null;
         if (isNotEmpty(localeValue)) {
-            String[] values = localeValue.split("_");
-            if (values.length == 2) {
-                locale = new Locale(values[0], values[1]);
+            if (localeValue.contains(LOCALE_SEPARATOR)) {
+                String language = substringBefore(localeValue, LOCALE_SEPARATOR);
+                String country = substringAfter(localeValue, LOCALE_SEPARATOR);
+                if (isAnyEmpty(language, country)) {
+                    throw new IllegalArgumentException("Invalid locale code " + localeValue);
+                }
+                locale = new Locale(language, country);
+            } else {
+                locale = new Locale(localeValue);
             }
         }
         return locale;
@@ -51,7 +61,12 @@ public abstract class LocaleUtils {
     }
 
     public static String toString(Locale locale) {
-        return format("%s_%s", locale.getLanguage().toLowerCase(), locale.getCountry().toLowerCase());
+        StringBuilder sb = new StringBuilder(locale.getLanguage().toLowerCase());
+        if (isNotEmpty(locale.getCountry())) {
+            sb.append(LOCALE_SEPARATOR)
+              .append(locale.getCountry().toLowerCase());
+        }
+        return sb.toString();
     }
 
     public static String appendLocale(String str, Locale locale) {
