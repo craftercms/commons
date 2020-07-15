@@ -18,16 +18,17 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>crafter-commons-audit</artifactId>
+    <name>Crafter Commons Audit</name>
+    <description>Crafter Commons Audit</description>
+         
     <parent>
         <artifactId>crafter-commons</artifactId>
         <groupId>org.craftercms</groupId>
         <version>3.2.0-SNAPSHOT</version><!-- craftercms version flag -->
     </parent>
-    <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>crafter-commons-audit</artifactId>
-    <name>Crafter Commons Audit</name>
-    <description>Crafter Commons Audit</description>
 
     <dependencies>
         <dependency>

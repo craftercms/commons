@@ -37,6 +37,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>${jcraft.jsch.version}</version>
+        </dependency>
         <!-- JGit -->
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
@@ -50,6 +55,13 @@
             <version>${jgit.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit.ssh.jsch</artifactId>
+            <version>${jgit.version}</version>
+        </dependency>
+            
+        <!-- Commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -103,6 +115,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-
 </project>

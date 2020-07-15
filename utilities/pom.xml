@@ -44,7 +44,7 @@
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>${commons.collections.version}</version>
+            <version>${commons.collections3.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -242,7 +242,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-shade-plugin</artifactId>
-                        <version>3.2.2</version>
+                        <version>${maven.shade.version}</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
@@ -295,7 +295,6 @@
                                             </excludes>
                                         </filter>
                                     </filters>
-
                                 </configuration>
                             </execution>
                         </executions>
