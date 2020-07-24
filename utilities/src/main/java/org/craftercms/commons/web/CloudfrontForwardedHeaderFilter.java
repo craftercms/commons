@@ -47,9 +47,15 @@ public class CloudfrontForwardedHeaderFilter extends OncePerRequestFilter {
     public static final String CLOUDFRONT_PROTO_HEADER_NAME = "CloudFront-Forwarded-Proto";
     public static final String STANDARD_PROTO_HEADER_NAME = "X-Forwarded-Proto";
 
+    protected boolean enabled;
+
+    public CloudfrontForwardedHeaderFilter(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return isEmpty(request.getHeader(CLOUDFRONT_PROTO_HEADER_NAME));
+        return !enabled || isEmpty(request.getHeader(CLOUDFRONT_PROTO_HEADER_NAME));
     }
 
     @Override
