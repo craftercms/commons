@@ -15,21 +15,20 @@
  */
 package org.craftercms.commons.cache;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.DisposableBean;
 
 /**
  * Spring {@link org.springframework.beans.factory.FactoryBean} used to create EhCache caches as beans.
  *
  * @author avasquez
  */
-public class EhCacheFactoryBean implements FactoryBean<Cache> {
+public class EhCacheFactoryBean implements FactoryBean<Cache>, InitializingBean, DisposableBean {
 
     private CacheConfiguration configuration;
     private Cache cache;
@@ -39,14 +38,12 @@ public class EhCacheFactoryBean implements FactoryBean<Cache> {
         this.configuration = configuration;
     }
 
-    @PostConstruct
-    public void init() {
+    public void afterPropertiesSet() {
         cache = new Cache(configuration);
 
         CacheManager.getInstance().addCache(cache);
     }
 
-    @PreDestroy
     public void destroy() {
         CacheManager.getInstance().shutdown();
     }

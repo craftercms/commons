@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -40,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.beans.factory.InitializingBean;
 import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
@@ -51,7 +51,7 @@ import com.mongodb.MongoClientURI;
  * @author avasquez
  */
 @SuppressWarnings("deprecation")
-public class MongoScriptRunner {
+public class MongoScriptRunner implements InitializingBean{
 
     private static final Logger logger = LoggerFactory.getLogger(MongoScriptRunner.class);
 
@@ -109,8 +109,7 @@ public class MongoScriptRunner {
         this.connectionStr = connectionStr;
     }
 
-    @PostConstruct
-    public void init()  {
+    public void afterPropertiesSet()  {
         logger.debug("Running Scripts?",runOnInit);
         if (runOnInit) {
             logger.debug("Using Mongo Client",useMongoClient);

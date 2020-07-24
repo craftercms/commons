@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
-import javax.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 
 import org.apache.commons.io.FileUtils;
@@ -31,13 +30,14 @@ import org.craftercms.commons.crypto.CryptoException;
 import org.craftercms.commons.crypto.SecretKeyRepository;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  * Default implementation of {@link org.craftercms.commons.crypto.SecretKeyRepository}, which uses JCE Key Store.
  *
  * @author avasquez
  */
-public class SecretKeyRepositoryImpl implements SecretKeyRepository {
+public class SecretKeyRepositoryImpl implements SecretKeyRepository, InitializingBean {
 
     public static final String KEY_STORE_TYPE = "JCEKS";
 
@@ -78,8 +78,7 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository {
         this.defaultKeyAlgorithm = defaultKeyAlgorithm;
     }
 
-    @PostConstruct
-    public void init() throws CryptoException {
+    public void afterPropertiesSet() throws CryptoException {
         loadKeyStore();
     }
 

@@ -18,12 +18,13 @@ package org.craftercms.commons.entitlements.validator.impl;
 
 import java.util.Base64;
 import java.util.Collections;
-import javax.annotation.PostConstruct;
 
 import org.apache.commons.text.StringSubstitutor;
 import org.craftercms.commons.entitlements.validator.EntitlementValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  * Default Implementation of {@link EntitlementValidator}.
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author joseross
  */
-public class DefaultEntitlementValidatorImpl implements EntitlementValidator {
+public class DefaultEntitlementValidatorImpl implements EntitlementValidator, InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultEntitlementValidatorImpl.class);
 
@@ -41,8 +42,7 @@ public class DefaultEntitlementValidatorImpl implements EntitlementValidator {
         + "X2JsYW5rIj5idWc8L2E+LiA8YSBocmVmPSJodHRwczovL2NyYWZ0ZXJjbXMub3JnL2Jsb2ciIHRhcmdld"
         + "D0iX2JsYW5rIj5DcmFmdGVyIE5ld3M8L2E+Lg==";
 
-    @PostConstruct
-    protected void init() {
+    public void afterPropertiesSet() {
         logger.info("Using Crafter CMS Community Edition");
     }
 

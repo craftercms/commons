@@ -15,12 +15,11 @@
  */
 package org.craftercms.commons.crypto.impl;
 
-import javax.annotation.PostConstruct;
-
 import org.craftercms.commons.crypto.CryptoException;
 import org.craftercms.commons.crypto.TextEncryptor;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.i10n.I10nUtils;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  * {@link org.craftercms.commons.crypto.TextEncryptor} that does not actually encrypt or decrypt the text at all.
@@ -29,14 +28,13 @@ import org.craftercms.commons.i10n.I10nUtils;
  *
  * @author avasquez
  */
-public class NoOpTextEncryptor implements TextEncryptor {
+public class NoOpTextEncryptor implements TextEncryptor, InitializingBean {
 
     private static final I10nLogger logger = new I10nLogger(NoOpTextEncryptor.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
     public static final String LOG_KEY_NOOP_USED = "crypto.textEncryptor.noOpUsed";
 
-    @PostConstruct
-    public void init() {
+    public void afterPropertiesSet() {
         logger.warn(LOG_KEY_NOOP_USED);
     }
 

@@ -16,11 +16,11 @@
 package org.craftercms.commons.rest;
 
 import java.util.List;
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  * Simple extension of {@link org.springframework.web.client.RestTemplate} that adds the following custom
@@ -35,7 +35,7 @@ import org.springframework.http.converter.HttpMessageConverter;
  *
  * @author avasquez
  */
-public class RestTemplate extends org.springframework.web.client.RestTemplate {
+public class RestTemplate extends org.springframework.web.client.RestTemplate implements InitializingBean {
 
     protected Class<?> errorResponseType;
 
@@ -57,8 +57,7 @@ public class RestTemplate extends org.springframework.web.client.RestTemplate {
         this.errorResponseType = errorResponseType;
     }
 
-    @PostConstruct
-    public void init() {
+    public void afterPropertiesSet() {
         if (getErrorHandler() instanceof HttpMessageConvertingResponseErrorHandler) {
             HttpMessageConvertingResponseErrorHandler errorHandler = (HttpMessageConvertingResponseErrorHandler)
                 getErrorHandler();
