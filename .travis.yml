@@ -3,8 +3,10 @@ sudo: false
 jdk:
   - openjdk11
 branches:
-  except:
-    - travis
+  only:
+  - develop
+  - support/.*
+  - master
 notifications:
   irc:
     channels:
