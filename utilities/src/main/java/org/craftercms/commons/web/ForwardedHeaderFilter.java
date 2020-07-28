@@ -15,6 +15,7 @@
  */
 package org.craftercms.commons.web;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -32,7 +33,7 @@ public class ForwardedHeaderFilter extends org.springframework.web.filter.Forwar
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return !enabled || super.shouldNotFilter(request);
     }
 
