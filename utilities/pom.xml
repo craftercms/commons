@@ -66,6 +66,11 @@
             <artifactId>httpclient</artifactId>
             <version>${httpcomponents.httpclient.version}</version>
         </dependency>
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>javax.activation</artifactId>
+			<version>${javax.activation.version}</version>
+		</dependency>
 
         <!-- Logging -->
         <dependency>
