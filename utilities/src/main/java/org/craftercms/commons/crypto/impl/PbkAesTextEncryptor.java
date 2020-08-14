@@ -27,6 +27,7 @@ import org.craftercms.commons.crypto.CryptoUtils;
 import org.craftercms.commons.crypto.CryptoException;
 import org.craftercms.commons.crypto.TextEncryptor;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.removeStartIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
@@ -58,7 +59,7 @@ public class PbkAesTextEncryptor implements TextEncryptor {
     }
 
     public PbkAesTextEncryptor(String password, String salt) throws CryptoException {
-        actualTextEncryptor = new AesTextEncryptor(generateKey(password, salt.getBytes()));
+        actualTextEncryptor = new AesTextEncryptor(generateKey(password, salt.getBytes(UTF_8)));
         if (Base64.isBase64(salt)) {
             legacyTextEncryptor = new AesTextEncryptor(generateKey(password, Base64.decodeBase64(salt)));
         }
