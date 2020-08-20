@@ -20,6 +20,7 @@ import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.upgrade.UpgradeOperation;
 import org.craftercms.commons.upgrade.exception.UpgradeException;
+import org.craftercms.commons.upgrade.impl.UpgradeContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -39,7 +40,6 @@ import org.springframework.core.io.Resource;
  * @author joseross
  * @since 3.1.5
  */
-@SuppressWarnings("rawtypes")
 public abstract class AbstractUpgradeOperation<T> implements UpgradeOperation<T>, ApplicationContextAware {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -74,7 +74,8 @@ public abstract class AbstractUpgradeOperation<T> implements UpgradeOperation<T>
     }
 
     @Override
-    public void init(final String currentVersion, final String nextVersion, final HierarchicalConfiguration config) throws ConfigurationException {
+    public void init(final String currentVersion, final String nextVersion, final HierarchicalConfiguration<?> config)
+            throws ConfigurationException {
         this.currentVersion = currentVersion;
         this.nextVersion = nextVersion;
 
@@ -86,22 +87,22 @@ public abstract class AbstractUpgradeOperation<T> implements UpgradeOperation<T>
     }
 
     @Override
-    public void execute(final T target) throws UpgradeException {
+    public void execute(final UpgradeContext<T> context) throws UpgradeException {
         if (!enabled) {
             logger.info("This operation is disabled, skipping execution");
             return;
         }
-        logger.debug("Starting execution for target {}", target);
+        logger.debug("Starting execution for target {}", context);
         try {
-            doExecute(target);
+            doExecute(context);
         } catch (Exception e) {
             throw new UpgradeException("Error executing upgrade operation " + getClass(), e);
         } finally {
-            logger.debug("Execution completed for target {}", target);
+            logger.debug("Execution completed for target {}", context);
         }
     }
 
-    protected abstract void doExecute(T target) throws Exception;
+    protected abstract void doExecute(UpgradeContext<T> context) throws Exception;
 
     protected Resource loadResource(String path) {
         return applicationContext.getResource(path);

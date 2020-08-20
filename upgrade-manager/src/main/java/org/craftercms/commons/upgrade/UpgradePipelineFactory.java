@@ -18,6 +18,7 @@ package org.craftercms.commons.upgrade;
 
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.upgrade.exception.UpgradeException;
+import org.craftercms.commons.upgrade.impl.UpgradeContext;
 
 /**
  * Builds an {@link UpgradePipeline} with all the required operations
@@ -36,10 +37,10 @@ public interface UpgradePipelineFactory<T> {
     /**
      * Retrieves the needed upgrade operations for the given target
      *
-     * @param target the target
+     * @param context the upgrade context
      * @return the upgrade pipeline
      * @throws UpgradeException if there is any error retrieving the operations
      */
-    UpgradePipeline<T> getPipeline(T target) throws UpgradeException, ConfigurationException;
+    UpgradePipeline<T> getPipeline(UpgradeContext<T> context) throws UpgradeException, ConfigurationException;
 
 }

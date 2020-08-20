@@ -19,6 +19,7 @@ package org.craftercms.commons.upgrade;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.upgrade.exception.UpgradeException;
+import org.craftercms.commons.upgrade.impl.UpgradeContext;
 
 /**
  * Defines the basic operations for a single upgrade
@@ -41,9 +42,9 @@ public interface UpgradeOperation<T> {
     /**
      * Performs a single upgrade operation.
      *
-     * @param target the target
+     * @param context the upgrade context
      * @throws UpgradeException if there is any error performing the upgrade
      */
-    void execute(T target) throws UpgradeException;
+    void execute(UpgradeContext<T> context) throws UpgradeException;
 
 }

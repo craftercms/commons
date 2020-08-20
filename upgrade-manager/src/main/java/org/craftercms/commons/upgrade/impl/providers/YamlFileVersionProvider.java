@@ -29,10 +29,11 @@ import org.yaml.snakeyaml.Yaml;
 /**
  * Implementation of {@link org.craftercms.commons.upgrade.VersionProvider} that handles YAML files
  *
+ * @param <T> The target type supported
  * @author joseross
  * @since 3.1.5
  */
-public class YamlFileVersionProvider extends AbstractFileVersionProvider {
+public class YamlFileVersionProvider<T> extends AbstractFileVersionProvider<T> {
 
     protected final Yaml yaml;
 

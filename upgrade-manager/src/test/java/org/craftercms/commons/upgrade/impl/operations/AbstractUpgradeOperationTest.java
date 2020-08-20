@@ -17,6 +17,7 @@
 package org.craftercms.commons.upgrade.impl.operations;
 
 import org.craftercms.commons.upgrade.exception.UpgradeException;
+import org.craftercms.commons.upgrade.impl.UpgradeContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Spy;
@@ -53,7 +54,7 @@ public class AbstractUpgradeOperationTest {
     private static class DummyUpgradeOperation extends AbstractUpgradeOperation<Object> {
 
         @Override
-        protected void doExecute(Object target) {
+        protected void doExecute(UpgradeContext<Object> target) {
             // do nothing
         }
 

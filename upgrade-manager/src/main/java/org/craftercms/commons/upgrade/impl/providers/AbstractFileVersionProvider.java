@@ -15,6 +15,8 @@
   */
  package org.craftercms.commons.upgrade.impl.providers;
 
+ import org.craftercms.commons.upgrade.impl.UpgradeContext;
+
  import java.io.File;
  import java.nio.file.Path;
  import java.nio.file.Paths;
@@ -22,32 +24,34 @@
  /**
   * Base class for all {@link org.craftercms.commons.upgrade.VersionProvider} that use files
   *
+  * @param <T> The target type supported
   * @author joseross
   * @since 3.1.5
   */
- public abstract class AbstractFileVersionProvider extends AbstractVersionProvider {
+ public abstract class AbstractFileVersionProvider<T> extends AbstractVersionProvider<T> {
 
-     protected Path getFile(Object target) {
+     protected Path getFile(UpgradeContext<T> context) {
+         var target = context.getTarget();
          if (target instanceof String) {
-             return Paths.get((String)target);
+             return Paths.get((String) target);
          } else if (target instanceof File) {
-             return ((File)target).toPath();
+             return ((File) target).toPath();
          } else if (target instanceof Path) {
-             return (Path)target;
+             return (Path) target;
          } else {
              throw new IllegalArgumentException("Target can't be converted to Path: " + target);
          }
      }
 
      @Override
-     protected String doGetVersion(final Object target) throws Exception {
-         Path file = getFile(target);
+     protected String doGetVersion(final UpgradeContext<T> context) throws Exception {
+         Path file = getFile(context);
          return readVersionFromFile(file);
      }
 
      @Override
-     protected void doSetVersion(final Object target, final String version) throws Exception {
-         Path file = getFile(target);
+     protected void doSetVersion(final UpgradeContext<T> context, final String version) throws Exception {
+         Path file = getFile(context);
          writeVersionToFile(file, version);
      }
 
