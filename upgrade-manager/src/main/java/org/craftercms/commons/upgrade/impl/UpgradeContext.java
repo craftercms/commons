@@ -13,34 +13,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package org.craftercms.commons.upgrade;
-
-import org.craftercms.commons.upgrade.exception.UpgradeException;
-import org.craftercms.commons.upgrade.impl.UpgradeContext;
+package org.craftercms.commons.upgrade.impl;
 
 /**
- * Groups any number of {@link UpgradeOperation} instances
+ * Holds all data related to a given upgrade process.
  *
  * @param <T> The target type supported
  * @author joseross
- * @since 3.1.5
+ * @since 3.2.0
  */
-public interface UpgradePipeline<T> {
+public abstract class UpgradeContext<T> {
 
     /**
-     * Executes each {@link UpgradeOperation} for the given target
-     *
-     * @param context the upgrade context
-     * @throws UpgradeException if any of the {@link UpgradeOperation}s fails
+     * The target of the upgrade.
      */
-    void execute(UpgradeContext<T> context) throws UpgradeException;
+    protected T target;
 
-    /**
-     * Indicates if the pipeline doesn't contain any operations
-     *
-     * @return true if there are no operations
-     */
-    boolean isEmpty();
+    public UpgradeContext(T target) {
+        this.target = target;
+    }
+
+    public T getTarget() {
+        return target;
+    }
+
+    @Override
+    public String toString() {
+        return target.toString();
+    }
 
 }

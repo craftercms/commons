@@ -29,6 +29,7 @@ import org.craftercms.commons.upgrade.UpgradePipeline;
 import org.craftercms.commons.upgrade.UpgradePipelineFactory;
 import org.craftercms.commons.upgrade.VersionProvider;
 import org.craftercms.commons.upgrade.exception.UpgradeException;
+import org.craftercms.commons.upgrade.impl.UpgradeContext;
 import org.craftercms.commons.upgrade.impl.operations.UpdateVersionUpgradeOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,6 @@ import static org.apache.commons.collections4.CollectionUtils.isEmpty;
  * @author joseross
  * @since 3.1.5
  */
-@SuppressWarnings("unchecked, rawtypes")
 public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFactory<T>, ApplicationContextAware {
 
     public static final String DEFAULT_PIPELINE_PREFIX = "pipelines.";
@@ -56,7 +56,7 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
     /**
      * The version provider
      */
-    protected VersionProvider versionProvider;
+    protected VersionProvider<T> versionProvider;
 
     /**
      * Path of the configuration file
@@ -84,7 +84,7 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
     protected ApplicationContext applicationContext;
 
     public DefaultUpgradePipelineFactoryImpl(final String pipelineName, final Resource configurationFile,
-                                             final VersionProvider versionProvider) {
+                                             final VersionProvider<T> versionProvider) {
         this.pipelineName = pipelineName;
         this.configurationFile = configurationFile;
         this.versionProvider = versionProvider;
@@ -102,6 +102,7 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
         this.applicationContext = applicationContext;
     }
 
+    @SuppressWarnings("rawtypes")
     protected HierarchicalConfiguration loadUpgradeConfiguration() throws UpgradeException {
         YamlConfiguration configuration = new YamlConfiguration();
         try (InputStream is = configurationFile.getInputStream()) {
@@ -112,21 +113,22 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
         return configuration;
     }
 
-    protected UpgradePipeline createPipeline(String name, List<UpgradeOperation<T>> operations) {
+    protected UpgradePipeline<T> createPipeline(String name, List<UpgradeOperation<T>> operations) {
         logger.debug("Creating pipeline instance for '{}'", name);
-        return new DefaultUpgradePipelineImpl(name, operations);
+        return new DefaultUpgradePipelineImpl<>(name, operations);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public UpgradePipeline getPipeline(T target) throws UpgradeException, ConfigurationException {
-        logger.debug("Building pipeline for target '{}'", target);
-        String currentVersion = versionProvider.getVersion(target);
+    @SuppressWarnings("rawtypes, unchecked")
+    public UpgradePipeline<T> getPipeline(UpgradeContext<T> context) throws UpgradeException, ConfigurationException {
+        logger.debug("Building pipeline for target '{}'", context);
+        String currentVersion = versionProvider.getVersion(context);
         if (VersionProvider.SKIP.equals(currentVersion)) {
             // Return an empty pipeline to avoid errors & warnings in the log
-            return new DefaultUpgradePipelineImpl(pipelineName, Collections.emptyList());
+            return new DefaultUpgradePipelineImpl<>(pipelineName, Collections.emptyList());
         }
         List<UpgradeOperation<T>> operations = new LinkedList<>();
         HierarchicalConfiguration config = loadUpgradeConfiguration();
@@ -140,7 +142,7 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
                 logger.debug("Adding version '{}' to pipeline '{}'", sourceVersion, pipelineName);
                 List<HierarchicalConfiguration> operationsConfig = release.configurationsAt(CONFIG_KEY_OPERATIONS);
                 for (HierarchicalConfiguration operationConfig : operationsConfig) {
-                    UpgradeOperation operation =
+                    UpgradeOperation<T> operation =
                         applicationContext.getBean(operationConfig.getString(CONFIG_KEY_TYPE), UpgradeOperation.class);
                     operation.init(sourceVersion, targetVersion, operationConfig);
                     operations.add(operation);
@@ -153,7 +155,7 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
 
         if (!isEmpty(operations) && updateVersion) {
             logger.debug("Adding upgrade version operation to pipeline '{}'", pipelineName);
-            UpdateVersionUpgradeOperation updateOp = new UpdateVersionUpgradeOperation(versionProvider);
+            UpdateVersionUpgradeOperation<T> updateOp = new UpdateVersionUpgradeOperation<>(versionProvider);
             updateOp.init(currentVersion, nextVersion, config);
             operations.add(updateOp);
         } else {

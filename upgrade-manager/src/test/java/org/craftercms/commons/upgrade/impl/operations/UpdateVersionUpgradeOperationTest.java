@@ -40,7 +40,7 @@ public class UpdateVersionUpgradeOperationTest {
     public static final String FINAL_VERSION = "2.0";
 
     @Mock
-    private VersionProvider versionProvider;
+    private VersionProvider<Object> versionProvider;
 
     @InjectMocks
     private UpdateVersionUpgradeOperation<?> operation;

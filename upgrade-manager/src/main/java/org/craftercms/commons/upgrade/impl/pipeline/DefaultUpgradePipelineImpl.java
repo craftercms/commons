@@ -22,6 +22,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.craftercms.commons.upgrade.UpgradeOperation;
 import org.craftercms.commons.upgrade.UpgradePipeline;
 import org.craftercms.commons.upgrade.exception.UpgradeException;
+import org.craftercms.commons.upgrade.impl.UpgradeContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StopWatch;
@@ -65,7 +66,7 @@ public class DefaultUpgradePipelineImpl<T> implements UpgradePipeline<T> {
      * {@inheritDoc}
      */
     @Override
-    public void execute(final T target) throws UpgradeException {
+    public void execute(final UpgradeContext<T> context) throws UpgradeException {
         if (isEmpty()) {
             logger.debug("Pipeline '{}' is empty, skipping execution", name);
             return;
@@ -78,7 +79,7 @@ public class DefaultUpgradePipelineImpl<T> implements UpgradePipeline<T> {
             logger.info("------- Starting execution of operation {} -------", operationName);
             watch.start(operationName);
             try {
-                operation.execute(target);
+                operation.execute(context);
             } catch (UpgradeException e) {
                 if (continueOnFailure) {
                     logger.error("Execution of operation {} failed", operationName, e);
