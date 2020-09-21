@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="maxSizeCache" class="org.craftercms.commons.cache.GuavaCacheFactoryBean">
+        <property name="maxSize" value="5"/>
+    </bean>
+
+    <bean id="timeToLiveCache" class="org.craftercms.commons.cache.GuavaCacheFactoryBean">
+        <property name="timeToLive" value="1"/>
+    </bean>
+
+    <bean id="timeToIdleCache" class="org.craftercms.commons.cache.GuavaCacheFactoryBean">
+        <property name="timeToIdle" value="1"/>
+    </bean>
+
+</beans>
