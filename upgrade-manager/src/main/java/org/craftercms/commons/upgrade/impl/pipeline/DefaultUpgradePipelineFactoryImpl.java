@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.vdurmont.semver4j.Semver;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.YamlConfiguration;
@@ -29,6 +30,7 @@ import org.craftercms.commons.upgrade.UpgradePipeline;
 import org.craftercms.commons.upgrade.UpgradePipelineFactory;
 import org.craftercms.commons.upgrade.VersionProvider;
 import org.craftercms.commons.upgrade.exception.UpgradeException;
+import org.craftercms.commons.upgrade.exception.UpgradeNotSupportedException;
 import org.craftercms.commons.upgrade.impl.UpgradeContext;
 import org.craftercms.commons.upgrade.impl.operations.UpdateVersionUpgradeOperation;
 import org.slf4j.Logger;
@@ -38,7 +40,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 
-import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
  * Default implementation of {@link UpgradePipelineFactory}
@@ -51,17 +54,17 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
 
     public static final String DEFAULT_PIPELINE_PREFIX = "pipelines.";
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * The version provider
      */
-    protected VersionProvider<T> versionProvider;
+    protected final VersionProvider<T> versionProvider;
 
     /**
      * Path of the configuration file
      */
-    protected Resource configurationFile;
+    protected final Resource configurationFile;
 
     /**
      * The prefix for the pipelines in the configuration file, defaults to {@code DEFAULT_PIPELINE_PREFIX}
@@ -132,7 +135,22 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
         }
         List<UpgradeOperation<T>> operations = new LinkedList<>();
         HierarchicalConfiguration config = loadUpgradeConfiguration();
-        List<HierarchicalConfiguration> pipeline = config.configurationsAt(pipelinePrefix + pipelineName);
+
+        var pipelineRoot = pipelinePrefix + pipelineName;
+        var requiredVersion = config.getString(pipelineRoot + CONFIG_KEY_REQUIRES);
+        if (isNotEmpty(requiredVersion)) {
+            logger.debug("Pipeline '{}' requires version '{}'", pipelineName, requiredVersion);
+            // NPM mode to support ranges
+            // withClearedSuffixAndBuild() because only major.minor.patch can be properly compared
+            var version = new Semver(currentVersion, Semver.SemverType.NPM).withClearedSuffixAndBuild();
+            if (!version.satisfies(requiredVersion)) {
+                throw new UpgradeNotSupportedException(format("Current version '%s' for '%s' cannot be upgraded " +
+                        "automatically, requires '%s'", currentVersion, context, requiredVersion));
+            }
+            pipelineRoot += CONFIG_KEY_VERSIONS;
+        }
+
+        List<HierarchicalConfiguration> pipeline = config.configurationsAt(pipelineRoot);
 
         String nextVersion = currentVersion;
         for (HierarchicalConfiguration release : pipeline) {
@@ -147,19 +165,21 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
                     operation.init(sourceVersion, targetVersion, operationConfig);
                     operations.add(operation);
                 }
+
+                if (updateVersion) {
+                    logger.debug("Adding upgrade version operation for '{}' to pipeline '{}'", targetVersion,
+                            pipelineName);
+                    UpdateVersionUpgradeOperation<T> updateOp = new UpdateVersionUpgradeOperation<>(versionProvider);
+                    updateOp.init(sourceVersion, targetVersion, config);
+                    operations.add(updateOp);
+                } else {
+                    logger.debug("Skipping upgrade version operation for pipeline '{}'", pipelineName);
+                }
+
                 nextVersion = targetVersion;
             } else {
                 logger.debug("Skipping version '{}' already applied", sourceVersion);
             }
-        }
-
-        if (!isEmpty(operations) && updateVersion) {
-            logger.debug("Adding upgrade version operation to pipeline '{}'", pipelineName);
-            UpdateVersionUpgradeOperation<T> updateOp = new UpdateVersionUpgradeOperation<>(versionProvider);
-            updateOp.init(currentVersion, nextVersion, config);
-            operations.add(updateOp);
-        } else {
-            logger.debug("Skipping upgrade version operation for pipeline '{}'", pipelineName);
         }
 
         return createPipeline(pipelineName, operations);

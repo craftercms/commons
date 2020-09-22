@@ -46,7 +46,7 @@ public class DefaultUpgradePipelineImpl<T> implements UpgradePipeline<T> {
     /**
      * Name of the pipeline.
      */
-    protected String name;
+    protected final String name;
 
     /**
      * Indicates if the pipeline should continue executing after an operation fails
@@ -56,7 +56,7 @@ public class DefaultUpgradePipelineImpl<T> implements UpgradePipeline<T> {
     /**
      * List of all upgrade operations to be executed.
      */
-    protected List<UpgradeOperation<T>> operations;
+    protected final List<UpgradeOperation<T>> operations;
 
     public void setContinueOnFailure(final boolean continueOnFailure) {
         this.continueOnFailure = continueOnFailure;
@@ -94,8 +94,8 @@ public class DefaultUpgradePipelineImpl<T> implements UpgradePipeline<T> {
         logger.info("Execution of pipeline {} completed", name);
         logger.info("============================================================");
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Pipeline Duration:\n" + watch.prettyPrint());
+        if (logger.isTraceEnabled()) {
+            logger.trace("Pipeline Duration:\n" + watch.prettyPrint());
         }
     }
 

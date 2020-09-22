@@ -1,0 +1,12 @@
+pipelines:
+  test:
+    requires: '>=1.0'
+    versions:
+      - currentVersion: 1.0
+        nextVersion: 2.0
+        operations:
+          - type: testUpgrader
+      - currentVersion: 2.0
+        nextVersion: 3.0
+        operations:
+          - type: testUpgrader

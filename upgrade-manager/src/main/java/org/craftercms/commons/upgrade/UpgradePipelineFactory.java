@@ -33,6 +33,8 @@ public interface UpgradePipelineFactory<T> {
     String CONFIG_KEY_NEXT_VERSION = "nextVersion";
     String CONFIG_KEY_OPERATIONS = "operations";
     String CONFIG_KEY_TYPE = "type";
+    String CONFIG_KEY_REQUIRES = ".requires";
+    String CONFIG_KEY_VERSIONS = ".versions";
 
     /**
      * Retrieves the needed upgrade operations for the given target
