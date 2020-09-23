@@ -16,19 +16,16 @@
 package org.craftercms.commons.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.event.CacheEventListenerAdapter;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalListener;
+import com.google.common.cache.RemovalNotification;
 import org.craftercms.commons.config.profiles.aws.AbstractAwsProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.cache.ehcache.EhCacheFactoryBean;
 
-import java.util.Collections;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -47,15 +44,14 @@ import java.util.concurrent.TimeUnit;
  * @author avasquez
  */
 public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProfile, C>
-        extends CacheEventListenerAdapter implements BeanNameAware, InitializingBean {
+        implements InitializingBean, DisposableBean, RemovalListener<P, C> {
 
     private static final Logger logger = LoggerFactory.getLogger(S3ClientCachingFactory.class);
 
     public static final int DEFAULT_SHUTDOWN_CLIENT_AFTER_IDLE_SECS = 900;
 
-    private String beanName;
     private int shutdownClientAfterIdleSecs;
-    private Ehcache cache;
+    private Cache<P, C> cache;
     private ScheduledExecutorService evictionService;
 
     public AbstractAwsClientCachingFactory() {
@@ -63,83 +59,59 @@ public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProf
         evictionService = Executors.newSingleThreadScheduledExecutor();
     }
 
-    @Override
-    public void setBeanName(String name) {
-        this.beanName = name;
-    }
-
     public void setShutdownClientAfterIdleSecs(int shutdownClientAfterIdleSecs) {
         this.shutdownClientAfterIdleSecs = shutdownClientAfterIdleSecs;
     }
 
     @Override
-    public void notifyElementRemoved(Ehcache cache, Element element) throws CacheException {
-        shutdownClient(element);
+    public void onRemoval(RemovalNotification<P, C> notification) {
+        shutdownClient(notification);
     }
 
     @Override
-    public void notifyElementExpired(Ehcache cache, Element element) {
-        shutdownClient(element);
-    }
-
-    @Override
-    public void notifyElementEvicted(Ehcache cache, Element element) {
-        shutdownClient(element);
-    }
-
-    @Override
-    public void dispose() {
+    public void destroy() {
         logger.info("Shutting down {}", getClass().getSimpleName());
 
         evictionService.shutdownNow();
 
-        for (Object key : cache.getKeys()) {
-            Element element = cache.get(key);
-            if (element != null) {
-                shutdownClient(element);
-            }
-        }
+        cache.invalidateAll();
+        cache.cleanUp();
     }
 
     @Override
     public void afterPropertiesSet() {
-        EhCacheFactoryBean factoryBean = new EhCacheFactoryBean();
-        factoryBean.setCacheEventListeners(Collections.singleton(this));
-        factoryBean.setBeanName(beanName);
-        factoryBean.setTimeToLive(0);
-        factoryBean.setTimeToIdle(shutdownClientAfterIdleSecs);
-        factoryBean.afterPropertiesSet();
-
-        cache = factoryBean.getObject();
+        cache = CacheBuilder.newBuilder()
+                .removalListener(this)
+                .expireAfterAccess(shutdownClientAfterIdleSecs, TimeUnit.SECONDS)
+                .build();
 
         // Schedule eviction of expired items every minute
-        evictionService.scheduleAtFixedRate(cache::evictExpiredElements, 1, 1, TimeUnit.MINUTES);
+        evictionService.scheduleAtFixedRate(cache::cleanUp, 1, 1, TimeUnit.MINUTES);
     }
 
-    @SuppressWarnings("unchecked")
     public C getClient(P profile) {
-        Element element = cache.get(profile);
-        if (element == null) {
+        var client = cache.getIfPresent(profile);
+        if (client == null) {
             synchronized (cache) {
                 // Check again, just in case the element was added by another concurrent thread
-                element = cache.get(profile);
-                if (element == null) {
+                client = cache.getIfPresent(profile);
+                if (client == null) {
                     logger.info("Creating client for {}", profile);
 
-                    element = new Element(profile, createClient(profile));
-                    cache.put(element);
+                    client = createClient(profile);
+                    cache.put(profile, client);
                 }
             }
         }
 
-        return (C) element.getObjectValue();
+        return client;
     }
 
-    protected void shutdownClient(Element element) {
-        if (element.getObjectValue() instanceof AmazonS3) {
-            logger.info("Shutting down AWS client for {}", element.getObjectKey());
+    protected void shutdownClient(RemovalNotification<P, C> notification) {
+        if (notification.getValue() instanceof AmazonS3) {
+            logger.info("Shutting down AWS client for {}", notification.getKey());
 
-            AmazonS3 client = (AmazonS3) element.getObjectValue();
+            AmazonS3 client = (AmazonS3) notification.getValue();
             client.shutdown();
         }
     }
