@@ -36,7 +36,7 @@ import static org.craftercms.commons.plugin.model.CrafterCmsEditions.ENTERPRISE;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Version {
 
-    private static Pattern PATTERN = Pattern.compile("(\\d\\.\\d\\.\\d)(\\w)?.*");
+    private static Pattern PATTERN = Pattern.compile("(\\d+\\.\\d+\\.\\d+)(\\w)?.*");
 
     public static Version of(String v) {
         if (StringUtils.isEmpty(v)) {
