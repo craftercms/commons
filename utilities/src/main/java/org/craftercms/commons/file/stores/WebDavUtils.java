@@ -20,6 +20,9 @@ import org.craftercms.commons.config.profiles.webdav.WebDavProfile;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Utility methods for WebDAV
  *
@@ -33,8 +36,13 @@ public class WebDavUtils {
      * @param profile the configuration profile
      * @return a WebDAV client
      */
-    public static Sardine createClient(WebDavProfile profile) {
-        return SardineFactory.begin(profile.getUsername(), profile.getPassword());
+    public static Sardine createClient(WebDavProfile profile) throws MalformedURLException {
+        Sardine client = SardineFactory.begin(profile.getUsername(), profile.getPassword());
+        if (profile.isPreemptiveAuth()) {
+            client.enablePreemptiveAuthentication(new URL(profile.getBaseUrl()));
+        }
+
+        return client;
     }
 
 }

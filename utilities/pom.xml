@@ -21,7 +21,7 @@
     <parent>
         <artifactId>crafter-commons</artifactId>
         <groupId>org.craftercms</groupId>
-        <version>3.1.11-SNAPSHOT</version><!-- craftercms version flag -->
+        <version>3.1.12-SNAPSHOT</version><!-- craftercms version flag -->
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -60,11 +60,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons.io.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${httpcomponents.httpclient.version}</version>
         </dependency>
 
         <!-- Logging -->
