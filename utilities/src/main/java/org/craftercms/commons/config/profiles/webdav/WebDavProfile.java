@@ -28,6 +28,7 @@ public class WebDavProfile extends ConfigurationProfile {
     protected String deliveryBaseUrl;
     protected String username;
     protected String password;
+    protected boolean preemptiveAuth;
 
     /**
      * Returns the base url of the webdav server.
@@ -87,6 +88,14 @@ public class WebDavProfile extends ConfigurationProfile {
      */
     public void setPassword(final String password) {
         this.password = password;
+    }
+
+    public boolean isPreemptiveAuth() {
+        return preemptiveAuth;
+    }
+
+    public void setPreemptiveAuth(boolean preemptiveAuth) {
+        this.preemptiveAuth = preemptiveAuth;
     }
 
 }

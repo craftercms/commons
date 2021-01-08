@@ -36,6 +36,7 @@ public class WebDavProfileMapper extends AbstractProfileConfigMapper<WebDavProfi
     private static final String CONFIG_KEY_DELIVERY_URL = "deliveryBaseUrl";
     private static final String CONFIG_KEY_USERNAME = "username";
     private static final String CONFIG_KEY_PASSWORD = "password";
+    private static final String CONFIG_KEY_PREEMPTIVE_AUTH = "preemptiveAuth";
 
     public WebDavProfileMapper(ConfigurationResolver configurationResolver) {
         super(CONFIG_KEY_WEBDAV, configurationResolver);
@@ -46,11 +47,15 @@ public class WebDavProfileMapper extends AbstractProfileConfigMapper<WebDavProfi
     protected WebDavProfile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException {
         WebDavProfile profile = new WebDavProfile();
         profile.setBaseUrl(getRequiredStringProperty(profileConfig, CONFIG_KEY_BASE_URL));
-        if(profileConfig.containsKey(CONFIG_KEY_DELIVERY_URL)) {
+        if (profileConfig.containsKey(CONFIG_KEY_DELIVERY_URL)) {
             profile.setDeliveryBaseUrl(getStringProperty(profileConfig, CONFIG_KEY_DELIVERY_URL));
         }
         profile.setUsername(getRequiredStringProperty(profileConfig, CONFIG_KEY_USERNAME));
         profile.setPassword(getRequiredStringProperty(profileConfig, CONFIG_KEY_PASSWORD));
+
+        if (profileConfig.containsKey(CONFIG_KEY_PREEMPTIVE_AUTH)) {
+            profile.setPreemptiveAuth(getBooleanProperty(profileConfig, CONFIG_KEY_PREEMPTIVE_AUTH));
+        }
 
         return profile;
     }
