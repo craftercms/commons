@@ -28,7 +28,7 @@ import java.time.Duration;
  * Spring {@link org.springframework.beans.factory.FactoryBean} used to create Guava caches as beans.
  *
  * @author joseross
- * @since 3.2.0
+ * @since 4.0.0
  */
 public class GuavaCacheFactoryBean<K, V>  extends AbstractFactoryBean<Cache<K, V>> implements BeanNameAware {
 

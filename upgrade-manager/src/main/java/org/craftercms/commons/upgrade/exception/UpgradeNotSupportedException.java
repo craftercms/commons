@@ -20,7 +20,7 @@ package org.craftercms.commons.upgrade.exception;
  * Extension of {@link UpgradeException} thrown when the current version of a target can't be upgraded automatically.
  *
  * @author joseross
- * @since 3.2.0
+ * @since 4.0.0
  */
 public class UpgradeNotSupportedException extends UpgradeException {
 

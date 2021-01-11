@@ -20,7 +20,7 @@ package org.craftercms.commons.upgrade.impl;
  *
  * @param <T> The target type supported
  * @author joseross
- * @since 3.2.0
+ * @since 4.0.0
  */
 public abstract class UpgradeContext<T> {
 

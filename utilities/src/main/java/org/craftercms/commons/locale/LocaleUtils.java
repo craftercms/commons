@@ -36,7 +36,7 @@ import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
  * Utility class for handling locale codes
  *
  * @author joseross
- * @since 3.2.0
+ * @since 4.0.0
  */
 public abstract class LocaleUtils {
 
