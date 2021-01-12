@@ -22,7 +22,6 @@
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-commons</artifactId>
     <packaging>pom</packaging>
-    <version>3.2.0-SNAPSHOT</version><!-- craftercms version flag -->
 
     <name>Crafter Commons</name>
     <description>Crafter Commons</description>
@@ -37,7 +36,7 @@
     <parent>
         <groupId>org.craftercms</groupId>
         <artifactId>craftercms</artifactId>
-        <version>3.2.0-SNAPSHOT</version><!-- craftercms version flag -->
+        <version>4.0.0-SNAPSHOT</version><!-- craftercms version flag -->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
