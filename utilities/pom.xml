@@ -209,6 +209,14 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Groovy Sandbox -->
+        <dependency>
+            <groupId>org.craftercms</groupId>
+            <artifactId>script-security</artifactId>
+            <version>${project.version}</version>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>
