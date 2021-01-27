@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
 
@@ -79,7 +80,7 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
 
     @Override
     public void read(InputStream in) throws ConfigurationException, IOException {
-        load(new InputStreamReader(in, "UTF-8"));
+        load(new InputStreamReader(in, StandardCharsets.UTF_8));
     }
 
     @Override
@@ -91,9 +92,9 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
     @SuppressWarnings("unchecked")
     protected void load(Reader in) throws ConfigurationException {
         try {
-            Yaml yaml = new Yaml();
+            Yaml yaml = new Yaml(new DisableClassLoadingConstructor());
 
-            Map<String, Object> yamlObj = yaml.loadAs(in, Map.class);
+            Map<String, Object> yamlObj = (Map<String, Object>) yaml.load(in);
 
             logger.debug(LOG_KEY_YAML_LOADED, yamlObj);
 
