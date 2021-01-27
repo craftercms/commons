@@ -23,8 +23,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
+import org.craftercms.commons.config.DisableClassLoadingConstructor;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.representer.Representer;
 
 /**
  * Implementation of {@link org.craftercms.commons.upgrade.VersionProvider} that handles YAML files
@@ -41,13 +43,13 @@ public class YamlFileVersionProvider<T> extends AbstractFileVersionProvider<T> {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         options.setPrettyFlow(true);
-        yaml = new Yaml(options);
+        yaml = new Yaml(new DisableClassLoadingConstructor(), new Representer(), options);
     }
 
     @SuppressWarnings("unchecked")
     protected Map<String, Object> loadFile(Path file) throws IOException {
         try (InputStream is = Files.newInputStream(file)) {
-            return yaml.loadAs(is, Map.class);
+            return (Map<String, Object>) yaml.load(is);
         }
     }
 
