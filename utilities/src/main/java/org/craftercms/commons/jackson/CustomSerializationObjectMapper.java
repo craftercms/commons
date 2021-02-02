@@ -46,6 +46,7 @@ public class CustomSerializationObjectMapper extends ObjectMapper implements Ini
     }
 
     protected void registerSerializationModule() {
+        findAndRegisterModules();
         registerModule(JacksonUtils.createModule(serializers, deserializers));
     }
 
