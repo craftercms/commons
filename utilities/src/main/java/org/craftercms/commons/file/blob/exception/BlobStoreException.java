@@ -13,10 +13,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.file.blob;
+package org.craftercms.commons.file.blob.exception;
 
 /**
- * Exception to wrap all blob store specific errors
+ * Base Exception for all blob store specific errors
  *
  * @author joseross
  * @since 3.1.12

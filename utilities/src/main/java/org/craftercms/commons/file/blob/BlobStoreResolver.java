@@ -34,6 +34,6 @@ public interface BlobStoreResolver {
      * @param storeId the id
      * @return the blob store
      */
-    BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException, IOException;
+    BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException;
 
 }
