@@ -21,8 +21,9 @@ import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.ConfigurationProvider;
 import org.craftercms.commons.config.ConfigurationResolver;
 import org.craftercms.commons.file.blob.BlobStore;
-import org.craftercms.commons.file.blob.BlobStoreException;
+import org.craftercms.commons.file.blob.exception.BlobStoreConfigurationMissingException;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
+import org.craftercms.commons.file.blob.exception.BlobStoreMissingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -82,10 +83,9 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
         this.configurationResolver = configurationResolver;
     }
 
-    protected String findStoreId(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate)
-            throws ConfigurationException {
+    protected String findStoreId(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate) {
         if (config == null || config.isEmpty()) {
-            throw new ConfigurationException("No blob store configuration found");
+            throw new BlobStoreConfigurationMissingException("No blob store configuration found");
         }
         Optional<HierarchicalConfiguration> storeConfig =
                 config.configurationsAt(CONFIG_KEY_STORE).stream().filter(predicate).findFirst();
@@ -99,7 +99,7 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
     protected BlobStore findStore(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate)
             throws ConfigurationException {
         if (config == null || config.isEmpty()) {
-            throw new ConfigurationException("No blob store configuration found");
+            throw new BlobStoreConfigurationMissingException("No blob store configuration found");
         }
         Optional<HierarchicalConfiguration> storeConfig =
                 config.configurationsAt(CONFIG_KEY_STORE).stream().filter(predicate).findFirst();
@@ -111,7 +111,7 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
                 instance.init(store);
                 return instance;
             } catch (NoSuchBeanDefinitionException e) {
-                throw new BlobStoreException(
+                throw new BlobStoreMissingException(
                         format("No blob store found with id '%s'", store.getString(CONFIG_KEY_ID)));
             }
         }
