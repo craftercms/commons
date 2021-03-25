@@ -25,6 +25,8 @@ import org.craftercms.commons.exceptions.DateParseException;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.InitializingBean;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 /**
  * Converts String to Date, with a custom pattern and time zone.
  *
@@ -61,6 +63,9 @@ public class StringToDateConverter implements Converter<String, Date>, Initializ
 
     @Override
     public Date convert(String source) {
+        if (isEmpty(source)) {
+            return null;
+        }
         try {
             return dateFormat.parse(source);
         } catch (ParseException e) {
