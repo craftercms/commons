@@ -83,7 +83,7 @@
         <slf4j.version>1.7.7</slf4j.version>
         <servlet.api.version>3.0.1</servlet.api.version>
         <javax.mail.version>1.4.7</javax.mail.version>
-        <freemarker.version>2.3.23</freemarker.version>
+        <freemarker.version>2.3.31</freemarker.version>
         <jackson.version>2.10.5</jackson.version>
         <jackson.databind.version>2.10.5</jackson.databind.version>
         <mongo.version>3.5.0</mongo.version>
