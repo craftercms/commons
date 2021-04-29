@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import static java.util.Collections.emptyList;
 import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 
@@ -107,6 +108,11 @@ public class Plugin {
      * The parameters supported by the plugin
      */
     protected List<Parameter> parameters;
+
+    /**
+     * List of installations to perform for the plugin
+     */
+    protected List<Installation> installation = emptyList();
 
     public String getType() {
         return type;
@@ -226,6 +232,14 @@ public class Plugin {
 
     public void setParameters(final List<Parameter> parameters) {
         this.parameters = parameters;
+    }
+
+    public List<Installation> getInstallation() {
+        return installation;
+    }
+
+    public void setInstallation(List<Installation> installation) {
+        this.installation = installation;
     }
 
     @Override
