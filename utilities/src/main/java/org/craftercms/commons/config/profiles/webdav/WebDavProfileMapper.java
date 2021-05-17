@@ -21,6 +21,8 @@ import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.ConfigurationResolver;
 import org.craftercms.commons.config.profiles.AbstractProfileConfigMapper;
 
+import java.beans.ConstructorProperties;
+
 import static org.craftercms.commons.config.ConfigUtils.*;
 
 /**
@@ -38,6 +40,7 @@ public class WebDavProfileMapper extends AbstractProfileConfigMapper<WebDavProfi
     private static final String CONFIG_KEY_PASSWORD = "password";
     private static final String CONFIG_KEY_PREEMPTIVE_AUTH = "preemptiveAuth";
 
+    @ConstructorProperties({"configurationResolver"})
     public WebDavProfileMapper(ConfigurationResolver configurationResolver) {
         super(CONFIG_KEY_WEBDAV, configurationResolver);
     }

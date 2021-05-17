@@ -15,6 +15,8 @@
  */
 package org.craftercms.commons.config;
 
+import java.beans.ConstructorProperties;
+
 /**
  * Implementation of {@link PublishingTargetResolver} that always returns the configured target
  *
@@ -28,6 +30,7 @@ public class FixedPublishingTargetResolver implements PublishingTargetResolver {
      */
     protected String target;
 
+    @ConstructorProperties({"target"})
     public FixedPublishingTargetResolver(String target) {
         this.target = target;
     }

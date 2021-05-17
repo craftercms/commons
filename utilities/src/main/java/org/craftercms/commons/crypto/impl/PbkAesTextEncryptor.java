@@ -15,6 +15,7 @@
  */
 package org.craftercms.commons.crypto.impl;
 
+import java.beans.ConstructorProperties;
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.spec.KeySpec;
@@ -58,6 +59,7 @@ public class PbkAesTextEncryptor implements TextEncryptor {
         }
     }
 
+    @ConstructorProperties({"password", "salt"})
     public PbkAesTextEncryptor(String password, String salt) throws CryptoException {
         actualTextEncryptor = new AesTextEncryptor(generateKey(password, salt.getBytes(UTF_8)));
         if (Base64.isBase64(salt)) {

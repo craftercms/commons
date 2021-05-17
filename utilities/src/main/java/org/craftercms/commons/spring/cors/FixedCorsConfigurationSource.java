@@ -20,6 +20,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.beans.ConstructorProperties;
+
 import static java.util.Arrays.asList;
 
 /**
@@ -32,6 +34,8 @@ public class FixedCorsConfigurationSource implements CorsConfigurationSource {
 
     protected CorsConfiguration config;
 
+    @ConstructorProperties({"disableCORS", "allowOrigins", "allowMethods", "maxAge", "allowHeaders",
+            "allowCredentials"})
     public FixedCorsConfigurationSource(boolean disableCORS, String allowOrigins, String allowMethods, String maxAge,
                                         String allowHeaders, boolean allowCredentials) {
         if (!disableCORS) {

@@ -16,6 +16,7 @@
 package org.craftercms.commons.web;
 
 import javax.servlet.http.HttpServletRequest;
+import java.beans.ConstructorProperties;
 
 /**
  * Extension of {@link org.springframework.web.filter.ForwardedHeaderFilter} that can be disabled via configuration
@@ -27,6 +28,7 @@ public class ForwardedHeaderFilter extends org.springframework.web.filter.Forwar
 
     protected boolean enabled;
 
+    @ConstructorProperties({"enabled"})
     public ForwardedHeaderFilter(boolean enabled) {
         this.enabled = enabled;
     }

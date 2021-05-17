@@ -20,6 +20,7 @@ import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SandboxInterceptor;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.core.io.Resource;
 
+import java.beans.ConstructorProperties;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -41,6 +42,7 @@ public class SandboxInterceptorFactory extends AbstractFactoryBean<SandboxInterc
      */
     protected Resource blacklist;
 
+    @ConstructorProperties({"sandboxEnabled", "blacklist"})
     public SandboxInterceptorFactory(boolean sandboxEnabled, Resource blacklist) {
         this.sandboxEnabled = sandboxEnabled;
         this.blacklist = blacklist;
