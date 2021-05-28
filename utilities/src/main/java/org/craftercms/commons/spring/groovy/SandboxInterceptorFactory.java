@@ -17,6 +17,7 @@ package org.craftercms.commons.spring.groovy;
 
 import org.jenkinsci.plugins.scriptsecurity.sandbox.blacklists.Blacklist;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SandboxInterceptor;
+import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.PermitAllWhitelist;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.core.io.Resource;
 
@@ -38,13 +39,19 @@ public class SandboxInterceptorFactory extends AbstractFactoryBean<SandboxInterc
     protected boolean sandboxEnabled;
 
     /**
+     * Indicates if the blacklist should be enabled
+     */
+    protected final boolean blacklistEnabled;
+
+    /**
      * Resource containing the restrictions
      */
     protected Resource blacklist;
 
-    @ConstructorProperties({"sandboxEnabled", "blacklist"})
-    public SandboxInterceptorFactory(boolean sandboxEnabled, Resource blacklist) {
+    @ConstructorProperties({"sandboxEnabled", "blacklistEnabled", "blacklist"})
+    public SandboxInterceptorFactory(boolean sandboxEnabled, boolean blacklistEnabled, Resource blacklist) {
         this.sandboxEnabled = sandboxEnabled;
+        this.blacklistEnabled = blacklistEnabled;
         this.blacklist = blacklist;
     }
 
@@ -55,10 +62,12 @@ public class SandboxInterceptorFactory extends AbstractFactoryBean<SandboxInterc
 
     @Override
     protected SandboxInterceptor createInstance() throws Exception {
-        if (sandboxEnabled) {
+        if (sandboxEnabled && blacklistEnabled) {
             try (InputStream is = blacklist.getInputStream()) {
                 return new SandboxInterceptor(new Blacklist(new InputStreamReader(is)));
             }
+        } else if(sandboxEnabled) {
+            return new SandboxInterceptor(new PermitAllWhitelist());
         } else {
             return null;
         }
