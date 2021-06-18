@@ -56,12 +56,13 @@ public class S3Profile extends AbstractAwsProfile {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         S3Profile s3Profile = (S3Profile) o;
-        return Objects.equals(bucketName, s3Profile.bucketName);
+        return pathStyleAccessEnabled == s3Profile.pathStyleAccessEnabled &&
+               Objects.equals(bucketName, s3Profile.bucketName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), bucketName);
+        return Objects.hash(super.hashCode(), bucketName, pathStyleAccessEnabled);
     }
 
     @Override
@@ -71,6 +72,7 @@ public class S3Profile extends AbstractAwsProfile {
                ", region='" + region + '\'' +
                ", endpoint='" + endpoint + '\'' +
                ", bucketName='" + bucketName + '\'' +
+               ", pathStyleAccessEnabled=" + pathStyleAccessEnabled +
                '}';
     }
 
