@@ -15,9 +15,8 @@
  */
 package org.craftercms.commons.config.profiles.aws;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.auth.*;
+import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.config.profiles.ConfigurationProfile;
 
 import java.util.Objects;
@@ -30,11 +29,6 @@ import java.util.Objects;
 public abstract class AbstractAwsProfile extends ConfigurationProfile {
 
     /**
-     * Provides the credentials to authenticate in AWS services.
-     */
-    protected AWSCredentialsProvider credentialsProvider = new DefaultAWSCredentialsProviderChain();
-
-    /**
      * Region to use in AWS services.
      */
     protected String region;
@@ -44,13 +38,15 @@ public abstract class AbstractAwsProfile extends ConfigurationProfile {
      */
     protected String endpoint;
 
-    public AWSCredentialsProvider getCredentialsProvider() {
-        return credentialsProvider;
-    }
+    /**
+     * The AWS access key (if using static credentials)
+     */
+    protected String accessKey;
 
-    public void setCredentialsProvider(final AWSCredentialsProvider credentialsProvider) {
-        this.credentialsProvider = credentialsProvider;
-    }
+    /**
+     * The AWS secret key (if using static credentials)
+     */
+    protected String secretKey;
 
     public String getRegion() {
         return region;
@@ -68,6 +64,30 @@ public abstract class AbstractAwsProfile extends ConfigurationProfile {
         this.endpoint = endpoint;
     }
 
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public AWSCredentialsProvider getCredentialsProvider() {
+        if (StringUtils.isNotEmpty(accessKey) && StringUtils.isNotEmpty(secretKey)) {
+            return new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey));
+        } else {
+            return DefaultAWSCredentialsProviderChain.getInstance();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,29 +96,13 @@ public abstract class AbstractAwsProfile extends ConfigurationProfile {
         AbstractAwsProfile that = (AbstractAwsProfile) o;
         return Objects.equals(region, that.region) &&
                Objects.equals(endpoint, that.endpoint) &&
-               areCredentialsEqual(that);
+               Objects.equals(accessKey, that.accessKey) &&
+               Objects.equals(secretKey, that.secretKey);
     }
 
     @Override
     public int hashCode() {
-        String accessKey = credentialsProvider.getCredentials().getAWSAccessKeyId();
-        String secretKey = credentialsProvider.getCredentials().getAWSSecretKey();
-
         return Objects.hash(super.hashCode(), region, endpoint, accessKey, secretKey);
-    }
-
-    protected boolean areCredentialsEqual(AbstractAwsProfile that) {
-        AWSCredentials thisCredentials = credentialsProvider.getCredentials();
-        AWSCredentials thatCredentials = that.credentialsProvider.getCredentials();
-
-        if (thisCredentials == thatCredentials) {
-            return true;
-        }
-
-        return thisCredentials != null && thatCredentials != null &&
-               thisCredentials.getClass() == thatCredentials.getClass() &&
-               thisCredentials.getAWSAccessKeyId().equals(thatCredentials.getAWSAccessKeyId()) &&
-               thisCredentials.getAWSSecretKey().equals(thatCredentials.getAWSSecretKey());
     }
 
 }
