@@ -46,12 +46,13 @@ public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> ext
     @SuppressWarnings("unchecked")
     protected T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException {
         AbstractAwsProfile profile = createProfile();
-        if (profileConfig.containsKey(CONFIG_KEY_ACCESS_KEY) && profileConfig.containsKey(CONFIG_KEY_SECRET_KEY)) {
-            String accessKey = getStringProperty(profileConfig, CONFIG_KEY_ACCESS_KEY);
-            String secretKey = getStringProperty(profileConfig, CONFIG_KEY_SECRET_KEY);
 
-            profile.setCredentialsProvider(
-                    new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)));
+        if (profileConfig.containsKey(CONFIG_KEY_ACCESS_KEY)) {
+            profile.setAccessKey(getStringProperty(profileConfig, CONFIG_KEY_ACCESS_KEY));
+        }
+
+        if (profileConfig.containsKey(CONFIG_KEY_SECRET_KEY)) {
+            profile.setSecretKey(getStringProperty(profileConfig, CONFIG_KEY_SECRET_KEY));
         }
 
         if (profileConfig.containsKey(CONFIG_KEY_REGION)) {
