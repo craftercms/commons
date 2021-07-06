@@ -36,7 +36,11 @@ public class StringToLongConverter implements Converter<String, Long> {
 
     @Override
     public Long convert(String source) {
-        return Long.valueOf(source);
+        try {
+            return Long.valueOf(source);
+        } catch (NullPointerException | NumberFormatException e) {
+            return null;
+        }
     }
 
 }
