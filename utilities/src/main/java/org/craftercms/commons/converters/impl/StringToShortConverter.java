@@ -36,7 +36,11 @@ public class StringToShortConverter implements Converter<String, Short> {
 
     @Override
     public Short convert(String source) {
-        return Short.valueOf(source);
+        try {
+            return Short.valueOf(source);
+        } catch (NullPointerException | NumberFormatException e) {
+            return null;
+        }
     }
 
 }

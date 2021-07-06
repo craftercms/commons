@@ -36,7 +36,11 @@ public class StringToFloatConverter implements Converter<String, Float> {
 
     @Override
     public Float convert(String source) {
-        return Float.valueOf(source);
+        try {
+            return Float.valueOf(source);
+        } catch (NullPointerException | NumberFormatException e) {
+            return null;
+        }
     }
 
 }

@@ -36,7 +36,11 @@ public class StringToIntegerConverter implements Converter<String, Integer> {
 
     @Override
     public Integer convert(String source) {
-        return Integer.valueOf(source);
+        try {
+            return Integer.valueOf(source);
+        } catch (NullPointerException | NumberFormatException e) {
+            return null;
+        }
     }
 
 }
