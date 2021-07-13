@@ -15,6 +15,7 @@
  */
 package org.craftercms.commons.rest;
 
+import java.beans.ConstructorProperties;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +54,7 @@ public class HttpMessageConvertingResponseWriter {
     protected List<HttpMessageConverter<?>> messageConverters;
     protected List<MediaType> allSupportedMediaTypes;
 
+    @ConstructorProperties({"contentNegotiationManager", "messageConverters"})
     public HttpMessageConvertingResponseWriter(ContentNegotiationManager contentNegotiationManager,
                                                List<HttpMessageConverter<?>> messageConverters) {
         this.contentNegotiationManager = contentNegotiationManager;
