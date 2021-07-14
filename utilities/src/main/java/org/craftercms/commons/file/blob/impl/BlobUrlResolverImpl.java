@@ -18,6 +18,8 @@ package org.craftercms.commons.file.blob.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.file.blob.BlobUrlResolver;
 
+import java.beans.ConstructorProperties;
+
 /**
  * Default implementation of {@link BlobUrlResolver}
  *
@@ -31,6 +33,7 @@ public class BlobUrlResolverImpl implements BlobUrlResolver {
      */
     protected String fileExtension;
 
+    @ConstructorProperties({"fileExtension"})
     public BlobUrlResolverImpl(String fileExtension) {
         this.fileExtension = fileExtension;
     }

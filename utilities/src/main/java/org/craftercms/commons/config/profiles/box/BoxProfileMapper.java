@@ -22,6 +22,7 @@ import org.craftercms.commons.config.ConfigurationResolver;
 import org.craftercms.commons.config.profiles.AbstractProfileConfigMapper;
 import org.craftercms.commons.config.ConfigurationException;
 
+import java.beans.ConstructorProperties;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,6 +48,7 @@ public class BoxProfileMapper extends AbstractProfileConfigMapper<BoxProfile> {
     private static final String KEY_PRIVATE_KEY = "privateKey";
     private static final String KEY_UPLOAD_FOLDER = "uploadFolder";
 
+    @ConstructorProperties({"configurationResolver"})
     public BoxProfileMapper(ConfigurationResolver configurationResolver) {
         super(KEY_BOX, configurationResolver);
     }

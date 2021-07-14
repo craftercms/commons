@@ -16,6 +16,7 @@
 
 package org.craftercms.commons.config;
 
+import java.beans.ConstructorProperties;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -48,6 +49,7 @@ public class EncryptionAwareConfigurationReader {
 
     protected Map<String, Lookup> prefixLookups;
 
+    @ConstructorProperties({"textEncryptor"})
     public EncryptionAwareConfigurationReader(TextEncryptor textEncryptor) {
         this.textEncryptor = textEncryptor;
 

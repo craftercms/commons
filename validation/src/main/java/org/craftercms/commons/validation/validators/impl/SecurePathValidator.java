@@ -15,11 +15,14 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
+import java.beans.ConstructorProperties;
+
 public class SecurePathValidator extends StringValidator {
 
     public static final String[] DEFAULT_BLACKLISTED_REGEXES =
             {"^[^:\\/]+:", "^(\\.+|~)$", "^(\\.+|~)[\\/]", "[\\/](\\.+|~)$", "[\\/](\\.+|~)[\\/]"};
 
+    @ConstructorProperties({"targetKey"})
     public SecurePathValidator(String targetKey) {
         super(targetKey);
 
