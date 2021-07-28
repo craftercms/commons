@@ -114,8 +114,9 @@ public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationCont
                 throw new BlobStoreMissingException(
                         format("No blob store found with id '%s'", store.getString(CONFIG_KEY_ID)));
             }
+        } else {
+            throw new BlobStoreMissingException("Blob store not found in the configuration file");
         }
-        return null;
     }
 
     protected HierarchicalConfiguration getConfiguration(ConfigurationProvider provider) throws ConfigurationException {
