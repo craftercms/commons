@@ -68,7 +68,7 @@ public class EncryptionAwareConfigurationReader {
 
     public HierarchicalConfiguration<?> readXmlConfiguration(InputStream inputStream)
         throws ConfigurationException {
-        return ConfigUtils.readXmlConfiguration(inputStream, prefixLookups);
+        return ConfigUtils.readXmlConfiguration(inputStream, ',', prefixLookups);
     }
 
     public HierarchicalConfiguration<?> readXmlConfiguration(Resource resource) throws ConfigurationException {

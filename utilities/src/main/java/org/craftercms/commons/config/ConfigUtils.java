@@ -55,9 +55,10 @@ public class ConfigUtils {
      * @throws ConfigurationException if an error occurs while reading the configuration
      */
     public static HierarchicalConfiguration<ImmutableNode> readXmlConfiguration(InputStream input,
+                                                                                char listDelimiter,
                                                                                 Map<String, Lookup> prefixLookups)
             throws ConfigurationException {
-        return readXmlConfiguration(input, prefixLookups, null);
+        return readXmlConfiguration(input, listDelimiter, prefixLookups, null);
     }
 
     /**
@@ -71,6 +72,7 @@ public class ConfigUtils {
      * @throws ConfigurationException if an error occurs while reading the configuration
      */
     public static HierarchicalConfiguration<ImmutableNode> readXmlConfiguration(InputStream input,
+                                                                                char listDelimiter,
                                                                                 Map<String, Lookup> prefixLookups,
                                                                                 String fileEncoding)
             throws ConfigurationException {
@@ -84,6 +86,8 @@ public class ConfigUtils {
             if (MapUtils.isNotEmpty(prefixLookups)) {
                 xmlParams = xmlParams.setPrefixLookups(prefixLookups);
             }
+
+            xmlParams.setListDelimiterHandler(new DefaultListDelimiterHandler(listDelimiter));
 
             builder.configure(xmlParams);
             XMLConfiguration config = builder.getConfiguration();
@@ -421,7 +425,6 @@ public class ConfigUtils {
      * @return the sub-configurations, or null if not found
      * @throws ConfigurationException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<HierarchicalConfiguration<ImmutableNode>> getConfigurationsAt(
             HierarchicalConfiguration<ImmutableNode> config, String key) throws ConfigurationException {
         try {
@@ -441,7 +444,6 @@ public class ConfigUtils {
      * @throws MissingConfigurationException if the sub-configurations are missing from the configuration
      * @throws ConfigurationException        if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<HierarchicalConfiguration<ImmutableNode>> getRequiredConfigurationsAt(
             HierarchicalConfiguration<ImmutableNode> config, String key) throws ConfigurationException {
         List<HierarchicalConfiguration<ImmutableNode>> configs = getConfigurationsAt(config, key);
