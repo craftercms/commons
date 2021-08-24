@@ -114,6 +114,11 @@ public class Plugin {
      */
     protected List<Installation> installation = emptyList();
 
+    /**
+     * The URL for the documentation
+     */
+    protected String documentation;
+
     public String getType() {
         return type;
     }
@@ -240,6 +245,14 @@ public class Plugin {
 
     public void setInstallation(List<Installation> installation) {
         this.installation = installation;
+    }
+
+    public String getDocumentation() {
+        return documentation;
+    }
+
+    public void setDocumentation(String documentation) {
+        this.documentation = documentation;
     }
 
     @Override
