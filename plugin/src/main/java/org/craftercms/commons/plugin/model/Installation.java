@@ -34,9 +34,14 @@ public class Installation {
     protected String type;
 
     /**
-     * The parent in the configuration file
+     * XPath selector for the parent node
      */
-    protected Parent parent;
+    protected String parentXpath = "null";
+
+    /**
+     * XPath selector to check if the wiring has already been done
+     */
+    protected String testXpath = "null";
 
     /**
      * The new element to add in the configuration file
@@ -51,12 +56,20 @@ public class Installation {
         this.type = type;
     }
 
-    public Parent getParent() {
-        return parent;
+    public String getParentXpath() {
+        return parentXpath;
     }
 
-    public void setParent(Parent parent) {
-        this.parent = parent;
+    public void setParentXpath(String parentXpath) {
+        this.parentXpath = parentXpath;
+    }
+
+    public String getTestXpath() {
+        return testXpath;
+    }
+
+    public void setTestXpath(String testXpath) {
+        this.testXpath = testXpath;
     }
 
     public Element getElement() {
@@ -65,39 +78,6 @@ public class Installation {
 
     public void setElement(Element element) {
         this.element = element;
-    }
-
-    /**
-     * Holds the data to locate the parent in the configuration file
-     */
-    public static class Parent {
-
-        /**
-         * The id of the parent widget, optional
-         */
-        protected String id = "null";
-
-        /**
-         * The xpath of the parent element, optional
-         */
-        protected String xpath = "null";
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getXpath() {
-            return xpath;
-        }
-
-        public void setXpath(String xpath) {
-            this.xpath = xpath;
-        }
-
     }
 
     /**
