@@ -31,7 +31,9 @@ public interface SearchEngines {
 
     /**
      * Crafter Search with Apache Solr
+     * @deprecated since 4.0.0
      */
+    @Deprecated(since = "4.0.0")
     String CRAFTER_SEARCH = "CrafterSearch";
 
 }
