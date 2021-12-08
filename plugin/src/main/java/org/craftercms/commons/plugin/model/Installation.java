@@ -41,7 +41,7 @@ public class Installation {
     /**
      * XPath selector to check if the wiring has already been done
      */
-    protected String testXpath = "null";
+    protected String elementXpath;
 
     /**
      * The new element to add in the configuration file
@@ -64,12 +64,12 @@ public class Installation {
         this.parentXpath = parentXpath;
     }
 
-    public String getTestXpath() {
-        return testXpath;
+    public String getElementXpath() {
+        return elementXpath;
     }
 
-    public void setTestXpath(String testXpath) {
-        this.testXpath = testXpath;
+    public void setElementXpath(String elementXpath) {
+        this.elementXpath = elementXpath;
     }
 
     public Element getElement() {

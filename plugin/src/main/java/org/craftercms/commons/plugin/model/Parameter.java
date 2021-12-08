@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Parameter {
 
-    public static String NAME_REGEX = "[a-z]+([A-Z][a-z0-9]+)+";
+    public static String NAME_REGEX = "[a-z]+([A-Z][a-z0-9]+)*";
 
     /**
      * The label to display for the parameter
