@@ -23,7 +23,7 @@
     <parent>
         <artifactId>crafter-commons</artifactId>
         <groupId>org.craftercms</groupId>
-        <version>3.1.17</version><!-- craftercms version flag -->
+        <version>3.1.17.3</version><!-- craftercms version flag -->
     </parent>
 
     <artifactId>crafter-commons-security</artifactId>
