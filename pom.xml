@@ -20,7 +20,7 @@
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-commons</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.17.3</version><!-- craftercms version flag -->
+    <version>3.1.17.4</version><!-- craftercms version flag -->
 
     <modules>
         <module>utilities</module>
