@@ -2,6 +2,7 @@
   <servers>
     <server>
       <id>sonatype-nexus-snapshots</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
       <username>${env.CI_DEPLOY_USERNAME}</username>
       <password>${env.CI_DEPLOY_PASSWORD}</password>
     </server>
