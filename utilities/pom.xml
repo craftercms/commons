@@ -182,7 +182,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>${aws.sdk.version}</version>
+            <version>${aws.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
