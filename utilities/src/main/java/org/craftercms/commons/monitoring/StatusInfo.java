@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  * @author Carlos Ortiz
  * @author Jose Ross
  */
-public final class StatusInfo {
+public class StatusInfo {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.of("UTC"));
 
