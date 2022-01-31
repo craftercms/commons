@@ -31,16 +31,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class StatusInfo {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.of("UTC"));
+    protected static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.of("UTC"));
 
-    private long uptime;
+    protected long uptime;
 
-    private String startup;
+    protected String startup;
 
     /**
      * Create the StatusInfo with current information.
      */
-    private StatusInfo() {
+    protected StatusInfo() {
         RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
         startup = FORMATTER.format(Instant.ofEpochMilli(runtime.getStartTime()));
         uptime = TimeUnit.MILLISECONDS.toSeconds(runtime.getUptime());
