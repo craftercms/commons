@@ -30,6 +30,6 @@ public interface GitAuthenticationConfigurator {
      *
      * @param command the command to configure
      */
-    void configureAuthentication(TransportCommand command);
+    void configureAuthentication(TransportCommand<?, ?> command);
 
 }

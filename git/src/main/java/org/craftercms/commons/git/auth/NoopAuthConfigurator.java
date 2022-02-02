@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -16,26 +16,18 @@
 package org.craftercms.commons.git.auth;
 
 import org.eclipse.jgit.api.TransportCommand;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 /**
- * {@link GitAuthenticationConfigurator} that uses basic username/password authentication.
+ * Implementation of {@link GitAuthenticationConfigurator} that doesn't perform any action
  *
- * @author avasquez
+ * @author joseross
+ * @since 4.0.0
  */
-public class BasicUsernamePasswordAuthConfigurator implements GitAuthenticationConfigurator {
-
-    private final String username;
-    private final String password;
-
-    public BasicUsernamePasswordAuthConfigurator(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+public class NoopAuthConfigurator implements GitAuthenticationConfigurator {
 
     @Override
     public void configureAuthentication(TransportCommand<?, ?> command) {
-        command.setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password));
+        // Do nothing
     }
 
 }
