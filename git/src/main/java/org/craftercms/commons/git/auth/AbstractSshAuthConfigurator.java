@@ -15,13 +15,11 @@
  */
 package org.craftercms.commons.git.auth;
 
-import com.jcraft.jsch.HostKey;
-import com.jcraft.jsch.Session;
-
 import org.eclipse.jgit.api.TransportCommand;
 import org.eclipse.jgit.transport.SshSessionFactory;
 import org.eclipse.jgit.transport.SshTransport;
-import org.eclipse.jgit.transport.ssh.jsch.OpenSshConfig;
+
+import java.io.File;
 
 /**
  * {@link GitAuthenticationConfigurator} that configures the {@code TransportCommand} to use SSH, but without providing
@@ -31,28 +29,17 @@ import org.eclipse.jgit.transport.ssh.jsch.OpenSshConfig;
  */
 public abstract class AbstractSshAuthConfigurator implements GitAuthenticationConfigurator {
 
-    public static final String KEY_TYPE_CONFIG = "server_host_key";
+    protected final File sshConfig;
+
+    public AbstractSshAuthConfigurator(File sshConfig) {
+        this.sshConfig = sshConfig;
+    }
 
     @Override
-    public void configureAuthentication(TransportCommand command) {
+    public void configureAuthentication(TransportCommand<?,?> command) {
         SshSessionFactory sessionFactory = createSessionFactory();
 
         command.setTransportConfigCallback(transport -> ((SshTransport) transport).setSshSessionFactory(sessionFactory));
-    }
-
-    /*
-     * Iterates through the known hosts (host key repository).
-     * If one of the know hosts matches the current host we're trying to connect too,
-     * it configures the session to use that key's algorithm
-     * (thus avoiding conflicts between JSch wanting RSA and the key being ECDSA)
-     */
-    protected void setHostKeyType(OpenSshConfig.Host host, Session session) {
-        HostKey[] hostKeys = session.getHostKeyRepository().getHostKey();
-        for(HostKey hostKey : hostKeys) {
-            if(hostKey.getHost().contains(host.getHostName())) {
-                session.setConfig(KEY_TYPE_CONFIG, hostKey.getType());
-            }
-        }
     }
 
     protected abstract SshSessionFactory createSessionFactory();
