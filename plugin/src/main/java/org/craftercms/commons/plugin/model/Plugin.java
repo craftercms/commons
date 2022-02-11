@@ -80,11 +80,6 @@ public class Plugin {
     protected Developer developer;
 
     /**
-     * The build information of the plugin
-     */
-    protected Build build;
-
-    /**
      * The license of the plugin
      */
     protected Link license;
@@ -191,14 +186,6 @@ public class Plugin {
         this.developer = developer;
     }
 
-    public Build getBuild() {
-        return build;
-    }
-
-    public void setBuild(Build build) {
-        this.build = build;
-    }
-
     public Link getLicense() {
         return license;
     }
@@ -269,7 +256,7 @@ public class Plugin {
             Objects.equals(version, plugin.version) &&
             Objects.equals(description, plugin.description) && Objects.equals(website, plugin.website) &&
             Objects.equals(media, plugin.media) && Objects.equals(developer, plugin.developer) &&
-            Objects.equals(build, plugin.build) && Objects.equals(license, plugin.license) &&
+            Objects.equals(license, plugin.license) &&
             isEqualCollection(emptyIfNull(crafterCmsEditions), emptyIfNull(plugin.crafterCmsEditions)) &&
             isEqualCollection(emptyIfNull(crafterCmsVersions), emptyIfNull(plugin.crafterCmsVersions)) &&
             Objects.equals(searchEngine, plugin.searchEngine) &&
@@ -278,7 +265,7 @@ public class Plugin {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, id, name, tags, version, description, website, media, developer, build, license,
+        return Objects.hash(type, id, name, tags, version, description, website, media, developer, license,
             crafterCmsEditions, crafterCmsVersions, searchEngine, parameters);
     }
 
@@ -286,7 +273,7 @@ public class Plugin {
     public String toString() {
         return "Plugin{" + "type='" + type + '\'' + ", id='" + id + '\'' + ", name='" + name + '\'' + ", tags=" +
             tags + ", version=" + version + ", description='" + description + '\'' + ", website=" + website +
-            ", media=" + media + ", developer=" + developer + ", build=" + build + ", license=" + license +
+            ", media=" + media + ", developer=" + developer + ", license=" + license +
             ", crafterCmsEditions=" + crafterCmsEditions + ", crafterCmsVersions=" + crafterCmsVersions +
             ", searchEngine='" + searchEngine + '\'' + ", parameters=" + parameters + '}';
     }
