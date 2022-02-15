@@ -4,4 +4,4 @@ This is a test email.
 
 Thanks,
 
-Crafter Software Team
+CrafterCMS Team
