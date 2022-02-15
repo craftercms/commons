@@ -85,12 +85,12 @@ public class Plugin {
     protected Link license;
 
     /**
-     * The supported Crafter CMS editions of the plugin
+     * The supported CrafterCMS editions of the plugin
      */
     protected List<String> crafterCmsEditions;
 
     /**
-     * The supported Crafter CMS versions of the plugin
+     * The supported CrafterCMS versions of the plugin
      */
     protected List<Version> crafterCmsVersions;
 

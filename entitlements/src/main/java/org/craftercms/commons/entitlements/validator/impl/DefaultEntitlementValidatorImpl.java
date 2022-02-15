@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -43,7 +43,7 @@ public class DefaultEntitlementValidatorImpl implements EntitlementValidator, In
         + "D0iX2JsYW5rIj5DcmFmdGVyIE5ld3M8L2E+Lg==";
 
     public void afterPropertiesSet() {
-        logger.info("Using Crafter CMS Community Edition");
+        logger.info("Using CrafterCMS Community Edition");
     }
 
     @Override

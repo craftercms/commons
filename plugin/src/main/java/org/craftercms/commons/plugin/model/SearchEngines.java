@@ -17,7 +17,7 @@
 package org.craftercms.commons.plugin.model;
 
 /**
- * All available search engines for Crafter CMS
+ * All available search engines for CrafterCMS
  *
  * @author joseross
  * @since 3.1.1

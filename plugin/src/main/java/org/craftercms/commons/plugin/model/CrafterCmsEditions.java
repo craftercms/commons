@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -17,7 +17,7 @@
 package org.craftercms.commons.plugin.model;
 
 /**
- * All available editions of Crafter CMS
+ * All available editions of CrafterCMS
  *
  * @author joseross
  * @since 3.1.1
