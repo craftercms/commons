@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public Link as published by
@@ -72,7 +72,7 @@ public class PluginDescriptorReaderImplTest {
             assertEquals(3, plugin.getCrafterCmsVersions().get(0).getMajor());
             assertEquals(2, plugin.getCrafterCmsEditions().size());
             assertEquals(6, plugin.getMedia().getScreenshots().size());
-            assertEquals("Crafter Software", plugin.getDeveloper().getCompany().getName());
+            assertEquals("CrafterCMS", plugin.getDeveloper().getCompany().getName());
         }
     }
 
