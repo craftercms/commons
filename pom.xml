@@ -20,7 +20,7 @@
     <groupId>org.craftercms</groupId>
     <artifactId>crafter-commons</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.19-SNAPSHOT</version><!-- craftercms version flag -->
+    <version>3.1.22-SNAPSHOT</version><!-- craftercms version flag -->
 
     <modules>
         <module>utilities</module>
@@ -84,8 +84,8 @@
         <servlet.api.version>3.0.1</servlet.api.version>
         <javax.mail.version>1.6.2</javax.mail.version>
         <freemarker.version>2.3.31</freemarker.version>
-        <jackson.version>2.10.5</jackson.version>
-        <jackson.databind.version>2.10.5</jackson.databind.version>
+        <jackson.version>2.13.1</jackson.version>
+        <jackson.databind.version>2.13.1</jackson.databind.version>
         <mongo.version>3.5.0</mongo.version>
         <jongo.version>1.4.0</jongo.version>
         <ehcache.version>2.10.9.2</ehcache.version>
