@@ -62,10 +62,14 @@ public class S3Resource implements RangeAwareResource {
         this.key = key;
     }
 
+    protected String getActualKey() {
+        return UrlUtils.concat(profile.getPrefix(), key);
+    }
+
     @Override
     public boolean exists() {
         try {
-            return getClient().doesObjectExist(getBucket(), key);
+            return getClient().doesObjectExist(getBucket(), getActualKey());
         } catch (Exception e) {
             logger.error("Error while checking if object " + getDescription() + " exists", e);
 
@@ -110,12 +114,12 @@ public class S3Resource implements RangeAwareResource {
 
     @Override
     public Resource createRelative(String relativePath) throws IOException {
-        return new S3Resource(clientFactory, profile, UrlUtils.concat(key, relativePath));
+        return new S3Resource(clientFactory, profile, UrlUtils.concat(getActualKey(), relativePath));
     }
 
     @Override
     public String getFilename() {
-        return FilenameUtils.getName(key);
+        return FilenameUtils.getName(getActualKey());
     }
 
     @Override
@@ -126,7 +130,7 @@ public class S3Resource implements RangeAwareResource {
     @Override
     public InputStream getInputStream() throws IOException {
         try {
-            return getClient().getObject(getBucket(), key).getObjectContent();
+            return getClient().getObject(getBucket(), getActualKey()).getObjectContent();
         } catch (AmazonServiceException e) {
             if (e.getStatusCode() == 404) {
                 throw new FileNotFoundException(getDescription() + " not found");
@@ -141,7 +145,7 @@ public class S3Resource implements RangeAwareResource {
     @Override
     public InputStream getInputStream(long start, long end) throws IOException {
         try {
-            return getClient().getObject(new GetObjectRequest(getBucket(), key).withRange(start, end))
+            return getClient().getObject(new GetObjectRequest(getBucket(), getActualKey()).withRange(start, end))
                               .getObjectContent();
         } catch (AmazonServiceException e) {
             if (e.getStatusCode() == 404) {
@@ -172,7 +176,7 @@ public class S3Resource implements RangeAwareResource {
 
     private ObjectMetadata getMetadata() throws IOException {
         try {
-            return getClient().getObjectMetadata(getBucket(), key);
+            return getClient().getObjectMetadata(getBucket(), getActualKey());
         } catch (AmazonServiceException e) {
             if (e.getStatusCode() == 404) {
                 throw new FileNotFoundException(getDescription() + " not found");

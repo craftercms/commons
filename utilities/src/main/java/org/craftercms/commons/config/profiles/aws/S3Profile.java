@@ -30,6 +30,11 @@ public class S3Profile extends AbstractAwsProfile {
     protected String bucketName;
 
     /**
+     * Optional prefix to prepend to all keys
+     */
+    protected String prefix;
+
+    /**
      * Indicates if path style access should be used for all request
      */
     protected boolean pathStyleAccessEnabled;
@@ -40,6 +45,14 @@ public class S3Profile extends AbstractAwsProfile {
 
     public void setBucketName(final String bucketName) {
         this.bucketName = bucketName;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
     public boolean isPathStyleAccessEnabled() {
@@ -57,12 +70,12 @@ public class S3Profile extends AbstractAwsProfile {
         if (!super.equals(o)) return false;
         S3Profile s3Profile = (S3Profile) o;
         return pathStyleAccessEnabled == s3Profile.pathStyleAccessEnabled &&
-               Objects.equals(bucketName, s3Profile.bucketName);
+               Objects.equals(bucketName, s3Profile.bucketName) && Objects.equals(prefix, s3Profile.prefix);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), bucketName, pathStyleAccessEnabled);
+        return Objects.hash(super.hashCode(), bucketName, prefix, pathStyleAccessEnabled);
     }
 
     @Override
@@ -72,6 +85,7 @@ public class S3Profile extends AbstractAwsProfile {
                ", region='" + region + '\'' +
                ", endpoint='" + endpoint + '\'' +
                ", bucketName='" + bucketName + '\'' +
+               ", prefix='" + prefix + '\'' +
                ", pathStyleAccessEnabled=" + pathStyleAccessEnabled +
                '}';
     }
