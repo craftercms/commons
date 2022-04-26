@@ -70,7 +70,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependency Version Numbers -->
-        <spring.version>4.3.18.RELEASE</spring.version>
+        <spring.version>4.3.29.RELEASE</spring.version>
         <commons.lang3.version>3.5</commons.lang3.version>
         <commons.collections4.version>4.1</commons.collections4.version>
         <commons.collections.version>3.2.2</commons.collections.version>
