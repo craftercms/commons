@@ -32,6 +32,7 @@ public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
 
     private static final String CONFIG_KEY_S3 = "s3";
     private static final String CONFIG_KEY_BUCKET = "bucketName";
+    private static final String CONFIG_KEY_PREFIX = "prefix";
     private static final String CONFIG_KEY_PATH_STYLE = "pathStyleAccess";
 
     public S3ProfileMapper(ConfigurationResolver configurationResolver) {
@@ -43,6 +44,7 @@ public class S3ProfileMapper extends AbstractAwsProfileMapper<S3Profile> {
             throws ConfigurationException {
         S3Profile profile = super.mapProfile(profileConfig);
         profile.setBucketName(getStringProperty(profileConfig, CONFIG_KEY_BUCKET));
+        profile.setPrefix(getStringProperty(profileConfig, CONFIG_KEY_PREFIX));
         profile.setPathStyleAccessEnabled(getBooleanProperty(profileConfig, CONFIG_KEY_PATH_STYLE, false));
 
         return profile;
