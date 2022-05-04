@@ -40,7 +40,7 @@ public class FixedCorsConfigurationSource implements CorsConfigurationSource {
                                         String allowHeaders, boolean allowCredentials) {
         if (!disableCORS) {
             config = new CorsConfiguration();
-            config.setAllowedOrigins(asList(allowOrigins.split(",")));
+            config.setAllowedOriginPatterns(asList(allowOrigins.split(",")));
             config.setAllowedMethods(asList(allowMethods.split(",")));
             config.setAllowedHeaders(asList(allowHeaders.split(",")));
             config.setMaxAge(Long.parseLong(maxAge));
