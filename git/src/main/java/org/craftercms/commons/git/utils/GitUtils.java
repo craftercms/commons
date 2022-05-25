@@ -77,9 +77,6 @@ public abstract class GitUtils {
     public static final int COMPRESSION_DEFAULT = 0;
     public static final boolean FILE_MODE_DEFAULT = false;
 
-    private GitUtils() {
-    }
-
     public static List<DiffEntry> doDiff(Git git, ObjectReader reader, ObjectId fromCommitId,
                                      ObjectId toCommitId) throws IOException, GitAPIException {
         AbstractTreeIterator fromTreeIter = getTreeIteratorForCommit(git, reader, fromCommitId);
@@ -159,19 +156,13 @@ public abstract class GitUtils {
         Git git = command.call();
         StoredConfig config = git.getRepository().getConfig();
 
-        if (StringUtils.isEmpty(bigFileThreshold)) {
-            bigFileThreshold = BIG_FILE_THRESHOLD_DEFAULT;
-        }
-        if (compression == null) {
-            compression = COMPRESSION_DEFAULT;
-        }
-        if (fileMode == null) {
-            fileMode = FILE_MODE_DEFAULT;
-        }
+        String bigFileTresholdOrDefault = StringUtils.isEmpty(bigFileThreshold) ? BIG_FILE_THRESHOLD_DEFAULT : bigFileThreshold;
+        Integer compressionOrDefault = compression == null ? COMPRESSION_DEFAULT : compression;
+        Boolean fileModeOrDefault = fileMode == null ? FILE_MODE_DEFAULT : fileMode;
 
-        config.setString(CORE_CONFIG_SECTION, null, BIG_FILE_THRESHOLD_CONFIG_PARAM, bigFileThreshold);
-        config.setInt(CORE_CONFIG_SECTION, null, COMPRESSION_CONFIG_PARAM, compression);
-        config.setBoolean(CORE_CONFIG_SECTION, null, FILE_MODE_CONFIG_PARAM, fileMode);
+        config.setString(CORE_CONFIG_SECTION, null, BIG_FILE_THRESHOLD_CONFIG_PARAM, bigFileTresholdOrDefault);
+        config.setInt(CORE_CONFIG_SECTION, null, COMPRESSION_CONFIG_PARAM, compressionOrDefault);
+        config.setBoolean(CORE_CONFIG_SECTION, null, FILE_MODE_CONFIG_PARAM, fileModeOrDefault);
         config.save();
 
         return git;
