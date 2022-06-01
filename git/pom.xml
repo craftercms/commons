@@ -72,13 +72,18 @@
             <artifactId>eddsa</artifactId>
             <version>${eddsa.version}</version>
         </dependency>
-            
+
         <!-- Commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons.lang3.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io.version}</version>
         </dependency>
 
         <!-- Logging -->
