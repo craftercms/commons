@@ -285,24 +285,51 @@ public abstract class GitUtils {
         }
     }
 
+    /**
+     * Check if a git repository is locked
+     *
+     * @param repoPath path to repository
+     * @return true if locked, false otherwise
+     */
     public static boolean isRepositoryLocked(String repoPath) {
         Path path = Paths.get(repoPath, GIT_FOLDER_NAME, GIT_LOCK_NAME);
         return Files.exists(path);
     }
 
+    /**
+     * Unlock a git repository by deleting the `.lock` file
+     *
+     * @param repoPath path to repository
+     *
+     * @throws IOException
+     */
     public static void unlock(String repoPath) throws IOException {
         deleteFile(Paths.get(repoPath, GIT_FOLDER_NAME, GIT_LOCK_NAME));
     }
 
+    /**
+     * Delete the git index for a given git repository (used to fix a broken repo)
+     *
+     * @param repoPath path to repository
+     *
+     * @throws IOException
+     */
     public static void deleteGitIndex(String repoPath) throws IOException {
         deleteFile(Paths.get(repoPath, GIT_FOLDER_NAME, GIT_INDEX_NAME));
     }
 
+    /**
+     * Force delete a file on disk
+     *
+     * @param file path to file
+     *
+     * @throws IOException
+     */
     protected static void deleteFile(Path file) throws IOException {
         try {
             Files.deleteIfExists(file);
         } catch (IOException e) {
-            logger.debug("Error deleting file {}, forcing delete", file, e);
+            logger.debug("Error deleting file '{}', forcing delete", file, e);
             FileUtils.forceDelete(file.toFile());
         }
     }
