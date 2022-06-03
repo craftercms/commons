@@ -304,7 +304,10 @@ public abstract class GitUtils {
      * @throws IOException
      */
     public static void unlock(String repoPath) throws IOException {
-        deleteFile(Paths.get(repoPath, GIT_FOLDER_NAME, GIT_LOCK_NAME));
+        Path path = Paths.get(repoPath, GIT_FOLDER_NAME, GIT_LOCK_NAME);
+        logger.warn("The repository '{}' is locked, trying to unlock it", repoPath);
+        deleteFile(path);
+        logger.info(".git/index.lock is deleted from repository '{}'", repoPath);
     }
 
     /**
