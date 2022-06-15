@@ -42,9 +42,9 @@ import static org.craftercms.commons.file.blob.BlobStore.CONFIG_KEY_ID;
 @SuppressWarnings("rawtypes, unchecked")
 public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationContextAware {
 
-    String CONFIG_KEY_STORE = "blobStore";
+    public final String CONFIG_KEY_STORE = "blobStore";
 
-    String CONFIG_KEY_TYPE = "type";
+    public final String CONFIG_KEY_TYPE = "type";
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
