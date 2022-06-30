@@ -66,6 +66,11 @@
 			<artifactId>javax.activation</artifactId>
 			<version>${javax.activation.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>${thumbnailator.version}</version>
+        </dependency>
 
         <!-- Logging -->
         <dependency>
