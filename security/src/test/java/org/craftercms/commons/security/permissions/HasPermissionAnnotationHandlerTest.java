@@ -31,12 +31,8 @@ import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
  * @author avasquez
@@ -139,7 +135,7 @@ public class HasPermissionAnnotationHandlerTest {
     }
 
     @Test
-    public void testManagementTokenValidToken() {
+    public void testManagementTokenValidToken() throws Throwable {
         RequestContext current = mock(RequestContext.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getParameter(TOKEN_PARAMETER)).thenReturn(VALID_TOKEN);
@@ -147,7 +143,7 @@ public class HasPermissionAnnotationHandlerTest {
         RequestContext.setCurrent(current);
 
         annotationHandler.setManagementToken(VALID_TOKEN);
-        service.doSomethingWithManagementToken();
+        assertNotNull(service.doSomethingWithManagementToken());
     }
 
     @Test(expected = PermissionException.class)
@@ -212,9 +208,9 @@ public class HasPermissionAnnotationHandlerTest {
 
         void doSomethingWrongPermissionType();
 
-        void doSomethingWithManagementToken();
+        String doSomethingWithManagementToken();
 
-        void doSomethingNoTokenAllowed();
+        String doSomethingNoTokenAllowed();
     }
 
     private static class MockSubjectResolver implements SubjectResolver<String> {
@@ -266,11 +262,13 @@ public class HasPermissionAnnotationHandlerTest {
         }
 
         @HasPermission(type = DefaultPermission.class, action = "forbidden", acceptManagementToken = false)
-        public void doSomethingNoTokenAllowed() {
+        public String doSomethingNoTokenAllowed() {
+            return "valid";
         }
 
         @HasPermission(type = DefaultPermission.class, action = "doSomething", acceptManagementToken = true)
-        public void doSomethingWithManagementToken() {
+        public String doSomethingWithManagementToken() {
+            return "valid";
         }
 
     }
