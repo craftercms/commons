@@ -41,4 +41,9 @@ public @interface HasPermission {
      */
     String action();
 
+    /**
+     * Indicates if the presence of a valid management token should grant access to the protected resource/action
+     */
+    boolean acceptManagementToken() default false;
+
 }
