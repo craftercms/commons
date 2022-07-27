@@ -18,6 +18,7 @@ package org.craftercms.commons.security.permissions;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.craftercms.commons.http.RequestContext;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.annotations.HasPermission;
@@ -28,18 +29,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import javax.servlet.http.HttpServletRequest;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
  * @author avasquez
  */
 @SuppressWarnings("unchecked")
 public class HasPermissionAnnotationHandlerTest {
+
+    private static final String TOKEN_PARAMETER = "token";
+    private static final String VALID_TOKEN = "THE_CONFIGURED_TOKEN";
+    private static final String WRONG_TOKEN = "THE_WRONG_TOKEN";
 
     private MockSubjectResolver subjectResolver;
     private HasPermissionAnnotationHandler annotationHandler;
@@ -114,6 +117,47 @@ public class HasPermissionAnnotationHandlerTest {
         }
     }
 
+    @Test(expected = PermissionException.class)
+    public void testManagementTokenWithNoToken() {
+        service.doSomethingWithManagementToken();
+    }
+
+    @Test(expected = PermissionException.class)
+    public void testManagementTokenWrongToken() {
+        RequestContext current = mock(RequestContext.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getParameter(TOKEN_PARAMETER)).thenReturn(WRONG_TOKEN);
+        when(current.getRequest()).thenReturn(request);
+        RequestContext.setCurrent(current);
+
+        annotationHandler.setManagementToken(VALID_TOKEN);
+        service.doSomethingWithManagementToken();
+    }
+
+    @Test
+    public void testManagementTokenValidToken() throws Throwable {
+        RequestContext current = mock(RequestContext.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getParameter(TOKEN_PARAMETER)).thenReturn(VALID_TOKEN);
+        when(current.getRequest()).thenReturn(request);
+        RequestContext.setCurrent(current);
+
+        annotationHandler.setManagementToken(VALID_TOKEN);
+        assertNotNull(service.doSomethingWithManagementToken());
+    }
+
+    @Test(expected = PermissionException.class)
+    public void testNoTokenAllowed() {
+        RequestContext current = mock(RequestContext.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getParameter(TOKEN_PARAMETER)).thenReturn(VALID_TOKEN);
+        when(current.getRequest()).thenReturn(request);
+        RequestContext.setCurrent(current);
+
+        annotationHandler.setManagementToken(VALID_TOKEN);
+        service.doSomethingNoTokenAllowed();
+    }
+
     private void createTestAnnotationHandler() throws PermissionException {
         Map<Class<?>, PermissionEvaluator<?, ?>> evaluators = new HashMap<>(1);
         evaluators.put(DefaultPermission.class, createTestPermissionEvaluator());
@@ -164,6 +208,9 @@ public class HasPermissionAnnotationHandlerTest {
 
         void doSomethingWrongPermissionType();
 
+        String doSomethingWithManagementToken();
+
+        String doSomethingNoTokenAllowed();
     }
 
     private static class MockSubjectResolver implements SubjectResolver<String> {
@@ -212,6 +259,16 @@ public class HasPermissionAnnotationHandlerTest {
 
         @HasPermission(type = Permission.class, action = "doSomething")
         public void doSomethingWrongPermissionType() {
+        }
+
+        @HasPermission(type = DefaultPermission.class, action = "forbidden", acceptManagementToken = false)
+        public String doSomethingNoTokenAllowed() {
+            return "valid";
+        }
+
+        @HasPermission(type = DefaultPermission.class, action = "doSomething", acceptManagementToken = true)
+        public String doSomethingWithManagementToken() {
+            return "valid";
         }
 
     }

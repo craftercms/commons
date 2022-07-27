@@ -20,10 +20,12 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.craftercms.commons.aop.AopUtils;
+import org.craftercms.commons.http.RequestContext;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
@@ -41,6 +43,8 @@ import org.springframework.core.annotation.Order;
 @Order(-1)
 public class HasPermissionAnnotationHandler {
 
+    private static final String TOKEN_PARAMETER = "token";
+
     private static final I10nLogger logger = new I10nLogger(HasPermissionAnnotationHandler.class,
                                                             "crafter.security.messages.logging");
 
@@ -52,22 +56,28 @@ public class HasPermissionAnnotationHandler {
 
     protected Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators;
 
+    protected String managementToken;
+
     @Required
     public void setPermissionEvaluators(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators) {
         this.permissionEvaluators = permissionEvaluators;
+    }
+
+    /**
+     * Sets the management token to be validated in case a {@link HasPermission} annotation
+     * has been configured to accept a management token.
+     * @param managementToken the management token value
+     */
+    public void setManagementToken(final String managementToken) {
+        this.managementToken = managementToken;
     }
 
     @SuppressWarnings("unchecked") //cortiz, OK permissionEvaluator.isAllowed
     @Around("@within(org.craftercms.commons.security.permissions.annotations.HasPermission) || " +
             "@annotation(org.craftercms.commons.security.permissions.annotations.HasPermission)")
     public Object checkPermissions(ProceedingJoinPoint pjp) throws Throwable {
-        boolean allowed;
         Method method = AopUtils.getActualMethod(pjp);
         HasPermission hasPermission = getHasPermissionAnnotation(method, pjp);
-        Class<?> type = hasPermission.type();
-        String action = hasPermission.action();
-        PermissionEvaluator permissionEvaluator = permissionEvaluators.get(type);
-
         Object securedResource = getAnnotatedProtectedResource(method, pjp);
         if (securedResource == null) {
             securedResource = getAnnotatedProtectedResourceIds(method, pjp);
@@ -79,22 +89,61 @@ public class HasPermissionAnnotationHandler {
             logger.debug(LOG_KEY_METHOD_INT_NO_SEC_OBJ, method, hasPermission);
         }
 
-        if (permissionEvaluator == null) {
-            throw new PermissionException(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
+        if (checkManagementToken(hasPermission)) {
+            return pjp.proceed();
         }
-
-        try {
-            allowed = permissionEvaluator.isAllowed(securedResource, action);
-        } catch (PermissionException e) {
-            throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
-        }
-
-        if (allowed) {
+        if (checkPermissions(method, hasPermission, securedResource)) {
             return pjp.proceed();
         } else if (securedResource != null) {
             throw new ActionDeniedException(hasPermission.action(), securedResource);
         } else {
             throw new ActionDeniedException(hasPermission.action());
+        }
+    }
+
+    /**
+     * Checks if there is a valid management token param in the request.
+     * This token must match the configured management token for this handler.
+     *
+     * @param hasPermission the {@link HasPermission} annotation
+     * @return true if and only if a valid management token is present in the request AND the {@link HasPermission}
+     * annotation has been configured to accept the token
+     */
+    protected boolean checkManagementToken(final HasPermission hasPermission) {
+        if (!hasPermission.acceptManagementToken() || StringUtils.isEmpty(managementToken)) {
+            return false;
+        }
+        RequestContext requestContext = RequestContext.getCurrent();
+        if (requestContext == null || requestContext.getRequest() == null) {
+            return false;
+        }
+        String token = requestContext.getRequest().getParameter(TOKEN_PARAMETER);
+
+        return StringUtils.equals(token, managementToken);
+    }
+
+    /**
+     * Checks the permissions to perform the action configured in the {@link HasPermission} to the securedResource (if any)
+     *
+     * @param method          the {@link Method} to secure
+     * @param hasPermission   the {@link HasPermission} annotation
+     * @param securedResource the securedResource, if any
+     * @return true if the action is allowed, false otherwise
+     */
+    @SuppressWarnings("unchecked")
+    protected boolean checkPermissions(final Method method, final HasPermission hasPermission, final Object securedResource) {
+        Class<?> type = hasPermission.type();
+        String action = hasPermission.action();
+        PermissionEvaluator permissionEvaluator = permissionEvaluators.get(type);
+
+        if (permissionEvaluator == null) {
+            throw new PermissionException(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
+        }
+
+        try {
+            return permissionEvaluator.isAllowed(securedResource, action);
+        } catch (PermissionException e) {
+            throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
         }
     }
 

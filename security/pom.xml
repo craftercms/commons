@@ -23,7 +23,7 @@
     <parent>
         <artifactId>crafter-commons</artifactId>
         <groupId>org.craftercms</groupId>
-        <version>4.0.0</version><!-- craftercms version flag -->
+        <version>4.0.1</version><!-- craftercms version flag -->
     </parent>
 
     <artifactId>crafter-commons-security</artifactId>
@@ -61,6 +61,13 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.api.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <!-- Test -->
