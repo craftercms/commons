@@ -69,7 +69,7 @@ public class PluginDescriptorReaderImplTest {
             assertEquals("Website Editorial Blueprint", plugin.getName());
             assertEquals("blueprint", plugin.getType());
             assertEquals(3, plugin.getTags().size());
-            assertEquals(3, plugin.getCrafterCmsVersions().get(0).getMajor());
+            assertEquals(4, plugin.getCrafterCmsVersions().get(0).getMajor());
             assertEquals(2, plugin.getCrafterCmsEditions().size());
             assertEquals(6, plugin.getMedia().getScreenshots().size());
             assertEquals("CrafterCMS", plugin.getDeveloper().getCompany().getName());
