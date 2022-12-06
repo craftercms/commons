@@ -19,12 +19,7 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.craftercms.commons.validation.annotations.param.ValidateDoubleParam;
-import org.craftercms.commons.validation.annotations.param.ValidateIntegerParam;
-import org.craftercms.commons.validation.annotations.param.ValidateLongParam;
-import org.craftercms.commons.validation.annotations.param.ValidateNoTagsParam;
-import org.craftercms.commons.validation.annotations.param.ValidateSecurePathParam;
-import org.craftercms.commons.validation.annotations.param.ValidateStringParam;
+import org.craftercms.commons.validation.annotations.param.*;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
@@ -33,13 +28,14 @@ public class AnnotationBasedValidatorFactoryRegistry implements AnnotationBasedV
     protected Map<Class<?>, AnnotationBasedValidatorFactory> registry;
 
     public AnnotationBasedValidatorFactoryRegistry() {
-        registry = new HashMap<>(2);
+        registry = new HashMap<>();
         registry.put(ValidateStringParam.class, new StringParamValidatorFactory());
         registry.put(ValidateIntegerParam.class, new IntegerParamValidatorFactory());
         registry.put(ValidateLongParam.class, new LongParamValidatorFactory());
         registry.put(ValidateDoubleParam.class, new DoubleParamValidatorFactory());
         registry.put(ValidateSecurePathParam.class, new SecurePathParamValidatorFactory());
         registry.put(ValidateNoTagsParam.class, new NoTagsParamValidatorFactory());
+        registry.put(EsapiValidatedParam.class, new EsapiValidatorFactory());
     }
 
     public void setRegistry(Map<Class<?>, AnnotationBasedValidatorFactory> registry) {
