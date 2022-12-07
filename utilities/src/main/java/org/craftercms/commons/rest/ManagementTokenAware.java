@@ -13,19 +13,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.annotations.param;
+package org.craftercms.commons.rest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.craftercms.commons.exceptions.InvalidManagementTokenException;
 
 /**
- * Supported ESAPI validator "types".
+ * Provides convenience functionality to validate token against configured secure token.
+ *
+ * @author jmendeza
+ * @since 4.0.3
  */
-public enum EsapiValidationType {
+public interface ManagementTokenAware {
 
-    HTTPURI("HTTPURI"),
-    SITE_ID("SITEID");
+    String getConfiguredToken();
 
-    public final String typeKey;
-
-    EsapiValidationType(final String typeKey) {
-        this.typeKey = typeKey;
+    default void validateToken(final String requestToken) throws InvalidManagementTokenException {
+        if (!StringUtils.equals(requestToken, getConfiguredToken())) {
+            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
+        }
     }
 }
