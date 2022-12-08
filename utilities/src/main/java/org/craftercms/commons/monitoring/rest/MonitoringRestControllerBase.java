@@ -16,11 +16,11 @@
 
 package org.craftercms.commons.monitoring.rest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.exceptions.InvalidManagementTokenException;
 import org.craftercms.commons.monitoring.MemoryInfo;
 import org.craftercms.commons.monitoring.StatusInfo;
 import org.craftercms.commons.monitoring.VersionInfo;
+import org.craftercms.commons.rest.ManagementTokenAware;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +32,7 @@ import java.io.IOException;
  * @author joseross
  */
 @RestController
-public abstract class MonitoringRestControllerBase {
+public abstract class MonitoringRestControllerBase implements ManagementTokenAware {
 
     public final static String ROOT_URL = "/monitoring";
     public final static String MEMORY_URL = "/memory";
@@ -42,32 +42,22 @@ public abstract class MonitoringRestControllerBase {
     @GetMapping(ROOT_URL + MEMORY_URL)
     public MemoryInfo getCurrentMemory(@RequestParam(name = "token", required = true) String token)
             throws InvalidManagementTokenException {
-        if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
-            return MemoryInfo.getCurrentMemory();
-        } else {
-            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
-        }
+        validateToken(token);
+        return MemoryInfo.getCurrentMemory();
     }
 
     @GetMapping(ROOT_URL + STATUS_URL)
     public StatusInfo getCurrentStatus(@RequestParam(name = "token", required = true) String token)
             throws InvalidManagementTokenException {
-        if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
-            return StatusInfo.getCurrentStatus();
-        } else {
-            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
-        }
+        validateToken(token);
+        return StatusInfo.getCurrentStatus();
     }
 
     @GetMapping(ROOT_URL + VERSION_URL)
     public VersionInfo getCurrentVersion(@RequestParam(name = "token", required = true) String token)
             throws InvalidManagementTokenException, IOException {
-        if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
-            return VersionInfo.getVersion(this.getClass());
-        } else {
-            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
-        }
+        validateToken(token);
+        return VersionInfo.getVersion(this.getClass());
     }
 
-    protected abstract String getConfiguredToken();
 }
