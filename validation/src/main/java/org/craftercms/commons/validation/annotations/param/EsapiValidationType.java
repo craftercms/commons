@@ -20,6 +20,7 @@ package org.craftercms.commons.validation.annotations.param;
  */
 public enum EsapiValidationType {
 
+    HTTPParameterName("HTTPParameterName"),
     HTTPURI("HTTPURI"),
     SITE_ID("SITEID");
 
