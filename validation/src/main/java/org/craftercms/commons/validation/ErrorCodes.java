@@ -45,6 +45,12 @@ public class ErrorCodes {
     public static final String NUMBER_MIN_VALUE_ERROR = "validation.error.number.minValue";
     public static final String NUMBER_MAX_VALUE_ERROR = "validation.error.number.maxValue";
 
+    private static final String ESAPI_URI_ERROR = "validation.error.esapi.%s";
+
+    public static String getEsapiErrorMessageKey(final String esapiType) {
+        return String.format(ESAPI_URI_ERROR, esapiType);
+    }
+
     private ErrorCodes() {
     }
 
