@@ -102,6 +102,7 @@
 	<aws.version>1.12.139</aws.version>
 	<box.sdk.version>2.58.0</box.sdk.version>
         <sardine.version>5.10</sardine.version>
+        <owasp.esapi.version>2.5.1.0</owasp.esapi.version>
 
         <!-- Sonar -->
         <sonar.language>java</sonar.language>
