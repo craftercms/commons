@@ -19,11 +19,15 @@ import org.craftercms.commons.validation.annotations.param.ValidateDoubleParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
+import java.lang.reflect.Parameter;
+
+import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
+
 public class DoubleParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateDoubleParam, Double> {
 
     @Override
-    public Validator<Double> getValidator(ValidateDoubleParam annotation) {
-        DoubleValidator validator = new DoubleValidator(annotation.name());
+    public Validator<Double> getValidator(ValidateDoubleParam annotation, String paramName) {
+        DoubleValidator validator = new DoubleValidator(defaultIfEmpty(annotation.name(), paramName));
         validator.setNotNull(annotation.notNull());
         validator.setMinValue(annotation.minValue());
         validator.setMaxValue(annotation.maxValue());

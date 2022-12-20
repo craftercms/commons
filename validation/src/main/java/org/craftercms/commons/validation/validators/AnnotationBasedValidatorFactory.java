@@ -16,9 +16,10 @@
 package org.craftercms.commons.validation.validators;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 
 public interface AnnotationBasedValidatorFactory<A extends Annotation, T> {
 
-    Validator<T> getValidator(A annotation);
+    Validator<T> getValidator(A annotation, String paramName);
 
 }

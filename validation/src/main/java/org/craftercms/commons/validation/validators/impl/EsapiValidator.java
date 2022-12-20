@@ -23,6 +23,7 @@ import org.owasp.esapi.errors.IntrusionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.craftercms.commons.validation.ErrorCodes.getEsapiErrorMessageKey;
 
 /**
@@ -30,7 +31,6 @@ import static org.craftercms.commons.validation.ErrorCodes.getEsapiErrorMessageK
  * against {@link ESAPI} validator(), using the annotation 'type' property.
  * 'type' property corresponds to the pattern indicated by the property
  * <code>Validator.&lt;type&gt;</code> in ESAPI.properties file.
- *
  */
 public class EsapiValidator extends StringValidator {
 
@@ -47,7 +47,9 @@ public class EsapiValidator extends StringValidator {
 
     @Override
     public boolean validate(final String target, final ValidationResult result) {
-        return super.validate(target, result) && validateEsapi(target, result);
+        return super.validate(target, result) &&
+        // Let super.validate() decide if blank is acceptable
+                (isBlank(target) || validateEsapi(target, result));
     }
 
     private boolean validateEsapi(final String target, final ValidationResult result) {

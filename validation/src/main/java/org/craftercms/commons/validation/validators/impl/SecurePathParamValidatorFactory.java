@@ -19,11 +19,15 @@ import org.craftercms.commons.validation.annotations.param.ValidateSecurePathPar
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
+import java.lang.reflect.Parameter;
+
+import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
+
 public class SecurePathParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateSecurePathParam, String> {
 
     @Override
-    public Validator<String> getValidator(ValidateSecurePathParam annotation) {
-        SecurePathValidator validator = new SecurePathValidator(annotation.name());
+    public Validator<String> getValidator(ValidateSecurePathParam annotation, String paramName) {
+        SecurePathValidator validator = new SecurePathValidator(defaultIfEmpty(annotation.name(), paramName));
         validator.setNotNull(annotation.notNull());
         validator.setNotEmpty(annotation.notEmpty());
         validator.setNotBlank(annotation.notBlank());

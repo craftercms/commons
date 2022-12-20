@@ -15,20 +15,21 @@
  */
 package org.craftercms.commons.validation.annotations.param;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * Supported ESAPI validator "types".
+ * Parameters annotated with {@link ValidateCollectionParam} will be validated
+ * by {@link org.craftercms.commons.validation.validators.impl.CollectionValidator}.
  */
-public enum EsapiValidationType {
+@Target({ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ValidateCollectionParam {
+    String name() default "";
 
-    ALPHANUMERIC("ALPHANUMERIC"),
-    HTTPParameterName("HTTPParameterName"),
-    HTTPURI("HTTPURI"),
-    SITE_ID("SITEID"),
-    USERNAME("USERNAME");
+    boolean notNull() default true;
 
-    public final String typeKey;
-
-    EsapiValidationType(final String typeKey) {
-        this.typeKey = typeKey;
-    }
+    boolean notEmpty() default true;
 }

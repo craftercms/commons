@@ -19,6 +19,10 @@ import org.craftercms.commons.validation.annotations.param.EsapiValidatedParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
+import java.lang.reflect.Parameter;
+
+import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
+
 /**
  * Simple AnnotationBasedValidatorFactory implementation to build a {@link EsapiValidator}
  * for a parameter annotated with {@link EsapiValidatedParam}
@@ -26,8 +30,8 @@ import org.craftercms.commons.validation.validators.Validator;
 public class EsapiValidatorFactory implements AnnotationBasedValidatorFactory<EsapiValidatedParam, String> {
 
     @Override
-    public Validator<String> getValidator(EsapiValidatedParam annotation) {
-        EsapiValidator validator = new EsapiValidator(annotation.name());
+    public Validator<String> getValidator(EsapiValidatedParam annotation, String paramName) {
+        EsapiValidator validator = new EsapiValidator(defaultIfEmpty(annotation.name(), paramName));
         validator.setEsapiType(annotation.type());
         validator.setNotNull(annotation.notNull());
         validator.setNotEmpty(annotation.notEmpty());

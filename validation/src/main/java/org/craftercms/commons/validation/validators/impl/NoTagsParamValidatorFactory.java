@@ -19,11 +19,15 @@ import org.craftercms.commons.validation.annotations.param.ValidateNoTagsParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
+import java.lang.reflect.Parameter;
+
+import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
+
 public class NoTagsParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateNoTagsParam, String> {
 
     @Override
-    public Validator<String> getValidator(ValidateNoTagsParam annotation) {
-        NoTagsValidator validator = new NoTagsValidator(annotation.name());
+    public Validator<String> getValidator(ValidateNoTagsParam annotation, String paramName) {
+        NoTagsValidator validator = new NoTagsValidator(defaultIfEmpty(annotation.name(), paramName));
         validator.setNotNull(annotation.notNull());
         validator.setNotEmpty(annotation.notEmpty());
         validator.setNotBlank(annotation.notBlank());
