@@ -15,7 +15,6 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -31,7 +30,6 @@ import org.springframework.beans.factory.annotation.Required;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
 import static org.craftercms.commons.validation.ErrorCodes.INVALID_METHOD_PARAMS_ERROR_CODE;
@@ -67,7 +65,10 @@ public class ValidateParamsAspect {
             Parameter methodParameter = methodParameters[i];
             Annotation[] paramAnnotations = methodParameter.getAnnotations();
             for (Annotation annotation : paramAnnotations) {
-                validateParam(annotation, param, result, methodParameter, paramNames[i]);
+                Validator<Object> validator = validatorFactory.getValidator(annotation, paramNames[i]);
+                if (validator != null) {
+                    ValidationUtils.validateValue(validator, param, result, methodParameter.getType());
+                }
             }
         }
 
@@ -77,20 +78,6 @@ public class ValidateParamsAspect {
             result.setMessage(ValidationUtils.getErrorMessage(errorMessageBundle, INVALID_METHOD_PARAMS_ERROR_CODE, methodStr));
 
             throw new ValidationRuntimeException(result);
-        }
-    }
-
-    protected void validateParam(Annotation annotation, Object param, ValidationResult result, Parameter parameter, String paramName) {
-        boolean collectionParam = Collection.class.isAssignableFrom(parameter.getType());
-        Validator<Object> validator = validatorFactory.getValidator(annotation, paramName);
-        if (validator == null) {
-            return;
-        }
-        if (collectionParam) {
-            Collection<Object> paramValueList = (Collection<Object>) param;
-            validator.validateCollection(paramValueList, result);
-        } else {
-            validator.validate(param, result);
         }
     }
 

@@ -19,8 +19,6 @@ import org.craftercms.commons.validation.annotations.param.ValidateSecurePathPar
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
-import java.lang.reflect.Parameter;
-
 import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
 
 public class SecurePathParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateSecurePathParam, String> {

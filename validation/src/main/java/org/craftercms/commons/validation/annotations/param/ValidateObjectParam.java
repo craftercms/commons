@@ -21,26 +21,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Parameters annotated with {@link EsapiValidatedParam} will be validated by
- * {@link org.craftercms.commons.validation.validators.impl.EsapiValidator} using the
- * specified type.
+ * Elements annotated with {@link ValidateObjectParam} will be validated by
+ * {@link org.craftercms.commons.validation.validators.impl.ObjectParamValidator} and
+ * trigger validation of any field annotated with Validation annotations of this package.
  */
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EsapiValidatedParam {
-
+public @interface ValidateObjectParam {
     String name() default "";
-
-    EsapiValidationType type();
-
-    boolean notNull() default true;
-
-    boolean notEmpty() default true;
-
-    boolean notBlank() default true;
-
-    int minLength() default 0;
-
-    int maxLength() default Integer.MAX_VALUE;
-
 }

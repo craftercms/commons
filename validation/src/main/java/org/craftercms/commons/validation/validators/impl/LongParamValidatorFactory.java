@@ -19,8 +19,6 @@ import org.craftercms.commons.validation.annotations.param.ValidateLongParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
-import java.lang.reflect.Parameter;
-
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 
 public class LongParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateLongParam, Long> {

@@ -19,8 +19,6 @@ import org.craftercms.commons.validation.annotations.param.ValidateIntegerParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
-import java.lang.reflect.Parameter;
-
 import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
 
 public class IntegerParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateIntegerParam, Integer> {

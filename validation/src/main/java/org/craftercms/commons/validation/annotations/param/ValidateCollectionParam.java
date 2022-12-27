@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  * Parameters annotated with {@link ValidateCollectionParam} will be validated
  * by {@link org.craftercms.commons.validation.validators.impl.CollectionValidator}.
  */
-@Target({ElementType.PARAMETER})
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidateCollectionParam {
     String name() default "";

@@ -44,6 +44,11 @@ public class ErrorCodes {
      */
     public static final String LIST_NOT_EMPTY_ERROR_CODE = "validation.error.list.notEmpty";
 
+    /**
+     * Object errors
+     */
+    public static final String OBJECT_FIELD_READ_ERROR_CODE = "validation.error.object.field.read";
+
     /*
      * Number errors
      */

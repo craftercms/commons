@@ -15,14 +15,13 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Parameter;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.craftercms.commons.validation.annotations.param.*;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
+
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AnnotationBasedValidatorFactoryRegistry implements AnnotationBasedValidatorFactory<Annotation, Object> {
 
@@ -38,6 +37,7 @@ public class AnnotationBasedValidatorFactoryRegistry implements AnnotationBasedV
         registry.put(ValidateNoTagsParam.class, new NoTagsParamValidatorFactory());
         registry.put(EsapiValidatedParam.class, new EsapiValidatorFactory());
         registry.put(ValidateCollectionParam.class, new CollectionParamValidatorFactory());
+        registry.put(ValidateObjectParam.class, new ObjectParamValidatorFactory(this));
     }
 
     public void setRegistry(Map<Class<?>, AnnotationBasedValidatorFactory> registry) {
