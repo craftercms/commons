@@ -21,6 +21,8 @@ import org.craftercms.commons.config.*;
 
 import java.util.List;
 
+import static java.lang.String.format;
+
 /**
  * Base class for configuration mappers that read configuration profiles and map them to profile classes.
  *
@@ -43,7 +45,7 @@ public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile
     @Override
     @SuppressWarnings("unchecked")
     public T readConfig(ConfigurationProvider provider, String module, String path, String encoding, String profileId)
-            throws ConfigurationException {
+            throws ConfigurationException, ConfigurationProfileNotFoundException {
         HierarchicalConfiguration<ImmutableNode> config =
                 (HierarchicalConfiguration<ImmutableNode>)
                         configurationResolver.getXmlConfiguration(module, path, provider);
@@ -54,7 +56,7 @@ public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile
                 .stream()
                 .filter(c -> profileId.equals(c.getString(CONFIG_KEY_ID)))
                 .findFirst()
-                .orElseThrow(() -> new ConfigurationException("Profile '" + profileId + "' not found"));
+                .orElseThrow(() -> new ConfigurationProfileNotFoundException(format("Profile '%s' not found", profileId)));
 
         T profile = processConfig(profileConfig);
         profile.setProfileId(profileId);
