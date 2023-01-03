@@ -17,8 +17,32 @@ package org.craftercms.commons.validation.validators;
 
 import org.craftercms.commons.validation.ValidationResult;
 
+import java.util.Collection;
+
+import static java.util.Objects.isNull;
+
 public interface Validator<T> {
 
     boolean validate(T target, ValidationResult result);
+
+    /**
+     * Validates each item in the target parameter against this {@link Validator}
+     * Null or empty {@link Collection} is consider valid.
+     *
+     * @param target collection of values to validate
+     * @param result result object where validation errors are recorded
+     * @return true if the collection is valid, false otherwise
+     */
+    default boolean validateCollection(Collection<T> target, ValidationResult result) {
+        if (isNull(target)) {
+            return true;
+        }
+        boolean isValid = true;
+        for (T t : target) {
+            if (!validate(t, result))
+                isValid = false;
+        }
+        return isValid;
+    }
 
 }

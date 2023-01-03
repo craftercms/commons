@@ -15,9 +15,12 @@
  */
 package org.craftercms.commons.validation;
 
-import java.util.ResourceBundle;
-
 import org.craftercms.commons.i10n.I10nUtils;
+import org.craftercms.commons.validation.validators.Validator;
+import org.springframework.lang.NonNull;
+
+import java.util.Collection;
+import java.util.ResourceBundle;
 
 public class ValidationUtils {
 
@@ -36,6 +39,24 @@ public class ValidationUtils {
         }
 
         return I10nUtils.getLocalizedMessage(messageBundle, errorCode, args);
+    }
+
+    /**
+     * Validates a target value according to the validation annotation
+     *
+     * @param validator {@link Validator} instance to delegate the validation to
+     * @param value field/param value to be validated
+     * @param result result of the validation
+     * @param declaredType declared type of the annotated element
+     */
+    public static boolean validateValue(@NonNull Validator<Object> validator, Object value, ValidationResult result,
+                                        Class<?> declaredType) {
+        boolean collectionParam = Collection.class.isAssignableFrom(declaredType);
+        if (!collectionParam) {
+            return validator.validate(value, result);
+        }
+        Collection<Object> paramValueList = (Collection<Object>) value;
+        return validator.validateCollection(paramValueList, result);
     }
 
 }

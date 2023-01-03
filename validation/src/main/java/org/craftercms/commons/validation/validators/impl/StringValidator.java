@@ -15,20 +15,14 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import java.util.Arrays;
-import java.util.ResourceBundle;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.lang.RegexUtils;
 import org.craftercms.commons.validation.ValidationResult;
-import org.craftercms.commons.validation.ValidationUtils;
 
-import static org.craftercms.commons.validation.ErrorCodes.STRING_MAX_LENGTH_ERROR_CODE;
-import static org.craftercms.commons.validation.ErrorCodes.STRING_MIN_LENGTH_ERROR_CODE;
-import static org.craftercms.commons.validation.ErrorCodes.STRING_NOT_BLANK_ERROR_CODE;
-import static org.craftercms.commons.validation.ErrorCodes.STRING_NOT_EMPTY_ERROR_CODE;
-import static org.craftercms.commons.validation.ErrorCodes.STRING_REGEX_VALIDATION_FAILED_ERROR_CODE;
+import java.util.Arrays;
+
+import static org.craftercms.commons.validation.ErrorCodes.*;
 
 public class StringValidator extends BasicValidator<String> {
 

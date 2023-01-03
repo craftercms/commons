@@ -19,11 +19,13 @@ import org.craftercms.commons.validation.annotations.param.ValidateIntegerParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
+import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
+
 public class IntegerParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateIntegerParam, Integer> {
 
     @Override
-    public Validator<Integer> getValidator(ValidateIntegerParam annotation) {
-        IntegerValidator validator = new IntegerValidator(annotation.name());
+    public Validator<Integer> getValidator(ValidateIntegerParam annotation, String paramName) {
+        IntegerValidator validator = new IntegerValidator(defaultIfEmpty(annotation.name(), paramName));
         validator.setNotNull(annotation.notNull());
         validator.setMinValue(annotation.minValue());
         validator.setMaxValue(annotation.maxValue());

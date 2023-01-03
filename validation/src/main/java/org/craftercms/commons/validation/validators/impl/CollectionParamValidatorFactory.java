@@ -15,22 +15,24 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import org.craftercms.commons.validation.annotations.param.ValidateDoubleParam;
+import org.craftercms.commons.validation.annotations.param.ValidateCollectionParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
 import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
 
-public class DoubleParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateDoubleParam, Double> {
+/**
+ * Simple AnnotationBasedValidatorFactory implementation to build a {@link CollectionValidator}
+ * for parameters annotated with {@link ValidateCollectionParam}
+ */
+public class CollectionParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateCollectionParam, Object> {
 
     @Override
-    public Validator<Double> getValidator(ValidateDoubleParam annotation, String paramName) {
-        DoubleValidator validator = new DoubleValidator(defaultIfEmpty(annotation.name(), paramName));
+    public Validator<Object> getValidator(final ValidateCollectionParam annotation, final String paramName) {
+        CollectionValidator validator = new CollectionValidator(defaultIfEmpty(annotation.name(), paramName));
         validator.setNotNull(annotation.notNull());
-        validator.setMinValue(annotation.minValue());
-        validator.setMaxValue(annotation.maxValue());
+        validator.setNotEmpty(annotation.notEmpty());
 
         return validator;
     }
-
 }

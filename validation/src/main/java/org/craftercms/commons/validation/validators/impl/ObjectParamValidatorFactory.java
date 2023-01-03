@@ -15,22 +15,27 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import org.craftercms.commons.validation.annotations.param.ValidateDoubleParam;
+import org.craftercms.commons.validation.annotations.param.ValidateObjectParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
+import java.lang.annotation.Annotation;
+
 import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
 
-public class DoubleParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateDoubleParam, Double> {
+/**
+ * Simple AnnotationBasedValidatorFactory implementation to build a {@link ObjectParamValidator}
+ * for an element annotated with {@link ValidateObjectParam}
+ */
+public class ObjectParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateObjectParam, Object> {
+    private final AnnotationBasedValidatorFactory<Annotation, Object> validatorFactory;
 
-    @Override
-    public Validator<Double> getValidator(ValidateDoubleParam annotation, String paramName) {
-        DoubleValidator validator = new DoubleValidator(defaultIfEmpty(annotation.name(), paramName));
-        validator.setNotNull(annotation.notNull());
-        validator.setMinValue(annotation.minValue());
-        validator.setMaxValue(annotation.maxValue());
-
-        return validator;
+    public ObjectParamValidatorFactory(AnnotationBasedValidatorFactory<Annotation, Object> validatorFactory) {
+        this.validatorFactory = validatorFactory;
     }
 
+    @Override
+    public Validator<Object> getValidator(final ValidateObjectParam annotation, final String paramName) {
+        return new ObjectParamValidator(defaultIfEmpty(annotation.name(), paramName), validatorFactory);
+    }
 }

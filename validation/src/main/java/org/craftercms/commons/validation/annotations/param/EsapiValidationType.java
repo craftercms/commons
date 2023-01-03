@@ -20,9 +20,11 @@ package org.craftercms.commons.validation.annotations.param;
  */
 public enum EsapiValidationType {
 
+    ALPHANUMERIC("ALPHANUMERIC"),
     HTTPParameterName("HTTPParameterName"),
     HTTPURI("HTTPURI"),
-    SITE_ID("SITEID");
+    SITE_ID("SITEID"),
+    USERNAME("USERNAME");
 
     public final String typeKey;
 

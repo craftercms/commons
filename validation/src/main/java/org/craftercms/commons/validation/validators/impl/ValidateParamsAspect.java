@@ -15,14 +15,10 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.ResourceBundle;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.craftercms.commons.aop.AopUtils;
 import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationRuntimeException;
@@ -30,6 +26,11 @@ import org.craftercms.commons.validation.ValidationUtils;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 import org.springframework.beans.factory.annotation.Required;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.ResourceBundle;
 
 import static org.craftercms.commons.validation.ErrorCodes.INVALID_METHOD_PARAMS_ERROR_CODE;
 
@@ -53,18 +54,20 @@ public class ValidateParamsAspect {
     @Before("@within(org.craftercms.commons.validation.annotations.param.ValidateParams) || " +
             "@annotation(org.craftercms.commons.validation.annotations.param.ValidateParams)")
     public void doValidation(JoinPoint joinPoint) {
+        String[] paramNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
         Object[] args = joinPoint.getArgs();
         Method method = AopUtils.getActualMethod(joinPoint);
-        Annotation[][] allParamAnnotations = method.getParameterAnnotations();
         ValidationResult result = new ValidationResult(errorMessageBundle);
 
-        if (ArrayUtils.isNotEmpty(allParamAnnotations)) {
-            for (int i = 0; i < args.length; i++) {
-                Object param = args[i];
-                Annotation[] paramAnnotations = allParamAnnotations[i];
-
-                for (Annotation annotation : paramAnnotations) {
-                    validateParam(annotation, param, result);
+        Parameter[] methodParameters = method.getParameters();
+        for (int i = 0; i < args.length; i++) {
+            Object param = args[i];
+            Parameter methodParameter = methodParameters[i];
+            Annotation[] paramAnnotations = methodParameter.getAnnotations();
+            for (Annotation annotation : paramAnnotations) {
+                Validator<Object> validator = validatorFactory.getValidator(annotation, paramNames[i]);
+                if (validator != null) {
+                    ValidationUtils.validateValue(validator, param, result, methodParameter.getType());
                 }
             }
         }
@@ -75,13 +78,6 @@ public class ValidateParamsAspect {
             result.setMessage(ValidationUtils.getErrorMessage(errorMessageBundle, INVALID_METHOD_PARAMS_ERROR_CODE, methodStr));
 
             throw new ValidationRuntimeException(result);
-        }
-    }
-
-    protected void validateParam(Annotation annotation, Object param, ValidationResult result) {
-        Validator<Object> validator = validatorFactory.getValidator(annotation);
-        if (validator != null) {
-            validator.validate(param, result);
         }
     }
 

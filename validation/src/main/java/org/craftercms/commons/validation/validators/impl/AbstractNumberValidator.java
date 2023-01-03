@@ -15,10 +15,7 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import java.util.ResourceBundle;
-
 import org.craftercms.commons.validation.ValidationResult;
-import org.craftercms.commons.validation.ValidationUtils;
 
 import static org.craftercms.commons.validation.ErrorCodes.NUMBER_MAX_VALUE_ERROR;
 import static org.craftercms.commons.validation.ErrorCodes.NUMBER_MIN_VALUE_ERROR;

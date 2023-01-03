@@ -40,6 +40,16 @@ public class ErrorCodes {
     public static final String STRING_REGEX_VALIDATION_FAILED_ERROR_CODE = "validation.error.string.regexMatchingFailed";
 
     /*
+     * List errors
+     */
+    public static final String LIST_NOT_EMPTY_ERROR_CODE = "validation.error.list.notEmpty";
+
+    /**
+     * Object errors
+     */
+    public static final String OBJECT_FIELD_READ_ERROR_CODE = "validation.error.object.field.read";
+
+    /*
      * Number errors
      */
     public static final String NUMBER_MIN_VALUE_ERROR = "validation.error.number.minValue";

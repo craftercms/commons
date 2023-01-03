@@ -19,11 +19,13 @@ import org.craftercms.commons.validation.annotations.param.ValidateStringParam;
 import org.craftercms.commons.validation.validators.AnnotationBasedValidatorFactory;
 import org.craftercms.commons.validation.validators.Validator;
 
+import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
+
 public class StringParamValidatorFactory implements AnnotationBasedValidatorFactory<ValidateStringParam, String> {
 
     @Override
-    public Validator<String> getValidator(ValidateStringParam annotation) {
-        StringValidator validator = new StringValidator(annotation.name());
+    public Validator<String> getValidator(ValidateStringParam annotation, String paramName) {
+        StringValidator validator = new StringValidator(defaultIfEmpty(annotation.name(), paramName));
         validator.setNotNull(annotation.notNull());
         validator.setNotEmpty(annotation.notEmpty());
         validator.setNotBlank(annotation.notBlank());
