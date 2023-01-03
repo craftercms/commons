@@ -25,8 +25,10 @@ import org.craftercms.commons.file.stores.impl.ProfileAwareRemotePath;
 import org.craftercms.commons.file.stores.impl.ResourceBasedRemoteFile;
 import org.craftercms.commons.spring.resources.WebDavResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.util.UriUtils;
 
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Implementation of {@link org.craftercms.commons.file.stores.RemoteFileStore} for WebDAV
@@ -39,7 +41,8 @@ public class WebDavFileStore extends AbstractProfileAwareRemoteFileStore<WebDavP
     @Override
     protected RemoteFile doGetFile(final ProfileAwareRemotePath path, final WebDavProfile profile)
             throws MalformedURLException {
-        String fullUrl = StringUtils.appendIfMissing(profile.getBaseUrl(), "/") + path.getPath();
+        String encodedPath = UriUtils.encodePath(path.getPath(), StandardCharsets.UTF_8);
+        String fullUrl = StringUtils.appendIfMissing(profile.getBaseUrl(), "/") + encodedPath;
         Resource resource = new WebDavResource(WebDavUtils.createClient(profile), fullUrl);
 
         return new ResourceBasedRemoteFile(path, resource);
