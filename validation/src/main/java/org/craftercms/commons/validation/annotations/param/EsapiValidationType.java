@@ -24,7 +24,9 @@ public enum EsapiValidationType {
     HTTPParameterName("HTTPParameterName"),
     HTTPURI("HTTPURI"),
     SITE_ID("SITEID"),
-    USERNAME("USERNAME");
+    EMAIL("EMAIL"),
+    USERNAME("USERNAME"),
+    SQL_ORDER_BY("SQL_ORDER_BY");
 
     public final String typeKey;
 
