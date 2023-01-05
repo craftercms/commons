@@ -26,6 +26,7 @@ public enum EsapiValidationType {
     SITE_ID("SITEID"),
     EMAIL("EMAIL"),
     USERNAME("USERNAME"),
+    GROUP_NAME("GROUP_NAME"),
     SQL_ORDER_BY("SQL_ORDER_BY");
 
     public final String typeKey;
