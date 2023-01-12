@@ -15,37 +15,45 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import org.craftercms.commons.validation.ValidationResult;
+import org.craftercms.commons.validation.ValidationUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+@RunWith(MockitoJUnitRunner.class)
 public class SecurePathValidatorTest {
 
     private static final String[] VALID_PATHS = {"/site/website", "/site/website/index.xml", "/site/website/.folder/index.xml",
-        "/site/website/..folder/index.xml", "/site/website/~folder/index.xml", "/site/website/folder:/index.xml"};
+            "/site/website/..folder/index.xml", "/site/website/~folder/index.xml", "/site/website/folder:/index.xml"};
     private static final String[] INVALID_PATHS = {".", "..", "...", "./folder", "folder/.", "../folder", "folder/..",
-        "folder/./folder", "folder/../folder", "~/folder", "folder/~", "folder/~/folder", "C:/Program Files"};
+            "folder/./folder", "folder/../folder", "~/folder", "folder/~", "folder/~/folder", "C:/Program Files"};
 
-    private SecurePathValidator validator;
+    private Validator validator;
 
     @Before
-    public void setUp() throws Exception {
-        validator = new SecurePathValidator("path");
+    public void setUp() {
+        validator = new SecurePathValidator();
     }
 
     @Test
-    public void testValidPaths() throws Exception {
+    public void testValidPaths() {
         for (String path : VALID_PATHS) {
-            assertTrue("Validation of " + path, validator.validate(path, new ValidationResult()));
+            Errors errors = ValidationUtils.validateValue(validator, path);
+            assertFalse("Validation of " + path, errors.hasErrors());
         }
     }
 
     @Test
-    public void testInvalidPaths() throws Exception {
+    public void testInvalidPaths() {
         for (String path : INVALID_PATHS) {
-            assertFalse("Validation of " + path, validator.validate(path, new ValidationResult()));
+            Errors errors = ValidationUtils.validateValue(validator, path);
+            assertTrue("Validation of " + path, errors.hasErrors());
         }
     }
 

@@ -15,14 +15,20 @@
  */
 package org.craftercms.commons.validation;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.craftercms.commons.i10n.I10nUtils;
-import org.craftercms.commons.validation.validators.Validator;
+import org.craftercms.commons.lang.RegexUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class ValidationUtils {
+
+    private static final String VALUE_FIELD_NAME = "value";
 
     public static final String DEFAULT_ERROR_MESSAGE_BUNDLE_NAME = "crafter.commons.validation.errors";
 
@@ -42,21 +48,19 @@ public class ValidationUtils {
     }
 
     /**
-     * Validates a target value according to the validation annotation
-     *
-     * @param validator {@link Validator} instance to delegate the validation to
-     * @param value field/param value to be validated
-     * @param result result of the validation
-     * @param declaredType declared type of the annotated element
+     * Invokes a {@link Validator} for a given value and return the list or errors
      */
-    public static boolean validateValue(@NonNull Validator<Object> validator, Object value, ValidationResult result,
-                                        Class<?> declaredType) {
-        boolean collectionParam = Collection.class.isAssignableFrom(declaredType);
-        if (!collectionParam) {
-            return validator.validate(value, result);
-        }
-        Collection<Object> paramValueList = (Collection<Object>) value;
-        return validator.validateCollection(paramValueList, result);
+    public static Errors validateValue(@NonNull Validator validator, Object value) {
+        Errors errors = new BeanPropertyBindingResult(value, "value");
+
+
+        org.springframework.validation.ValidationUtils.invokeValidator(validator, value, errors);
+        return errors;
+    }
+
+    public static boolean validateString(final String value, String[] blacklistRegexes, String[] whitelistRegexes, final boolean matchFullInput) {
+        return (ArrayUtils.isEmpty(whitelistRegexes) || RegexUtils.matchesAny(value, Arrays.asList(whitelistRegexes), matchFullInput)) &&
+                (ArrayUtils.isEmpty(blacklistRegexes) || !RegexUtils.matchesAny(value, Arrays.asList(blacklistRegexes), matchFullInput));
     }
 
 }

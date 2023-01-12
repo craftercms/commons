@@ -24,6 +24,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+
 import static org.craftercms.commons.plugin.model.CrafterCmsEditions.COMMUNITY;
 import static org.craftercms.commons.plugin.model.CrafterCmsEditions.ENTERPRISE;
 
@@ -81,16 +84,19 @@ public class Version {
     /**
      * The major version
      */
+    @Positive
     protected int major;
 
     /**
      * The minor version
      */
+    @PositiveOrZero
     protected int minor;
 
     /**
      * The patch version
      */
+    @PositiveOrZero
     protected int patch;
 
     public int getMajor() {

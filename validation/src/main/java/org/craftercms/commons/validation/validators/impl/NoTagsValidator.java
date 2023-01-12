@@ -15,15 +15,15 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-public class NoTagsValidator extends StringValidator {
-
+import org.craftercms.commons.validation.annotations.param.ValidateNoTagsParam;
+import javax.validation.ConstraintValidator;
+public class NoTagsValidator extends AbstractStringValidator implements ConstraintValidator<ValidateNoTagsParam, String> {
     public static final String[] DEFAULT_BLACKLISTED_REGEXES = {"<[^>]*>", "&lt;((?!&gt;).)*&gt;"};
-
-    public NoTagsValidator(String targetKey) {
-        super(targetKey);
-
+    public NoTagsValidator() {
+        this.blacklistRegexes = DEFAULT_BLACKLISTED_REGEXES;
         matchFullInput = false;
-        blacklistRegexes = DEFAULT_BLACKLISTED_REGEXES;
     }
-
+    @Override
+    public void initialize(ValidateNoTagsParam annotation) {
+    }
 }

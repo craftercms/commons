@@ -15,94 +15,17 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.craftercms.commons.lang.RegexUtils;
-import org.craftercms.commons.validation.ValidationResult;
+import org.craftercms.commons.validation.annotations.param.ValidateStringParam;
 
-import java.util.Arrays;
+import javax.validation.ConstraintValidator;
 
-import static org.craftercms.commons.validation.ErrorCodes.*;
-
-public class StringValidator extends BasicValidator<String> {
-
-    protected boolean notEmpty;
-    protected boolean notBlank;
-    protected Integer minLength;
-    protected Integer maxLength;
-    protected String[] whitelistRegexes;
-    protected String[] blacklistRegexes;
-    protected boolean matchFullInput;
-
-    public StringValidator(String targetKey) {
-        super(targetKey);
-        
-        notEmpty = false;
-        notBlank = false;
-        minLength = 0;
-        maxLength = Integer.MAX_VALUE;
-        whitelistRegexes = new String[0];
-        blacklistRegexes = new String[0];
-        matchFullInput = true;
-    }
-
-    public void setNotEmpty(boolean notEmpty) {
-        this.notEmpty = notEmpty;
-    }
-
-    public void setNotBlank(boolean notBlank) {
-        this.notBlank = notBlank;
-    }
-
-    public void setMinLength(int minLength) {
-        this.minLength = minLength;
-    }
-
-    public void setMaxLength(int maxLength) {
-        this.maxLength = maxLength;
-    }
-
-    public void setWhitelistRegexes(String[] whitelistRegexes) {
-        this.whitelistRegexes = whitelistRegexes;
-    }
-
-    public void setBlacklistRegexes(String[] blacklistRegexes) {
-        this.blacklistRegexes = blacklistRegexes;
-    }
-
-    public void setMatchFullInput(boolean matchFullInput) {
-        this.matchFullInput = matchFullInput;
-    }
-
+public class StringValidator extends AbstractStringValidator implements ConstraintValidator<ValidateStringParam, String> {
 
     @Override
-    public boolean validate(String target, ValidationResult result) {
-        if (!super.validate(target, result)) {
-            return false;
-        } else if (notEmpty && StringUtils.isEmpty(target)) {
-            result.addError(targetKey, STRING_NOT_EMPTY_ERROR_CODE);
-            return false;
-        } else if (notBlank && StringUtils.isBlank(target)) {
-            result.addError(targetKey, STRING_NOT_BLANK_ERROR_CODE);
-            return false;
-        } else if (minLength != null && target != null && target.length() < minLength) {
-            result.addError(targetKey, STRING_MIN_LENGTH_ERROR_CODE, minLength);
-            return false;
-        } else if (maxLength != null && target != null && target.length() > maxLength) {
-            result.addError(targetKey, STRING_MAX_LENGTH_ERROR_CODE, maxLength);
-            return false;
-        } else if (target != null && !isWhitelistedAndNotBlacklisted(target)) {
-            result.addError(targetKey, STRING_REGEX_VALIDATION_FAILED_ERROR_CODE);
-            return false;
-        } else {
-            return true;
-        }
+    public void initialize(ValidateStringParam annotation) {
+        this.whitelistRegexes = annotation.whitelistedPatterns();
+        this.blacklistRegexes = annotation.blacklistedPatterns();
+        this.matchFullInput = annotation.matchFullInput();
     }
-
-    protected boolean isWhitelistedAndNotBlacklisted(String target) {
-        return (ArrayUtils.isEmpty(whitelistRegexes) || RegexUtils.matchesAny(target, Arrays.asList(whitelistRegexes), matchFullInput)) &&
-               (ArrayUtils.isEmpty(blacklistRegexes) || !RegexUtils.matchesAny(target, Arrays.asList(blacklistRegexes), matchFullInput));
-    }
-
 
 }

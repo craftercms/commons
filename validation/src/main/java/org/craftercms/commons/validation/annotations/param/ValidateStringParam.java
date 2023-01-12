@@ -15,26 +15,25 @@
  */
 package org.craftercms.commons.validation.annotations.param;
 
-import java.lang.annotation.ElementType;
+import org.craftercms.commons.validation.validators.impl.StringValidator;
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.PARAMETER, ElementType.FIELD})
+import static java.lang.annotation.ElementType.*;
+
 @Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = StringValidator.class)
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 public @interface ValidateStringParam {
+    String message() default "{validation.error.string.regexMatchingFailed}";
 
-    String name() default "";
+    Class<?>[] groups() default {};
 
-    boolean notNull() default false;
-
-    boolean notEmpty() default false;
-
-    boolean notBlank() default false;
-
-    int minLength() default 0;
-
-    int maxLength() default Integer.MAX_VALUE;
+    Class<? extends Payload>[] payload() default {};
 
     String[] whitelistedPatterns() default {};
 
