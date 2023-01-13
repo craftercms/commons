@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -18,7 +18,6 @@ package org.craftercms.commons.validation.validators.impl;
 import org.craftercms.commons.validation.annotations.param.ValidateSecurePathParam;
 
 import javax.validation.ConstraintValidator;
-import java.beans.ConstructorProperties;
 
 public class SecurePathValidator extends AbstractStringValidator implements ConstraintValidator<ValidateSecurePathParam, String> {
 
@@ -28,10 +27,6 @@ public class SecurePathValidator extends AbstractStringValidator implements Cons
     public SecurePathValidator() {
         matchFullInput = false;
         blacklistRegexes = DEFAULT_BLACKLISTED_REGEXES;
-    }
-
-    @Override
-    public void initialize(ValidateSecurePathParam annotation) {
     }
 
 }

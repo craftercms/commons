@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published by
+ * the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.craftercms.commons.validation.validators.impl;
 
 import org.craftercms.commons.validation.ValidationUtils;
@@ -9,7 +24,12 @@ import javax.validation.ConstraintValidatorContext;
 
 import static org.craftercms.commons.validation.ErrorCodes.STRING_REGEX_VALIDATION_FAILED_ERROR_CODE;
 
-public class AbstractStringValidator implements Validator {
+/**
+ * Base {@link Validator} implementation for String validation.
+ * It supports a list of whitelist regexes and a list of blacklist
+ * regexes to validate the input value.
+ */
+public abstract class AbstractStringValidator implements Validator {
     protected String[] whitelistRegexes;
     protected String[] blacklistRegexes;
     protected boolean matchFullInput;

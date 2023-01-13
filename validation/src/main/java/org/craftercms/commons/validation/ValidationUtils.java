@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -26,9 +26,9 @@ import org.springframework.validation.Validator;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-public class ValidationUtils {
+import static java.lang.String.format;
 
-    private static final String VALUE_FIELD_NAME = "value";
+public class ValidationUtils {
 
     public static final String DEFAULT_ERROR_MESSAGE_BUNDLE_NAME = "crafter.commons.validation.errors";
 
@@ -49,15 +49,33 @@ public class ValidationUtils {
 
     /**
      * Invokes a {@link Validator} for a given value and return the list or errors
+     *
+     * @param validator {@link Validator} to invoke
+     * @param value     value to validate
+     * @param objectKey the key/name of the value being validated
      */
-    public static Errors validateValue(@NonNull Validator validator, Object value) {
-        Errors errors = new BeanPropertyBindingResult(value, "value");
-
-
+    public static ValidationResult validateValue(@NonNull Validator validator, Object value, String objectKey) {
+        Errors errors = new BeanPropertyBindingResult(value, objectKey);
         org.springframework.validation.ValidationUtils.invokeValidator(validator, value, errors);
-        return errors;
+        return getValidationResult(errors);
     }
 
+    private static ValidationResult getValidationResult(final Errors errors) {
+        ValidationResult result = new ValidationResult(format("Validation failed for '%s'", errors.getObjectName()), getDefaultErrorMessageBundle());
+        errors.getAllErrors().forEach(error ->
+                result.addError(errors.getObjectName(), error.getCode()));
+        return result;
+    }
+
+    /**
+     * Convenience method to validate a String against a list of blacklist regexes and a list of whitelist regexes
+     *
+     * @param value            String to validate
+     * @param blacklistRegexes list of blacklist regexes
+     * @param whitelistRegexes list of whitelist regexes
+     * @param matchFullInput   if the entire string should be matched
+     * @return true if the string matches any of the whitelist regexes and none of the blacklist regexes
+     */
     public static boolean validateString(final String value, String[] blacklistRegexes, String[] whitelistRegexes, final boolean matchFullInput) {
         return (ArrayUtils.isEmpty(whitelistRegexes) || RegexUtils.matchesAny(value, Arrays.asList(whitelistRegexes), matchFullInput)) &&
                 (ArrayUtils.isEmpty(blacklistRegexes) || !RegexUtils.matchesAny(value, Arrays.asList(blacklistRegexes), matchFullInput));

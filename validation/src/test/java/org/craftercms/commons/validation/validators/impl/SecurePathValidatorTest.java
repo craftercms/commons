@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,12 +15,12 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
+import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import static org.junit.Assert.assertFalse;
@@ -44,7 +44,7 @@ public class SecurePathValidatorTest {
     @Test
     public void testValidPaths() {
         for (String path : VALID_PATHS) {
-            Errors errors = ValidationUtils.validateValue(validator, path);
+            ValidationResult errors = ValidationUtils.validateValue(validator, path, "path");
             assertFalse("Validation of " + path, errors.hasErrors());
         }
     }
@@ -52,7 +52,7 @@ public class SecurePathValidatorTest {
     @Test
     public void testInvalidPaths() {
         for (String path : INVALID_PATHS) {
-            Errors errors = ValidationUtils.validateValue(validator, path);
+            ValidationResult errors = ValidationUtils.validateValue(validator, path, path);
             assertTrue("Validation of " + path, errors.hasErrors());
         }
     }
