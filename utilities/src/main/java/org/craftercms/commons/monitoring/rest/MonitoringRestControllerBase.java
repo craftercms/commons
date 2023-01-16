@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -16,11 +16,11 @@
 
 package org.craftercms.commons.monitoring.rest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.exceptions.InvalidManagementTokenException;
 import org.craftercms.commons.monitoring.MemoryInfo;
 import org.craftercms.commons.monitoring.StatusInfo;
 import org.craftercms.commons.monitoring.VersionInfo;
-import org.craftercms.commons.rest.ManagementTokenAware;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,12 +32,18 @@ import java.io.IOException;
  * @author joseross
  */
 @RestController
-public abstract class MonitoringRestControllerBase implements ManagementTokenAware {
+public abstract class MonitoringRestControllerBase {
 
     public final static String ROOT_URL = "/monitoring";
     public final static String MEMORY_URL = "/memory";
     public final static String STATUS_URL = "/status";
     public final static String VERSION_URL = "/version";
+
+    private final String configuredToken;
+
+    public MonitoringRestControllerBase(final String configuredToken) {
+        this.configuredToken = configuredToken;
+    }
 
     @GetMapping(ROOT_URL + MEMORY_URL)
     public MemoryInfo getCurrentMemory(@RequestParam(name = "token", required = true) String token)
@@ -58,6 +64,12 @@ public abstract class MonitoringRestControllerBase implements ManagementTokenAwa
             throws InvalidManagementTokenException, IOException {
         validateToken(token);
         return VersionInfo.getVersion(this.getClass());
+    }
+
+    protected final void validateToken(final String requestToken) throws InvalidManagementTokenException {
+        if (!StringUtils.equals(requestToken, configuredToken)) {
+            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,25 +15,25 @@
  */
 package org.craftercms.commons.validation.annotations.param;
 
-import java.lang.annotation.ElementType;
+import org.craftercms.commons.validation.validators.impl.NoTagsValidator;
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.PARAMETER, ElementType.FIELD})
+import static java.lang.annotation.ElementType.*;
+
 @Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = {NoTagsValidator.class})
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 public @interface ValidateNoTagsParam {
+    String message() default "{validation.error.string.regexMatchingFailed}";
 
-    String name() default "";
+    Class<?>[] groups() default {};
 
-    boolean notNull() default false;
+    Class<? extends Payload>[] payload() default {};
 
-    boolean notEmpty() default false;
-
-    boolean notBlank() default false;
-
-    int minLength() default 0;
-
-    int maxLength() default Integer.MAX_VALUE;
 
 }
