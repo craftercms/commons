@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,32 +15,30 @@
  */
 package org.craftercms.commons.validation.annotations.param;
 
-import java.lang.annotation.ElementType;
+import org.craftercms.commons.validation.validators.impl.EsapiValidator;
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
 
 /**
  * Parameters annotated with {@link EsapiValidatedParam} will be validated by
  * {@link org.craftercms.commons.validation.validators.impl.EsapiValidator} using the
  * specified type.
  */
-@Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = {EsapiValidator.class})
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 public @interface EsapiValidatedParam {
+    String message() default "{validation.error.esapi.invalid}";
 
-    String name() default "";
+    Class<?>[] groups() default { };
+
+    Class<? extends Payload>[] payload() default { };
 
     EsapiValidationType type();
-
-    boolean notNull() default true;
-
-    boolean notEmpty() default true;
-
-    boolean notBlank() default true;
-
-    int minLength() default 0;
-
-    int maxLength() default Integer.MAX_VALUE;
-
 }

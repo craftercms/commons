@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+  ~ Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License version 3 as published by
@@ -22,13 +22,14 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <aop:aspectj-autoproxy/>
+    <aop:aspectj-autoproxy />
 
-    <bean id="crafter.validatorFactoryRegistry"
-          class="org.craftercms.commons.validation.validators.impl.AnnotationBasedValidatorFactoryRegistry"/>
-
-    <bean id="crafter.validateParamsAspect" class="org.craftercms.commons.validation.validators.impl.ValidateParamsAspect">
-        <property name="validatorFactory" ref="crafter.validatorFactoryRegistry"/>
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:crafter/commons/validation/errors"/>
     </bean>
 
+    <bean id="commonValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
 </beans>

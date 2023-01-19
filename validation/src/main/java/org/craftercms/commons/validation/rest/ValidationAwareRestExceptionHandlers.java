@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -16,9 +16,6 @@
 package org.craftercms.commons.validation.rest;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-
-import java.util.ResourceBundle;
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.craftercms.commons.rest.BaseRestExceptionHandlers;
 import org.craftercms.commons.validation.ValidationException;
@@ -34,9 +31,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import static org.craftercms.commons.validation.ErrorCodes.FIELD_MISSING_ERROR_CODE;
-import static org.craftercms.commons.validation.ErrorCodes.FIELD_UNRECOGNIZED_ERROR_CODE;
-import static org.craftercms.commons.validation.ErrorCodes.INVALID_REQUEST_BODY_ERROR_CODE;
+import java.util.ResourceBundle;
+
+import static org.craftercms.commons.validation.ErrorCodes.*;
 
 @ControllerAdvice
 public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandlers {
@@ -88,9 +85,8 @@ public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandl
         Throwable cause = ex.getCause();
         if (cause instanceof ValidationException) {
             return handleValidationException((ValidationException)cause, webRequest);
-        } else {
-            return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, webRequest);
         }
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, webRequest);
     }
 
 }

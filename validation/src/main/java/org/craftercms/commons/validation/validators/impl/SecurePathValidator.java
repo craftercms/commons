@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,17 +15,16 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import java.beans.ConstructorProperties;
+import org.craftercms.commons.validation.annotations.param.ValidateSecurePathParam;
 
-public class SecurePathValidator extends StringValidator {
+import javax.validation.ConstraintValidator;
+
+public class SecurePathValidator extends AbstractStringValidator implements ConstraintValidator<ValidateSecurePathParam, String> {
 
     public static final String[] DEFAULT_BLACKLISTED_REGEXES =
             {"^[^:\\/]+:", "^(\\.+|~)$", "^(\\.+|~)[\\/]", "[\\/](\\.+|~)$", "[\\/](\\.+|~)[\\/]"};
 
-    @ConstructorProperties({"targetKey"})
-    public SecurePathValidator(String targetKey) {
-        super(targetKey);
-
+    public SecurePathValidator() {
         matchFullInput = false;
         blacklistRegexes = DEFAULT_BLACKLISTED_REGEXES;
     }

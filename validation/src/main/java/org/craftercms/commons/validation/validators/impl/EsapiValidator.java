@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,7 +15,7 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
-import org.craftercms.commons.validation.ValidationResult;
+import org.craftercms.commons.validation.annotations.param.EsapiValidatedParam;
 import org.craftercms.commons.validation.annotations.param.EsapiValidationType;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.Validator;
@@ -23,8 +23,8 @@ import org.owasp.esapi.errors.IntrusionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.craftercms.commons.validation.ErrorCodes.getEsapiErrorMessageKey;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 /**
  * {@link StringValidator} extension that validates the parameter value
@@ -32,41 +32,33 @@ import static org.craftercms.commons.validation.ErrorCodes.getEsapiErrorMessageK
  * 'type' property corresponds to the pattern indicated by the property
  * <code>Validator.&lt;type&gt;</code> in ESAPI.properties file.
  */
-public class EsapiValidator extends StringValidator {
+public class EsapiValidator implements ConstraintValidator<EsapiValidatedParam, String> {
 
     private static final Logger logger = LoggerFactory.getLogger(EsapiValidator.class);
 
     private final Validator validator;
-
     private EsapiValidationType type;
 
-    public EsapiValidator(final String targetKey) {
-        super(targetKey);
+    public EsapiValidator() {
         validator = ESAPI.validator();
     }
 
     @Override
-    public boolean validate(final String target, final ValidationResult result) {
-        return super.validate(target, result) &&
-        // Let super.validate() decide if blank is acceptable
-                (isBlank(target) || validateEsapi(target, result));
+    public void initialize(EsapiValidatedParam annotation) {
+        this.type = annotation.type();
     }
 
-    private boolean validateEsapi(final String target, final ValidationResult result) {
+    @Override
+    public boolean isValid(final String value, final ConstraintValidatorContext context) {
         boolean isValid = false;
         String esapiType = type.typeKey;
         try {
-            isValid = validator.isValidInput(esapiType, target, esapiType, maxLength, !notNull);
+            isValid = validator.isValidInput(esapiType, value, esapiType, Integer.MAX_VALUE, true);
         } catch (IntrusionException e) {
-            logger.warn("Potential attack attempt detected while validating input for param '{}'", targetKey, e);
-        }
-        if (!isValid) {
-            result.addError(targetKey, getEsapiErrorMessageKey(esapiType));
+            // TODO: JM: Revisit how to get param name
+            logger.warn("Potential attack attempt detected while validating input", e);
         }
         return isValid;
     }
 
-    public void setEsapiType(final EsapiValidationType type) {
-        this.type = type;
-    }
 }
