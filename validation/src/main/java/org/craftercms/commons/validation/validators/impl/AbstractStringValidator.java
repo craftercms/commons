@@ -21,7 +21,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.ConstraintValidatorContext;
+import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.craftercms.commons.validation.ErrorCodes.STRING_REGEX_VALIDATION_FAILED_ERROR_CODE;
 
 /**
@@ -30,14 +32,20 @@ import static org.craftercms.commons.validation.ErrorCodes.STRING_REGEX_VALIDATI
  * regexes to validate the input value.
  */
 public abstract class AbstractStringValidator implements Validator {
-    protected String[] whitelistRegexes;
-    protected String[] blacklistRegexes;
+    protected List<String> whitelistRegexes;
+    protected List<String> blacklistRegexes;
     protected boolean matchFullInput;
 
     public AbstractStringValidator() {
-        whitelistRegexes = new String[0];
-        blacklistRegexes = new String[0];
+        whitelistRegexes = emptyList();
+        blacklistRegexes = emptyList();
         matchFullInput = true;
+    }
+
+    public AbstractStringValidator(final List<String> whitelistRegexes, final List<String> blacklistRegexes, final boolean matchFullInput) {
+        this.whitelistRegexes = whitelistRegexes;
+        this.blacklistRegexes = blacklistRegexes;
+        this.matchFullInput = matchFullInput;
     }
 
     public boolean isValid(final String value, final ConstraintValidatorContext context) {
