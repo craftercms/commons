@@ -21,8 +21,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.ConstraintValidatorContext;
-
-import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
