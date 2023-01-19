@@ -15,9 +15,7 @@
  */
 package org.craftercms.commons.validation;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.craftercms.commons.i10n.I10nUtils;
-import org.craftercms.commons.lang.RegexUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -27,6 +25,8 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.ArrayUtils.isEmpty;
+import static org.craftercms.commons.lang.RegexUtils.matchesAny;
 
 public class ValidationUtils {
 
@@ -77,8 +77,8 @@ public class ValidationUtils {
      * @return true if the string matches any of the whitelist regexes and none of the blacklist regexes
      */
     public static boolean validateString(final String value, String[] blacklistRegexes, String[] whitelistRegexes, final boolean matchFullInput) {
-        return (ArrayUtils.isEmpty(whitelistRegexes) || RegexUtils.matchesAny(value, Arrays.asList(whitelistRegexes), matchFullInput)) &&
-                (ArrayUtils.isEmpty(blacklistRegexes) || !RegexUtils.matchesAny(value, Arrays.asList(blacklistRegexes), matchFullInput));
+        return (isEmpty(whitelistRegexes) || matchesAny(value, Arrays.asList(whitelistRegexes), matchFullInput)) &&
+                (isEmpty(blacklistRegexes) || !matchesAny(value, Arrays.asList(blacklistRegexes), matchFullInput));
     }
 
 }

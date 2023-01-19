@@ -34,7 +34,7 @@ import static java.lang.annotation.ElementType.*;
 @Constraint(validatedBy = {EsapiValidator.class})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 public @interface EsapiValidatedParam {
-    String message() default "{validation.error.esapi.invalid}";
+    String message() default "";
 
     Class<?>[] groups() default { };
 

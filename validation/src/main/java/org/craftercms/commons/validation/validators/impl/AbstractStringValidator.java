@@ -40,6 +40,12 @@ public abstract class AbstractStringValidator implements Validator {
         matchFullInput = true;
     }
 
+    public AbstractStringValidator(final String[] whitelistRegexes, final String[] blacklistRegexes, final boolean matchFullInput) {
+        this.whitelistRegexes = whitelistRegexes;
+        this.blacklistRegexes = blacklistRegexes;
+        this.matchFullInput = matchFullInput;
+    }
+
     public boolean isValid(final String value, final ConstraintValidatorContext context) {
         return value == null || ValidationUtils.validateString(value, blacklistRegexes, whitelistRegexes, matchFullInput);
     }

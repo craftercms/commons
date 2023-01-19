@@ -21,6 +21,13 @@ import javax.validation.ConstraintValidator;
 
 public class StringValidator extends AbstractStringValidator implements ConstraintValidator<ValidateStringParam, String> {
 
+    public StringValidator() {
+    }
+
+    public StringValidator(String[] whitelistRegexes, String[] blacklistRegexes, boolean matchFullInput) {
+        super(whitelistRegexes, blacklistRegexes, matchFullInput);
+    }
+
     @Override
     public void initialize(ValidateStringParam annotation) {
         this.whitelistRegexes = annotation.whitelistedPatterns();

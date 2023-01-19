@@ -13,19 +13,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.validation;
 
-import org.craftercms.commons.validation.annotations.param.ValidateSecurePathParam;
+/**
+ * Basic interface for exceptions that contain a {@link ValidationResult}
+ */
+public interface ValidationResultAware {
 
-import javax.validation.ConstraintValidator;
-
-public class SecurePathValidator extends AbstractStringValidator implements ConstraintValidator<ValidateSecurePathParam, String> {
-
-    public static final String[] DEFAULT_BLACKLISTED_REGEXES =
-            {"^[^:\\/]+:", "^(\\.+|~)$", "^(\\.+|~)[\\/]", "[\\/](\\.+|~)$", "[\\/](\\.+|~)[\\/]"};
-
-    public SecurePathValidator() {
-        matchFullInput = false;
-        blacklistRegexes = DEFAULT_BLACKLISTED_REGEXES;
-    }
+    ValidationResult getResult();
 }
