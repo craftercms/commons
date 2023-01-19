@@ -21,11 +21,11 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang3.ArrayUtils.isEmpty;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.craftercms.commons.lang.RegexUtils.matchesAny;
 
 public class ValidationUtils {
@@ -76,9 +76,9 @@ public class ValidationUtils {
      * @param matchFullInput   if the entire string should be matched
      * @return true if the string matches any of the whitelist regexes and none of the blacklist regexes
      */
-    public static boolean validateString(final String value, String[] blacklistRegexes, String[] whitelistRegexes, final boolean matchFullInput) {
-        return (isEmpty(whitelistRegexes) || matchesAny(value, Arrays.asList(whitelistRegexes), matchFullInput)) &&
-                (isEmpty(blacklistRegexes) || !matchesAny(value, Arrays.asList(blacklistRegexes), matchFullInput));
+    public static boolean validateString(final String value, List<String> blacklistRegexes, List<String> whitelistRegexes, final boolean matchFullInput) {
+        return (isEmpty(whitelistRegexes) || matchesAny(value, whitelistRegexes, matchFullInput)) &&
+                (isEmpty(blacklistRegexes) || !matchesAny(value, blacklistRegexes, matchFullInput));
     }
 
 }

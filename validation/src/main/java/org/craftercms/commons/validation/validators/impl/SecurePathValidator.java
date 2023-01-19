@@ -18,6 +18,7 @@ package org.craftercms.commons.validation.validators.impl;
 import org.craftercms.commons.validation.annotations.param.ValidateSecurePathParam;
 
 import javax.validation.ConstraintValidator;
+import java.util.List;
 
 public class SecurePathValidator extends AbstractStringValidator implements ConstraintValidator<ValidateSecurePathParam, String> {
 
@@ -26,6 +27,6 @@ public class SecurePathValidator extends AbstractStringValidator implements Cons
 
     public SecurePathValidator() {
         matchFullInput = false;
-        blacklistRegexes = DEFAULT_BLACKLISTED_REGEXES;
+        blacklistRegexes = List.of(DEFAULT_BLACKLISTED_REGEXES);
     }
 }
