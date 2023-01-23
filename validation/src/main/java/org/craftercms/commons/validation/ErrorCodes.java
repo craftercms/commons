@@ -39,6 +39,8 @@ public class ErrorCodes {
     public static final String STRING_MAX_LENGTH_ERROR_CODE = "validation.error.string.maxLength";
     public static final String STRING_REGEX_VALIDATION_FAILED_ERROR_CODE = "validation.error.string.regexMatchingFailed";
 
+    public static final String SQL_SORT_VALIDATION_FAILED_ERROR_CODE = "validation.error.sql.sort.failed";
+
     /*
      * List errors
      */
