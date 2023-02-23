@@ -20,30 +20,35 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Validator;
 
-import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.USERNAME;
+import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.CONFIGURATION_PATH;
 
-public class UsernameValidatorTest implements ValidatorTest {
+public class ConfigurationPathValidatorTest implements ValidatorTest {
 
     private Validator validator;
 
     @Before
     public void setUp() {
-        validator = new EsapiValidator(USERNAME);
+        validator = new EsapiValidator(CONFIGURATION_PATH);
     }
 
     @Test
-    public void testDash() {
-        assertValid("john-wick");
+    public void testSpace() {
+        assertRejected("site/website/folder 1/index.xml");
     }
 
     @Test
     public void testStartWithDigit() {
-        assertRejected("1st_john");
+        assertValid("1st_folder/path/");
+    }
+
+    @Test
+    public void testGroovy() {
+        assertValid("/config/studio/content-types/taxonomy/controller.groovy");
     }
 
     @Test
     public void testStartWithDigit2() {
-        assertRejected("7s1t3s");
+        assertValid("7s1t3s/and/more");
     }
 
     @Test
@@ -58,62 +63,32 @@ public class UsernameValidatorTest implements ValidatorTest {
 
     @Test
     public void testSpecialChars() {
-        assertRejected("valid_but;");
-    }
-
-    @Test
-    public void testOnlyLetters() {
-        assertValid("admin");
-    }
-
-    @Test
-    public void testLettersThenDigits() {
-        assertValid("bob123");
+        assertRejected("invalid;");
     }
 
     @Test
     public void testUnderscore() {
-        assertValid("john_wick");
+        assertValid("/site/website/_articles/folder_1");
     }
 
     @Test
     public void testDot() {
-        assertValid("john.wick");
+        assertValid("/site/components/path.to.content");
     }
 
     @Test
-    public void testEmail() {
-        assertValid("john@wick.com");
+    public void testXml() {
+        assertValid("/config/studio/validations/somefile.xml");
     }
 
     @Test
-    public void testDoubleAtEmail() {
-        assertValid("john@wi@ck.com");
+    public void testMultiSlash() {
+        assertValid("/site//components/path//to/content/index.xml");
     }
 
     @Test
-    public void testEmailWithSpaces() {
-        assertRejected("john@wic k.com");
-    }
-
-    @Test
-    public void testHash() {
-        assertRejected("john#wi@ck.com");
-    }
-
-    @Test
-    public void testHash2() {
-        assertRejected("john@wi#ck.com");
-    }
-
-    @Test
-    public void testAtSign() {
-        assertValid("john@");
-    }
-
-    @Test
-    public void testPlusSign() {
-        assertValid("john+wick");
+    public void testMixedCase() {
+        assertRejected("/site/website/DOCS/to/content/index.xml");
     }
 
     @Override
