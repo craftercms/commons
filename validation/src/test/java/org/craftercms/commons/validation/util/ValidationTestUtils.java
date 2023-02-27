@@ -19,6 +19,9 @@ import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Utility for validation tests
  */
@@ -27,6 +30,14 @@ public class ValidationTestUtils {
     public static boolean isValid(Validator validator, String value) {
         ValidationResult errors = ValidationUtils.validateValue(validator, value, "key");
         return !errors.hasErrors();
+    }
+
+    public static void assertValid(Validator validator, String value){
+        assertTrue(isValid(validator, value));
+    }
+
+    public static void assertInvalid(Validator validator, String value){
+        assertFalse(isValid(validator, value));
     }
 
 }

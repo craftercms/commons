@@ -20,79 +20,55 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Validator;
 
-import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.GROUP_NAME;
+import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.CONTENT_FILE_NAME_WRITE;
 
-public class GroupNameValidatorTest implements ValidatorTest {
+public class ContentNewFilenameValidatorTest implements ValidatorTest {
 
     private Validator validator;
 
     @Before
     public void setUp() {
-        validator = new EsapiValidator(GROUP_NAME);
+        validator = new EsapiValidator(CONTENT_FILE_NAME_WRITE);
     }
 
     @Test
-    public void testStartWithDigits() {
-        assertRejected("1st_publisher");
+    public void testXml() {
+        assertValid("index.xml");
+    }
+
+    @Test
+    public void testSlash() {
+        assertRejected("path/file.xml");
     }
 
     @Test
     public void testSpaces() {
-        assertRejected("SITE reviewer");
+        assertRejected("my file.xml");
     }
 
     @Test
-    public void testStartWithDigits2() {
-        assertRejected("7s1t3s");
+    public void testDots() {
+        assertRejected("my.file.xml");
     }
 
     @Test
-    public void testSpecialChars() {
-        assertRejected("administrators;");
+    public void testNonXml() {
+        assertRejected("my.txt");
     }
 
     @Test
-    public void testSpecialCharsTags() {
-        assertRejected("<malicious>");
+    public void testLevelDescriptor() {
+        assertValid("crafter-level-descriptor.level.xml");
     }
 
     @Test
-    public void testUnderscore() {
-        assertValid("regional_reviewer");
-    }
-
-    @Test
-    public void testUnderscoreAndDigits() {
-        assertValid("site_admin3");
-    }
-
-    @Test
-    public void testOnlyLetters() {
-        assertValid("reviewer");
-    }
-
-    @Test
-    public void testDigits() {
-        assertValid("s1t3s");
-    }
-
-    @Test
-    public void testDigits2() {
-        assertValid("a1d");
-    }
-
-    @Test
-    public void testDash() {
-        assertValid("division-owner");
-    }
-
-    @Test
-    public void testDot() {
-        assertValid("division.owner");
+    public void testLevelDescriptor2() {
+        assertRejected("something_else_crafter-level-descriptor.level.xml");
     }
 
     @Override
     public Validator getValidator() {
         return validator;
     }
+
 }

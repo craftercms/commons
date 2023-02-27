@@ -20,35 +20,35 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Validator;
 
-import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.GROUP_NAME;
+import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.SITE_ID;
 
-public class GroupNameValidatorTest implements ValidatorTest {
+public class SiteIdValidatorTest implements ValidatorTest {
 
     private Validator validator;
 
     @Before
     public void setUp() {
-        validator = new EsapiValidator(GROUP_NAME);
+        validator = new EsapiValidator(SITE_ID);
     }
 
     @Test
-    public void testStartWithDigits() {
-        assertRejected("1st_publisher");
+    public void testSpace() {
+        assertRejected("my site");
+    }
+
+    @Test
+    public void testStartWithDigit() {
+        assertValid("1mysite");
+    }
+
+    @Test
+    public void testStartWithDigit2() {
+        assertValid("7s1t3s");
     }
 
     @Test
     public void testSpaces() {
-        assertRejected("SITE reviewer");
-    }
-
-    @Test
-    public void testStartWithDigits2() {
-        assertRejected("7s1t3s");
-    }
-
-    @Test
-    public void testSpecialChars() {
-        assertRejected("administrators;");
+        assertRejected("johnny mnemonic");
     }
 
     @Test
@@ -57,38 +57,18 @@ public class GroupNameValidatorTest implements ValidatorTest {
     }
 
     @Test
+    public void testSpecialChars() {
+        assertRejected("invalid;");
+    }
+
+    @Test
     public void testUnderscore() {
-        assertValid("regional_reviewer");
-    }
-
-    @Test
-    public void testUnderscoreAndDigits() {
-        assertValid("site_admin3");
-    }
-
-    @Test
-    public void testOnlyLetters() {
-        assertValid("reviewer");
-    }
-
-    @Test
-    public void testDigits() {
-        assertValid("s1t3s");
-    }
-
-    @Test
-    public void testDigits2() {
-        assertValid("a1d");
-    }
-
-    @Test
-    public void testDash() {
-        assertValid("division-owner");
+        assertValid("my_site");
     }
 
     @Test
     public void testDot() {
-        assertValid("division.owner");
+        assertRejected("my.site");
     }
 
     @Override
