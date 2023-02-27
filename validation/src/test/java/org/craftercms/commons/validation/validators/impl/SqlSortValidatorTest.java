@@ -1,16 +1,28 @@
+/*
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as published by
+ * the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.craftercms.commons.validation.validators.impl;
 
+import org.craftercms.commons.validation.validators.ValidatorTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Validator;
 
 import java.util.List;
 
-import static org.craftercms.commons.validation.util.ValidationTestUtils.isValid;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-public class SqlSortValidatorTest {
+public class SqlSortValidatorTest implements ValidatorTest {
     private Validator validator;
 
     @Before
@@ -20,46 +32,51 @@ public class SqlSortValidatorTest {
 
     @Test
     public void testSingleColumn() {
-        assertTrue(isValid(validator, "date"));
+        assertValid("date");
     }
 
     @Test
     public void testSingleColumnAndSort() {
-        assertTrue(isValid(validator, "date desc"));
+        assertValid("date desc");
     }
 
     @Test
     public void testDifferentCase() {
-        assertTrue(isValid(validator, "DATE desc"));
+        assertValid("DATE desc");
     }
 
     @Test
     public void testDifferentCase2() {
-        assertTrue(isValid(validator, "id ASc"));
+        assertValid("id ASc");
     }
 
     @Test
     public void testTwoColumns() {
-        assertTrue(isValid(validator, "date, name"));
+        assertValid("date, name");
     }
 
     @Test
     public void testMultipleColumnAndSorts() {
-        assertTrue(isValid(validator, "date asc, name desc,id"));
+        assertValid("date asc, name desc,id");
     }
 
     @Test
     public void testInvalidColumn() {
-        assertFalse(isValid(validator, "date, parent"));
+        assertRejected("date, parent");
     }
 
     @Test
     public void testInvalidOrder() {
-        assertFalse(isValid(validator, "date asce"));
+        assertRejected("date asce");
     }
 
     @Test
     public void testMultipleOrder() {
-        assertFalse(isValid(validator, "date asc desc"));
+        assertRejected("date asc desc");
+    }
+
+    @Override
+    public Validator getValidator() {
+        return validator;
     }
 }

@@ -15,41 +15,43 @@
  */
 package org.craftercms.commons.validation.validators.impl;
 
+import org.craftercms.commons.validation.validators.ValidatorTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.validation.Validator;
 
-import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.USERNAME;
-import static org.craftercms.commons.validation.util.ValidationTestUtils.isValid;
-import static org.junit.Assert.assertFalse;
+import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.SEARCH_KEYWORDS;
 
-public class SearchKeywordsTest {
+public class SearchKeywordsTest implements ValidatorTest {
     private Validator validator;
 
     @Before
     public void setUp() {
-        validator = new EsapiValidator(USERNAME);
+        validator = new EsapiValidator(SEARCH_KEYWORDS);
     }
 
     @Test
     public void testSpecialChars() {
-        assertFalse(isValid(validator, "<invalid>"));
+        assertRejected("<invalid>");
     }
 
     @Test
     public void testUnderscore() {
-        assertFalse(isValid(validator, "_invalid_"));
+        assertValid("_invalid_");
     }
 
     @Test
     public void testDash() {
-        assertFalse(isValid(validator, "this-is-valid"));
+        assertValid("this-is-valid");
     }
 
     @Test
     public void testSpaces() {
-        assertFalse(isValid(validator, "also this is valid"));
+        assertValid("also this is valid");
     }
 
-
+    @Override
+    public Validator getValidator() {
+        return validator;
+    }
 }
