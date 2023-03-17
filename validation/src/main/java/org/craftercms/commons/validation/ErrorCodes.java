@@ -39,11 +39,29 @@ public class ErrorCodes {
     public static final String STRING_MAX_LENGTH_ERROR_CODE = "validation.error.string.maxLength";
     public static final String STRING_REGEX_VALIDATION_FAILED_ERROR_CODE = "validation.error.string.regexMatchingFailed";
 
+    public static final String SQL_SORT_VALIDATION_FAILED_ERROR_CODE = "validation.error.sql.sort.failed";
+
+    /*
+     * List errors
+     */
+    public static final String LIST_NOT_EMPTY_ERROR_CODE = "validation.error.list.notEmpty";
+
+    /**
+     * Object errors
+     */
+    public static final String OBJECT_FIELD_READ_ERROR_CODE = "validation.error.object.field.read";
+
     /*
      * Number errors
      */
     public static final String NUMBER_MIN_VALUE_ERROR = "validation.error.number.minValue";
     public static final String NUMBER_MAX_VALUE_ERROR = "validation.error.number.maxValue";
+
+    private static final String ESAPI_URI_ERROR = "validation.error.esapi.%s";
+
+    public static String getEsapiErrorMessageKey(final String esapiType) {
+        return String.format(ESAPI_URI_ERROR, esapiType);
+    }
 
     private ErrorCodes() {
     }

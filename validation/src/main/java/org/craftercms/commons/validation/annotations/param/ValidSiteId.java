@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,12 +15,27 @@
  */
 package org.craftercms.commons.validation.annotations.param;
 
-import java.lang.annotation.ElementType;
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import javax.validation.constraints.Size;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD, ElementType.TYPE})
+import static java.lang.annotation.ElementType.*;
+import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.SITE_ID;
+
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ValidateParams {
+@Constraint(validatedBy = {})
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+@ValidateNoTagsParam
+@ValidateSecurePathParam
+@EsapiValidatedParam(type = SITE_ID)
+@Size(max = 50)
+public @interface ValidSiteId {
+    String message() default "";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

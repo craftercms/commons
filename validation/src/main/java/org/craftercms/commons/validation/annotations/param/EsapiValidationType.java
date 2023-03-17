@@ -15,25 +15,28 @@
  */
 package org.craftercms.commons.validation.annotations.param;
 
-import org.craftercms.commons.validation.validators.impl.NoTagsValidator;
+/**
+ * Supported ESAPI validator "types".
+ */
+public enum EsapiValidationType {
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+    ALPHANUMERIC("ALPHANUMERIC"),
+    ASSET_PATH_WRITE("ASSET_PATH_WRITE"),
+    CONTENT_FILE_NAME_WRITE("CONTENT_FILE_NAME_WRITE"),
+    CONTENT_PATH_WRITE("CONTENT_PATH_WRITE"),
+    CONTENT_PATH_READ("CONTENT_PATH_READ"),
+    CONFIGURATION_PATH("CONFIGURATION_PATH"),
+    HTTPParameterName("HTTPParameterName"),
+    SITE_ID("SITEID"),
+    EMAIL("EMAIL"),
+    USERNAME("USERNAME"),
+    GROUP_NAME("GROUP_NAME"),
+    SEARCH_KEYWORDS("SEARCH_KEYWORDS"),
+    SQL_ORDER_BY("SQL_ORDER_BY");
 
-import static java.lang.annotation.ElementType.*;
+    public final String typeKey;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {NoTagsValidator.class})
-@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
-public @interface ValidateNoTagsParam {
-    String message() default "{validation.error.string.regexMatchingFailed}";
-
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
-
-
+    EsapiValidationType(final String typeKey) {
+        this.typeKey = typeKey;
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -39,35 +39,37 @@ public abstract class MonitoringRestControllerBase {
     public final static String STATUS_URL = "/status";
     public final static String VERSION_URL = "/version";
 
+    private final String configuredToken;
+
+    public MonitoringRestControllerBase(final String configuredToken) {
+        this.configuredToken = configuredToken;
+    }
+
     @GetMapping(ROOT_URL + MEMORY_URL)
     public MemoryInfo getCurrentMemory(@RequestParam(name = "token", required = true) String token)
             throws InvalidManagementTokenException {
-        if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
-            return MemoryInfo.getCurrentMemory();
-        } else {
-            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
-        }
+        validateToken(token);
+        return MemoryInfo.getCurrentMemory();
     }
 
     @GetMapping(ROOT_URL + STATUS_URL)
     public StatusInfo getCurrentStatus(@RequestParam(name = "token", required = true) String token)
             throws InvalidManagementTokenException {
-        if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
-            return StatusInfo.getCurrentStatus();
-        } else {
-            throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
-        }
+        validateToken(token);
+        return StatusInfo.getCurrentStatus();
     }
 
     @GetMapping(ROOT_URL + VERSION_URL)
     public VersionInfo getCurrentVersion(@RequestParam(name = "token", required = true) String token)
             throws InvalidManagementTokenException, IOException {
-        if (StringUtils.isNotEmpty(token) && StringUtils.equals(token, getConfiguredToken())) {
-            return VersionInfo.getVersion(this.getClass());
-        } else {
+        validateToken(token);
+        return VersionInfo.getVersion(this.getClass());
+    }
+
+    protected final void validateToken(final String requestToken) throws InvalidManagementTokenException {
+        if (!StringUtils.equals(requestToken, configuredToken)) {
             throw new InvalidManagementTokenException("Management authorization failed, invalid token.");
         }
     }
 
-    protected abstract String getConfiguredToken();
 }

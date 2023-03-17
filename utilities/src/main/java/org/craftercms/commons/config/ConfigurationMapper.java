@@ -17,6 +17,7 @@ package org.craftercms.commons.config;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
+import org.craftercms.commons.config.profiles.ConfigurationProfileNotFoundException;
 
 /**
  * Interface for classes that map configuration data to Java bean classes.
@@ -36,9 +37,10 @@ public interface ConfigurationMapper<T> {
      * @return the configuration object
      *
      * @throws ConfigurationException if an error occurs
+     * @throws ConfigurationProfileNotFoundException if profile is not found
      */
     T readConfig(ConfigurationProvider provider, String module, String path, String encoding, String configId)
-            throws ConfigurationException;
+            throws ConfigurationException, ConfigurationProfileNotFoundException;
 
     /**
      * Reads a single profile from the given configuration

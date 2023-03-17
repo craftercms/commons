@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public Link as published by
@@ -23,6 +23,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 import static org.craftercms.commons.plugin.model.CrafterCmsEditions.COMMUNITY;
 import static org.craftercms.commons.plugin.model.CrafterCmsEditions.ENTERPRISE;
@@ -81,16 +84,19 @@ public class Version {
     /**
      * The major version
      */
+    @Positive
     protected int major;
 
     /**
      * The minor version
      */
+    @PositiveOrZero
     protected int minor;
 
     /**
      * The patch version
      */
+    @PositiveOrZero
     protected int patch;
 
     public int getMajor() {

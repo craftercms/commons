@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -13,25 +13,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.craftercms.commons.validation.validators.impl;
+package org.craftercms.commons.config.profiles;
 
-public class DoubleValidator extends AbstractNumberValidator<Double> {
-
-    public DoubleValidator(String targetKey) {
-        super(targetKey);
-
-        this.minValue = Double.MIN_VALUE;
-        this.maxValue = Double.MAX_VALUE;
+/**
+ * Exception thrown by classes that handle configuration if the profile Id does not exist
+ */
+public class ConfigurationProfileNotFoundException extends Exception {
+    public ConfigurationProfileNotFoundException(String message) {
+        super(message);
     }
 
-    @Override
-    protected boolean isLessThanMinValue(Double target) {
-        return target < minValue;
+    public ConfigurationProfileNotFoundException(String message, Throwable cause) {
+        super(message, cause);
     }
-
-    @Override
-    protected boolean isGreaterThanMaxValue(Double target) {
-        return target > maxValue;
-    }
-
 }

@@ -15,7 +15,7 @@
  */
 package org.craftercms.commons.validation.annotations.param;
 
-import org.craftercms.commons.validation.validators.impl.StringValidator;
+import org.craftercms.commons.validation.validators.impl.EsapiValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -25,20 +25,20 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
+/**
+ * Parameters annotated with {@link EsapiValidatedParam} will be validated by
+ * {@link org.craftercms.commons.validation.validators.impl.EsapiValidator} using the
+ * specified type.
+ */
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = StringValidator.class)
+@Constraint(validatedBy = {EsapiValidator.class})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
-public @interface ValidateStringParam {
-    String message() default "{validation.error.string.regexMatchingFailed}";
+public @interface EsapiValidatedParam {
+    String message() default "";
 
-    Class<?>[] groups() default {};
+    Class<?>[] groups() default { };
 
-    Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default { };
 
-    String[] whitelistedPatterns() default {};
-
-    String[] blacklistedPatterns() default {};
-
-    boolean matchFullInput() default true;
-
+    EsapiValidationType type();
 }

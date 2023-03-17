@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,10 +15,21 @@
  */
 package org.craftercms.commons.validation.validators;
 
-import java.lang.annotation.Annotation;
+import org.craftercms.commons.validation.util.ValidationTestUtils;
+import org.springframework.validation.Validator;
 
-public interface AnnotationBasedValidatorFactory<A extends Annotation, T> {
+/**
+ * Test interface to provide default accept/reject assertions for validations
+ */
+public interface ValidatorTest {
 
-    Validator<T> getValidator(A annotation);
+    Validator getValidator();
 
+    default void assertValid(String value) {
+        ValidationTestUtils.assertValid(getValidator(), value);
+    }
+
+    default void assertRejected(String value) {
+        ValidationTestUtils.assertInvalid(getValidator(), value);
+    }
 }

@@ -15,8 +15,6 @@
  */
 package org.craftercms.commons.validation.annotations.param;
 
-import org.craftercms.commons.validation.validators.impl.StringValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Retention;
@@ -24,21 +22,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
+import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.CONFIGURATION_PATH;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = StringValidator.class)
+@Constraint(validatedBy = {})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
-public @interface ValidateStringParam {
-    String message() default "{validation.error.string.regexMatchingFailed}";
+@ValidateNoTagsParam
+@ValidateSecurePathParam
+@EsapiValidatedParam(type = CONFIGURATION_PATH)
+public @interface ValidConfigurationPath {
+    String message() default "";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
-    String[] whitelistedPatterns() default {};
-
-    String[] blacklistedPatterns() default {};
-
-    boolean matchFullInput() default true;
-
 }
