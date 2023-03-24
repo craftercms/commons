@@ -126,6 +126,36 @@ public class ContentPathReadValidatorTest implements ValidatorTest {
         assertRejected("/site/website/folder#hash/to/content/index.xml");
     }
 
+    @Test
+    public void testSpecialChars2() {
+        assertValid("/static-assets/images/ran[,]do%$(()~`m-picture^.png");
+    }
+
+    @Test
+    public void testAcuteAccent() {
+        assertValid("/static-assets/images/á-picture.png");
+    }
+
+    @Test
+    public void testGraveAccent() {
+        assertValid("/static-assets/images/à-picture.png");
+    }
+
+    @Test
+    public void testTilde() {
+        assertValid("/static-assets/images/ã-picture.png");
+    }
+
+    @Test
+    public void testDiacritics() {
+        assertValid("àâĩûŷỹỳóõï");
+    }
+
+    @Test
+    public void testColon() {
+        assertValid("screenshot-2022-08-25-16:01:00.png");
+    }
+
     @Override
     public Validator getValidator() {
         return validator;
