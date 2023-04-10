@@ -5,7 +5,7 @@ git:
 language: java
 sudo: false
 jdk:
-- openjdk11
+- openjdk17
 branches:
   only:
   - develop
