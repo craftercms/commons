@@ -31,20 +31,14 @@ public class MongoClientOptionsFactory extends AbstractFactoryBean<MongoClientOp
     private static final int NEAREST_READ_PREFERENCE = 2;
     private static final int SECONDARY_READ_PREFERENCE = 3;
     private int readPreference;
-    private boolean alwaysUseMBeans;
     private int connectionsPerHost;
     private boolean cursorFinalizerEnabled;
     private int connectTimeout;
     private int maxWaitTime;
     private String writeConcern;
-    private int threadsAllowedToBlockForConnectionMultiplier;
 
     public void setReadPreference(final int readPreference) {
         this.readPreference = readPreference;
-    }
-
-    public void setAlwaysUseMBeans(final boolean alwaysUseMBeans) {
-        this.alwaysUseMBeans = alwaysUseMBeans;
     }
 
     public void setConnectionsPerHost(final int connectionsPerHost) {
@@ -67,11 +61,6 @@ public class MongoClientOptionsFactory extends AbstractFactoryBean<MongoClientOp
         this.writeConcern = writeConcern;
     }
 
-    public void setThreadsAllowedToBlockForConnectionMultiplier(final int
-                                                                    threadsAllowedToBlockForConnectionMultiplier) {
-        this.threadsAllowedToBlockForConnectionMultiplier = threadsAllowedToBlockForConnectionMultiplier;
-    }
-
     @Override
     public Class<?> getObjectType() {
         return MongoClientOptions.class;
@@ -80,7 +69,6 @@ public class MongoClientOptionsFactory extends AbstractFactoryBean<MongoClientOp
     @Override
     protected MongoClientOptions createInstance() throws Exception {
         MongoClientOptions.Builder builder = MongoClientOptions.builder();
-        builder.alwaysUseMBeans(this.alwaysUseMBeans);
         builder.connectionsPerHost(this.connectionsPerHost);
         builder.cursorFinalizerEnabled(this.cursorFinalizerEnabled);
         builder.connectTimeout(this.connectTimeout);
@@ -102,7 +90,6 @@ public class MongoClientOptionsFactory extends AbstractFactoryBean<MongoClientOp
                 break;
         }
         builder.writeConcern(WriteConcern.valueOf(this.writeConcern));
-        builder.threadsAllowedToBlockForConnectionMultiplier(this.threadsAllowedToBlockForConnectionMultiplier);
         return builder.build();
 
     }
