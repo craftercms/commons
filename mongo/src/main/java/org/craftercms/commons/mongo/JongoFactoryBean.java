@@ -19,16 +19,13 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.mongodb.DB;
-import com.mongodb.Mongo;
 
 import java.util.List;
 import java.util.Map;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.jackson.JacksonUtils;
 import org.jongo.Jongo;
 import org.jongo.marshall.jackson.JacksonMapper;
