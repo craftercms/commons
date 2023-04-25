@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -38,7 +38,7 @@ public class BeanListFactoryBean implements FactoryBean<List<Object>>, Applicati
         this.applicationContext = applicationContext;
     }
 
-    @Required
+    @Autowired
     public void setBeanNames(String[] beanNames) {
         this.beanNames = beanNames;
     }

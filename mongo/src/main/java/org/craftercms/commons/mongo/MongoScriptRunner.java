@@ -33,7 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -62,12 +62,12 @@ public class MongoScriptRunner implements InitializingBean{
         this.runOnInit = true;
     }
 
-    @Required
+    @Autowired
     public void setMongo(MongoClient mongo) {
         this.mongo = mongo;
     }
 
-    @Required
+    @Autowired
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
@@ -80,7 +80,7 @@ public class MongoScriptRunner implements InitializingBean{
         this.password = password;
     }
 
-    @Required
+    @Autowired
     public void setScriptPaths(List<Resource> scriptPaths) {
         this.scriptPaths = scriptPaths;
     }

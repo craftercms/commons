@@ -41,7 +41,7 @@ import org.jongo.MongoCollection;
 import org.jongo.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Simple interface to interact with Jongo/MongoDB.<br/>
@@ -538,7 +538,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
         return (Iterable<T>)find.as(clazz);
     }
 
-    @Required
+    @Autowired
     public void setJongo(final Jongo jongo) {
         this.jongo = jongo;
         this.gridfs = new GridFS(jongo.getDatabase());

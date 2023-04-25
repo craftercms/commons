@@ -22,17 +22,19 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.i10n.I10nUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.util.MimeType;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.util.MimeTypeUtils;
 
 /**
  * Writes the response using a {@link org.springframework.http.converter.HttpMessageConverter} chosen depending on
@@ -156,7 +158,7 @@ public class HttpMessageConvertingResponseWriter {
 
     /**
      * Return the media types supported by all provided message converters sorted by specificity via
-     * {@link MediaType#sortBySpecificity(List)}.
+     * {@link MimeTypeUtils#sortBySpecificity(List)}.
      */
     protected List<MediaType> getAllSupportedMediaTypes(List<HttpMessageConverter<?>> messageConverters) {
         Set<MediaType> allSupportedMediaTypes = new LinkedHashSet<MediaType>();
@@ -166,7 +168,7 @@ public class HttpMessageConvertingResponseWriter {
 
         List<MediaType> result = new ArrayList<MediaType>(allSupportedMediaTypes);
 
-        MediaType.sortBySpecificity(result);
+        MimeTypeUtils.sortBySpecificity(result);
 
         return Collections.unmodifiableList(result);
     }

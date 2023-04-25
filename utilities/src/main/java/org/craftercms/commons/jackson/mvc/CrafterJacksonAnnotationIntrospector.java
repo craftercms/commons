@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 
 import org.craftercms.commons.jackson.mvc.annotations.Exclude;
 import org.craftercms.commons.jackson.mvc.annotations.SecureProperty;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Extends JacksonAnnotationIntrospector so it will always a filter (so @JsonFilter) annotation is not needed.
@@ -59,7 +59,7 @@ public class CrafterJacksonAnnotationIntrospector extends JacksonAnnotationIntro
         this.securityPropertyFilter = securityPropertyFilter;
     }
 
-    @Required
+    @Autowired
     public void setDefaultFilter(final String defaultFilter) {
         this.defaultFilter = defaultFilter;
     }

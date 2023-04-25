@@ -18,9 +18,10 @@ package org.craftercms.commons.mail.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.MimeMessage;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.MimeMessage;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -29,12 +30,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.i10n.I10nUtils;
-import org.craftercms.commons.mail.Email;
-import org.craftercms.commons.mail.EmailAddressException;
-import org.craftercms.commons.mail.EmailException;
-import org.craftercms.commons.mail.EmailFactory;
-import org.craftercms.commons.mail.EmailPreparationException;
-import org.springframework.beans.factory.annotation.Required;
+import org.craftercms.commons.mail.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -64,7 +61,7 @@ public class EmailFactoryImpl implements EmailFactory {
         templateEncoding = DEFAULT_ENCODING;
     }
 
-    @Required
+    @Autowired
     public void setMailSender(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
@@ -113,7 +110,7 @@ public class EmailFactoryImpl implements EmailFactory {
     }
 
     protected MimeMessage createMessage(String from, String[] to, String[] cc, String[] bcc, String replyTo,
-                                        String subject, String body, boolean html, File... attachments) throws EmailException {
+                                                              String subject, String body, boolean html, File... attachments) throws EmailException {
         boolean addAttachments = ArrayUtils.isNotEmpty(attachments);
         MimeMessageHelper messageHelper;
 

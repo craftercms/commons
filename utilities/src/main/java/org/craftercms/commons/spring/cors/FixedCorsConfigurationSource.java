@@ -15,10 +15,9 @@
  */
 package org.craftercms.commons.spring.cors;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-
-import javax.servlet.http.HttpServletRequest;
 
 import java.beans.ConstructorProperties;
 import java.util.Arrays;

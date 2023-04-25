@@ -16,7 +16,7 @@
 package org.craftercms.commons.file.stores.impl;
 
 import org.craftercms.commons.file.stores.RemotePath;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.regex.Matcher;
 
@@ -30,7 +30,7 @@ public class FixedStoreTypeRemotePathParser implements RemotePathParser {
 
     private String storeType;
 
-    @Required
+    @Autowired
     public void setStoreType(String storeType) {
         this.storeType = storeType;
     }

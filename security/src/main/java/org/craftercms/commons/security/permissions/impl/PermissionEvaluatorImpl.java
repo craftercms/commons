@@ -22,7 +22,7 @@ import org.craftercms.commons.security.permissions.Permission;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.craftercms.commons.security.permissions.PermissionResolver;
 import org.craftercms.commons.security.permissions.SubjectResolver;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Default implementation of {@link org.craftercms.commons.security.permissions.PermissionEvaluator}
@@ -40,12 +40,12 @@ public class PermissionEvaluatorImpl<S, R> implements PermissionEvaluator<S, R> 
     protected SubjectResolver<S> subjectResolver;
     protected PermissionResolver<S, R> permissionResolver;
 
-    @Required
+    @Autowired
     public void setSubjectResolver(SubjectResolver<S> subjectResolver) {
         this.subjectResolver = subjectResolver;
     }
 
-    @Required
+    @Autowired
     public void setPermissionResolver(PermissionResolver<S, R> permissionResolver) {
         this.permissionResolver = permissionResolver;
     }

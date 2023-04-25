@@ -21,7 +21,7 @@ import org.craftercms.commons.config.profiles.ConfigurationProfileLoader;
 import org.craftercms.commons.file.stores.RemoteFile;
 import org.craftercms.commons.file.stores.RemoteFileStore;
 import org.craftercms.commons.file.stores.RemotePath;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
@@ -35,7 +35,7 @@ public abstract class AbstractProfileAwareRemoteFileStore<T extends Configuratio
 
     protected ConfigurationProfileLoader<T> profileLoader;
 
-    @Required
+    @Autowired
     public void setProfileLoader(ConfigurationProfileLoader<T> profileLoader) {
         this.profileLoader = profileLoader;
     }

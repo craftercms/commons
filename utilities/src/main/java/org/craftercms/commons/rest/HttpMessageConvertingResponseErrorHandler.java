@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -51,19 +51,19 @@ public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorH
         return responseType;
     }
 
-    @Required
+    @Autowired
     public void setResponseType(Class<?> responseType) {
         this.responseType = responseType;
     }
 
     @Override
     public boolean hasError(ClientHttpResponse response) throws IOException {
-        return hasError(response.getStatusCode());
+        return hasError(HttpStatus.resolve(response.getStatusCode().value()));
     }
 
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
-        HttpStatus status = response.getStatusCode();
+        HttpStatus status = HttpStatus.resolve(response.getStatusCode().value());
         HttpMessageConverterExtractor<?> responseExtractor = new HttpMessageConverterExtractor<>(responseType,
             messageConverters);
 

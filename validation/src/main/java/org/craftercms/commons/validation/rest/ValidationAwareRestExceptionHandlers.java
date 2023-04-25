@@ -23,6 +23,7 @@ import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -51,7 +52,7 @@ public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandl
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest webRequest) {
+                                                                  HttpStatusCode statusCode, WebRequest webRequest) {
         Throwable cause = ExceptionUtils.getRootCause(ex);
         if (cause instanceof UnrecognizedPropertyException) {
             UnrecognizedPropertyException upe = (UnrecognizedPropertyException)cause;
@@ -70,7 +71,7 @@ public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandl
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
+                                                                  HttpStatusCode statusCode, WebRequest request) {
         ValidationResult result = new ValidationResult();
 
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {

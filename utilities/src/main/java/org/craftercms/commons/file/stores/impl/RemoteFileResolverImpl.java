@@ -19,7 +19,7 @@ import org.craftercms.commons.file.stores.RemoteFile;
 import org.craftercms.commons.file.stores.RemoteFileResolver;
 import org.craftercms.commons.file.stores.RemoteFileStore;
 import org.craftercms.commons.file.stores.RemotePath;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.Map;
@@ -37,12 +37,12 @@ public class RemoteFileResolverImpl implements RemoteFileResolver {
     protected Map<String, RemotePathParser> pathParsers;
     protected Map<String, RemoteFileStore> stores;
 
-    @Required
+    @Autowired
     public void setPathParsers(Map<String, RemotePathParser> pathParsers) {
         this.pathParsers = pathParsers;
     }
 
-    @Required
+    @Autowired
     public void setStores(Map<String, RemoteFileStore> stores) {
         this.stores = stores;
     }

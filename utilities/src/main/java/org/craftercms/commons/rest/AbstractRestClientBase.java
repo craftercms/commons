@@ -15,7 +15,7 @@
  */
 package org.craftercms.commons.rest;
 
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -29,7 +29,7 @@ public abstract class AbstractRestClientBase {
     protected String extension;
     protected RestTemplate restTemplate;
 
-    @Required
+    @Autowired
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
@@ -38,7 +38,7 @@ public abstract class AbstractRestClientBase {
         this.extension = extension;
     }
 
-    @Required
+    @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }

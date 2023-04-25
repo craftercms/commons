@@ -18,12 +18,12 @@ package org.craftercms.commons.mail.impl;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Map;
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import jakarta.mail.Message;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;

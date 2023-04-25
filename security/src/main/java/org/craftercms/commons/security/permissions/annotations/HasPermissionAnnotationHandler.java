@@ -30,7 +30,7 @@ import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 
 /**
@@ -58,7 +58,7 @@ public class HasPermissionAnnotationHandler {
 
     protected String managementToken;
 
-    @Required
+    @Autowired
     public void setPermissionEvaluators(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators) {
         this.permissionEvaluators = permissionEvaluators;
     }

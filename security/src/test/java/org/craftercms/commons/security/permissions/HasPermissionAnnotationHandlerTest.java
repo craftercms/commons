@@ -18,6 +18,7 @@ package org.craftercms.commons.security.permissions;
 import java.util.HashMap;
 import java.util.Map;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.craftercms.commons.http.RequestContext;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
@@ -28,8 +29,6 @@ import org.craftercms.commons.security.permissions.impl.PermissionEvaluatorImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;

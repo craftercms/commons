@@ -29,7 +29,7 @@ import org.craftercms.commons.jackson.mvc.annotations.InjectValueFactory;
 import org.craftercms.commons.jackson.mvc.annotations.SecureProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -170,7 +170,7 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
         this.securePropertyHandler = securePropertyHandler;
     }
 
-    @Required()
+    @Autowired
     public void setFilter(final FilterProvider filter) {
         this.filter = filter;
     }
