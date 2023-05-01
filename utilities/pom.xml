@@ -191,6 +191,12 @@
             <version>${box.sdk.version}</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.bitbucket.b_c</groupId>
+            <artifactId>jose4j</artifactId>
+            <version>${jose4j.version}</version>
+        </dependency>
+
         <!-- WebDAV -->
         <dependency>
             <groupId>com.github.lookfirst</groupId>
