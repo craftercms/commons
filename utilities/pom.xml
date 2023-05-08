@@ -145,7 +145,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.databind.version}</version>
+            <version>${jackson.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -240,7 +240,7 @@
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version>${jsonpath.version}</version>
+            <version>${json.path.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
