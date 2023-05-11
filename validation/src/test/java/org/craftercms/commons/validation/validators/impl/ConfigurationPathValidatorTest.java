@@ -32,8 +32,18 @@ public class ConfigurationPathValidatorTest implements ValidatorTest {
     }
 
     @Test
-    public void testSpace() {
-        assertRejected("site/website/folder 1/index.xml");
+    public void testSpaceFolderName() {
+        assertValid("site/website/folder 1/index.xml");
+    }
+
+    @Test
+    public void testSpaceNoSlash() {
+        assertValid("johnny mne.mo nic");
+    }
+
+    @Test
+    public void testSpaceFileName() {
+        assertValid("site/website/folder1/in dex.xml");
     }
 
     @Test
@@ -49,11 +59,6 @@ public class ConfigurationPathValidatorTest implements ValidatorTest {
     @Test
     public void testStartWithDigit2() {
         assertValid("7s1t3s/and/more");
-    }
-
-    @Test
-    public void testSpaces() {
-        assertRejected("johnny mnemonic");
     }
 
     @Test
@@ -88,7 +93,7 @@ public class ConfigurationPathValidatorTest implements ValidatorTest {
 
     @Test
     public void testMixedCase() {
-        assertRejected("/site/website/DOCS/to/content/index.xml");
+        assertValid("/site/website/DOCS/to/content/index.xml");
     }
 
     @Override
