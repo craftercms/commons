@@ -72,8 +72,13 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
     }
 
     @Test
-    public void testDot() {
-        assertRejected("/site/components/path.to.content");
+    public void testMultipleDotsInFilename() {
+        assertValid("/site/components/path.to.content");
+    }
+
+    @Test
+    public void testMultipleDotsInPath() {
+        assertValid("/site/compo.ne.nts/path-to.content.xml");
     }
 
     @Test
