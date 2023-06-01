@@ -33,7 +33,17 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
 
     @Test
     public void testSpace() {
-        assertRejected("site/website/folder 1/index.xml");
+        assertValid("site/website/folder 1/index.xml");
+    }
+
+    @Test
+    public void testSpace2() {
+        assertValid("static-assets/images/my picture.png");
+    }
+
+    @Test
+    public void testSpace3() {
+        assertValid("johnny mnemonic");
     }
 
     @Test
@@ -44,11 +54,6 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
     @Test
     public void testStartWithDigit2() {
         assertValid("7s1t3s/and/more");
-    }
-
-    @Test
-    public void testSpaces() {
-        assertRejected("johnny mnemonic");
     }
 
     @Test
@@ -67,8 +72,13 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
     }
 
     @Test
-    public void testDot() {
-        assertRejected("/site/components/path.to.content");
+    public void testMultipleDotsInFilename() {
+        assertValid("/site/components/path.to.content");
+    }
+
+    @Test
+    public void testMultipleDotsInPath() {
+        assertValid("/site/compo.ne.nts/path-to.content.xml");
     }
 
     @Test
@@ -83,7 +93,7 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
 
     @Test
     public void testMixedCase() {
-        assertRejected("/site/website/DOCS/to/content/index.xml");
+        assertValid("/site/website/DOCS/to/content/index.xml");
     }
 
     @Test
