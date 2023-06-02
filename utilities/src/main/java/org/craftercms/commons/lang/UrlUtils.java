@@ -31,6 +31,7 @@ public class UrlUtils {
     public static final String RANGE_HEADER_NAME = "Range";
     public static final String RANGE_HEADER_FORMAT = "bytes=%s-%s";
     public static final String RANGE_NO_END_HEADER_FORMAT = "bytes=%s-";
+    private static final int MAX_LOGGED_URI_LENGTH = 2000;
 
     private UrlUtils() {
     }
@@ -137,6 +138,17 @@ public class UrlUtils {
         }
 
         return newUrl.append(fragment).toString();
+    }
+
+    /**
+     * Clean a url for logging purposes.
+     * It truncates the url to 2000 characters and removes any line feeds or carriage returns.
+     *
+     * @param url the url to clean
+     * @return the cleaned url
+     */
+    public static String cleanUrlForLog(final String url) {
+        return StringUtils.truncate(url, MAX_LOGGED_URI_LENGTH).replaceAll("[\\r\\n]", "");
     }
 
 
