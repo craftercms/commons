@@ -15,8 +15,6 @@
  */
 package org.craftercms.commons.mongo;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -24,11 +22,10 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
+import com.mongodb.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -37,13 +34,8 @@ import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.InitializingBean;
-import com.mongodb.CommandResult;
-import com.mongodb.DB;
-import com.mongodb.Mongo;
-import com.mongodb.MongoClientURI;
 
 /**
  * Utility class for running Mongo scripts in JS.
@@ -55,14 +47,14 @@ public class MongoScriptRunner implements InitializingBean{
 
     private static final Logger logger = LoggerFactory.getLogger(MongoScriptRunner.class);
 
-    private Mongo mongo;
+    private static final String MONGO_CLIENT_BIN_PATH = System.getenv("MONGODB_HOME") + "/bin/mongosh";
+
+    private MongoClient mongo;
     private String dbName;
     private String username;
     private String password;
     private List<Resource> scriptPaths;
     private boolean runOnInit;
-    private boolean useMongoClient;
-    private String mongoClientBin;
     private String connectionStr;
 
 
@@ -71,7 +63,7 @@ public class MongoScriptRunner implements InitializingBean{
     }
 
     @Required
-    public void setMongo(Mongo mongo) {
+    public void setMongo(MongoClient mongo) {
         this.mongo = mongo;
     }
 
@@ -97,27 +89,15 @@ public class MongoScriptRunner implements InitializingBean{
         this.runOnInit = runOnInit;
     }
 
-    public void setUseMongoClient(final boolean useMongoClient) {
-        this.useMongoClient = useMongoClient;
-    }
-
-    public void setMongoClientBin(final String mongoClientBin) {
-        this.mongoClientBin = mongoClientBin;
-    }
-
     public void setConnectionStr(final String connectionStr) {
         this.connectionStr = connectionStr;
     }
 
-    public void afterPropertiesSet()  {
-        logger.debug("Running Scripts?",runOnInit);
+    public void afterPropertiesSet() throws Exception {
+        logger.debug("Running Scripts?", runOnInit);
         if (runOnInit) {
-            logger.debug("Using Mongo Client",useMongoClient);
-            if(useMongoClient){
-                runScriptsWithMongoClient();
-            }else {
-                runScripts();
-            }
+            logger.debug("Using Mongo Client");
+            runScriptsWithMongoClient();
         }
     }
 
@@ -128,10 +108,12 @@ public class MongoScriptRunner implements InitializingBean{
             for (Resource scriptPath : scriptPaths) {
                 if (scriptPath.getFile().isDirectory()) {
                     Files.walkFileTree(scriptPath.getFile().toPath(), new JSFileVisitor(toExecute));
-                }else{
+                } else {
                     toExecute.add(scriptPath.getFile().getAbsolutePath());
                 }
             }
+            Collections.sort(toExecute);
+
             final Path allScripsFile = Files.createTempFile("ScriptRunner", ".js");
             StringBuilder builder =new StringBuilder();
             for (String path : toExecute) {
@@ -140,70 +122,12 @@ public class MongoScriptRunner implements InitializingBean{
             FileUtils.writeStringToFile(allScripsFile.toFile(),builder.toString(),"UTF-8");
             runScript(allScripsFile);
             Files.deleteIfExists(allScripsFile);
-        }catch (IOException | MongoDataException ex){
+        } catch (IOException | MongoDataException ex) {
             logger.error("Unable to run script using MongoClient",ex);
         }
     }
 
-    public void runScripts() {
-        try {
-            DB db = getDB();
-            logger.debug("Running Scriptns in {}",db.getName());
-            for (Resource scriptPath : scriptPaths) {
-                runScript(db, scriptPath);
-            }
-        }catch (Exception ex){
-            //We where unable to run script due some reason , logged and make sure the app at least startup.
-            logger.error("Unable to run scripts due a internal exception ",ex);
-        }
-    }
-
-    private void runScript(DB db, Resource scriptPath) throws MongoDataException {
-        String script;
-        try {
-            if (scriptPath.getFile().isDirectory()) {
-                final File[] files = scriptPath.getFile().listFiles(new FilenameFilter() {
-                    @Override
-                    public boolean accept(final File dir, final String name) {
-                        return name.toLowerCase().endsWith(".js");
-                    }
-                });
-                List<File> orderFiles = Arrays.asList(files);
-                Collections.sort(orderFiles, new Comparator<File>() {
-                    @Override
-                    public int compare(final File o1, final File o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
-                logger.debug("Directory {} files to exec {}",scriptPath.getFile(),orderFiles);
-                for (File file : orderFiles) {
-                    runScript(db, new FileSystemResource(file.getPath()));
-                }
-            } else {
-                logger.debug("Running Script {}",scriptPath.getURI());
-                try {
-                    script = IOUtils.toString(scriptPath.getInputStream(), "UTF-8");
-                } catch (IOException e) {
-                    throw new MongoDataException("Unable to read script at " + scriptPath.getURI().toString());
-                }
-
-                CommandResult result = db.doEval(script);
-                if (!result.ok()) {
-                    Exception ex = result.getException();
-
-                    throw new MongoDataException("An error occurred while running script at " + scriptPath.getURI().toString(),
-                        ex);
-
-                }
-                logger.info("Mongo script at {} executed successfully", scriptPath.getDescription());
-            }
-        } catch (IOException ex) {
-            logger.error("Unable to read files from {}", ex);
-        }
-    }
-
     private void runScript(Path scriptPath) throws MongoDataException {
-        String script;
         try {
             ProcessBuilder mongoProcess = new ProcessBuilder(getCommands(scriptPath));
             Process process=mongoProcess.start();
@@ -234,7 +158,7 @@ public class MongoScriptRunner implements InitializingBean{
             commandList.add("CMD");
             commandList.add("/C");
         }
-        if(StringUtils.isBlank(mongoClientBin)){
+        if (StringUtils.isBlank(MONGO_CLIENT_BIN_PATH)) {
             throw new MongoDataException("Unable to run scripts, mongo client bin path is not set ");
         }
         String pwd = null;
@@ -253,7 +177,7 @@ public class MongoScriptRunner implements InitializingBean{
             replicaSetName=uri.getOptions().getRequiredReplicaSetName()+"/";
         }
         final String host = StringUtils.trim(replicaSetName+StringUtils.join(uri.getHosts(),","));
-        commandList.add(mongoClientBin);
+        commandList.add(MONGO_CLIENT_BIN_PATH);
         commandList.add("--host");
         commandList.add(host);
         commandList.add(uri.getDatabase());

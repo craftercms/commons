@@ -21,6 +21,7 @@ import org.craftercms.commons.exceptions.InvalidManagementTokenException;
 import org.craftercms.commons.monitoring.MemoryInfo;
 import org.craftercms.commons.monitoring.StatusInfo;
 import org.craftercms.commons.monitoring.VersionInfo;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,10 +54,11 @@ public abstract class MonitoringRestControllerBase {
     }
 
     @GetMapping(ROOT_URL + STATUS_URL)
-    public StatusInfo getCurrentStatus(@RequestParam(name = "token", required = true) String token)
+    public ResponseEntity getCurrentStatus(@RequestParam(name = "site", required = false) String site,
+                                           @RequestParam(name = "token") String token)
             throws InvalidManagementTokenException {
         validateToken(token);
-        return StatusInfo.getCurrentStatus();
+        return ResponseEntity.ok().body(StatusInfo.getCurrentStatus());
     }
 
     @GetMapping(ROOT_URL + VERSION_URL)

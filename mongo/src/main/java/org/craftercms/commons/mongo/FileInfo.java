@@ -46,7 +46,6 @@ public class FileInfo {
 
 
     FileInfo(final GridFSFile savedFile,final boolean withInputStream) {
-        this.md5 = savedFile.getMD5();
         this.fileId = (ObjectId)savedFile.getId();
         this.contentType = savedFile.getContentType();
         this.fileSize = FileUtils.readableFileSize(savedFile.getLength());
