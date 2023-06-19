@@ -186,7 +186,7 @@ public interface CrudRepository<T> {
     Iterable<T> find(String query, Object... queryParams) throws MongoDataException;
 
     /**
-     * Search for documents of the given collection that match the query.<br>In only return the first Document</br>
+     * Search for documents of the given collection that match the query.<br/>In only return the first Document<br/>
      *
      * @param query Name of the  Template Query to be look in default-queries.xml or custom-queries
      *              .properties
@@ -197,7 +197,7 @@ public interface CrudRepository<T> {
     T findOne(String query) throws MongoDataException;
 
     /**
-     * Search for documents of the given collection that match the query.<br>In only return the first Document</br>
+     * Search for documents of the given collection that match the query.<br/>In only return the first Document<br/>
      *
      * @param query       Name of the  Template Query to be look in default-queries.xml or custom-queries
      *                    .properties

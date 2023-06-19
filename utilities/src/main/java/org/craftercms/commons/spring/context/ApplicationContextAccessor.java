@@ -20,7 +20,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
- * Wraps an instance of {@link ApplicationContext} and provides simple access to beans for Groovy & Freemarker
+ * Wraps an instance of {@link ApplicationContext} and provides simple access to beans for Groovy &amp; Freemarker
  *
  * @author joseross
  * @since 4.0
