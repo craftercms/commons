@@ -29,12 +29,11 @@ import org.springframework.core.io.Resource;
 
 /**
  * Base class for all {@link UpgradeOperation} implementations that provides access to system resources
- * <p>Supported YAML properties:
+ * Supported YAML properties:
  * <ul>
  *     <li><strong>currentVersion</strong>: (required) the version number that will be upgraded</li>
  *     <li><strong>nextVersion</strong> (required) the version number to use after the upgrade</li>
  * </ul>
- * </p>
  *
  * @param <T> The target type supported
  * @author joseross
