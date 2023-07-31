@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -16,19 +16,10 @@
 
 package org.craftercms.commons.upgrade.impl.pipeline;
 
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.vdurmont.semver4j.Semver;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.craftercms.commons.config.ConfigurationException;
-import org.craftercms.commons.config.YamlConfiguration;
-import org.craftercms.commons.upgrade.UpgradeOperation;
-import org.craftercms.commons.upgrade.UpgradePipeline;
-import org.craftercms.commons.upgrade.UpgradePipelineFactory;
-import org.craftercms.commons.upgrade.VersionProvider;
+import org.craftercms.commons.upgrade.*;
 import org.craftercms.commons.upgrade.exception.UpgradeException;
 import org.craftercms.commons.upgrade.exception.UpgradeNotSupportedException;
 import org.craftercms.commons.upgrade.impl.UpgradeContext;
@@ -38,7 +29,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.io.Resource;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -64,7 +58,7 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
     /**
      * Path of the configuration file
      */
-    protected final Resource configurationFile;
+    protected final UpgradeConfigurationProvider<HierarchicalConfiguration> configurationProvider;
 
     /**
      * The prefix for the pipelines in the configuration file, defaults to {@code DEFAULT_PIPELINE_PREFIX}
@@ -86,10 +80,10 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
      */
     protected ApplicationContext applicationContext;
 
-    public DefaultUpgradePipelineFactoryImpl(final String pipelineName, final Resource configurationFile,
+    public DefaultUpgradePipelineFactoryImpl(final String pipelineName, final UpgradeConfigurationProvider<HierarchicalConfiguration> configurationProvider,
                                              final VersionProvider<T> versionProvider) {
         this.pipelineName = pipelineName;
-        this.configurationFile = configurationFile;
+        this.configurationProvider = configurationProvider;
         this.versionProvider = versionProvider;
     }
 
@@ -103,17 +97,6 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
 
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-    }
-
-    @SuppressWarnings("rawtypes")
-    protected HierarchicalConfiguration loadUpgradeConfiguration() throws UpgradeException {
-        YamlConfiguration configuration = new YamlConfiguration();
-        try (InputStream is = configurationFile.getInputStream()) {
-            configuration.read(is);
-        } catch (Exception e) {
-            throw new UpgradeException("Error reading configuration file", e);
-        }
-        return configuration;
     }
 
     protected UpgradePipeline<T> createPipeline(String name, List<UpgradeOperation<T>> operations) {
@@ -134,7 +117,7 @@ public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFact
             return new DefaultUpgradePipelineImpl<>(pipelineName, Collections.emptyList());
         }
         List<UpgradeOperation<T>> operations = new LinkedList<>();
-        HierarchicalConfiguration config = loadUpgradeConfiguration();
+        HierarchicalConfiguration config = configurationProvider.getConfiguration();
 
         var pipelineRoot = pipelinePrefix + pipelineName;
         var requiredVersion = config.getString(pipelineRoot + CONFIG_KEY_REQUIRES);
