@@ -118,7 +118,7 @@ public final class VersionInfo {
     }
 
     /**
-     * Gets the current VersionInfo based on Manifest & current JVM information.
+     * Gets the current VersionInfo based on Manifest &amp; current JVM information.
      * @param manifest Manifest were to get the information.
      * @return A VersionInfo pojo with information.
      */
