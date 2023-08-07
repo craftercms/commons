@@ -17,6 +17,7 @@ package org.craftercms.commons.security.permissions.annotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
 import org.craftercms.commons.security.permissions.PermissionEvaluator;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 
 /**
@@ -174,21 +176,20 @@ public class HasPermissionAnnotationHandler {
     }
 
     protected Map<String, Object> getAnnotatedProtectedResourceIds(Method method, ProceedingJoinPoint pjp) {
-        Annotation[][] paramAnnotations = method.getParameterAnnotations();
-        Object[] params = pjp.getArgs();
+        Parameter[] methodParameters = method.getParameters();
+        Object[] paramValues = pjp.getArgs();
         Map<String, Object> resourceIds = null;
 
-        for (int i = 0; i < paramAnnotations.length; i++) {
-            for (Annotation a : paramAnnotations[i]) {
-                if (a instanceof ProtectedResourceId) {
-                    String idName = ((ProtectedResourceId) a).value();
+        for (int i = 0; i < methodParameters.length; i++) {
+            ProtectedResourceId resourceIdAnnotation = AnnotationUtils.findAnnotation(methodParameters[i], ProtectedResourceId.class);
+            if (resourceIdAnnotation != null) {
+                String idName = resourceIdAnnotation.value();
 
-                    if (resourceIds == null) {
-                        resourceIds = new HashMap<>();
-                    }
-
-                    resourceIds.put(idName, params[i]);
+                if (resourceIds == null) {
+                    resourceIds = new HashMap<>();
                 }
+
+                resourceIds.put(idName, paramValues[i]);
             }
         }
 
