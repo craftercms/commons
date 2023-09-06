@@ -16,7 +16,7 @@
 package org.craftercms.commons.spring;
 
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Required;
+import java.beans.ConstructorProperties;
 
 /**
  * Simple Spring factory bean that only returns an actual bean if the specified flag is true.
@@ -28,14 +28,10 @@ public class ConditionalFactoryBean implements FactoryBean<Object> {
     private Object actualBean;
     private boolean flag;
 
-    @Required
-    public void setActualBean(Object actualBean) {
-        this.actualBean = actualBean;
-    }
-
-    @Required
-    public void setFlag(boolean flag) {
+    @ConstructorProperties({"flag", "actualBean"})
+    public ConditionalFactoryBean(final boolean flag, final Object actualBean) {
         this.flag = flag;
+        this.actualBean = actualBean;
     }
 
     @Override
