@@ -101,6 +101,13 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+
+	<!-- overrides -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons.fileupload.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

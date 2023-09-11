@@ -15,6 +15,7 @@
  */
 package org.craftercms.commons.config;
 
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -26,19 +27,20 @@ import org.yaml.snakeyaml.constructor.Constructor;
  */
 public class DisableClassLoadingConstructor extends Constructor {
 
-    public DisableClassLoadingConstructor() {
+    public DisableClassLoadingConstructor(LoaderOptions loadingConfig) {
+        super(loadingConfig);
     }
 
-    public DisableClassLoadingConstructor(Class<?> theRoot) {
-        super(theRoot);
+    public DisableClassLoadingConstructor(Class<?> theRoot, LoaderOptions loadingConfig) {
+        super(theRoot, loadingConfig);
     }
 
-    public DisableClassLoadingConstructor(TypeDescription theRoot) {
-        super(theRoot);
+    public DisableClassLoadingConstructor(TypeDescription theRoot, LoaderOptions loadingConfig) {
+        super(theRoot, loadingConfig);
     }
 
-    public DisableClassLoadingConstructor(String theRoot) throws ClassNotFoundException {
-        super(theRoot);
+    public DisableClassLoadingConstructor(String theRoot, LoaderOptions loadingConfig) throws ClassNotFoundException {
+        super(theRoot, loadingConfig);
     }
 
     @Override

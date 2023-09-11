@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public Link as published by
@@ -23,6 +23,8 @@ import java.io.Reader;
 import org.craftercms.commons.plugin.model.PluginDescriptor;
 import org.craftercms.commons.plugin.PluginDescriptorReader;
 import org.craftercms.commons.plugin.exception.PluginException;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
@@ -49,9 +51,9 @@ public class PluginDescriptorReaderImpl implements PluginDescriptorReader {
     @Override
     public PluginDescriptor read(final Reader reader) throws PluginException {
         try {
-            Representer representer = new Representer();
+            Representer representer = new Representer(new DumperOptions());
             representer.getPropertyUtils().setSkipMissingProperties(true);
-            Yaml yaml = new Yaml(new Constructor(PluginDescriptor.class), representer);
+            Yaml yaml = new Yaml(new Constructor(PluginDescriptor.class, new LoaderOptions()), representer);
             return yaml.loadAs(reader, PluginDescriptor.class);
         } catch (Exception e) {
             throw new PluginException("Error reading plugin descriptor from reader", e);

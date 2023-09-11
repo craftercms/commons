@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.craftercms.commons.config.DisableClassLoadingConstructor;
 import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.representer.Representer;
 
@@ -42,7 +43,7 @@ public class YamlFileVersionProvider extends AbstractFileVersionProvider {
         DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         options.setPrettyFlow(true);
-        yaml = new Yaml(new DisableClassLoadingConstructor(), new Representer(), options);
+        yaml = new Yaml(new DisableClassLoadingConstructor(new LoaderOptions()), new Representer(options), options);
     }
 
     @SuppressWarnings("unchecked")

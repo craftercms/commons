@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2020 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -32,6 +32,7 @@ import org.apache.commons.configuration2.io.InputStreamSupport;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.i10n.I10nUtils;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -92,7 +93,8 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
     @SuppressWarnings("unchecked")
     protected void load(Reader in) throws ConfigurationException {
         try {
-            Yaml yaml = new Yaml(new DisableClassLoadingConstructor());
+            Yaml yaml = new Yaml(new DisableClassLoadingConstructor(new LoaderOptions()));
+
 
             Map<String, Object> yamlObj = (Map<String, Object>) yaml.load(in);
 
