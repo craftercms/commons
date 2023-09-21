@@ -19,15 +19,11 @@ package org.craftercms.commons.audit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import reactor.core.Reactor;
-import reactor.event.Event;
-import reactor.function.Consumer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -36,11 +32,11 @@ import static org.junit.Assert.assertNull;
 @ContextConfiguration(locations = {"classpath:/audit-test-context.xml"})
 public class TestSpringCtx {
 
-    @Autowired()
-    private Reactor auditReactor;
+    @Autowired
+    protected ApplicationContext applicationContext;
 
     @Autowired
-    private TestAuditServiceImpl auditService;
+    private TestAuditServiceImpl<TestAuditModel> auditService;
 
     @Test
     public void test1ContextIsInit() {
@@ -48,31 +44,13 @@ public class TestSpringCtx {
     }
 
     @Test
-    public void testAuditListener() throws InterruptedException {
+    public void testAuditListener() {
         auditService.clear();
         TestAuditModel testAuditModel = new TestAuditModel();
         TestAuditModel testAuditModelNotSended = new TestAuditModel();
-        EventCallback eventCallback = new EventCallback();
-        auditReactor.notify(Audit.AUDIT_EVENT, Event.wrap(testAuditModel), eventCallback);
-        while (!eventCallback.isCompleted()) {
-            Thread.sleep(1);
-        }
+        applicationContext.publishEvent(testAuditModel);
         assertEquals(1, auditService.countAuditLogs());
         assertNotNull(auditService.getAuditLog(testAuditModel.getId()));
         assertNull(auditService.getAuditLog(testAuditModelNotSended.getId()));
-    }
-
-    class EventCallback implements Consumer<Event<? extends AuditModel>> {
-
-        private boolean completed = false;
-
-        @Override
-        public void accept(Event<? extends AuditModel> event) {
-            completed = true;
-        }
-
-        public boolean isCompleted() {
-            return completed;
-        }
     }
 }
