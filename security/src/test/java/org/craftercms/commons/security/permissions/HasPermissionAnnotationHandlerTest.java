@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -15,9 +15,6 @@
  */
 package org.craftercms.commons.security.permissions;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.craftercms.commons.http.RequestContext;
 import org.craftercms.commons.security.exception.ActionDeniedException;
 import org.craftercms.commons.security.exception.PermissionException;
@@ -30,6 +27,8 @@ import org.junit.Test;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -130,7 +129,6 @@ public class HasPermissionAnnotationHandlerTest {
         when(current.getRequest()).thenReturn(request);
         RequestContext.setCurrent(current);
 
-        annotationHandler.setManagementToken(VALID_TOKEN);
         service.doSomethingWithManagementToken();
     }
 
@@ -142,7 +140,6 @@ public class HasPermissionAnnotationHandlerTest {
         when(current.getRequest()).thenReturn(request);
         RequestContext.setCurrent(current);
 
-        annotationHandler.setManagementToken(VALID_TOKEN);
         assertNotNull(service.doSomethingWithManagementToken());
     }
 
@@ -154,7 +151,6 @@ public class HasPermissionAnnotationHandlerTest {
         when(current.getRequest()).thenReturn(request);
         RequestContext.setCurrent(current);
 
-        annotationHandler.setManagementToken(VALID_TOKEN);
         service.doSomethingNoTokenAllowed();
     }
 
@@ -162,8 +158,7 @@ public class HasPermissionAnnotationHandlerTest {
         Map<Class<?>, PermissionEvaluator<?, ?>> evaluators = new HashMap<>(1);
         evaluators.put(DefaultPermission.class, createTestPermissionEvaluator());
 
-        annotationHandler = new HasPermissionAnnotationHandler();
-        annotationHandler.setPermissionEvaluators(evaluators);
+        annotationHandler = new HasPermissionAnnotationHandler(evaluators, VALID_TOKEN);
     }
 
     private void createTestService() throws PermissionException {

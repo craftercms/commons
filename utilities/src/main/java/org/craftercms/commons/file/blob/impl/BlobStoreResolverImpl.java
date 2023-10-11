@@ -21,8 +21,8 @@ import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.ConfigurationProvider;
 import org.craftercms.commons.config.ConfigurationResolver;
 import org.craftercms.commons.file.blob.BlobStore;
-import org.craftercms.commons.file.blob.exception.BlobStoreConfigurationMissingException;
 import org.craftercms.commons.file.blob.BlobStoreResolver;
+import org.craftercms.commons.file.blob.exception.BlobStoreConfigurationMissingException;
 import org.craftercms.commons.file.blob.exception.BlobStoreMissingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import static java.lang.String.format;
-import static org.craftercms.commons.file.blob.BlobStore.CONFIG_KEY_ID;
+import static org.craftercms.commons.file.blob.BlobStore.*;
 
 /**
  * Default implementation of {@link BlobStoreResolver}
@@ -45,10 +45,6 @@ import static org.craftercms.commons.file.blob.BlobStore.CONFIG_KEY_ID;
  */
 @SuppressWarnings("rawtypes, unchecked")
 public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationContextAware {
-
-    public final String CONFIG_KEY_STORE = "blobStore";
-
-    public final String CONFIG_KEY_TYPE = "type";
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
