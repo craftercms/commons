@@ -74,6 +74,17 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
 
     private static final I10nLogger logger = new I10nLogger(YamlConfiguration.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
+    protected final LoaderOptions loaderOptions = new LoaderOptions();
+
+    public YamlConfiguration() {
+        // Disabled by default
+        loaderOptions.setMaxAliasesForCollections(0);
+    }
+
+    public LoaderOptions getLoaderOptions() {
+        return loaderOptions;
+    }
+
     @Override
     public void read(Reader in) throws ConfigurationException, IOException {
         load(in);
@@ -93,7 +104,7 @@ public class YamlConfiguration extends BaseHierarchicalConfiguration implements 
     @SuppressWarnings("unchecked")
     protected void load(Reader in) throws ConfigurationException {
         try {
-            Yaml yaml = new Yaml(new DisableClassLoadingConstructor(new LoaderOptions()));
+            Yaml yaml = new Yaml(new DisableClassLoadingConstructor(loaderOptions));
 
 
             Map<String, Object> yamlObj = (Map<String, Object>) yaml.load(in);

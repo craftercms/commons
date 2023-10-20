@@ -125,9 +125,25 @@ public class ConfigUtils {
 
     public static HierarchicalConfiguration<?> readYamlConfiguration(Reader reader,
                                                                      Map<String, Lookup> prefixLookups)
-        throws ConfigurationException {
+            throws ConfigurationException {
+        return readYamlConfiguration(reader, prefixLookups, 0);
+    }
+
+    /**
+     * Read a YAML configuration from the given reader.
+     * @param reader the reader
+     * @param prefixLookups the prefix lookups
+     * @param maxAliasesForCollections the maximum number of aliases for collections
+     * @return the configuration
+     * @throws ConfigurationException if an error occurs while parsing the yaml stream
+     */
+    public static HierarchicalConfiguration<?> readYamlConfiguration(Reader reader,
+                                                                     Map<String, Lookup> prefixLookups,
+                                                                     int maxAliasesForCollections)
+            throws ConfigurationException {
         YamlConfiguration configuration = new YamlConfiguration();
         configuration.setPrefixLookups(prefixLookups);
+        configuration.getLoaderOptions().setMaxAliasesForCollections(maxAliasesForCollections);
 
         try {
             configuration.read(reader);
