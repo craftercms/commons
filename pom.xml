@@ -44,7 +44,6 @@
         <module>utilities</module>
         <module>security</module>
         <module>mongo</module>
-        <module>ebus</module>
         <module>audit</module>
         <module>git</module>
         <module>entitlements</module>
