@@ -16,32 +16,25 @@
 
 package org.craftercms.commons.audit;
 
-import org.craftercms.commons.ebus.annotations.EListener;
-import org.craftercms.commons.ebus.annotations.EventHandler;
-import org.craftercms.commons.ebus.annotations.EventSelectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.event.Event;
+import org.springframework.context.event.EventListener;
 
 /**
  * Ebus Listener to create the Audit entries.
  *
  * @author Carlos Ortiz.
  */
-@EListener
 public class AuditListener {
 
     private AuditService auditService;
     private Logger log = LoggerFactory.getLogger(AuditListener.class);
 
-    @EventHandler(
-        event = Audit.AUDIT_EVENT,
-        ebus = "@" + Audit.AUDIT_REACTOR,
-        type = EventSelectorType.REGEX)
     @SuppressWarnings("unchecked") // cortiz, OK raw is data is needed.
-    public void onAudit(final Event<? extends AuditModel> auditModel) {
+    @EventListener
+    public void onAudit(final AuditModel auditModel) {
         log.debug("Auditing {}", auditModel);
-        auditService.audit(auditModel.getData());
+        auditService.audit(auditModel);
     }
 
     public void setAuditService(final AuditService auditService) {

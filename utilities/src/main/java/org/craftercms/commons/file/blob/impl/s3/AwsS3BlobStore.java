@@ -19,6 +19,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.aws.S3ClientCachingFactory;
+import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
 import org.craftercms.commons.file.blob.exception.BlobStoreException;
 import org.craftercms.commons.file.blob.impl.AbstractBlobStore;
@@ -58,7 +59,7 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
     }
 
     @Override
-    public void doInit(HierarchicalConfiguration<ImmutableNode> config) {
+    public void doInit(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException {
         // do nothing
     }
 

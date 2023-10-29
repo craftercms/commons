@@ -48,14 +48,26 @@ public class EncryptionAwareConfigurationReader {
     protected TextEncryptor textEncryptor;
 
     protected Map<String, Lookup> prefixLookups;
+    private int maxAliasesForCollections = 0;
 
     @ConstructorProperties({"textEncryptor"})
     public EncryptionAwareConfigurationReader(TextEncryptor textEncryptor) {
         this.textEncryptor = textEncryptor;
 
-        if(textEncryptor != null) {
+        if (textEncryptor != null) {
             prefixLookups = singletonMap(encryptedValuePrefix, new DecryptionLookup(textEncryptor));
         }
+    }
+
+    @ConstructorProperties({"textEncryptor", "maxAliasesForCollections"})
+    public EncryptionAwareConfigurationReader(TextEncryptor textEncryptor, int maxAliasesForCollections) {
+        this.textEncryptor = textEncryptor;
+
+        if (textEncryptor != null) {
+            prefixLookups = singletonMap(encryptedValuePrefix, new DecryptionLookup(textEncryptor));
+        }
+
+        this.maxAliasesForCollections = maxAliasesForCollections;
     }
 
     public EncryptionAwareConfigurationReader(char configListDelimiter, String encryptedValuePrefix,
@@ -63,7 +75,6 @@ public class EncryptionAwareConfigurationReader {
         this(textEncryptor);
         this.configListDelimiter = configListDelimiter;
         this.encryptedValuePrefix = encryptedValuePrefix;
-
     }
 
     public HierarchicalConfiguration<?> readXmlConfiguration(InputStream inputStream)
@@ -76,7 +87,7 @@ public class EncryptionAwareConfigurationReader {
     }
 
     public HierarchicalConfiguration<?> readYamlConfiguration(Reader reader) throws ConfigurationException {
-        return ConfigUtils.readYamlConfiguration(reader, prefixLookups);
+        return ConfigUtils.readYamlConfiguration(reader, prefixLookups, maxAliasesForCollections);
     }
 
     public HierarchicalConfiguration<?> readYamlConfiguration(File file) throws ConfigurationException {

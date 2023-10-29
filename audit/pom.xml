@@ -27,14 +27,20 @@
     <parent>
         <artifactId>crafter-commons</artifactId>
         <groupId>org.craftercms</groupId>
-        <version>4.1.1</version><!-- craftercms version flag -->
+        <version>4.1.2</version><!-- craftercms version flag -->
     </parent>
 
     <dependencies>
+        <!-- Logging -->
         <dependency>
-            <groupId>org.craftercms</groupId>
-            <artifactId>crafter-commons-ebus</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <!-- Commons -->

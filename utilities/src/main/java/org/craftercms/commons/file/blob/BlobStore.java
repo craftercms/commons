@@ -35,6 +35,9 @@ public interface BlobStore {
     String CONFIG_KEY_MAPPING_STORE_TARGET = "storeTarget";
     String CONFIG_KEY_MAPPING_PREFIX = "prefix";
     String CONFIG_KEY_CONFIGURATION = "configuration";
+    String CONFIG_KEY_STORE = "blobStore";
+    String CONFIG_KEY_TYPE = "type";
+    String CONFIG_KEY_READ_ONLY = "readOnly";
 
     /**
      * Performs all setup needed with the given configuration

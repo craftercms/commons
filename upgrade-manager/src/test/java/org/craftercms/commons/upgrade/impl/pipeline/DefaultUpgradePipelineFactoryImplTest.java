@@ -15,12 +15,15 @@
  */
 package org.craftercms.commons.upgrade.impl.pipeline;
 
+import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.craftercms.commons.config.ConfigurationException;
+import org.craftercms.commons.upgrade.UpgradeConfigurationProvider;
 import org.craftercms.commons.upgrade.UpgradeOperation;
 import org.craftercms.commons.upgrade.VersionProvider;
 import org.craftercms.commons.upgrade.exception.UpgradeException;
 import org.craftercms.commons.upgrade.exception.UpgradeNotSupportedException;
 import org.craftercms.commons.upgrade.impl.UpgradeContext;
+import org.craftercms.commons.upgrade.impl.configuration.YamlConfigurationProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +61,7 @@ public class DefaultUpgradePipelineFactoryImplTest {
 
     private DefaultUpgradePipelineFactoryImpl<String> factory;
 
-    private Resource config = new ClassPathResource(CONFIG_PATH);
+    private final Resource config = new ClassPathResource(CONFIG_PATH);
 
     @Mock
     private VersionProvider<String> versionProvider;
@@ -74,7 +77,8 @@ public class DefaultUpgradePipelineFactoryImplTest {
 
     @Before
     public void setUp() {
-        factory = new DefaultUpgradePipelineFactoryImpl<>(PIPELINE_NAME_VERSIONS, config, versionProvider);
+        UpgradeConfigurationProvider<HierarchicalConfiguration> configProvider = new YamlConfigurationProvider(config);
+        factory = new DefaultUpgradePipelineFactoryImpl<>(PIPELINE_NAME_VERSIONS, configProvider, versionProvider);
         factory.setApplicationContext(applicationContext);
 
         when(applicationContext.getBean(OPERATION_TYPE, UpgradeOperation.class)).thenReturn(testOperation);

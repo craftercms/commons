@@ -34,6 +34,7 @@ public class YamlConfigurationTest {
     @Before
     public void setUp() throws Exception {
         yamlConfiguration = new YamlConfiguration();
+        yamlConfiguration.loaderOptions.setMaxAliasesForCollections(50);
     }
 
     @Test

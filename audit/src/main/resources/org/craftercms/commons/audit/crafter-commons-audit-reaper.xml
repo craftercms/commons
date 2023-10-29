@@ -28,9 +28,6 @@
     <import resource="classpath*:/crafter/ebus/ebus-context.xml"/>
     <context:component-scan base-package="org.craftercms.commons.ebus"/>
 
-    <bean id="AuditReactor" name="AuditReactor" factory-bean="reactorFactory" factory-method="createReactor"/>
-
-
     <bean id="auditScytheCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="auditScythe"/>
         <property name="cronExpression" value="${org.craftercms.commons.audit.auditScytheCronExp}"/>
