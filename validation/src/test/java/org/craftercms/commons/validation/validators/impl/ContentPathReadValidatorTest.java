@@ -117,8 +117,36 @@ public class ContentPathReadValidatorTest implements ValidatorTest {
     }
 
     @Test
-    public void testMultiSlash() {
+    public void testTwoSlash() {
         assertValid("/site//components/path//to/content/index.xml");
+        assertValid("/site//components/path//to/a content folder with space//index.xml");
+    }
+
+    @Test
+    public void testThreeOrMoreSlash() {
+        assertRejected("/site///website/index.xml");
+        assertRejected("/site/website////index.xml");
+        assertRejected("/site/website/////index.xml");
+    }
+
+    @Test
+    public void testStartTwoOrMoreSlash() {
+        assertRejected("//site/website/index.xml");
+        assertRejected("///site/website/index.xml");
+        assertRejected("////site/website/index.xml");
+        assertRejected("/////site/website/index.xml");
+    }
+
+    @Test
+    public void testEndTwoSlash() {
+        assertValid("/site/website/folder//");
+    }
+
+    @Test
+    public void testEndThreeOrMoreSlash() {
+        assertRejected("/site/website/folder///");
+        assertRejected("/site/website/folder////");
+        assertRejected("/site/website/folder/////");
     }
 
     @Test
