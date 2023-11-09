@@ -52,6 +52,7 @@ public class AbstractBlobStoreTest {
     @Before
     public void setUp() {
         initMocks(this);
+        store.profileMapper = profileMapper;
     }
 
     @Test

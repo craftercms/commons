@@ -30,7 +30,6 @@ import org.mockito.stubbing.Answer;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.ArgumentMatchers.any;
 
 /**
  * Created by alfonsovasquez on 14/6/16.
@@ -53,10 +52,10 @@ public class UpdateHelperTest {
 
     @Before
     public void setUp() throws Exception {
-        doAnswer(new Answer<Void>() {
+        doAnswer(new Answer<Object>() {
 
             @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
 
                 id = (String)args[0];
@@ -71,7 +70,7 @@ public class UpdateHelperTest {
                 return null;
             }
 
-        }).when(repository).update(anyString(), anyString(), eq(false), eq(false), any());
+        }).when(repository).update(anyString(), anyString(), eq(false), eq(false), any(Object[].class));
 
         updateHelper = new UpdateHelper();
     }
