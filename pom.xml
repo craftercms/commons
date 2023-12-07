@@ -16,41 +16,41 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.craftercms</groupId>
-    <artifactId>crafter-commons</artifactId>
-    <packaging>pom</packaging>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.craftercms</groupId>
+	<artifactId>crafter-commons</artifactId>
+	<packaging>pom</packaging>
 
-    <name>Crafter Commons</name>
-    <description>Crafter Commons</description>
-    <url>https://github.com/craftercms/commons</url>
+	<name>Crafter Commons</name>
+	<description>Crafter Commons</description>
+	<url>https://github.com/craftercms/commons</url>
 
-    <scm>
-        <connection>scm:git:git://github.com/craftercms/commons</connection>
-        <developerConnection>scm:git:git://github.com/craftercms/commons</developerConnection>
-        <url>scm:git:git://github.com/craftercms/core</url>
-    </scm>
+	<scm>
+		<connection>scm:git:git://github.com/craftercms/commons</connection>
+		<developerConnection>scm:git:git://github.com/craftercms/commons</developerConnection>
+		<url>scm:git:git://github.com/craftercms/core</url>
+	</scm>
 
-    <parent>
-        <groupId>org.craftercms</groupId>
-        <artifactId>craftercms</artifactId>
-        <version>4.2.0-SNAPSHOT</version><!-- craftercms version flag -->
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+	<parent>
+		<groupId>org.craftercms</groupId>
+		<artifactId>craftercms</artifactId>
+		<version>4.2.0-SNAPSHOT</version><!-- craftercms version flag -->
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
 
-    <modules>
-        <module>utilities</module>
-        <module>security</module>
-        <module>mongo</module>
-        <module>audit</module>
-        <module>git</module>
-        <module>entitlements</module>
-        <module>validation</module>
-        <module>plugin</module>
-        <module>upgrade-manager</module>
-    </modules>
+	<modules>
+		<module>utilities</module>
+		<module>security</module>
+		<module>mongo</module>
+		<module>audit</module>
+		<module>git</module>
+		<module>entitlements</module>
+		<module>validation</module>
+		<module>plugin</module>
+		<module>upgrade-manager</module>
+	</modules>
 
 	<repositories>
 		<repository>
