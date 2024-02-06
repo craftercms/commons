@@ -21,8 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 public class ProxyUtils {
+    @SuppressWarnings("unused")
     public static final List<String> IGNORE_REQUEST_HEADERS = Arrays.asList("authorization", "x-xsrf-token");
     public static final List<String> IGNORE_REQUEST_COOKIES = Arrays.asList("xsrf-token", "jsessionid", "refresh_token");
 
@@ -32,8 +34,12 @@ public class ProxyUtils {
      * @return cookies' header string
      */
     public static String getProxyCookieHeader(HttpServletRequest request) {
-        StringBuilder cookieBuilder = new StringBuilder();
         Cookie[] cookies = request.getCookies();
+        if (isEmpty(cookies)) {
+            return "";
+        }
+
+        StringBuilder cookieBuilder = new StringBuilder();
         for (Cookie cookie : cookies) {
             if (!IGNORE_REQUEST_COOKIES.contains(cookie.getName().toLowerCase())) {
                 if (cookieBuilder.length() == 0) {
