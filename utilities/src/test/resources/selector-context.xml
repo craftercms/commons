@@ -32,9 +32,7 @@
             <beans:bean id="jacksonMessageConverter"
                         class="org.craftercms.commons.jackson.mvc.CrafterJackson2MessageConverter"
                     >
-                <beans:property name="supportedMediaTypes" value="application/json"/>
-                <beans:property name="prettyPrint" value="false"/>
-                <beans:property name="filter">
+                <beans:constructor-arg name="filter">
                     <beans:bean class="org.craftercms.commons.jackson.mvc.SelectorFilterFactory">
                         <beans:property name="filters">
                             <beans:list>
@@ -42,7 +40,9 @@
                             </beans:list>
                         </beans:property>
                     </beans:bean>
-                </beans:property>
+                </beans:constructor-arg>
+                <beans:property name="supportedMediaTypes" value="application/json"/>
+                <beans:property name="prettyPrint" value="false"/>
                 <beans:property name="objectMapper">
                     <beans:bean class="com.fasterxml.jackson.databind.ObjectMapper">
                         <beans:property name="filterProvider" >
@@ -52,7 +52,7 @@
                         </beans:property>
                         <beans:property name="annotationIntrospector">
                             <beans:bean class="org.craftercms.commons.jackson.mvc.CrafterJacksonAnnotationIntrospector">
-                                <beans:property name="defaultFilter" value="gdata"/>
+                                <beans:constructor-arg name="defaultFilter" value="gdata"/>
                             </beans:bean>
                         </beans:property>
                         <beans:property name="dateFormat">

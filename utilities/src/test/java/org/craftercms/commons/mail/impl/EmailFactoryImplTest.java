@@ -18,9 +18,9 @@ package org.craftercms.commons.mail.impl;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Map;
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.Message;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -62,8 +62,7 @@ public class EmailFactoryImplTest {
         mailSender = createMailSender();
         freeMarkerConfig = createFreeMarkerConfig();
 
-        emailFactory = new EmailFactoryImpl();
-        emailFactory.setMailSender(mailSender);
+        emailFactory = new EmailFactoryImpl(mailSender);
         emailFactory.setFreeMarkerConfig(freeMarkerConfig);
         emailFactory.setTemplateSuffix(TEMPLATE_SUFFIX);
         emailFactory.setTemplateEncoding(ENCODING);

@@ -18,12 +18,11 @@ package org.craftercms.commons.web;
 
 import java.io.IOException;
 import java.util.Map;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
@@ -47,8 +46,7 @@ public class AddResponseHeaderFilter extends OncePerRequestFilter {
         this.enabled = enabled;
     }
 
-    @Required
-    public void setHeaders(final Map<String, String> headers) {
+    public AddResponseHeaderFilter(final Map<String, String> headers) {
         this.headers = headers;
     }
 

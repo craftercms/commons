@@ -19,8 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -39,6 +38,10 @@ public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorH
     protected List<HttpMessageConverter<?>> messageConverters;
     protected Class<?> responseType;
 
+    public HttpMessageConvertingResponseErrorHandler(Class<?> responseType) {
+        this.responseType = responseType;
+    }
+
     public List<HttpMessageConverter<?>> getMessageConverters() {
         return messageConverters;
     }
@@ -51,7 +54,6 @@ public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorH
         return responseType;
     }
 
-    @Required
     public void setResponseType(Class<?> responseType) {
         this.responseType = responseType;
     }
@@ -63,7 +65,7 @@ public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorH
 
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
-        HttpStatus status = response.getStatusCode();
+        HttpStatusCode status = response.getStatusCode();
         HttpMessageConverterExtractor<?> responseExtractor = new HttpMessageConverterExtractor<>(responseType,
             messageConverters);
 
@@ -79,13 +81,11 @@ public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorH
         throw new RestServiceException(status, errorDetails);
     }
 
-    protected boolean hasError(HttpStatus statusCode) {
-        return (statusCode.series() == HttpStatus.Series.CLIENT_ERROR || statusCode.series() == HttpStatus.Series
-            .SERVER_ERROR);
+    protected boolean hasError(HttpStatusCode statusCode) {
+        return (statusCode.is4xxClientError() || statusCode.is5xxServerError());
     }
 
     protected String getResponseBodyAsString(ClientHttpResponse response) throws IOException {
         return IOUtils.toString(response.getBody(), response.getHeaders().getContentType().getCharset());
     }
-
 }

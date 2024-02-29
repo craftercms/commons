@@ -41,7 +41,6 @@ import org.jongo.MongoCollection;
 import org.jongo.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Simple interface to interact with Jongo/MongoDB.<br/>
@@ -70,7 +69,9 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     protected JongoQueries queries;
     protected GridFS gridfs;
 
-    public void init() throws Exception {
+    public void init(final Jongo jongo) throws Exception {
+        this.jongo = jongo;
+        this.gridfs = new GridFS(jongo.getDatabase());
         //Thru pure magic get parameter Class .
         this.clazz = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         if (this.clazz == null) {
@@ -536,12 +537,6 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @SuppressWarnings("uncheck")// cortiz, might change in jongo 1.4
     protected Iterable<T> returnList(final Find find) {
         return (Iterable<T>)find.as(clazz);
-    }
-
-    @Required
-    public void setJongo(final Jongo jongo) {
-        this.jongo = jongo;
-        this.gridfs = new GridFS(jongo.getDatabase());
     }
 
     public void setQueries(final JongoQueries queries) {

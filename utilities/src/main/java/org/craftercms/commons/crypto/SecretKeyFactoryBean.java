@@ -18,7 +18,6 @@ package org.craftercms.commons.crypto;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Spring factory bean used to easily inject a secret key from a
@@ -32,18 +31,9 @@ public class SecretKeyFactoryBean implements FactoryBean<SecretKey> {
     private boolean create;
     private SecretKeyRepository keyRepository;
 
-    @Required
-    public void setKeyName(String keyName) {
+    public SecretKeyFactoryBean(String keyName, boolean create, SecretKeyRepository keyRepository) {
         this.keyName = keyName;
-    }
-
-    @Required
-    public void setCreate(boolean create) {
         this.create = create;
-    }
-
-    @Required
-    public void setKeyRepository(SecretKeyRepository keyRepository) {
         this.keyRepository = keyRepository;
     }
 

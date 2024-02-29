@@ -29,7 +29,6 @@ import org.apache.commons.collections4.MapUtils;
 import org.craftercms.commons.jackson.JacksonUtils;
 import org.jongo.Jongo;
 import org.jongo.marshall.jackson.JacksonMapper;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 /**
@@ -46,13 +45,8 @@ public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
     private List<JsonSerializer<?>> serializers;
     private Map<Class<?>, JsonDeserializer<?>> deserializers;
 
-    @Required
-    public void setDbName(String dbName) {
+    public JongoFactoryBean(String dbName, MongoClient mongoClient) {
         this.dbName = dbName;
-    }
-
-    @Required
-    public void setMongo(MongoClient mongoClient) {
         this.mongo = mongoClient;
     }
 

@@ -15,7 +15,7 @@
  */
 package org.craftercms.commons.web;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.beans.ConstructorProperties;
 
 /**

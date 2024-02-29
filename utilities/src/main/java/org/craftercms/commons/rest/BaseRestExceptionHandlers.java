@@ -17,7 +17,9 @@ package org.craftercms.commons.rest;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -43,15 +45,15 @@ public class BaseRestExceptionHandlers extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status,
-                                                             WebRequest request) {
-        logger.error("Request " + ((ServletWebRequest) request).getRequest().getRequestURI() + " failed with status " + status, ex);
+    protected ResponseEntity<Object> handleExceptionInternal(
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+        logger.error("Request " + ((ServletWebRequest) request).getRequest().getRequestURI() + " failed with status " + statusCode, ex);
 
         if (body == null) {
             body = new Result(ex.getMessage());
         }
 
-        return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(body, headers, statusCode);
     }
 
 }

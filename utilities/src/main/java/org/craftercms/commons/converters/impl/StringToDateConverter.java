@@ -22,7 +22,6 @@ import java.util.TimeZone;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.craftercms.commons.converters.Converter;
 import org.craftercms.commons.exceptions.DateParseException;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.InitializingBean;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -38,8 +37,7 @@ public class StringToDateConverter implements Converter<String, Date>, Initializ
     protected TimeZone timeZone;
     protected FastDateFormat dateFormat;
 
-    @Required
-    public void setDatePattern(String datePattern) {
+    public StringToDateConverter(String datePattern) {
         this.datePattern = datePattern;
     }
 
