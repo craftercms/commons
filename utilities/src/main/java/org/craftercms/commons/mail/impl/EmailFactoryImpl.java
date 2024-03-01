@@ -18,9 +18,9 @@ package org.craftercms.commons.mail.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.MimeMessage;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -34,7 +34,6 @@ import org.craftercms.commons.mail.EmailAddressException;
 import org.craftercms.commons.mail.EmailException;
 import org.craftercms.commons.mail.EmailFactory;
 import org.craftercms.commons.mail.EmailPreparationException;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -58,14 +57,10 @@ public class EmailFactoryImpl implements EmailFactory {
     protected String templateSuffix;
     protected String templateEncoding;
 
-    public EmailFactoryImpl() {
+    public EmailFactoryImpl(JavaMailSender mailSender) {
         templatePrefix = "";
         templateSuffix = "";
         templateEncoding = DEFAULT_ENCODING;
-    }
-
-    @Required
-    public void setMailSender(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 

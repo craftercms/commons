@@ -16,6 +16,7 @@
 package org.craftercms.commons.file.stores.impl.box;
 
 import org.apache.commons.io.FilenameUtils;
+import org.craftercms.commons.config.profiles.ConfigurationProfileLoader;
 import org.craftercms.commons.config.profiles.box.BoxProfile;
 import org.craftercms.commons.file.stores.BoxUtils;
 import org.craftercms.commons.file.stores.RemoteFile;
@@ -33,6 +34,10 @@ import java.io.IOException;
  * @author avasquez
  */
 public class BoxFileStore extends AbstractProfileAwareRemoteFileStore<BoxProfile> {
+
+    public BoxFileStore(ConfigurationProfileLoader<BoxProfile> profileLoader) {
+        super(profileLoader);
+    }
 
     @Override
     protected RemoteFile doGetFile(ProfileAwareRemotePath path, BoxProfile profile) throws IOException {

@@ -15,9 +15,13 @@
  */
 package org.craftercms.commons.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -32,6 +36,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class BaseRestExceptionHandlers extends ResponseEntityExceptionHandler {
 
+    private final Logger logger = LoggerFactory.getLogger(BaseRestExceptionHandlers.class);
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest webRequest) {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, webRequest);
@@ -43,15 +49,15 @@ public class BaseRestExceptionHandlers extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status,
-                                                             WebRequest request) {
-        logger.error("Request " + ((ServletWebRequest) request).getRequest().getRequestURI() + " failed with status " + status, ex);
+    protected ResponseEntity<Object> handleExceptionInternal(
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+        logger.error("Request '{}' failed with status '{}'", ((ServletWebRequest) request).getRequest().getRequestURI(), statusCode, ex);
 
         if (body == null) {
             body = new Result(ex.getMessage());
         }
 
-        return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(body, headers, statusCode);
     }
 
 }

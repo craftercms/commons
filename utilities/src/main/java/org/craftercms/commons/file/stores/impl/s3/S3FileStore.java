@@ -15,6 +15,7 @@
  */
 package org.craftercms.commons.file.stores.impl.s3;
 
+import org.craftercms.commons.config.profiles.ConfigurationProfileLoader;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
 import org.craftercms.commons.file.stores.RemoteFile;
 import org.craftercms.commons.aws.S3ClientCachingFactory;
@@ -22,7 +23,6 @@ import org.craftercms.commons.file.stores.impl.AbstractProfileAwareRemoteFileSto
 import org.craftercms.commons.file.stores.impl.ProfileAwareRemotePath;
 import org.craftercms.commons.file.stores.impl.ResourceBasedRemoteFile;
 import org.craftercms.commons.spring.resources.S3Resource;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
@@ -36,8 +36,8 @@ public class S3FileStore extends AbstractProfileAwareRemoteFileStore<S3Profile> 
 
     protected S3ClientCachingFactory clientFactory;
 
-    @Required
-    public void setClientFactory(S3ClientCachingFactory clientFactory) {
+    public S3FileStore(S3ClientCachingFactory clientFactory, ConfigurationProfileLoader<S3Profile> profileLoader) {
+        super(profileLoader);
         this.clientFactory = clientFactory;
     }
 

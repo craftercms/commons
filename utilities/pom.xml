@@ -89,8 +89,8 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -115,7 +115,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sun.mail</groupId>
-			<artifactId>javax.mail</artifactId>
+			<artifactId>jakarta.mail</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
