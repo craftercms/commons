@@ -9,7 +9,7 @@ jdk:
 branches:
   only:
   - develop
-  - support/.*
+  - support/4.1.x
   - master
 cache:
   directories:
