@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -31,6 +31,7 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static org.apache.commons.collections4.MapUtils.isEmpty;
 import static org.junit.Assert.*;
@@ -58,7 +59,7 @@ public class AbstractBlobStoreTest {
     @Test
     public void initTest() throws IOException, org.craftercms.commons.config.ConfigurationException {
         try (InputStream is = CONFIG_FILE.getInputStream()) {
-            HierarchicalConfiguration<ImmutableNode> config = ConfigUtils.readXmlConfiguration(is, ',' ,emptyMap());
+            HierarchicalConfiguration<ImmutableNode> config = ConfigUtils.readXmlConfiguration(is, ',' ,emptyMap(), emptyMap());
 
             store.init(config.configurationsAt("blobStore").get(0));
 
