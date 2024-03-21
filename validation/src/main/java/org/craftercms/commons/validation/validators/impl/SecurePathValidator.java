@@ -17,7 +17,7 @@ package org.craftercms.commons.validation.validators.impl;
 
 import org.craftercms.commons.validation.annotations.param.ValidateSecurePathParam;
 
-import javax.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidator;
 import java.util.List;
 
 public class SecurePathValidator extends AbstractStringValidator implements ConstraintValidator<ValidateSecurePathParam, String> {

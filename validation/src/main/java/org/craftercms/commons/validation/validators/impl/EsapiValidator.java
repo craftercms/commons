@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.Errors;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 import static org.craftercms.commons.validation.ErrorCodes.getEsapiErrorMessageKey;
 import static org.craftercms.commons.validation.ValidationUtils.getDefaultErrorMessageBundle;
