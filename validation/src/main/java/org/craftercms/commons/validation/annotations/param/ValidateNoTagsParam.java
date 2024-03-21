@@ -17,8 +17,8 @@ package org.craftercms.commons.validation.annotations.param;
 
 import org.craftercms.commons.validation.validators.impl.NoTagsValidator;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
