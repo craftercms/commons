@@ -57,6 +57,12 @@ public class EmailAddressTest implements ValidatorTest {
         assertValid("user%example.com@example.org");
         assertValid("user-@example.org");
         assertValid("postmaster@[123.123.123.123]");
+        assertValid("postmaster@[2001:0db8:85a3:0000:0000:8a2e:0370:7334]");
+        assertValid("_test@[2001:0db8:85a3:0000:0000:8a2e:0370:7334]");
+        assertValid("_test@[2001:db8:85a3::8a2e:370:7334]");
+        assertValid("_test@[2001:db8::1]");
+        assertValid("_test@[::1]");
+        assertValid("_test@[::]");
     }
 
     @Test
