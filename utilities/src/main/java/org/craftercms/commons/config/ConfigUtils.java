@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -29,12 +29,18 @@ import org.apache.commons.configuration2.io.FileHandler;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.lookup.StringLookup;
+import org.apache.commons.text.lookup.StringLookupFactory;
 import org.springframework.core.io.Resource;
+import org.springframework.lang.NonNull;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.commons.collections4.MapUtils.isNotEmpty;
 
 /**
  * Utility methods for Apache Commons based configuration.
@@ -56,9 +62,22 @@ public class ConfigUtils {
      */
     public static HierarchicalConfiguration<ImmutableNode> readXmlConfiguration(InputStream input,
                                                                                 char listDelimiter,
-                                                                                Map<String, Lookup> prefixLookups)
+                                                                                Map<String, Lookup> prefixLookups,
+                                                                                Map<String,String> lookupVariables)
             throws ConfigurationException {
-        return readXmlConfiguration(input, listDelimiter, prefixLookups, null);
+        return readXmlConfiguration(input, listDelimiter, prefixLookups, lookupVariables, null);
+    }
+
+    /**
+     * Get the default lookups to expand in configuration files.
+     *
+     * @param variables the variables to expand
+     * @return the lookups
+     */
+    @NonNull
+    private static Collection<Lookup> getLookups(final Map<String, String> variables) {
+        StringLookup lookup = StringLookupFactory.INSTANCE.mapStringLookup(variables);
+        return List.of(lookup::lookup);
     }
 
     /**
@@ -74,6 +93,7 @@ public class ConfigUtils {
     public static HierarchicalConfiguration<ImmutableNode> readXmlConfiguration(InputStream input,
                                                                                 char listDelimiter,
                                                                                 Map<String, Lookup> prefixLookups,
+                                                                                final Map<String, String> lookupVariables,
                                                                                 String fileEncoding)
             throws ConfigurationException {
         Parameters params = new Parameters();
@@ -85,6 +105,9 @@ public class ConfigUtils {
 
             if (MapUtils.isNotEmpty(prefixLookups)) {
                 xmlParams = xmlParams.setPrefixLookups(prefixLookups);
+            }
+            if (isNotEmpty(lookupVariables)) {
+                xmlParams = xmlParams.setDefaultLookups(getLookups(lookupVariables));
             }
 
             xmlParams.setListDelimiterHandler(new DefaultListDelimiterHandler(listDelimiter));
@@ -103,7 +126,8 @@ public class ConfigUtils {
     }
 
     public static XMLConfiguration readXmlConfiguration(Resource resource, char listDelimiter,
-                                                        Map<String, Lookup> prefixLookups)
+                                                        Map<String, Lookup> prefixLookups,
+                                                        Map<String,String> lookupVariables)
         throws ConfigurationException {
         Parameters params = new Parameters();
         FileBasedConfigurationBuilder<XMLConfiguration> builder =
@@ -117,6 +141,9 @@ public class ConfigUtils {
 
             if (MapUtils.isNotEmpty(prefixLookups)) {
                 xmlParams = xmlParams.setPrefixLookups(prefixLookups);
+            }
+            if (isNotEmpty(lookupVariables)) {
+                xmlParams = xmlParams.setDefaultLookups(getLookups(lookupVariables));
             }
 
             builder.configure(xmlParams);

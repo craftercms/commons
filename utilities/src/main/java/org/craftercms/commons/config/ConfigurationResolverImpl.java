@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -87,10 +87,9 @@ public class ConfigurationResolverImpl implements ConfigurationResolver {
             }
 
             if (provider.configExists(url)) {
-                return configurationReader.readXmlConfiguration(provider.getConfig(url));
-            } else {
-                return null;
+                return configurationReader.readXmlConfiguration(provider.getConfig(url), provider.getLookupVariables());
             }
+            return null;
         } catch (IOException e) {
             throw new ConfigurationException("Error reading configuration file at " + url, e);
         }
