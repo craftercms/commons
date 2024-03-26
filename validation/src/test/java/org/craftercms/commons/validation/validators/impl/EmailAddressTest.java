@@ -39,8 +39,10 @@ public class EmailAddressTest implements ValidatorTest {
     @Test
     public void testValidEmailsRFC() {
         assertValid("simple@example.com");
+        assertValid("Sample.With.Capital@example.com");
         assertValid("very.common@example.com");
         assertValid("name.d'uncommon@example.com");
+        assertValid("crafter.D'studio@example.com");
         assertValid("disposable.style.email.with+symbol@example.com");
         assertValid("\"very.unusual.@.unusual.com\"@example.com");
         assertValid("admin@mailserver1");
@@ -55,15 +57,23 @@ public class EmailAddressTest implements ValidatorTest {
         assertValid("user%example.com@example.org");
         assertValid("user-@example.org");
         assertValid("postmaster@[123.123.123.123]");
+        assertValid("postmaster@[2001:0db8:85a3:0000:0000:8a2e:0370:7334]");
+        assertValid("_test@[2001:0db8:85a3:0000:0000:8a2e:0370:7334]");
+        assertValid("_test@[2001:db8:85a3::8a2e:370:7334]");
+        assertValid("_test@[2001:db8::1]");
+        assertValid("_test@[::1]");
+        assertValid("_test@[::]");
     }
 
     @Test
     public void testInvalidEmailsRFC() {
         assertRejected("Abc.example.com");
+        assertRejected("a@b@c@example.com");
         assertRejected("A@b@c@example.com");
         assertRejected("a\"b(c)d,e:f;g<h>i[j\\k]l@example.com");
         assertRejected("just\"not\"right@example.com");
         assertRejected("this is\"not\\allowed@example.com");
         assertRejected("this\\ still\\\"not\\\\allowed@example.com");
+        assertRejected("i.like.underscores@but_they_are_not_allowed_in_this_part");
     }
 }
