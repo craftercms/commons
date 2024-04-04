@@ -33,6 +33,8 @@ import java.util.concurrent.ExecutorService;
  * Provides utility methods for AWS services
  */
 public final class AwsUtils {
+    private static final Logger logger = LoggerFactory.getLogger(AwsUtils.class);
+
     /**
      * Builds the {@link TransferManager} using the shared {@link ExecutorService}
      */
@@ -63,7 +65,9 @@ public final class AwsUtils {
         TransferManager transferManager = buildTransferManager(client, executorFactory);
         try {
             CountDownLatch doneSignal = new CountDownLatch(paths.size());
+            logger.debug("Copying {} objects from '{}' to '{}'", paths.size(), sourceBucket, targetBucket);
             for (String path : paths) {
+                logger.debug("Copying '{}' from '{}' to '{}'",path, sourceBucket, targetBucket);
                 String sourceKey = sourceBaseKey + path;
                 String targetKey = targetBaseKey + path;
                 CopyObjectRequest copyRequest = new CopyObjectRequest()
@@ -74,8 +78,9 @@ public final class AwsUtils {
                 transferManager.copy(copyRequest, new MultiOperationTransferStateChangeListener(sourceKey, targetKey, doneSignal));
             }
             doneSignal.await();
+            logger.debug("Finished copying {} objects from '{}' to '{}'", paths.size(), sourceBucket, targetBucket);
         } finally {
-            transferManager.shutdownNow();
+            transferManager.shutdownNow(false);
         }
     }
 
@@ -106,7 +111,7 @@ public final class AwsUtils {
                     doneSignal.countDown();
                 }
                 case Failed -> {
-                    logger.debug("Failed copy: '{}' -> '{}'", source, target);
+                    logger.error("Failed copy: '{}' -> '{}'", source, target);
                     doneSignal.countDown();
                 }
                 case Canceled -> {
