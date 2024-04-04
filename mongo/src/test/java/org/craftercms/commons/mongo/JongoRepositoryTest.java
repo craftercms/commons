@@ -16,7 +16,6 @@
 
 package org.craftercms.commons.mongo;
 
-import com.mongodb.MongoClient;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,14 +30,14 @@ public class JongoRepositoryTest {
     @Test
     public void testAnnotatedPojoRepository() throws Exception {
         TestAnnotated repository = new TestAnnotated();
-        repository.init(new JongoFactoryBean("test", new MongoClient()).createInstance());
+        repository.init();
         Assert.assertEquals(COLLECTION_NAME, repository.collectionName);
     }
 
     @Test
     public void testNonAnnotatedPojoRepository() throws Exception {
         TestSimple repository = new TestSimple();
-        repository.init(new JongoFactoryBean("test", new MongoClient()).createInstance());
+        repository.init();
         Assert.assertEquals(TESTPOJO, repository.collectionName);
 
     }
