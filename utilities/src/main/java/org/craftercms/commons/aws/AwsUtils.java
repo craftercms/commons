@@ -67,7 +67,7 @@ public final class AwsUtils {
             CountDownLatch doneSignal = new CountDownLatch(paths.size());
             logger.debug("Copying {} objects from '{}' to '{}'", paths.size(), sourceBucket, targetBucket);
             for (String path : paths) {
-                logger.debug("Copying '{}' from '{}' to '{}'",path, sourceBucket, targetBucket);
+                logger.debug("Copying '{}' from '{}' to '{}'", path, sourceBucket, targetBucket);
                 String sourceKey = sourceBaseKey + path;
                 String targetKey = targetBaseKey + path;
                 CopyObjectRequest copyRequest = new CopyObjectRequest()
@@ -75,7 +75,7 @@ public final class AwsUtils {
                         .withSourceKey(sourceKey)
                         .withDestinationBucketName(targetBucket)
                         .withDestinationKey(targetKey);
-                transferManager.copy(copyRequest, new MultiOperationTransferStateChangeListener(sourceKey, targetKey, doneSignal));
+                transferManager.copy(copyRequest, new MultiOperationTransferStateChangeListener(sourceBucket, sourceKey, targetBucket, targetKey, doneSignal));
             }
             doneSignal.await();
             logger.debug("Finished copying {} objects from '{}' to '{}'", paths.size(), sourceBucket, targetBucket);
@@ -91,31 +91,37 @@ public final class AwsUtils {
     private static class MultiOperationTransferStateChangeListener implements TransferStateChangeListener {
         protected static final Logger logger = LoggerFactory.getLogger(MultiOperationTransferStateChangeListener.class);
 
-        private final String source;
-        private final String target;
+        private final String sourceBucket;
+        private final String sourceKey;
+        private final String targetBucket;
+        private final String targetKey;
 
         private final CountDownLatch doneSignal;
 
-        public MultiOperationTransferStateChangeListener(final String source, final String target, final CountDownLatch doneSignal) {
-            this.source = source;
-            this.target = target;
+        public MultiOperationTransferStateChangeListener(final String sourceBucket, final String sourceKey,
+                                                         final String targetBucket, final String targetKey,
+                                                         final CountDownLatch doneSignal) {
+            this.sourceBucket = sourceBucket;
+            this.sourceKey = sourceKey;
+            this.targetBucket = targetBucket;
+            this.targetKey = targetKey;
             this.doneSignal = doneSignal;
         }
 
         @Override
         public void transferStateChanged(Transfer transfer, Transfer.TransferState state) {
             switch (state) {
-                case InProgress -> logger.debug("Started to copy: '{}' -> '{}'", source, target);
+                case InProgress -> logger.debug("Started to copy: '{}:{}' -> '{}:{}'", sourceBucket, sourceKey, targetBucket, targetKey);
                 case Completed -> {
-                    logger.debug("Completed copy: '{}' -> '{}'", source, target);
+                    logger.debug("Completed copy: '{}:{}' -> '{}:{}'", sourceBucket, sourceKey, targetBucket, targetKey);
                     doneSignal.countDown();
                 }
                 case Failed -> {
-                    logger.error("Failed copy: '{}' -> '{}'", source, target);
+                    logger.error("Failed copy: '{}:{}' -> '{}:{}'", sourceBucket, sourceKey, targetBucket, targetKey);
                     doneSignal.countDown();
                 }
                 case Canceled -> {
-                    logger.debug("Canceled copy: '{}' -> '{}'", source, target);
+                    logger.debug("Canceled copy: '{}:{}' -> '{}:{}'", sourceBucket, sourceKey, targetBucket, targetKey);
                     doneSignal.countDown();
                 }
             }
