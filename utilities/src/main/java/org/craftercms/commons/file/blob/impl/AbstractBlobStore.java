@@ -27,6 +27,7 @@ import org.springframework.core.io.Resource;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.craftercms.commons.config.ConfigUtils.getRequiredStringProperty;
 
@@ -140,6 +141,18 @@ public abstract class AbstractBlobStore<T extends ConfigurationProfile> implemen
          */
         public String prefix;
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Mapping mapping = (Mapping) o;
+            return Objects.equals(target, mapping.target) && Objects.equals(prefix, mapping.prefix);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(target, prefix);
+        }
     }
 
 }
