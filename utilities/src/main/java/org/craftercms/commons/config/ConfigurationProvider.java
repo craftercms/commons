@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -17,6 +17,7 @@ package org.craftercms.commons.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * Defines the operations to access configuration files
@@ -40,5 +41,12 @@ public interface ConfigurationProvider {
      * @throws IOException if there is any error reading the configuration
      */
     InputStream getConfig(String path) throws IOException;
+
+    /**
+     * Get a Map of variables to be expanded during configuration files loading.
+     * e.g.: ${siteName} will be replaced by the value of the siteName variable
+     * @return the name of the site
+     */
+    Map<String, String> getLookupVariables();
 
 }
