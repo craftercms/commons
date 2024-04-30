@@ -26,7 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -169,9 +169,7 @@ public class HasPermissionAnnotationHandlerTest {
     }
 
     private PermissionEvaluator<String, Object> createTestPermissionEvaluator() throws PermissionException {
-        PermissionEvaluatorImpl<String, Object> evaluator = new PermissionEvaluatorImpl<>();
-        evaluator.setSubjectResolver(subjectResolver);
-        evaluator.setPermissionResolver(createTestPermissionResolver());
+        PermissionEvaluatorImpl<String, Object> evaluator = new PermissionEvaluatorImpl<>(subjectResolver, createTestPermissionResolver());
 
         return evaluator;
     }

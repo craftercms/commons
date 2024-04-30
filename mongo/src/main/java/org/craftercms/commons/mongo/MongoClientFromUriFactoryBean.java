@@ -18,7 +18,6 @@ package org.craftercms.commons.mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 /**
@@ -33,8 +32,7 @@ public class MongoClientFromUriFactoryBean extends AbstractFactoryBean<MongoClie
 
     protected String uri;
 
-    @Required
-    public void setUri(String uri) {
+    public MongoClientFromUriFactoryBean(String uri) {
         this.uri = uri;
     }
 

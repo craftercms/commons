@@ -17,7 +17,6 @@ package org.craftercms.commons.rest;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.beans.factory.InitializingBean;
@@ -37,22 +36,18 @@ public class RestTemplate extends org.springframework.web.client.RestTemplate im
 
     protected Class<?> errorResponseType;
 
-    public RestTemplate() {
+    public RestTemplate(Class<?> errorResponseType) {
         super(new HttpComponentsClientHttpRequestFactory());
 
-        setErrorHandler(new HttpMessageConvertingResponseErrorHandler());
+        this.errorResponseType = errorResponseType;
+        setErrorHandler(new HttpMessageConvertingResponseErrorHandler(errorResponseType));
     }
 
     public RestTemplate(List<HttpMessageConverter<?>> messageConverters) {
         super(new HttpComponentsClientHttpRequestFactory());
 
         setMessageConverters(messageConverters);
-        setErrorHandler(new HttpMessageConvertingResponseErrorHandler());
-    }
-
-    @Required
-    public void setErrorResponseType(Class<?> errorResponseType) {
-        this.errorResponseType = errorResponseType;
+        setErrorHandler(new HttpMessageConvertingResponseErrorHandler(errorResponseType));
     }
 
     public void afterPropertiesSet() {
