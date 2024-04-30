@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -33,14 +32,13 @@ public class BeanListFactoryBean implements FactoryBean<List<Object>>, Applicati
     protected ApplicationContext applicationContext;
     protected String[] beanNames;
 
+    public BeanListFactoryBean(String[] beanNames) {
+        this.beanNames = beanNames;
+    }
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-    }
-
-    @Required
-    public void setBeanNames(String[] beanNames) {
-        this.beanNames = beanNames;
     }
 
     @Override

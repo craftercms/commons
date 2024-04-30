@@ -41,7 +41,8 @@ import org.jongo.MongoCollection;
 import org.jongo.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * Simple interface to interact with Jongo/MongoDB.<br/>
@@ -146,12 +147,12 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             getCollection().insert(query, queryParams);
         } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for save query " + query + " of type " + clazz.getName() +
-                " with params " + Arrays.toString(queryParams);
+                    " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new DuplicateKeyException(msg, ex);
         } catch (MongoException ex) {
             String msg = "Unable to save document by query " + query + " of type " + clazz.getName() +
-                " with params " + Arrays.toString(queryParams);
+                    " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -159,7 +160,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
 
     @Override
     public void update(final String id, final Object updateObject, final boolean multi, final boolean upsert) throws
-        MongoDataException {
+            MongoDataException {
         try {
             Update update = getCollection().update(new ObjectId(id));
             if (multi) {
@@ -171,12 +172,12 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             update.with(updateObject);
         } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for update with id='" + id + "', updatedObject=" + updateObject + ", multi=" +
-                multi + ", upsert=" + upsert;
+                    multi + ", upsert=" + upsert;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         } catch (MongoException ex) {
             String msg = "Unable to do update with id='" + id + "', updatedObject=" + updateObject + ", multi=" +
-                multi + ", upsert=" + upsert;
+                    multi + ", upsert=" + upsert;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -189,7 +190,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
 
     @Override
     public void update(final String id, final String modifier, final boolean multi, final boolean upsert) throws
-        MongoDataException {
+            MongoDataException {
         try {
             Update update = getCollection().update(new ObjectId(id));
             if (multi) {
@@ -201,12 +202,12 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             update.with(modifier);
         } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for update with id='" + id + "', modifier=" + modifier + ", multi=" +
-                multi + ", upsert=" + upsert;
+                    multi + ", upsert=" + upsert;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         } catch (MongoException ex) {
             String msg = "Unable to do update with id='" + id + "', modifier=" + modifier + ", multi=" +
-                multi + ", upsert=" + upsert;
+                    multi + ", upsert=" + upsert;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -225,12 +226,12 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             update.with(modifier, params);
         } catch (com.mongodb.DuplicateKeyException ex) {
             String msg = "Duplicate key for update with id='" + id + "', modifier=" + modifier + ", multi=" +
-                multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
+                    multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         } catch (MongoException ex) {
             String msg = "Unable to do update with id='" + id + "', modifier=" + modifier + ", multi=" +
-                multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
+                    multi + ", upsert=" + upsert + ", params" + Arrays.toString(params);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -253,7 +254,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             return getCollection().count(query);
         } catch (MongoException ex) {
             String msg = "Unable to count documents of type " + clazz.getName() + " that match the " +
-                "query " + query;
+                    "query " + query;
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -265,8 +266,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             return getCollection().count(query, queryParams);
         } catch (MongoException ex) {
             String msg = "Unable to count documents of type " + clazz.getName() + " that match the " +
-                "query " + query +
-                " with params " + Arrays.toString(queryParams);
+                    "query " + query +
+                    " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -300,7 +301,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             return returnList(getCollection().find(query, queryParams));
         } catch (MongoException ex) {
             String msg = "Unable to find documents by query " + query + " of type " + clazz.getName() +
-                " with params " + Arrays.toString(queryParams);
+                    " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -323,7 +324,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             return getCollection().findOne(query, queryParams).as(clazz);
         } catch (MongoException ex) {
             String msg = "Unable to find document by query " + query + " of type " + clazz.getName() +
-                " with params " + Arrays.toString(queryParams);
+                    " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -335,7 +336,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
             getCollection().remove(query, queryParams);
         } catch (MongoException ex) {
             String msg = "Unable to remove document by query " + query + " of type " + clazz.getName() +
-                " with params " + Arrays.toString(queryParams);
+                    " with params " + Arrays.toString(queryParams);
             log.error(msg, ex);
             throw new MongoDataException(msg, ex);
         }
@@ -412,7 +413,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
 
     @Override
     public FileInfo saveFile(final InputStream inputStream, final String storeName, final String contentType) throws
-        MongoDataException, FileExistsException {
+            MongoDataException, FileExistsException {
         return saveFile(inputStream, storeName, contentType, null);
     }
 
@@ -461,7 +462,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
 
     @Override
     public FileInfo updateFile(final InputStream inputStream, final String storeName, final String contentType)
-        throws FileNotFoundException, MongoDataException, FileExistsException {
+            throws FileNotFoundException, MongoDataException, FileExistsException {
         gridfs.remove(validateObject(storeName));
         return saveFile(inputStream, storeName, contentType);
     }
@@ -480,7 +481,7 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
     @Override
     public List<FileInfo> listFilesByName(final String filename){
         final List<GridFSDBFile> files = gridfs.find(new BasicDBObject("filename",new BasicDBObject("$regex",
-            ".*"+filename+".*")));
+                ".*"+filename+".*")));
         final ArrayList<FileInfo> toReturn = new ArrayList<FileInfo>();
         for (GridFSDBFile file : files) {
             toReturn.add(new FileInfo(file,false));
@@ -538,8 +539,8 @@ public abstract class AbstractJongoRepository<T> implements CrudRepository<T> {
         return (Iterable<T>)find.as(clazz);
     }
 
-    @Required
-    public void setJongo(final Jongo jongo) {
+    @Autowired
+    public void setJongo(@Lazy final Jongo jongo) {
         this.jongo = jongo;
         this.gridfs = new GridFS(jongo.getDatabase());
     }

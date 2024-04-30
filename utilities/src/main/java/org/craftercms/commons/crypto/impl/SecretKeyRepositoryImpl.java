@@ -29,7 +29,6 @@ import org.craftercms.commons.crypto.CryptoUtils;
 import org.craftercms.commons.crypto.CryptoException;
 import org.craftercms.commons.crypto.SecretKeyRepository;
 import org.craftercms.commons.i10n.I10nLogger;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -60,18 +59,10 @@ public class SecretKeyRepositoryImpl implements SecretKeyRepository, Initializin
 
     protected KeyStore keyStore;
 
-    public SecretKeyRepositoryImpl() {
-        defaultKeyAlgorithm = CryptoUtils.AES_CIPHER_ALGORITHM;
-    }
-
-    @Required
-    public void setKeyStoreFile(File keyStoreFile) {
+    public SecretKeyRepositoryImpl(File keyStoreFile, String keyStorePassword) {
         this.keyStoreFile = keyStoreFile;
-    }
-
-    @Required
-    public void setKeyStorePassword(String keyStorePassword) {
         this.keyStorePassword = keyStorePassword.toCharArray();
+        defaultKeyAlgorithm = CryptoUtils.AES_CIPHER_ALGORITHM;
     }
 
     public void setDefaultKeyAlgorithm(String defaultKeyAlgorithm) {

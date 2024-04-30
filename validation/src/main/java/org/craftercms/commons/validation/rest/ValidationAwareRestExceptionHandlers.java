@@ -23,6 +23,7 @@ import org.craftercms.commons.validation.ValidationResult;
 import org.craftercms.commons.validation.ValidationUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -50,8 +51,8 @@ public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandl
     }
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest webRequest) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Throwable cause = ExceptionUtils.getRootCause(ex);
         if (cause instanceof UnrecognizedPropertyException) {
             UnrecognizedPropertyException upe = (UnrecognizedPropertyException)cause;
@@ -60,17 +61,17 @@ public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandl
             ValidationResult result = new ValidationResult();
             result.addError(field, ValidationUtils.getErrorMessage(errorMessageBundle, FIELD_UNRECOGNIZED_ERROR_CODE));
 
-            return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+            return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
         } else {
             String message = ValidationUtils.getErrorMessage(errorMessageBundle, INVALID_REQUEST_BODY_ERROR_CODE);
 
-            return handleExceptionInternal(ex, message, new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
+            return handleExceptionInternal(ex, message, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
         }
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ValidationResult result = new ValidationResult();
 
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {

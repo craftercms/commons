@@ -24,8 +24,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import static org.craftercms.commons.plugin.model.CrafterCmsEditions.COMMUNITY;
 import static org.craftercms.commons.plugin.model.CrafterCmsEditions.ENTERPRISE;

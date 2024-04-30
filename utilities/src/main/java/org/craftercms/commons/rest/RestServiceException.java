@@ -15,7 +15,7 @@
  */
 package org.craftercms.commons.rest;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.RestClientException;
 
 /**
@@ -26,17 +26,17 @@ import org.springframework.web.client.RestClientException;
  */
 public class RestServiceException extends RestClientException {
 
-    protected HttpStatus responseStatus;
+    protected HttpStatusCode responseStatus;
     protected Object errorDetails;
 
-    public RestServiceException(HttpStatus responseStatus, Object errorDetails) {
+    public RestServiceException(HttpStatusCode responseStatus, Object errorDetails) {
         super("responseStatus = " + responseStatus.value() + ", errorDetails = " + errorDetails);
 
         this.responseStatus = responseStatus;
         this.errorDetails = errorDetails;
     }
 
-    public HttpStatus getResponseStatus() {
+    public HttpStatusCode getResponseStatus() {
         return responseStatus;
     }
 

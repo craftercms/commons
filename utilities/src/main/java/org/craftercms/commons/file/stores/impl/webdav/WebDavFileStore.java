@@ -27,6 +27,8 @@ import org.craftercms.commons.spring.resources.WebDavResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.util.UriUtils;
 
+import org.craftercms.commons.config.profiles.ConfigurationProfileLoader;
+
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 
@@ -37,6 +39,10 @@ import java.nio.charset.StandardCharsets;
  * @since 3.1.4
  */
 public class WebDavFileStore extends AbstractProfileAwareRemoteFileStore<WebDavProfile> {
+
+    public WebDavFileStore(ConfigurationProfileLoader<WebDavProfile> profileLoader) {
+        super(profileLoader);
+    }
 
     @Override
     protected RemoteFile doGetFile(final ProfileAwareRemotePath path, final WebDavProfile profile)

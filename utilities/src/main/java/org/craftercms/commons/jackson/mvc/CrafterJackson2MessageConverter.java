@@ -29,7 +29,6 @@ import org.craftercms.commons.jackson.mvc.annotations.InjectValueFactory;
 import org.craftercms.commons.jackson.mvc.annotations.SecureProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -49,6 +48,10 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
     protected SecurePropertyHandler securePropertyHandler;
     private Logger log = LoggerFactory.getLogger(CrafterJackson2MessageConverter.class);
 
+    public CrafterJackson2MessageConverter(final FilterProvider filter) {
+        super();
+        this.filter = filter;
+    }
 
     @Override
     protected void writeInternal(Object object, Type type, HttpOutputMessage outputMessage) throws IOException,
@@ -169,12 +172,6 @@ public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageC
     public void setSecurePropertyHandler(final SecurePropertyHandler securePropertyHandler) {
         this.securePropertyHandler = securePropertyHandler;
     }
-
-    @Required()
-    public void setFilter(final FilterProvider filter) {
-        this.filter = filter;
-    }
-
 
     public void setInjectValueFactory(final InjectValueFactory injectValueFactory) {
         this.injectValueFactory = injectValueFactory;
