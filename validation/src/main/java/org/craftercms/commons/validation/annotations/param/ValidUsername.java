@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -24,6 +24,7 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.USERNAME;
+import static org.craftercms.commons.validation.annotations.param.ValidUsername.MAX_USERNAME_LENGTH;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
@@ -31,8 +32,10 @@ import static org.craftercms.commons.validation.annotations.param.EsapiValidatio
 @ValidateNoTagsParam
 @ValidateSecurePathParam
 @EsapiValidatedParam(type = USERNAME)
-@Size(max = 255)
+@Size(max = MAX_USERNAME_LENGTH)
 public @interface ValidUsername {
+
+    int MAX_USERNAME_LENGTH = 255;
     String message() default "";
 
     Class<?>[] groups() default {};

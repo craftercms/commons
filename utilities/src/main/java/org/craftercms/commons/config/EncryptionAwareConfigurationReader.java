@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -16,19 +16,20 @@
 
 package org.craftercms.commons.config;
 
-import java.beans.ConstructorProperties;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Map;
-
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.interpol.Lookup;
+import org.apache.commons.text.lookup.StringLookup;
+import org.apache.commons.text.lookup.StringLookupFactory;
 import org.craftercms.commons.crypto.TextEncryptor;
 import org.springframework.core.io.Resource;
+import org.springframework.lang.NonNull;
+
+import java.beans.ConstructorProperties;
+import java.io.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 
@@ -77,13 +78,13 @@ public class EncryptionAwareConfigurationReader {
         this.encryptedValuePrefix = encryptedValuePrefix;
     }
 
-    public HierarchicalConfiguration<?> readXmlConfiguration(InputStream inputStream)
-        throws ConfigurationException {
-        return ConfigUtils.readXmlConfiguration(inputStream, ',', prefixLookups);
+    public HierarchicalConfiguration<?> readXmlConfiguration(InputStream inputStream, Map<String,String> lookupVariables)
+            throws ConfigurationException {
+        return ConfigUtils.readXmlConfiguration(inputStream, ',', prefixLookups, lookupVariables);
     }
 
-    public HierarchicalConfiguration<?> readXmlConfiguration(Resource resource) throws ConfigurationException {
-        return ConfigUtils.readXmlConfiguration(resource, configListDelimiter, prefixLookups);
+    public HierarchicalConfiguration<?> readXmlConfiguration(Resource resource, Map<String,String> lookupVariables) throws ConfigurationException {
+        return ConfigUtils.readXmlConfiguration(resource, configListDelimiter, prefixLookups, lookupVariables);
     }
 
     public HierarchicalConfiguration<?> readYamlConfiguration(Reader reader) throws ConfigurationException {

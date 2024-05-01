@@ -24,6 +24,7 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.SITE_ID;
+import static org.craftercms.commons.validation.annotations.param.ValidSiteId.MAX_SITE_ID_LENGTH;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
@@ -31,8 +32,10 @@ import static org.craftercms.commons.validation.annotations.param.EsapiValidatio
 @ValidateNoTagsParam
 @ValidateSecurePathParam
 @EsapiValidatedParam(type = SITE_ID)
-@Size(max = 50)
+@Size(max = MAX_SITE_ID_LENGTH)
 public @interface ValidSiteId {
+    int MAX_SITE_ID_LENGTH = 50;
+
     String message() default "";
 
     Class<?>[] groups() default {};

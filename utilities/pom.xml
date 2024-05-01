@@ -21,7 +21,7 @@
     <parent>
         <artifactId>crafter-commons</artifactId>
         <groupId>org.craftercms</groupId>
-        <version>4.1.3</version><!-- craftercms version flag -->
+        <version>4.1.4</version><!-- craftercms version flag -->
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -277,6 +277,15 @@
             </activation>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <environmentVariables>
+                                <TEST_ENV_PROPERTY1>CUSTOM_VALUE</TEST_ENV_PROPERTY1>
+                            </environmentVariables>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-shade-plugin</artifactId>
