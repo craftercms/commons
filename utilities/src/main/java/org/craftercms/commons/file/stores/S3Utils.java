@@ -15,11 +15,15 @@
  */
 package org.craftercms.commons.file.stores;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.config.profiles.aws.AbstractAwsProfile;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import software.amazon.awssdk.services.s3.S3Configuration;
+
+import java.net.URI;
 
 /**
  * Utility methods for S3.
@@ -35,25 +39,27 @@ public class S3Utils {
      *
      * @return a client to an Amazon S3 account
      */
-    public static final AmazonS3 createClient(AbstractAwsProfile profile, boolean useCustomEndpoint) {
-        AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard()
-                                                             .withCredentials(profile.getCredentialsProvider());
+    public static final S3Client createClient(AbstractAwsProfile profile, boolean useCustomEndpoint) {
+        S3ClientBuilder builder = S3Client.builder()
+                .credentialsProvider(profile.getCredentialsProvider());
 
         if (useCustomEndpoint && StringUtils.isNotEmpty(profile.getEndpoint()) &&
             StringUtils.isNotEmpty(profile.getRegion())) {
-            builder.withEndpointConfiguration(
-                new AmazonS3ClientBuilder.EndpointConfiguration(profile.getEndpoint(), profile.getRegion()));
+            builder.endpointOverride(URI.create(profile.getEndpoint()))
+                    .region(Region.of(profile.getRegion()));
             if (profile instanceof S3Profile) {
-                builder.withPathStyleAccessEnabled(((S3Profile) profile).isPathStyleAccessEnabled());
+                builder.serviceConfiguration(S3Configuration.builder()
+                        .pathStyleAccessEnabled(((S3Profile) profile).isPathStyleAccessEnabled())
+                        .build());
             }
         } else if (StringUtils.isNotEmpty(profile.getRegion())) {
-            builder.withRegion(profile.getRegion());
+            builder.region(Region.of(profile.getRegion()));
         }
 
         return builder.build();
     }
 
-    public static final AmazonS3 createClient(AbstractAwsProfile profile) {
+    public static final S3Client createClient(AbstractAwsProfile profile) {
         return createClient(profile, true);
     }
 

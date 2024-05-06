@@ -15,19 +15,19 @@
  */
 package org.craftercms.commons.aws;
 
-import com.amazonaws.services.s3.AmazonS3;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
 import org.craftercms.commons.file.stores.S3Utils;
+import software.amazon.awssdk.services.s3.S3Client;
 
 /**
  * {@link AbstractAwsClientCachingFactory} for S3 clients.
  *
  * @author avasquez
  */
-public class S3ClientCachingFactory extends AbstractAwsClientCachingFactory<S3Profile, AmazonS3> {
+public class S3ClientCachingFactory extends AbstractAwsClientCachingFactory<S3Profile, S3Client> {
 
     @Override
-    protected AmazonS3 createClient(S3Profile profile) {
+    protected S3Client createClient(S3Profile profile) {
         return S3Utils.createClient(profile);
     }
 

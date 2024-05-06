@@ -15,11 +15,6 @@
  */
 package org.craftercms.commons.spring.resources;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import org.apache.commons.io.FilenameUtils;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
 import org.craftercms.commons.aws.S3ClientCachingFactory;
@@ -27,6 +22,8 @@ import org.craftercms.commons.lang.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -69,10 +66,10 @@ public class S3Resource implements RangeAwareResource {
     @Override
     public boolean exists() {
         try {
-            return getClient().doesObjectExist(getBucket(), getActualKey());
+            getClient().headObject(getHeadObjectRequest());
+            return true;
         } catch (Exception e) {
             logger.error("Error while checking if object " + getDescription() + " exists", e);
-
             return false;
         }
     }
@@ -104,12 +101,12 @@ public class S3Resource implements RangeAwareResource {
 
     @Override
     public long contentLength() throws IOException {
-        return getMetadata().getContentLength();
+        return getMetadata().contentLength();
     }
 
     @Override
     public long lastModified() throws IOException {
-        return getMetadata().getLastModified().getTime();
+        return getMetadata().lastModified().toEpochMilli();
     }
 
     @Override
@@ -130,14 +127,14 @@ public class S3Resource implements RangeAwareResource {
     @Override
     public InputStream getInputStream() throws IOException {
         try {
-            return getClient().getObject(getBucket(), getActualKey()).getObjectContent();
-        } catch (AmazonServiceException e) {
-            if (e.getStatusCode() == 404) {
-                throw new FileNotFoundException(getDescription() + " not found");
-            } else {
-                throw new IOException("Error while getting object content for " + getDescription(), e);
-            }
-        } catch (SdkClientException e) {
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                    .bucket(getBucket())
+                    .key(getActualKey())
+                    .build();
+            return getClient().getObject(getObjectRequest);
+        } catch (NoSuchKeyException e) {
+            throw new FileNotFoundException(getDescription() + " not found");
+        } catch (Exception e) {
             throw new IOException("Error while getting object content for " + getDescription(), e);
         }
     }
@@ -145,15 +142,15 @@ public class S3Resource implements RangeAwareResource {
     @Override
     public InputStream getInputStream(long start, long end) throws IOException {
         try {
-            return getClient().getObject(new GetObjectRequest(getBucket(), getActualKey()).withRange(start, end))
-                              .getObjectContent();
-        } catch (AmazonServiceException e) {
-            if (e.getStatusCode() == 404) {
-                throw new FileNotFoundException(getDescription() + " not found");
-            } else {
-                throw new IOException("Error while getting object content for " + getDescription(), e);
-            }
-        } catch (SdkClientException e) {
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                    .bucket(getBucket())
+                    .key(getActualKey())
+                    .range("bytes=" + start + "-" + end)
+                    .build();
+            return getClient().getObject(getObjectRequest);
+        } catch (NoSuchKeyException e) {
+            throw new FileNotFoundException(getDescription() + " not found");
+        } catch (Exception e) {
             throw new IOException("Error while getting object content for " + getDescription(), e);
         }
     }
@@ -166,7 +163,7 @@ public class S3Resource implements RangeAwareResource {
                '}';
     }
 
-    private AmazonS3 getClient() {
+    private S3Client getClient() {
         return clientFactory.getClient(profile);
     }
 
@@ -174,16 +171,28 @@ public class S3Resource implements RangeAwareResource {
         return isEmpty(bucket)? profile.getBucketName() : bucket;
     }
 
-    private ObjectMetadata getMetadata() throws IOException {
+    /**
+     * Get head object request
+     * @return instance of {@link HeadObjectRequest}
+     */
+    private HeadObjectRequest getHeadObjectRequest() {
+        return HeadObjectRequest.builder()
+                .bucket(getBucket())
+                .key(getActualKey())
+                .build();
+    }
+
+    /**
+     * Get S3 object metadata
+     * @return instance of {@link HeadObjectResponse}
+     * @throws IOException
+     */
+    private HeadObjectResponse getMetadata() throws IOException {
         try {
-            return getClient().getObjectMetadata(getBucket(), getActualKey());
-        } catch (AmazonServiceException e) {
-            if (e.getStatusCode() == 404) {
-                throw new FileNotFoundException(getDescription() + " not found");
-            } else {
-                throw new IOException("Error while getting object metadata for " + getDescription(), e);
-            }
-        } catch (SdkClientException e) {
+            return getClient().headObject(getHeadObjectRequest());
+        } catch (NoSuchKeyException e) {
+            throw new FileNotFoundException(getDescription() + " not found");
+        } catch (Exception e) {
             throw new IOException("Error while getting object metadata for " + getDescription(), e);
         }
     }

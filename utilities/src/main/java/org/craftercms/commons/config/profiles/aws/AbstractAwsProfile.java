@@ -15,9 +15,12 @@
  */
 package org.craftercms.commons.config.profiles.aws;
 
-import com.amazonaws.auth.*;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.config.profiles.ConfigurationProfile;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 
 import java.util.Objects;
 
@@ -80,11 +83,11 @@ public abstract class AbstractAwsProfile extends ConfigurationProfile {
         this.secretKey = secretKey;
     }
 
-    public AWSCredentialsProvider getCredentialsProvider() {
+    public AwsCredentialsProvider getCredentialsProvider() {
         if (StringUtils.isNotEmpty(accessKey) && StringUtils.isNotEmpty(secretKey)) {
-            return new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey));
+            return StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey));
         } else {
-            return DefaultAWSCredentialsProviderChain.getInstance();
+            return DefaultCredentialsProvider.create();
         }
     }
 

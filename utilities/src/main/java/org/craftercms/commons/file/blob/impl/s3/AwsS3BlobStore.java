@@ -15,7 +15,6 @@
  */
 package org.craftercms.commons.file.blob.impl.s3;
 
-import com.amazonaws.services.s3.AmazonS3;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
 import org.craftercms.commons.aws.S3ClientCachingFactory;
@@ -25,6 +24,7 @@ import org.craftercms.commons.file.blob.exception.BlobStoreException;
 import org.craftercms.commons.file.blob.impl.AbstractBlobStore;
 import org.craftercms.commons.spring.resources.S3Resource;
 import org.springframework.core.io.Resource;
+import software.amazon.awssdk.services.s3.S3Client;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -45,7 +45,7 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
         this.clientFactory = clientFactory;
     }
 
-    protected AmazonS3 getClient() {
+    protected S3Client getClient() {
         return clientFactory.getClient(profile);
     }
 

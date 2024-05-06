@@ -15,7 +15,6 @@
  */
 package org.craftercms.commons.aws;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalListener;
@@ -25,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import software.amazon.awssdk.services.s3.S3Client;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -108,11 +108,11 @@ public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProf
     }
 
     protected void shutdownClient(RemovalNotification<P, C> notification) {
-        if (notification.getValue() instanceof AmazonS3) {
+        if (notification.getValue() instanceof S3Client) {
             logger.info("Shutting down AWS client for {}", notification.getKey());
 
-            AmazonS3 client = (AmazonS3) notification.getValue();
-            client.shutdown();
+            S3Client client = (S3Client) notification.getValue();
+            client.close();
         }
     }
 

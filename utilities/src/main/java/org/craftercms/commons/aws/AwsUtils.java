@@ -15,18 +15,16 @@
  */
 package org.craftercms.commons.aws;
 
-import com.amazonaws.client.builder.ExecutorFactory;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CopyObjectRequest;
-import com.amazonaws.services.s3.transfer.Transfer;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
-import com.amazonaws.services.s3.transfer.internal.TransferStateChangeListener;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
+import software.amazon.awssdk.transfer.s3.S3TransferManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import software.amazon.awssdk.transfer.s3.model.CompletedCopy;
+import software.amazon.awssdk.transfer.s3.model.Copy;
+import software.amazon.awssdk.transfer.s3.model.CopyRequest;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -36,95 +34,51 @@ public final class AwsUtils {
     private static final Logger logger = LoggerFactory.getLogger(AwsUtils.class);
 
     /**
-     * Builds the {@link TransferManager} using the shared {@link ExecutorService}
+     * Builds the {@link S3TransferManager} using the shared {@link ExecutorService}
      */
-    public static TransferManager buildTransferManager(AmazonS3 client, ExecutorFactory executorFactory) {
-        return TransferManagerBuilder
-                .standard()
-                .withS3Client(client)
-                .withExecutorFactory(executorFactory)
-                .withShutDownThreadPools(false)
+    public static S3TransferManager buildTransferManager(S3AsyncClient client) {
+        return S3TransferManager.builder()
+                .s3Client(client)
                 .build();
     }
 
     /**
      * Copy a list of objects from a source bucket to a target bucket
      *
-     * @param client          The {@link AmazonS3} client
-     * @param executorFactory The {@link ExecutorFactory} to use to create a {@link TransferManager}
+     * @param client          The {@link S3AsyncClient} client
      * @param sourceBucket    The source bucket
      * @param sourceBaseKey   The base key in the source bucket (i.e. prefix for all paths)
      * @param targetBucket    The target bucket
      * @param targetBaseKey   The base key in the target bucket (i.e. prefix for all paths)
      * @param paths           The list of paths to copy
-     * @throws InterruptedException If the operation is interrupted while copying the objects
      */
-    public static void copyObjects(AmazonS3 client, ExecutorFactory executorFactory, String sourceBucket, String sourceBaseKey,
-                                   String targetBucket, String targetBaseKey, List<String> paths) throws InterruptedException {
+    public static void copyObjects(S3AsyncClient client, String sourceBucket, String sourceBaseKey,
+                                   String targetBucket, String targetBaseKey, List<String> paths) {
 
-        TransferManager transferManager = buildTransferManager(client, executorFactory);
+        S3TransferManager transferManager = buildTransferManager(client);
         try {
-            CountDownLatch doneSignal = new CountDownLatch(paths.size());
             logger.debug("Copying {} objects from '{}' to '{}'", paths.size(), sourceBucket, targetBucket);
             for (String path : paths) {
                 logger.debug("Copying '{}' from '{}' to '{}'", path, sourceBucket, targetBucket);
                 String sourceKey = sourceBaseKey + path;
                 String targetKey = targetBaseKey + path;
-                CopyObjectRequest copyRequest = new CopyObjectRequest()
-                        .withSourceBucketName(sourceBucket)
-                        .withSourceKey(sourceKey)
-                        .withDestinationBucketName(targetBucket)
-                        .withDestinationKey(targetKey);
-                transferManager.copy(copyRequest, new MultiOperationTransferStateChangeListener(sourceBucket, sourceKey, targetBucket, targetKey, doneSignal));
+                CopyObjectRequest copyObjectRequest = CopyObjectRequest.builder()
+                        .sourceBucket(sourceBucket)
+                        .sourceKey(sourceKey)
+                        .destinationBucket(targetBucket)
+                        .destinationKey(targetKey)
+                        .build();
+                CopyRequest copyRequest = CopyRequest.builder()
+                        .copyObjectRequest(copyObjectRequest)
+                        .build();
+                Copy copy = transferManager.copy(copyRequest);
+                CompletedCopy completedCopy = copy.completionFuture().join();
+                logger.debug("Finished copying '{}' from '{}' to '{}' with result '{}'", path, sourceBucket, targetBucket,
+                        completedCopy.response().copyObjectResult());
             }
-            doneSignal.await();
             logger.debug("Finished copying {} objects from '{}' to '{}'", paths.size(), sourceBucket, targetBucket);
         } finally {
-            transferManager.shutdownNow(false);
-        }
-    }
-
-    /**
-     * Transfer state change listener that logs the state of the transfer while signaling a {@link CountDownLatch}
-     * to be able to wait for the completion of the transfer
-     */
-    private static class MultiOperationTransferStateChangeListener implements TransferStateChangeListener {
-        protected static final Logger logger = LoggerFactory.getLogger(MultiOperationTransferStateChangeListener.class);
-
-        private final String sourceBucket;
-        private final String sourceKey;
-        private final String targetBucket;
-        private final String targetKey;
-
-        private final CountDownLatch doneSignal;
-
-        public MultiOperationTransferStateChangeListener(final String sourceBucket, final String sourceKey,
-                                                         final String targetBucket, final String targetKey,
-                                                         final CountDownLatch doneSignal) {
-            this.sourceBucket = sourceBucket;
-            this.sourceKey = sourceKey;
-            this.targetBucket = targetBucket;
-            this.targetKey = targetKey;
-            this.doneSignal = doneSignal;
-        }
-
-        @Override
-        public void transferStateChanged(Transfer transfer, Transfer.TransferState state) {
-            switch (state) {
-                case InProgress -> logger.debug("Started to copy: '{}:{}' -> '{}:{}'", sourceBucket, sourceKey, targetBucket, targetKey);
-                case Completed -> {
-                    logger.debug("Completed copy: '{}:{}' -> '{}:{}'", sourceBucket, sourceKey, targetBucket, targetKey);
-                    doneSignal.countDown();
-                }
-                case Failed -> {
-                    logger.error("Failed copy: '{}:{}' -> '{}:{}'", sourceBucket, sourceKey, targetBucket, targetKey);
-                    doneSignal.countDown();
-                }
-                case Canceled -> {
-                    logger.debug("Canceled copy: '{}:{}' -> '{}:{}'", sourceBucket, sourceKey, targetBucket, targetKey);
-                    doneSignal.countDown();
-                }
-            }
+            transferManager.close();
         }
     }
 
