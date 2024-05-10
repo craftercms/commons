@@ -17,6 +17,7 @@ package org.craftercms.commons.file.blob.impl.s3;
 
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.apache.commons.configuration2.tree.ImmutableNode;
+import org.craftercms.commons.aws.S3AsyncClientCachingFactory;
 import org.craftercms.commons.aws.S3ClientCachingFactory;
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
@@ -24,6 +25,7 @@ import org.craftercms.commons.file.blob.exception.BlobStoreException;
 import org.craftercms.commons.file.blob.impl.AbstractBlobStore;
 import org.craftercms.commons.spring.resources.S3Resource;
 import org.springframework.core.io.Resource;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
 import static org.apache.commons.lang3.StringUtils.*;
@@ -41,12 +43,18 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
      */
     protected S3ClientCachingFactory clientFactory;
 
+    protected S3AsyncClientCachingFactory asyncClientFactory;
+
     public void setClientFactory(S3ClientCachingFactory clientFactory) {
         this.clientFactory = clientFactory;
     }
 
     protected S3Client getClient() {
         return clientFactory.getClient(profile);
+    }
+
+    protected S3AsyncClient getAsyncClient() {
+        return asyncClientFactory.getClient(profile);
     }
 
     protected String getKey(Mapping mapping, String path) {
