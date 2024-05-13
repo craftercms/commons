@@ -24,6 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import software.amazon.awssdk.awscore.AwsClient;
+import software.amazon.awssdk.core.SdkClient;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
 import java.util.concurrent.Executors;
@@ -43,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author avasquez
  */
-public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProfile, C>
+public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProfile, C extends AwsClient>
         implements InitializingBean, DisposableBean, RemovalListener<P, C> {
 
     private static final Logger logger = LoggerFactory.getLogger(S3ClientCachingFactory.class);
@@ -108,10 +111,10 @@ public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProf
     }
 
     protected void shutdownClient(RemovalNotification<P, C> notification) {
-        if (notification.getValue() instanceof S3Client) {
+        if (notification.getValue() instanceof S3Client || notification.getValue() instanceof S3AsyncClient) {
             logger.info("Shutting down AWS client for {}", notification.getKey());
 
-            S3Client client = (S3Client) notification.getValue();
+            C client = (C) notification.getValue();
             client.close();
         }
     }
