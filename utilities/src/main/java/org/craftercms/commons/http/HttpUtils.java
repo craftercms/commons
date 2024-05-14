@@ -417,4 +417,17 @@ public class HttpUtils {
         response.addDateHeader(EXPIRES_HEADER_NAME, 1L);
     }
 
+    /**
+     * Encode an URL to valid the macro characters
+     * @param url URL string
+     * @return encoded version of the URL
+     */
+    public static String encodeUrlMacro(String url) {
+        if (StringUtils.isEmpty(url)) {
+            return url;
+        }
+
+        return url.replace("{", "%7B").replace("}", "%7D");
+    }
+
 }
