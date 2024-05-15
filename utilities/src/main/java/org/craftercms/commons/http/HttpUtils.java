@@ -17,6 +17,7 @@ package org.craftercms.commons.http;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -50,6 +51,8 @@ public class HttpUtils {
     public static final String PRAGMA_HEADER_NAME = "Pragma";
     public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
     public static final String EXPIRES_HEADER_NAME = "Expires";
+    public static final String LEFT_CURLY_BRACE = "{";
+    public static final String RIGHT_CURLY_BRACE = "}";
 
     /**
      * Returns the portion from the URL that includes the scheme, server name and port number, without the server
@@ -427,7 +430,8 @@ public class HttpUtils {
             return url;
         }
 
-        return url.replace("{", "%7B").replace("}", "%7D");
+        return url.replace(LEFT_CURLY_BRACE, URLEncoder.encode(LEFT_CURLY_BRACE, StandardCharsets.UTF_8))
+                .replace(RIGHT_CURLY_BRACE, URLEncoder.encode(RIGHT_CURLY_BRACE, StandardCharsets.UTF_8));
     }
 
 }
