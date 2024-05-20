@@ -18,10 +18,14 @@ package org.craftercms.commons.file.stores;
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.config.profiles.aws.AbstractAwsProfile;
 import org.craftercms.commons.config.profiles.aws.S3Profile;
+import software.amazon.awssdk.awscore.AwsClient;
+import software.amazon.awssdk.awscore.client.builder.AwsClientBuilder;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.*;
+import software.amazon.awssdk.utils.builder.SdkBuilder;
 
 import java.net.URI;
+import java.util.function.Function;
 
 /**
  * Utility methods for S3.
@@ -31,42 +35,19 @@ import java.net.URI;
 public class S3Utils {
 
     /**
-     * Creates an {@link S3Client} based on the given profile config.
+     * Creates an S3 client (sync or async) based on the given profile config.
      *
      * @param profile the configuration profile
      *
-     * @return a client to an S3Client account
+     * @return a client to an S3 client account
      */
-    public static final S3Client createClient(AbstractAwsProfile profile, boolean useCustomEndpoint) {
-        S3ClientBuilder builder = S3Client.builder()
-                .credentialsProvider(profile.getCredentialsProvider());
+    public static <T extends S3BaseClientBuilder<T, U>, U extends AwsClient> U createClient(
+            AbstractAwsProfile profile,
+            boolean useCustomEndpoint,
+            T builder,
+            Function<T, U> buildFunc) {
 
-        if (useCustomEndpoint && StringUtils.isNotEmpty(profile.getEndpoint()) &&
-            StringUtils.isNotEmpty(profile.getRegion())) {
-            builder.endpointOverride(URI.create(profile.getEndpoint()))
-                    .region(Region.of(profile.getRegion()));
-            if (profile instanceof S3Profile) {
-                builder.serviceConfiguration(S3Configuration.builder()
-                        .pathStyleAccessEnabled(((S3Profile) profile).isPathStyleAccessEnabled())
-                        .build());
-            }
-        } else if (StringUtils.isNotEmpty(profile.getRegion())) {
-            builder.region(Region.of(profile.getRegion()));
-        }
-
-        return builder.build();
-    }
-
-    /**
-     * Creates an {@link S3AsyncClient} based on the given profile config.
-     *
-     * @param profile the configuration profile
-     *
-     * @return a client to an S3AsyncClient account
-     */
-    public static final S3AsyncClient createAsyncClient(AbstractAwsProfile profile, boolean useCustomEndpoint) {
-        S3AsyncClientBuilder builder = S3AsyncClient.builder()
-                .credentialsProvider(profile.getCredentialsProvider());
+        builder.credentialsProvider(profile.getCredentialsProvider());
 
         if (useCustomEndpoint && StringUtils.isNotEmpty(profile.getEndpoint()) &&
                 StringUtils.isNotEmpty(profile.getRegion())) {
@@ -81,15 +62,15 @@ public class S3Utils {
             builder.region(Region.of(profile.getRegion()));
         }
 
-        return builder.build();
+        return buildFunc.apply(builder);
     }
 
     public static final S3Client createClient(AbstractAwsProfile profile) {
-        return createClient(profile, true);
+        return createClient(profile, true, S3Client.builder(), S3ClientBuilder::build);
     }
 
     public static final S3AsyncClient createAsyncClient(AbstractAwsProfile profile) {
-        return createAsyncClient(profile, true);
+        return createClient(profile, true, S3AsyncClient.builder(), S3AsyncClientBuilder::build);
     }
 
 }

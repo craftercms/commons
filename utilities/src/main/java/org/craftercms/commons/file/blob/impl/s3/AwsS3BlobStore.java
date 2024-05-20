@@ -43,6 +43,9 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
      */
     protected S3ClientCachingFactory clientFactory;
 
+    /**
+     * The async client factory
+     */
     protected S3AsyncClientCachingFactory asyncClientFactory;
 
     public void setClientFactory(S3ClientCachingFactory clientFactory) {
@@ -51,6 +54,10 @@ public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
 
     protected S3Client getClient() {
         return clientFactory.getClient(profile);
+    }
+
+    public void setAsyncClientFactory(S3AsyncClientCachingFactory asyncClientFactory) {
+        this.asyncClientFactory = asyncClientFactory;
     }
 
     protected S3AsyncClient getAsyncClient() {
