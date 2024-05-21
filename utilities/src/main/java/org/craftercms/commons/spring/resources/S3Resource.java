@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 
+import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -68,8 +69,8 @@ public class S3Resource implements RangeAwareResource {
         try {
             getClient().headObject(getHeadObjectRequest());
             return true;
-        } catch (Exception e) {
-            logger.error("Error while checking if object " + getDescription() + " exists", e);
+        } catch (NoSuchKeyException e) {
+            logger.error(format("Error while checking if object '%s' exists", getDescription()), e);
             return false;
         }
     }
