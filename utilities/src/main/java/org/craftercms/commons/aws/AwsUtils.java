@@ -15,6 +15,7 @@
  */
 package org.craftercms.commons.aws;
 
+import org.apache.commons.lang3.StringUtils;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
@@ -34,7 +35,10 @@ import java.util.concurrent.ThreadPoolExecutor;
  * Provides utility methods for AWS services
  */
 public final class AwsUtils {
+
     private static final Logger logger = LoggerFactory.getLogger(AwsUtils.class);
+
+    public static final String DELIMITER = "/";
 
     /**
      * Builds the {@link S3TransferManager} using the shared {@link ExecutorService}
@@ -66,8 +70,8 @@ public final class AwsUtils {
             for (String path : paths) {
                 futures.add(CompletableFuture.runAsync(() -> {
                     logger.debug("Copying '{}' from '{}' to '{}'", path, sourceBucket, targetBucket);
-                    String sourceKey = sourceBaseKey + path;
-                    String targetKey = targetBaseKey + path;
+                    String sourceKey = s3KeyFromPath(sourceBaseKey, path);
+                    String targetKey = s3KeyFromPath(targetBaseKey, path);
                     CopyObjectRequest copyObjectRequest = CopyObjectRequest.builder()
                             .sourceBucket(sourceBucket)
                             .sourceKey(sourceKey)
@@ -88,6 +92,17 @@ public final class AwsUtils {
         } finally {
             transferManager.close();
         }
+    }
+
+    /**
+     * Form a S3 key from a base key and a path
+     * @param baseKey the base key
+     * @param path the path
+     * @return s3 key format
+     */
+    public static String s3KeyFromPath(String baseKey, String path) {
+        String s3Key = StringUtils.appendIfMissing(baseKey, DELIMITER) + StringUtils.stripStart(path, DELIMITER);
+        return StringUtils.stripStart(s3Key, DELIMITER);
     }
 
 }
