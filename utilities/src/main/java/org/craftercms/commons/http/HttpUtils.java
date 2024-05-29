@@ -17,6 +17,7 @@ package org.craftercms.commons.http;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -50,6 +51,8 @@ public class HttpUtils {
     public static final String PRAGMA_HEADER_NAME = "Pragma";
     public static final String CACHE_CONTROL_HEADER_NAME = "Cache-Control";
     public static final String EXPIRES_HEADER_NAME = "Expires";
+    public static final String LEFT_CURLY_BRACE = "{";
+    public static final String RIGHT_CURLY_BRACE = "}";
 
     /**
      * Returns the portion from the URL that includes the scheme, server name and port number, without the server
@@ -415,6 +418,20 @@ public class HttpUtils {
         response.addHeader(PRAGMA_HEADER_NAME, "no-cache");
         response.addHeader(CACHE_CONTROL_HEADER_NAME, "no-cache, no-store, max-age=0");
         response.addDateHeader(EXPIRES_HEADER_NAME, 1L);
+    }
+
+    /**
+     * Encode an URL to valid the macro characters
+     * @param url URL string
+     * @return encoded version of the URL
+     */
+    public static String encodeUrlMacro(String url) {
+        if (StringUtils.isEmpty(url)) {
+            return url;
+        }
+
+        return url.replace(LEFT_CURLY_BRACE, URLEncoder.encode(LEFT_CURLY_BRACE, StandardCharsets.UTF_8))
+                .replace(RIGHT_CURLY_BRACE, URLEncoder.encode(RIGHT_CURLY_BRACE, StandardCharsets.UTF_8));
     }
 
 }

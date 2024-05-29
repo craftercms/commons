@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2024 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -17,18 +17,15 @@ package org.craftercms.commons.aws;
 
 import org.craftercms.commons.config.profiles.aws.S3Profile;
 import org.craftercms.commons.file.stores.S3Utils;
-import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
- * {@link AbstractAwsClientCachingFactory} for S3 clients.
- *
- * @author avasquez
+ * {@link AbstractAwsClientCachingFactory} for S3 async clients.
  */
-public class S3ClientCachingFactory extends AbstractAwsClientCachingFactory<S3Profile, S3Client> {
+public class S3AsyncClientCachingFactory extends AbstractAwsClientCachingFactory<S3Profile, S3AsyncClient>{
 
     @Override
-    protected S3Client createClient(S3Profile profile) {
-        return S3Utils.createClient(profile);
+    protected S3AsyncClient createClient(S3Profile profile) {
+        return S3Utils.createAsyncClient(profile);
     }
-
 }

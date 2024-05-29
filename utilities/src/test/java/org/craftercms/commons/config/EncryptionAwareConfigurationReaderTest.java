@@ -15,7 +15,6 @@
  */
 package org.craftercms.commons.config;
 
-import com.amazonaws.util.StringInputStream;
 import junit.framework.TestCase;
 import org.apache.commons.configuration2.HierarchicalConfiguration;
 import org.craftercms.commons.crypto.TextEncryptor;
@@ -25,7 +24,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static org.mockito.Mockito.when;
@@ -63,21 +64,21 @@ public class EncryptionAwareConfigurationReaderTest extends TestCase {
     @Test
     public void testReadXmlLookupVariable() throws UnsupportedEncodingException, ConfigurationException {
         HierarchicalConfiguration<?> xmlConfiguration = encryptionAwareConfigurationReader
-                .readXmlConfiguration(new StringInputStream(CONFIG_CONTENT), lookupVariables);
+                .readXmlConfiguration(new ByteArrayInputStream(CONFIG_CONTENT.getBytes(StandardCharsets.UTF_8)), lookupVariables);
         assertEquals("This is the site: " + SITE_NAME, xmlConfiguration.getString(CONFIGURATION_PROPERTY_KEY));
     }
 
     @Test
     public void testReadXmlEnvVariable() throws UnsupportedEncodingException, ConfigurationException {
         HierarchicalConfiguration<?> xmlConfiguration = encryptionAwareConfigurationReader
-                .readXmlConfiguration(new StringInputStream(CONFIG_CONTENT), lookupVariables);
+                .readXmlConfiguration(new ByteArrayInputStream(CONFIG_CONTENT.getBytes(StandardCharsets.UTF_8)), lookupVariables);
         assertEquals(ENV_VARIABLE_VALUE, xmlConfiguration.getString(ENV_VARIABLE_PROPERTY_KEY));
     }
 
     @Test
     public void testReadXmlEncryptedValue() throws UnsupportedEncodingException, ConfigurationException {
         HierarchicalConfiguration<?> xmlConfiguration = encryptionAwareConfigurationReader
-                .readXmlConfiguration(new StringInputStream(CONFIG_CONTENT), lookupVariables);
+                .readXmlConfiguration(new ByteArrayInputStream(CONFIG_CONTENT.getBytes(StandardCharsets.UTF_8)), lookupVariables);
         assertEquals(DECRYPTED_SECRET_VALUE, xmlConfiguration.getString(SECRET_PROPERTY_KEY));
     }
 }
