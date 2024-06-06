@@ -24,6 +24,8 @@ import org.springframework.core.io.Resource;
 import java.beans.ConstructorProperties;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Implementation of {@link org.springframework.beans.factory.FactoryBean} for {@link SandboxInterceptor}
@@ -48,11 +50,17 @@ public class SandboxInterceptorFactory extends AbstractFactoryBean<SandboxInterc
      */
     protected Resource blacklist;
 
-    @ConstructorProperties({"sandboxEnabled", "blacklistEnabled", "blacklist"})
-    public SandboxInterceptorFactory(boolean sandboxEnabled, boolean blacklistEnabled, Resource blacklist) {
+    /**
+     * List of regex to allow System.getenv()
+     */
+    protected List<String> whitelistGetEnvRegex;
+
+    @ConstructorProperties({"sandboxEnabled", "blacklistEnabled", "blacklist", "whitelistGetEnvRegex"})
+    public SandboxInterceptorFactory(boolean sandboxEnabled, boolean blacklistEnabled, Resource blacklist, final String[] whitelistGetEnvRegex) {
         this.sandboxEnabled = sandboxEnabled;
         this.blacklistEnabled = blacklistEnabled;
         this.blacklist = blacklist;
+        this.whitelistGetEnvRegex = Arrays.stream(whitelistGetEnvRegex).toList();
     }
 
     @Override
@@ -64,10 +72,14 @@ public class SandboxInterceptorFactory extends AbstractFactoryBean<SandboxInterc
     protected SandboxInterceptor createInstance() throws Exception {
         if (sandboxEnabled && blacklistEnabled) {
             try (InputStream is = blacklist.getInputStream()) {
-                return new SandboxInterceptor(new Blacklist(new InputStreamReader(is)));
+                Blacklist bl = new Blacklist(new InputStreamReader(is));
+                bl.setGetEnvWhitelistRegex(whitelistGetEnvRegex);
+                return new SandboxInterceptor(bl);
             }
         } else if(sandboxEnabled) {
-            return new SandboxInterceptor(new PermitAllWhitelist());
+            PermitAllWhitelist permitAllWhitelist = new PermitAllWhitelist();
+            permitAllWhitelist.setGetEnvWhitelistRegex(whitelistGetEnvRegex);
+            return new SandboxInterceptor(permitAllWhitelist);
         } else {
             return null;
         }
