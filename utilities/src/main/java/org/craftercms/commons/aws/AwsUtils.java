@@ -16,11 +16,11 @@
 package org.craftercms.commons.aws;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.transfer.s3.model.CompletedCopy;
 import software.amazon.awssdk.transfer.s3.model.Copy;
 import software.amazon.awssdk.transfer.s3.model.CopyRequest;
@@ -52,22 +52,29 @@ public final class AwsUtils {
     /**
      * Copy a list of objects from a source bucket to a target bucket
      *
-     * @param client                The {@link S3AsyncClient} client
-     * @param threadPoolExecutor    The thread pool executor
-     * @param sourceBucket          The source bucket
-     * @param sourceBaseKey         The base key in the source bucket (i.e. prefix for all paths)
-     * @param targetBucket          The target bucket
-     * @param targetBaseKey         The base key in the target bucket (i.e. prefix for all paths)
-     * @param paths                 The list of paths to copy
+     * @param client             The {@link S3AsyncClient} client
+     * @param threadPoolExecutor The thread pool executor
+     * @param sourceBucket       The source bucket
+     * @param sourceBaseKey      The base key in the source bucket (i.e. prefix for all paths)
+     * @param targetBucket       The target bucket
+     * @param targetBaseKey      The base key in the target bucket (i.e. prefix for all paths)
+     * @param paths              The list of paths to copy
      */
     public static void copyObjects(S3AsyncClient client, ThreadPoolExecutor threadPoolExecutor, String sourceBucket, String sourceBaseKey,
                                    String targetBucket, String targetBaseKey, List<String> paths) {
+        List<CopyPathRequest> copyPaths = paths.stream()
+                .map(s -> (CopyPathRequest) () -> s)
+                .toList();
+        copyObjectsResultAware(client, threadPoolExecutor, sourceBucket, sourceBaseKey, targetBucket, targetBaseKey, copyPaths);
+    }
 
-        S3TransferManager transferManager = buildTransferManager(client);
-        try {
-            logger.debug("Copying {} objects from '{}' to '{}'", paths.size(), sourceBucket, targetBucket);
+    public static void copyObjectsResultAware(S3AsyncClient client, ThreadPoolExecutor threadPoolExecutor, String sourceBucket, String sourceBaseKey,
+                                              String targetBucket, String targetBaseKey, List<CopyPathRequest> copyPaths) {
+        try (S3TransferManager transferManager = buildTransferManager(client)) {
+            logger.debug("Copying {} objects from '{}' to '{}'", copyPaths.size(), sourceBucket, targetBucket);
             List<CompletableFuture<Void>> futures = new ArrayList<>();
-            for (String path : paths) {
+            for (CopyPathRequest copyPath : copyPaths) {
+                String path = copyPath.getPath();
                 futures.add(CompletableFuture.runAsync(() -> {
                     logger.debug("Copying '{}' from '{}' to '{}'", path, sourceBucket, targetBucket);
                     String sourceKey = s3KeyFromPath(sourceBaseKey, path);
@@ -82,27 +89,50 @@ public final class AwsUtils {
                             .copyObjectRequest(copyObjectRequest)
                             .build();
                     Copy copy = transferManager.copy(copyRequest);
-                    CompletedCopy completedCopy = copy.completionFuture().join();
-                    logger.debug("Finished copying '{}' from '{}' to '{}' with result '{}'", path, sourceBucket, targetBucket,
-                            completedCopy.response().copyObjectResult());
+                    CompletableFuture<CompletedCopy> completionFuture = copy.completionFuture()
+                            .thenApplyAsync(completedCopy -> {
+                                logger.debug("Finished copying '{}' from '{}' to '{}' with result '{}'", path, sourceBucket, targetBucket,
+                                        completedCopy.response().copyObjectResult());
+                                copyPath.complete();
+                                return completedCopy;
+                            }).exceptionallyAsync(throwable -> {
+                                logger.error("Failed to copy '{}' from '{}' to '{}'", path, sourceBucket, targetBucket, throwable);
+                                copyPath.fail(throwable);
+                                return null;
+                            });
+                    completionFuture.join();
                 }, threadPoolExecutor));
             }
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-            logger.debug("Finished copying {} objects from '{}' to '{}'", paths.size(), sourceBucket, targetBucket);
-        } finally {
-            transferManager.close();
+            logger.debug("Finished copying {} objects from '{}' to '{}'", copyPaths.size(), sourceBucket, targetBucket);
         }
     }
 
     /**
      * Form a S3 key from a base key and a path
+     *
      * @param baseKey the base key
-     * @param path the path
+     * @param path    the path
      * @return s3 key format
      */
     public static String s3KeyFromPath(String baseKey, String path) {
         String s3Key = StringUtils.appendIfMissing(baseKey, DELIMITER) + StringUtils.stripStart(path, DELIMITER);
         return StringUtils.stripStart(s3Key, DELIMITER);
+    }
+
+    /**
+     * Represent a request to copy a path between S3 buckets, providing fail() and complete() methods
+     * to notify about the result of the operation
+     * Notice that bucket and path prefix are not part of this object
+     */
+    public interface CopyPathRequest {
+        String getPath();
+
+        default void fail(Throwable throwable) {
+        }
+
+        default void complete() {
+        }
     }
 
 }
