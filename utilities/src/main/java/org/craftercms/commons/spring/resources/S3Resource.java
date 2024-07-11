@@ -25,12 +25,11 @@ import org.springframework.core.io.Resource;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -61,7 +60,12 @@ public class S3Resource implements RangeAwareResource {
     }
 
     protected String getActualKey() {
-        return UrlUtils.concat(profile.getPrefix(), key);
+        String keyUri = UrlUtils.concat(profile.getPrefix(), key);
+        try {
+            return URLDecoder.decode(keyUri, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            return keyUri;
+        }
     }
 
     @Override
