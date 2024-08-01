@@ -101,6 +101,13 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
         assertRejected("/site/website/folder#hash/to/content/index.xml");
     }
 
+    @Test
+    public void testInvalidPathTraversal() {
+        assertRejected("../../site/website");
+        assertRejected("./site/website");
+        assertRejected("/site/website/../../sample");
+    }
+
     @Override
     public Validator getValidator() {
         return validator;
