@@ -108,6 +108,28 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
         assertRejected("/site/website/../../sample");
     }
 
+    @Test
+    public void testValidCurlyBraces() {
+        assertValid("/scripts/rest/{version}");
+        assertValid("/site/website/{version}/index.xml");
+        assertValid("/site/{a}/{b}/{c}/sample.xml");
+        assertValid("/site/component/{abc}-sample.xml");
+        assertValid("/site/component/{version}");
+        assertValid("/site/component/{version.xml}/abc/xyz");
+        assertValid("/site/component/{version}");
+        assertValid("/site/component/{a.sample.version}");
+        assertValid("/site/a.sample.component/{version}");
+        assertValid("/site/component/{index.xml}");
+    }
+
+    @Test
+    public void testInvalidCurlyBraces() {
+        assertRejected("/site/website/{version");
+        assertRejected("/site/website/version}");
+        assertRejected("/site/website/{{version}}");
+        assertRejected("/site/website/{version}/sample/{newVersion");
+    }
+
     @Override
     public Validator getValidator() {
         return validator;
