@@ -120,6 +120,9 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
         assertValid("/site/component/{a.sample.version}");
         assertValid("/site/a.sample.component/{version}");
         assertValid("/site/component/{index.xml}");
+        assertValid("{version}");
+        assertValid("{version}/{version}/component/sample/{new.version}/index.xml");
+        assertValid("{version}/component");
     }
 
     @Test
@@ -128,6 +131,9 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
         assertRejected("/site/website/version}");
         assertRejected("/site/website/{{version}}");
         assertRejected("/site/website/{version}/sample/{newVersion");
+        assertRejected("{{version}}");
+        assertRejected("{version/sample/path}");
+        assertRejected("/sample/path/{with{wrong{curl{brances}}}");
     }
 
     @Override
