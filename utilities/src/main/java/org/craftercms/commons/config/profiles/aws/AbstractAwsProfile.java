@@ -86,9 +86,8 @@ public abstract class AbstractAwsProfile extends ConfigurationProfile {
     public AwsCredentialsProvider getCredentialsProvider() {
         if (StringUtils.isNotEmpty(accessKey) && StringUtils.isNotEmpty(secretKey)) {
             return StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey));
-        } else {
-            return DefaultCredentialsProvider.create();
         }
+        return DefaultCredentialsProvider.builder().build();
     }
 
     @Override
