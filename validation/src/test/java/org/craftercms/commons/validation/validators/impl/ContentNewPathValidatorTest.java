@@ -106,6 +106,7 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
         assertRejected("../../site/website");
         assertRejected("./site/website");
         assertRejected("/site/website/../../sample");
+        assertRejected("/./website/sample");
     }
 
     @Test
@@ -134,6 +135,13 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
         assertRejected("{{version}}");
         assertRejected("{version/sample/path}");
         assertRejected("/sample/path/{with{wrong{curl{brances}}}");
+    }
+
+    @Test
+    public void testSiteScreenshots() {
+        assertValid("/.crafter/screenshots");
+        assertValid("/.crafter/screenshots/default.png");
+        assertRejected("/..crafter/screenshots/default.png");
     }
 
     @Override
