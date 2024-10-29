@@ -114,6 +114,13 @@ public class ContentPathReadValidatorTest implements ValidatorTest {
     @Test
     public void testShortFolderNames() {
         assertValid("/site/website/articles/2021/3/top-clubs-in-virginia/index.xml");
+        assertValid("/site/website/a/b");
+        assertValid("/site/website/a/a");
+        assertValid("/site/website/a/b/c/d");
+        assertValid("/site/website/1/22/33");
+        assertValid("/site/website/11/2/33");
+        assertValid("/site/website/1/2/33");
+        assertValid("/site/website/1/2/3");
     }
 
     @Test
