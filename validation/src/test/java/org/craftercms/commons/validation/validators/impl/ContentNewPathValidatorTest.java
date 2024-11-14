@@ -144,6 +144,18 @@ public class ContentNewPathValidatorTest implements ValidatorTest {
         assertRejected("/..crafter/screenshots/default.png");
     }
 
+    @Test
+    public void testShortFolderNames() {
+        assertValid("/site/website/a/b/");
+        assertValid("/site/website/a/b");
+        assertValid("/site/website/a/a");
+        assertValid("/site/website/a/b/c/d");
+        assertValid("/site/website/1/22/33");
+        assertValid("/site/website/11/2/33");
+        assertValid("/site/website/1/2/33");
+        assertValid("/site/website/1/2/3");
+    }
+
     @Override
     public Validator getValidator() {
         return validator;
