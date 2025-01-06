@@ -31,6 +31,7 @@ import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.StoredConfig;
+import org.eclipse.jgit.merge.ContentMergeStrategy;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.RefSpec;
@@ -183,7 +184,8 @@ public abstract class GitUtils {
      * @throws URISyntaxException if the remote URL is invalid
      */
     public static PullResult pull(Git git, String remoteName, String remoteUrl, String branch,
-                                  MergeStrategy mergeStrategy, GitAuthenticationConfigurator authConfigurator)
+                                  MergeStrategy mergeStrategy, ContentMergeStrategy contentMergeStrategy,
+                                  MergeCommand.FastForwardMode fastForwardMode, GitAuthenticationConfigurator authConfigurator)
             throws GitAPIException, URISyntaxException {
         addRemote(git, remoteName, remoteUrl);
 
@@ -193,6 +195,14 @@ public abstract class GitUtils {
 
         if (mergeStrategy != null) {
             command.setStrategy(mergeStrategy);
+        }
+
+        if (contentMergeStrategy != null) {
+            command.setContentMergeStrategy(contentMergeStrategy);
+        }
+
+        if (fastForwardMode != null) {
+            command.setFastForward(fastForwardMode);
         }
 
         if (authConfigurator != null) {
