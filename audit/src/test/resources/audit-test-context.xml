@@ -16,10 +16,10 @@
   -->
 
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns="http://www.springframework.org/schema/beans"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-		<import resource="classpath:/org/craftercms/commons/audit/crafter-commons-audit-reaper.xml"/>
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<import resource="classpath:/org/craftercms/commons/audit/crafter-commons-audit-reaper.xml"/>
 
-		<bean id="org.craftercms.commons.audit.AuditServiceImpl"
-			  class="org.craftercms.commons.audit.TestAuditServiceImpl"/>
+	<bean id="org.craftercms.commons.audit.AuditServiceImpl"
+	      class="org.craftercms.commons.audit.TestAuditServiceImpl"/>
 </beans>

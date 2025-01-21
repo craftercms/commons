@@ -16,87 +16,87 @@
   -->
 
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-		<modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.craftercms</groupId>
+	<artifactId>crafter-commons</artifactId>
+	<packaging>pom</packaging>
+
+	<name>Crafter Commons</name>
+	<description>Crafter Commons</description>
+	<url>https://github.com/craftercms/commons</url>
+
+	<scm>
+		<connection>scm:git:git://github.com/craftercms/commons</connection>
+		<developerConnection>scm:git:git://github.com/craftercms/commons</developerConnection>
+		<url>scm:git:git://github.com/craftercms/core</url>
+	</scm>
+
+	<parent>
 		<groupId>org.craftercms</groupId>
-		<artifactId>crafter-commons</artifactId>
-		<packaging>pom</packaging>
+		<artifactId>craftercms</artifactId>
+		<version>5.0.0-SNAPSHOT</version><!-- craftercms version flag -->
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
 
-		<name>Crafter Commons</name>
-		<description>Crafter Commons</description>
-		<url>https://github.com/craftercms/commons</url>
+	<modules>
+		<module>utilities</module>
+		<module>security</module>
+		<module>mongo</module>
+		<module>audit</module>
+		<module>git</module>
+		<module>entitlements</module>
+		<module>validation</module>
+		<module>plugin</module>
+		<module>upgrade-manager</module>
+	</modules>
 
-		<scm>
-				<connection>scm:git:git://github.com/craftercms/commons</connection>
-				<developerConnection>scm:git:git://github.com/craftercms/commons</developerConnection>
-				<url>scm:git:git://github.com/craftercms/core</url>
-		</scm>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<configLocation>https://raw.githubusercontent.com/craftercms/craftercms/refs/heads/develop/checkstyle.xml</configLocation>
+				</configuration>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-		<parent>
-				<groupId>org.craftercms</groupId>
-				<artifactId>craftercms</artifactId>
-				<version>5.0.0-SNAPSHOT</version><!-- craftercms version flag -->
-				<relativePath/> <!-- lookup parent from repository -->
-		</parent>
+	<repositories>
+		<repository>
+			<id>sonatype-snapshots</id>
+			<name>Sonatype Snapshot Repository</name>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</repository>
+	</repositories>
 
-		<modules>
-				<module>utilities</module>
-				<module>security</module>
-				<module>mongo</module>
-				<module>audit</module>
-				<module>git</module>
-				<module>entitlements</module>
-				<module>validation</module>
-				<module>plugin</module>
-				<module>upgrade-manager</module>
-		</modules>
-
-		<build>
-				<plugins>
-						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-checkstyle-plugin</artifactId>
-								<configuration>
-										<configLocation>https://raw.githubusercontent.com/craftercms/craftercms/refs/heads/develop/checkstyle.xml</configLocation>
-								</configuration>
-								<executions>
-										<execution>
-												<id>validate</id>
-												<phase>validate</phase>
-												<goals>
-														<goal>check</goal>
-												</goals>
-										</execution>
-								</executions>
-						</plugin>
-				</plugins>
-		</build>
-
-		<repositories>
-				<repository>
-						<id>sonatype-snapshots</id>
-						<name>Sonatype Snapshot Repository</name>
-						<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-						<releases>
-								<enabled>false</enabled>
-						</releases>
-						<snapshots>
-								<enabled>true</enabled>
-								<updatePolicy>always</updatePolicy>
-								<checksumPolicy>fail</checksumPolicy>
-						</snapshots>
-				</repository>
-		</repositories>
-
-		<distributionManagement>
-				<snapshotRepository>
-						<id>sonatype-snapshots</id>
-						<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-				</snapshotRepository>
-				<repository>
-						<id>sonatype-staging</id>
-						<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-				</repository>
-		</distributionManagement>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>sonatype-snapshots</id>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>sonatype-staging</id>
+			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 </project>
