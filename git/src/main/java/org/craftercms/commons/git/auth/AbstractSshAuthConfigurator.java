@@ -29,19 +29,19 @@ import java.io.File;
  */
 public abstract class AbstractSshAuthConfigurator implements GitAuthenticationConfigurator {
 
-    protected final File sshConfig;
+	protected final File sshConfig;
 
-    public AbstractSshAuthConfigurator(File sshConfig) {
-        this.sshConfig = sshConfig;
-    }
+	public AbstractSshAuthConfigurator(File sshConfig) {
+		this.sshConfig = sshConfig;
+	}
 
-    @Override
-    public void configureAuthentication(TransportCommand<?,?> command) {
-        SshSessionFactory sessionFactory = createSessionFactory();
+	@Override
+	public void configureAuthentication(TransportCommand<?, ?> command) {
+		SshSessionFactory sessionFactory = createSessionFactory();
 
-        command.setTransportConfigCallback(transport -> ((SshTransport) transport).setSshSessionFactory(sessionFactory));
-    }
+		command.setTransportConfigCallback(transport -> ((SshTransport) transport).setSshSessionFactory(sessionFactory));
+	}
 
-    protected abstract SshSessionFactory createSessionFactory();
+	protected abstract SshSessionFactory createSessionFactory();
 
 }

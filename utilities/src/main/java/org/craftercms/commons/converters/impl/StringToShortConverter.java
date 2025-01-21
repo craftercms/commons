@@ -24,23 +24,23 @@ import org.craftercms.commons.converters.Converter;
  */
 public class StringToShortConverter implements Converter<String, Short> {
 
-    @Override
-    public Class<?> getSourceClass() {
-        return String.class;
-    }
+	@Override
+	public Class<?> getSourceClass() {
+		return String.class;
+	}
 
-    @Override
-    public Class<?> getTargetClass() {
-        return Short.class;
-    }
+	@Override
+	public Class<?> getTargetClass() {
+		return Short.class;
+	}
 
-    @Override
-    public Short convert(String source) {
-        try {
-            return Short.valueOf(source);
-        } catch (NullPointerException | NumberFormatException e) {
-            return null;
-        }
-    }
+	@Override
+	public Short convert(String source) {
+		try {
+			return Short.valueOf(source);
+		} catch (NullPointerException | NumberFormatException e) {
+			return null;
+		}
+	}
 
 }

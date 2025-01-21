@@ -36,75 +36,75 @@ import static java.util.Collections.singletonMap;
 /**
  * Base class that loads configuration files handling encrypted properties
  *
- * @since 3.1.5
  * @author joseross
+ * @since 3.1.5
  */
 public class EncryptionAwareConfigurationReader {
 
-    public static final char DEFAULT_LIST_DELIMITER = ',';
-    public static final String DEFAULT_ENCRYPTED_VALUE_PREFIX = "enc";
+	public static final char DEFAULT_LIST_DELIMITER = ',';
+	public static final String DEFAULT_ENCRYPTED_VALUE_PREFIX = "enc";
 
-    protected char configListDelimiter = DEFAULT_LIST_DELIMITER;
-    protected String encryptedValuePrefix = DEFAULT_ENCRYPTED_VALUE_PREFIX;
-    protected TextEncryptor textEncryptor;
+	protected char configListDelimiter = DEFAULT_LIST_DELIMITER;
+	protected String encryptedValuePrefix = DEFAULT_ENCRYPTED_VALUE_PREFIX;
+	protected TextEncryptor textEncryptor;
 
-    protected Map<String, Lookup> prefixLookups;
-    private int maxAliasesForCollections = 0;
+	protected Map<String, Lookup> prefixLookups;
+	private int maxAliasesForCollections = 0;
 
-    @ConstructorProperties({"textEncryptor"})
-    public EncryptionAwareConfigurationReader(TextEncryptor textEncryptor) {
-        this.textEncryptor = textEncryptor;
+	@ConstructorProperties({"textEncryptor"})
+	public EncryptionAwareConfigurationReader(TextEncryptor textEncryptor) {
+		this.textEncryptor = textEncryptor;
 
-        if (textEncryptor != null) {
-            prefixLookups = singletonMap(encryptedValuePrefix, new DecryptionLookup(textEncryptor));
-        }
-    }
+		if (textEncryptor != null) {
+			prefixLookups = singletonMap(encryptedValuePrefix, new DecryptionLookup(textEncryptor));
+		}
+	}
 
-    @ConstructorProperties({"textEncryptor", "maxAliasesForCollections"})
-    public EncryptionAwareConfigurationReader(TextEncryptor textEncryptor, int maxAliasesForCollections) {
-        this.textEncryptor = textEncryptor;
+	@ConstructorProperties({"textEncryptor", "maxAliasesForCollections"})
+	public EncryptionAwareConfigurationReader(TextEncryptor textEncryptor, int maxAliasesForCollections) {
+		this.textEncryptor = textEncryptor;
 
-        if (textEncryptor != null) {
-            prefixLookups = singletonMap(encryptedValuePrefix, new DecryptionLookup(textEncryptor));
-        }
+		if (textEncryptor != null) {
+			prefixLookups = singletonMap(encryptedValuePrefix, new DecryptionLookup(textEncryptor));
+		}
 
-        this.maxAliasesForCollections = maxAliasesForCollections;
-    }
+		this.maxAliasesForCollections = maxAliasesForCollections;
+	}
 
-    public EncryptionAwareConfigurationReader(char configListDelimiter, String encryptedValuePrefix,
-                                              TextEncryptor textEncryptor) {
-        this(textEncryptor);
-        this.configListDelimiter = configListDelimiter;
-        this.encryptedValuePrefix = encryptedValuePrefix;
-    }
+	public EncryptionAwareConfigurationReader(char configListDelimiter, String encryptedValuePrefix,
+						  TextEncryptor textEncryptor) {
+		this(textEncryptor);
+		this.configListDelimiter = configListDelimiter;
+		this.encryptedValuePrefix = encryptedValuePrefix;
+	}
 
-    public HierarchicalConfiguration<?> readXmlConfiguration(InputStream inputStream, Map<String,String> lookupVariables)
-            throws ConfigurationException {
-        return ConfigUtils.readXmlConfiguration(inputStream, ',', prefixLookups, lookupVariables);
-    }
+	public HierarchicalConfiguration<?> readXmlConfiguration(InputStream inputStream, Map<String, String> lookupVariables)
+		throws ConfigurationException {
+		return ConfigUtils.readXmlConfiguration(inputStream, ',', prefixLookups, lookupVariables);
+	}
 
-    public HierarchicalConfiguration<?> readXmlConfiguration(Resource resource, Map<String,String> lookupVariables) throws ConfigurationException {
-        return ConfigUtils.readXmlConfiguration(resource, configListDelimiter, prefixLookups, lookupVariables);
-    }
+	public HierarchicalConfiguration<?> readXmlConfiguration(Resource resource, Map<String, String> lookupVariables) throws ConfigurationException {
+		return ConfigUtils.readXmlConfiguration(resource, configListDelimiter, prefixLookups, lookupVariables);
+	}
 
-    public HierarchicalConfiguration<?> readYamlConfiguration(Reader reader) throws ConfigurationException {
-        return ConfigUtils.readYamlConfiguration(reader, prefixLookups, maxAliasesForCollections);
-    }
+	public HierarchicalConfiguration<?> readYamlConfiguration(Reader reader) throws ConfigurationException {
+		return ConfigUtils.readYamlConfiguration(reader, prefixLookups, maxAliasesForCollections);
+	}
 
-    public HierarchicalConfiguration<?> readYamlConfiguration(File file) throws ConfigurationException {
-        try(Reader reader = new FileReader(file)) {
-            return readYamlConfiguration(reader);
-        } catch (IOException e) {
-            throw new ConfigurationException("Error reading YAML file at " + file, e);
-        }
-    }
+	public HierarchicalConfiguration<?> readYamlConfiguration(File file) throws ConfigurationException {
+		try (Reader reader = new FileReader(file)) {
+			return readYamlConfiguration(reader);
+		} catch (IOException e) {
+			throw new ConfigurationException("Error reading YAML file at " + file, e);
+		}
+	}
 
-    public HierarchicalConfiguration<?> readYamlConfiguration(Resource resource) throws ConfigurationException {
-        try(Reader reader = new InputStreamReader(resource.getInputStream())) {
-            return readYamlConfiguration(reader);
-        } catch (IOException e) {
-            throw new ConfigurationException("Error reading YAML file at " + resource, e);
-        }
-    }
+	public HierarchicalConfiguration<?> readYamlConfiguration(Resource resource) throws ConfigurationException {
+		try (Reader reader = new InputStreamReader(resource.getInputStream())) {
+			return readYamlConfiguration(reader);
+		} catch (IOException e) {
+			throw new ConfigurationException("Error reading YAML file at " + resource, e);
+		}
+	}
 
 }

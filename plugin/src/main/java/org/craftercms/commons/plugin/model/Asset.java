@@ -29,67 +29,67 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Asset {
 
-    /**
-     * The title of the asset
-     */
-    protected String title;
+	/**
+	 * The title of the asset
+	 */
+	protected String title;
 
-    /**
-     * The description of the asset
-     */
-    protected String description;
+	/**
+	 * The description of the asset
+	 */
+	protected String description;
 
-    /**
-     * The URL of the asset
-     */
-    private String url;
+	/**
+	 * The URL of the asset
+	 */
+	private String url;
 
-    public String getTitle() {
-        return title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Asset)) {
-            return false;
-        }
-        final Asset asset = (Asset)o;
-        return Objects.equals(title, asset.title) && Objects.equals(description, asset.description) &&
-            Objects.equals(url, asset.url);
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Asset)) {
+			return false;
+		}
+		final Asset asset = (Asset) o;
+		return Objects.equals(title, asset.title) && Objects.equals(description, asset.description) &&
+			Objects.equals(url, asset.url);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(title, description, url);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(title, description, url);
+	}
 
-    @Override
-    public String toString() {
-        return "Asset{" + "title='" + title + '\'' + ", description='" + description + '\'' + ", url='" + url + '\'' +
-            '}';
-    }
+	@Override
+	public String toString() {
+		return "Asset{" + "title='" + title + '\'' + ", description='" + description + '\'' + ", url='" + url + '\'' +
+			'}';
+	}
 
 }

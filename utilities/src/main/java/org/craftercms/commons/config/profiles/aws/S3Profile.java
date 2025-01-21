@@ -24,70 +24,70 @@ import java.util.Objects;
  */
 public class S3Profile extends AbstractAwsProfile {
 
-    /**
-     * Name of the bucket.
-     */
-    protected String bucketName;
+	/**
+	 * Name of the bucket.
+	 */
+	protected String bucketName;
 
-    /**
-     * Optional prefix to prepend to all keys
-     */
-    protected String prefix;
+	/**
+	 * Optional prefix to prepend to all keys
+	 */
+	protected String prefix;
 
-    /**
-     * Indicates if path style access should be used for all request
-     */
-    protected boolean pathStyleAccessEnabled;
+	/**
+	 * Indicates if path style access should be used for all request
+	 */
+	protected boolean pathStyleAccessEnabled;
 
-    public String getBucketName() {
-        return bucketName;
-    }
+	public String getBucketName() {
+		return bucketName;
+	}
 
-    public void setBucketName(final String bucketName) {
-        this.bucketName = bucketName;
-    }
+	public void setBucketName(final String bucketName) {
+		this.bucketName = bucketName;
+	}
 
-    public String getPrefix() {
-        return prefix;
-    }
+	public String getPrefix() {
+		return prefix;
+	}
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
 
-    public boolean isPathStyleAccessEnabled() {
-        return pathStyleAccessEnabled;
-    }
+	public boolean isPathStyleAccessEnabled() {
+		return pathStyleAccessEnabled;
+	}
 
-    public void setPathStyleAccessEnabled(final boolean pathStyleAccessEnabled) {
-        this.pathStyleAccessEnabled = pathStyleAccessEnabled;
-    }
+	public void setPathStyleAccessEnabled(final boolean pathStyleAccessEnabled) {
+		this.pathStyleAccessEnabled = pathStyleAccessEnabled;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        S3Profile s3Profile = (S3Profile) o;
-        return pathStyleAccessEnabled == s3Profile.pathStyleAccessEnabled &&
-               Objects.equals(bucketName, s3Profile.bucketName) && Objects.equals(prefix, s3Profile.prefix);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		S3Profile s3Profile = (S3Profile) o;
+		return pathStyleAccessEnabled == s3Profile.pathStyleAccessEnabled &&
+			Objects.equals(bucketName, s3Profile.bucketName) && Objects.equals(prefix, s3Profile.prefix);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), bucketName, prefix, pathStyleAccessEnabled);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), bucketName, prefix, pathStyleAccessEnabled);
+	}
 
-    @Override
-    public String toString() {
-        return "S3Profile{" +
-               "profileId='" + profileId + '\'' +
-               ", region='" + region + '\'' +
-               ", endpoint='" + endpoint + '\'' +
-               ", bucketName='" + bucketName + '\'' +
-               ", prefix='" + prefix + '\'' +
-               ", pathStyleAccessEnabled=" + pathStyleAccessEnabled +
-               '}';
-    }
+	@Override
+	public String toString() {
+		return "S3Profile{" +
+			"profileId='" + profileId + '\'' +
+			", region='" + region + '\'' +
+			", endpoint='" + endpoint + '\'' +
+			", bucketName='" + bucketName + '\'' +
+			", prefix='" + prefix + '\'' +
+			", pathStyleAccessEnabled=" + pathStyleAccessEnabled +
+			'}';
+	}
 
 }

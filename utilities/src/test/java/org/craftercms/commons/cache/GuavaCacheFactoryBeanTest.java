@@ -35,54 +35,54 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @ContextConfiguration("classpath:cache-context.xml")
 public class GuavaCacheFactoryBeanTest {
 
-    public static final String CACHE_KEY = "myKey";
+	public static final String CACHE_KEY = "myKey";
 
-    public static final String CACHE_VALUE = "myValue";
+	public static final String CACHE_VALUE = "myValue";
 
-    @Autowired
-    Cache<String, String> maxSizeCache;
+	@Autowired
+	Cache<String, String> maxSizeCache;
 
-    @Autowired
-    Cache<String, String> timeToLiveCache;
+	@Autowired
+	Cache<String, String> timeToLiveCache;
 
-    @Autowired
-    Cache<String, String> timeToIdleCache;
+	@Autowired
+	Cache<String, String> timeToIdleCache;
 
-    @Before
-    public void setUp() {
-        maxSizeCache.invalidateAll();
-        timeToLiveCache.invalidateAll();
-        timeToIdleCache.invalidateAll();
-    }
+	@Before
+	public void setUp() {
+		maxSizeCache.invalidateAll();
+		timeToLiveCache.invalidateAll();
+		timeToIdleCache.invalidateAll();
+	}
 
-    @Test
-    public void maxSizeTest() {
-        Stream.generate(UUID::randomUUID).limit(10).map(UUID::toString).forEach(uuid -> maxSizeCache.put(uuid, uuid));
+	@Test
+	public void maxSizeTest() {
+		Stream.generate(UUID::randomUUID).limit(10).map(UUID::toString).forEach(uuid -> maxSizeCache.put(uuid, uuid));
 
-        assertThat(maxSizeCache.size(), equalTo(5L));
-    }
+		assertThat(maxSizeCache.size(), equalTo(5L));
+	}
 
-    @Test
-    public void timeToLiveTest() throws InterruptedException {
-        timeToIdleCache.put(CACHE_KEY, CACHE_VALUE);
+	@Test
+	public void timeToLiveTest() throws InterruptedException {
+		timeToIdleCache.put(CACHE_KEY, CACHE_VALUE);
 
-        var cached = timeToIdleCache.getIfPresent(CACHE_KEY);
-        assertThat(cached, equalTo(CACHE_VALUE));
+		var cached = timeToIdleCache.getIfPresent(CACHE_KEY);
+		assertThat(cached, equalTo(CACHE_VALUE));
 
-        sleep(2000);
+		sleep(2000);
 
-        cached = timeToIdleCache.getIfPresent(CACHE_KEY);
-        assertThat(cached, nullValue());
-    }
+		cached = timeToIdleCache.getIfPresent(CACHE_KEY);
+		assertThat(cached, nullValue());
+	}
 
-    @Test
-    public void timeToIdleTest() throws InterruptedException {
-        timeToLiveCache.put(CACHE_KEY, CACHE_VALUE);
+	@Test
+	public void timeToIdleTest() throws InterruptedException {
+		timeToLiveCache.put(CACHE_KEY, CACHE_VALUE);
 
-        sleep(2000);
+		sleep(2000);
 
-        var cached = timeToLiveCache.getIfPresent(CACHE_KEY);
-        assertThat(cached, nullValue());
-    }
+		var cached = timeToLiveCache.getIfPresent(CACHE_KEY);
+		assertThat(cached, nullValue());
+	}
 
 }

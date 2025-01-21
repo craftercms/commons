@@ -37,27 +37,27 @@ import org.yaml.snakeyaml.representer.Representer;
  */
 public class PluginDescriptorReaderImpl implements PluginDescriptorReader {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PluginDescriptor read(final InputStream is) throws PluginException {
-        return read(new InputStreamReader(is));
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public PluginDescriptor read(final InputStream is) throws PluginException {
+		return read(new InputStreamReader(is));
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PluginDescriptor read(final Reader reader) throws PluginException {
-        try {
-            Representer representer = new Representer(new DumperOptions());
-            representer.getPropertyUtils().setSkipMissingProperties(true);
-            Yaml yaml = new Yaml(new Constructor(PluginDescriptor.class, new LoaderOptions()), representer);
-            return yaml.loadAs(reader, PluginDescriptor.class);
-        } catch (Exception e) {
-            throw new PluginException("Error reading plugin descriptor from reader", e);
-        }
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public PluginDescriptor read(final Reader reader) throws PluginException {
+		try {
+			Representer representer = new Representer(new DumperOptions());
+			representer.getPropertyUtils().setSkipMissingProperties(true);
+			Yaml yaml = new Yaml(new Constructor(PluginDescriptor.class, new LoaderOptions()), representer);
+			return yaml.loadAs(reader, PluginDescriptor.class);
+		} catch (Exception e) {
+			throw new PluginException("Error reading plugin descriptor from reader", e);
+		}
+	}
 
 }

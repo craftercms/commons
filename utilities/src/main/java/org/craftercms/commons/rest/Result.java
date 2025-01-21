@@ -24,30 +24,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Result {
 
-    public static final Result OK = new Result("OK");
+	public static final Result OK = new Result("OK");
 
-    private String message;
+	private String message;
 
-    public Result() {
-    }
+	public Result() {
+	}
 
-    public Result(String message) {
-        this.message = message;
-    }
+	public Result(String message) {
+		this.message = message;
+	}
 
-    @JsonProperty("message")
-    public String getMessage() {
-        return message;
-    }
+	@JsonProperty("message")
+	public String getMessage() {
+		return message;
+	}
 
-    @JsonProperty("message")
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	@JsonProperty("message")
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-    @Override
-    public String toString() {
-        return "Result{message='" + message + '\'' + '}';
-    }
+	@Override
+	public String toString() {
+		return "Result{message='" + message + '\'' + '}';
+	}
 
 }

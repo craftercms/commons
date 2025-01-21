@@ -27,40 +27,40 @@ import java.io.File;
  */
 public class TypeBasedAuthConfiguratorBuilderTest extends AbstractAuthConfiguratorBuilderTest {
 
-    protected TypeBasedAuthConfiguratorBuilder createBuilder(String type) {
-        // The config path is not important for this test
-        return new TypeBasedAuthConfiguratorBuilder(new File("."), type);
-    }
+	protected TypeBasedAuthConfiguratorBuilder createBuilder(String type) {
+		// The config path is not important for this test
+		return new TypeBasedAuthConfiguratorBuilder(new File("."), type);
+	}
 
-    @Test
-    public void testNoAuth() {
-        verify(createBuilder(AuthenticationType.NONE), NoopAuthConfigurator.class);
-    }
+	@Test
+	public void testNoAuth() {
+		verify(createBuilder(AuthenticationType.NONE), NoopAuthConfigurator.class);
+	}
 
-    @Test
-    public void testBasicAuth() {
-        verify(createBuilder(AuthenticationType.BASIC)
-                .withUsername("joe")
-                .withPassword("secret"), BasicUsernamePasswordAuthConfigurator.class);
-    }
+	@Test
+	public void testBasicAuth() {
+		verify(createBuilder(AuthenticationType.BASIC)
+			.withUsername("joe")
+			.withPassword("secret"), BasicUsernamePasswordAuthConfigurator.class);
+	}
 
-    @Test
-    public void testTokenAuth() {
-        verify(createBuilder(AuthenticationType.TOKEN)
-                .withUsername("token"), BasicUsernamePasswordAuthConfigurator.class);
-    }
+	@Test
+	public void testTokenAuth() {
+		verify(createBuilder(AuthenticationType.TOKEN)
+			.withUsername("token"), BasicUsernamePasswordAuthConfigurator.class);
+	}
 
-    @Test
-    public void testPrivateKeyAuth() {
-        verify(createBuilder(AuthenticationType.PRIVATE_KEY)
-                .withPrivateKeyPath("/some/key"), SshPrivateKeyAuthConfigurator.class);
-    }
+	@Test
+	public void testPrivateKeyAuth() {
+		verify(createBuilder(AuthenticationType.PRIVATE_KEY)
+			.withPrivateKeyPath("/some/key"), SshPrivateKeyAuthConfigurator.class);
+	}
 
-    @Test
-    public void testPrivateKeyAuthWithPass() {
-        verify(createBuilder(AuthenticationType.PRIVATE_KEY)
-                .withPrivateKeyPath("/some/key")
-                .withPrivateKeyPassphrase("secret"), SshPrivateKeyAuthConfigurator.class);
-    }
+	@Test
+	public void testPrivateKeyAuthWithPass() {
+		verify(createBuilder(AuthenticationType.PRIVATE_KEY)
+			.withPrivateKeyPath("/some/key")
+			.withPrivateKeyPassphrase("secret"), SshPrivateKeyAuthConfigurator.class);
+	}
 
 }

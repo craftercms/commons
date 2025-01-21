@@ -33,39 +33,39 @@ import java.util.regex.Pattern;
  */
 public class RemoteFileResolverImpl implements RemoteFileResolver {
 
-    protected Map<String, RemotePathParser> pathParsers;
-    protected Map<String, RemoteFileStore> stores;
+	protected Map<String, RemotePathParser> pathParsers;
+	protected Map<String, RemoteFileStore> stores;
 
-    public RemoteFileResolverImpl(Map<String, RemotePathParser> pathParsers, Map<String, RemoteFileStore> stores) {
-        this.pathParsers = pathParsers;
-        this.stores = stores;
-    }
+	public RemoteFileResolverImpl(Map<String, RemotePathParser> pathParsers, Map<String, RemoteFileStore> stores) {
+		this.pathParsers = pathParsers;
+		this.stores = stores;
+	}
 
-    @Override
-    public RemoteFile resolve(String path) throws IOException, IllegalArgumentException {
-        RemotePath remotePath = null;
+	@Override
+	public RemoteFile resolve(String path) throws IOException, IllegalArgumentException {
+		RemotePath remotePath = null;
 
-        for (Map.Entry<String, RemotePathParser> entry : pathParsers.entrySet()) {
-            Pattern pattern = Pattern.compile(entry.getKey());
-            Matcher matcher = pattern.matcher(path);
+		for (Map.Entry<String, RemotePathParser> entry : pathParsers.entrySet()) {
+			Pattern pattern = Pattern.compile(entry.getKey());
+			Matcher matcher = pattern.matcher(path);
 
-            if (matcher.matches()) {
-                remotePath = entry.getValue().parse(path, matcher);
-                break;
-            }
-        }
+			if (matcher.matches()) {
+				remotePath = entry.getValue().parse(path, matcher);
+				break;
+			}
+		}
 
-        if (remotePath != null) {
-            RemoteFileStore store = stores.get(remotePath.getStoreType());
-            if (store != null) {
-                return store.getFile(remotePath);
-            } else {
-                throw new IllegalArgumentException("Store type '" + remotePath.getStoreType() + "' couldn't be matched " +
-                                                   "to any of the known remote file stores: " + stores.keySet());
-            }
-        } else {
-            throw new IllegalArgumentException("Path " + path + " is not a supported remote file");
-        }
-    }
+		if (remotePath != null) {
+			RemoteFileStore store = stores.get(remotePath.getStoreType());
+			if (store != null) {
+				return store.getFile(remotePath);
+			} else {
+				throw new IllegalArgumentException("Store type '" + remotePath.getStoreType() + "' couldn't be matched " +
+					"to any of the known remote file stores: " + stores.keySet());
+			}
+		} else {
+			throw new IllegalArgumentException("Path " + path + " is not a supported remote file");
+		}
+	}
 
 }

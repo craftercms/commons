@@ -26,5 +26,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InjectValue {
-    String useProperty();
+	String useProperty();
 }

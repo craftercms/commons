@@ -18,22 +18,23 @@ package org.craftercms.commons.validation.validators.impl;
 import org.craftercms.commons.validation.annotations.param.ValidateStringParam;
 
 import jakarta.validation.ConstraintValidator;
+
 import java.util.List;
 
 public class StringValidator extends AbstractStringValidator implements ConstraintValidator<ValidateStringParam, String> {
 
-    public StringValidator() {
-    }
+	public StringValidator() {
+	}
 
-    public StringValidator(List<String> whitelistRegexes, List<String> blacklistRegexes, boolean matchFullInput) {
-        super(whitelistRegexes, blacklistRegexes, matchFullInput);
-    }
+	public StringValidator(List<String> whitelistRegexes, List<String> blacklistRegexes, boolean matchFullInput) {
+		super(whitelistRegexes, blacklistRegexes, matchFullInput);
+	}
 
-    @Override
-    public void initialize(ValidateStringParam annotation) {
-        this.whitelistRegexes = List.of(annotation.whitelistedPatterns());
-        this.blacklistRegexes = List.of(annotation.blacklistedPatterns());
-        this.matchFullInput = annotation.matchFullInput();
-    }
+	@Override
+	public void initialize(ValidateStringParam annotation) {
+		this.whitelistRegexes = List.of(annotation.whitelistedPatterns());
+		this.blacklistRegexes = List.of(annotation.blacklistedPatterns());
+		this.matchFullInput = annotation.matchFullInput();
+	}
 
 }

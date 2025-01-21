@@ -26,20 +26,20 @@ import java.util.UUID;
  */
 public class TestAuditModel extends AuditModel {
 
-    public static final String PATTERN = "yyyy-MM-dd HH:mm:ss";
+	public static final String PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-    public TestAuditModel() {
-        this(new SimpleDateFormat(PATTERN).format(new Date()));
-    }
+	public TestAuditModel() {
+		this(new SimpleDateFormat(PATTERN).format(new Date()));
+	}
 
-    public TestAuditModel(final String date) {
-        try {
-            this.auditDate = new SimpleDateFormat(PATTERN).parse(date);
-            this.id = UUID.randomUUID().toString();
-            this.setPayload(null);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public TestAuditModel(final String date) {
+		try {
+			this.auditDate = new SimpleDateFormat(PATTERN).parse(date);
+			this.id = UUID.randomUUID().toString();
+			this.setPayload(null);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 }

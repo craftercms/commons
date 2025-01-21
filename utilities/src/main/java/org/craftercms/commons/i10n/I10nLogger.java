@@ -27,107 +27,108 @@ import org.slf4j.LoggerFactory;
  */
 public class I10nLogger {
 
-    protected Logger actualLogger;
-    protected ResourceBundle resourceBundle;
+	protected Logger actualLogger;
+	protected ResourceBundle resourceBundle;
 
-    public I10nLogger(Class<?> clazz) {
-        this(LoggerFactory.getLogger(clazz), I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
-    }
+	public I10nLogger(Class<?> clazz) {
+		this(LoggerFactory.getLogger(clazz), I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
+	}
 
-    public I10nLogger(Class<?> clazz, String bundleName) {
-        this(LoggerFactory.getLogger(clazz), bundleName);
-    }
+	public I10nLogger(Class<?> clazz, String bundleName) {
+		this(LoggerFactory.getLogger(clazz), bundleName);
+	}
 
-    public I10nLogger(Logger actualLogger, String bundleName) {
-        this.actualLogger = actualLogger;
-        this.resourceBundle = ResourceBundle.getBundle(bundleName);
-    }
+	public I10nLogger(Logger actualLogger, String bundleName) {
+		this.actualLogger = actualLogger;
+		this.resourceBundle = ResourceBundle.getBundle(bundleName);
+	}
 
-    public Logger getActualLogger() {
-        return actualLogger;
-    }
+	public Logger getActualLogger() {
+		return actualLogger;
+	}
 
-    public boolean isTraceEnabled() {
-        return actualLogger.isTraceEnabled();
-    }
+	public boolean isTraceEnabled() {
+		return actualLogger.isTraceEnabled();
+	}
 
-    public boolean isDebugEnabled() {
-        return actualLogger.isDebugEnabled();
-    }
+	public boolean isDebugEnabled() {
+		return actualLogger.isDebugEnabled();
+	}
 
-    public boolean isWarnEnabled() {
-        return actualLogger.isWarnEnabled();
-    }
+	public boolean isWarnEnabled() {
+		return actualLogger.isWarnEnabled();
+	}
 
-    public boolean isErrorEnabled() {
-        return actualLogger.isErrorEnabled();
-    }
+	public boolean isErrorEnabled() {
+		return actualLogger.isErrorEnabled();
+	}
 
-    public boolean isInfoEnabled() {
-        return actualLogger.isInfoEnabled();
-    }
+	public boolean isInfoEnabled() {
+		return actualLogger.isInfoEnabled();
+	}
 
-    public void trace(String key, Object... args) {
-        if (isTraceEnabled()) {
-            actualLogger.trace(getLocalizedMessage(key, args));
-        }
-    }
+	public void trace(String key, Object... args) {
+		if (isTraceEnabled()) {
+			actualLogger.trace(getLocalizedMessage(key, args));
+		}
+	}
 
-    public void trace(String key, Throwable e, Object... args) {
-        if (isTraceEnabled()) {
-            actualLogger.trace(getLocalizedMessage(key, args), e);
-        }
-    }
+	public void trace(String key, Throwable e, Object... args) {
+		if (isTraceEnabled()) {
+			actualLogger.trace(getLocalizedMessage(key, args), e);
+		}
+	}
 
-    public void debug(String key, Object... args) {
-        if (isDebugEnabled()) {
-            actualLogger.debug(getLocalizedMessage(key, args));
-        }
-    }
+	public void debug(String key, Object... args) {
+		if (isDebugEnabled()) {
+			actualLogger.debug(getLocalizedMessage(key, args));
+		}
+	}
 
-    public void debug(String key, Throwable e, Object... args) {
-        if (isDebugEnabled()) {
-            actualLogger.debug(getLocalizedMessage(key, args), e);
-        }
-    }
+	public void debug(String key, Throwable e, Object... args) {
+		if (isDebugEnabled()) {
+			actualLogger.debug(getLocalizedMessage(key, args), e);
+		}
+	}
 
-    public void warn(String key, Object... args) {
-        if (isWarnEnabled()) {
-            actualLogger.warn(getLocalizedMessage(key, args));
-        }
-    }
+	public void warn(String key, Object... args) {
+		if (isWarnEnabled()) {
+			actualLogger.warn(getLocalizedMessage(key, args));
+		}
+	}
 
-    public void warn(String key, Throwable e, Object... args) {
-        if (isWarnEnabled()) {
-            actualLogger.warn(getLocalizedMessage(key, args), e);
-        }
-    }
+	public void warn(String key, Throwable e, Object... args) {
+		if (isWarnEnabled()) {
+			actualLogger.warn(getLocalizedMessage(key, args), e);
+		}
+	}
 
-    public void error(String key, Object... args) {
-        if (isErrorEnabled()) {
-            actualLogger.error(getLocalizedMessage(key, args));
-        }
-    }
+	public void error(String key, Object... args) {
+		if (isErrorEnabled()) {
+			actualLogger.error(getLocalizedMessage(key, args));
+		}
+	}
 
-    public void error(String key, Throwable e, Object... args) {
-        if (isErrorEnabled()) {
-            actualLogger.error(getLocalizedMessage(key, args), e);
-        }
-    }
+	public void error(String key, Throwable e, Object... args) {
+		if (isErrorEnabled()) {
+			actualLogger.error(getLocalizedMessage(key, args), e);
+		}
+	}
 
-    public void info(String key, Throwable e, Object... args) {
-        if (isInfoEnabled()) {
-            actualLogger.info(getLocalizedMessage(key, args), e);
-        }
-    }
+	public void info(String key, Throwable e, Object... args) {
+		if (isInfoEnabled()) {
+			actualLogger.info(getLocalizedMessage(key, args), e);
+		}
+	}
 
-    public void info(String key, Object... args) {
-        if (isInfoEnabled()) {
-            actualLogger.info(getLocalizedMessage(key, args));
-        }
-    }
-    protected String getLocalizedMessage(String key, Object... args) {
-        return I10nUtils.getLocalizedMessage(resourceBundle, key, args);
-    }
+	public void info(String key, Object... args) {
+		if (isInfoEnabled()) {
+			actualLogger.info(getLocalizedMessage(key, args));
+		}
+	}
+
+	protected String getLocalizedMessage(String key, Object... args) {
+		return I10nUtils.getLocalizedMessage(resourceBundle, key, args);
+	}
 
 }

@@ -38,53 +38,53 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class AwsS3BlobStore extends AbstractBlobStore<S3Profile> {
 
-    /**
-     * The client factory
-     */
-    protected S3ClientCachingFactory clientFactory;
+	/**
+	 * The client factory
+	 */
+	protected S3ClientCachingFactory clientFactory;
 
-    /**
-     * The async client factory
-     */
-    protected S3AsyncClientCachingFactory asyncClientFactory;
+	/**
+	 * The async client factory
+	 */
+	protected S3AsyncClientCachingFactory asyncClientFactory;
 
-    public void setClientFactory(S3ClientCachingFactory clientFactory) {
-        this.clientFactory = clientFactory;
-    }
+	public void setClientFactory(S3ClientCachingFactory clientFactory) {
+		this.clientFactory = clientFactory;
+	}
 
-    protected S3Client getClient() {
-        return clientFactory.getClient(profile);
-    }
+	protected S3Client getClient() {
+		return clientFactory.getClient(profile);
+	}
 
-    public void setAsyncClientFactory(S3AsyncClientCachingFactory asyncClientFactory) {
-        this.asyncClientFactory = asyncClientFactory;
-    }
+	public void setAsyncClientFactory(S3AsyncClientCachingFactory asyncClientFactory) {
+		this.asyncClientFactory = asyncClientFactory;
+	}
 
-    protected S3AsyncClient getAsyncClient() {
-        return asyncClientFactory.getClient(profile);
-    }
+	protected S3AsyncClient getAsyncClient() {
+		return asyncClientFactory.getClient(profile);
+	}
 
-    protected String getKey(Mapping mapping, String path) {
-        StringBuilder sb = new StringBuilder();
-        if (isNotEmpty(mapping.prefix)) {
-            sb.append(appendIfMissing(removeStart(mapping.prefix, "/"), "/"));
-        }
-        sb.append(removeStart(path, "/"));
-        return  sb.toString();
-    }
+	protected String getKey(Mapping mapping, String path) {
+		StringBuilder sb = new StringBuilder();
+		if (isNotEmpty(mapping.prefix)) {
+			sb.append(appendIfMissing(removeStart(mapping.prefix, "/"), "/"));
+		}
+		sb.append(removeStart(path, "/"));
+		return sb.toString();
+	}
 
-    @Override
-    public void doInit(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException {
-        // do nothing
-    }
+	@Override
+	public void doInit(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException {
+		// do nothing
+	}
 
-    @Override
-    protected Resource doGetContent(Mapping mapping, String path) {
-        try {
-            return new S3Resource(clientFactory, profile, mapping.target, getKey(mapping, path));
-        } catch (Exception e) {
-            throw new BlobStoreException("Error getting content at " + mapping.target + "/" + getKey(mapping, path), e);
-        }
-    }
+	@Override
+	protected Resource doGetContent(Mapping mapping, String path) {
+		try {
+			return new S3Resource(clientFactory, profile, mapping.target, getKey(mapping, path));
+		} catch (Exception e) {
+			throw new BlobStoreException("Error getting content at " + mapping.target + "/" + getKey(mapping, path), e);
+		}
+	}
 
 }

@@ -28,65 +28,69 @@ import org.springframework.util.StopWatch;
 
 /**
  * Defines the operations to support entitlement usage data in a module.
- *
+ * <p>
  * Each module must provide an implementation of this interface.
  *
  * @author joseross
  */
 public interface EntitlementUsageProvider {
 
-    /**
-     * Identifies the current module running.
-     * @return value from {@link Module}
-     */
-    Module getModule();
+	/**
+	 * Identifies the current module running.
+	 *
+	 * @return value from {@link Module}
+	 */
+	Module getModule();
 
-    List<EntitlementType> getSupportedEntitlements();
+	List<EntitlementType> getSupportedEntitlements();
 
-    /**
-     * Returns the current usage for a given entitlement type in the current module
-     * @param type the entitlement to check
-     * @return the current usage
-     */
-    default int getEntitlementUsage(final EntitlementType type) {
-        Logger logger = LoggerFactory.getLogger(getClass());
-        logger.debug("Getting current value for entitlement {}", type);
-        int value = Integer.MAX_VALUE;
-        StopWatch watch = new StopWatch(getClass().getSimpleName());
-        if (logger.isDebugEnabled()) {
-            watch.start(type.toString());
-        }
-        try {
-            value = doGetEntitlementUsage(type);
-        } catch (Exception e) {
-            logger.error("Error getting current value for entitlement {}", type);
-        } finally {
-            if (logger.isDebugEnabled()) {
-                watch.stop();
-                logger.debug("{}", watch);
-            }
-        }
-        return value;
-    }
+	/**
+	 * Returns the current usage for a given entitlement type in the current module
+	 *
+	 * @param type the entitlement to check
+	 * @return the current usage
+	 */
+	default int getEntitlementUsage(final EntitlementType type) {
+		Logger logger = LoggerFactory.getLogger(getClass());
+		logger.debug("Getting current value for entitlement {}", type);
+		int value = Integer.MAX_VALUE;
+		StopWatch watch = new StopWatch(getClass().getSimpleName());
+		if (logger.isDebugEnabled()) {
+			watch.start(type.toString());
+		}
+		try {
+			value = doGetEntitlementUsage(type);
+		} catch (Exception e) {
+			logger.error("Error getting current value for entitlement {}", type);
+		} finally {
+			if (logger.isDebugEnabled()) {
+				watch.stop();
+				logger.debug("{}", watch);
+			}
+		}
+		return value;
+	}
 
-    /**
-     * Performs the module specific operations to get the current value of the given entitlement
-     * @param type the entitlement to check
-     * @return the current usage
-     */
-    int doGetEntitlementUsage(final EntitlementType type) throws Exception;
+	/**
+	 * Performs the module specific operations to get the current value of the given entitlement
+	 *
+	 * @param type the entitlement to check
+	 * @return the current usage
+	 */
+	int doGetEntitlementUsage(final EntitlementType type) throws Exception;
 
-    /**
-     * Provides a list holding the current values for all entitlements supported by the current module.
-     * @return the entitlement list
-     */
-    default List<Entitlement> getCurrentUsage() {
-        return getSupportedEntitlements().stream().map(type -> {
-            Entitlement entitlement = new Entitlement();
-            entitlement.setType(type);
-            entitlement.setValue(getEntitlementUsage(type));
-            return entitlement;
-        }).collect(Collectors.toList());
-    }
+	/**
+	 * Provides a list holding the current values for all entitlements supported by the current module.
+	 *
+	 * @return the entitlement list
+	 */
+	default List<Entitlement> getCurrentUsage() {
+		return getSupportedEntitlements().stream().map(type -> {
+			Entitlement entitlement = new Entitlement();
+			entitlement.setType(type);
+			entitlement.setValue(getEntitlementUsage(type));
+			return entitlement;
+		}).collect(Collectors.toList());
+	}
 
 }

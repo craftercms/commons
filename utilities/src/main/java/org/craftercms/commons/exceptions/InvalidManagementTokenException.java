@@ -5,7 +5,7 @@ package org.craftercms.commons.exceptions;
  */
 public class InvalidManagementTokenException extends Exception {
 
-    public InvalidManagementTokenException(String message) {
-        super(message);
-    }
+	public InvalidManagementTokenException(String message) {
+		super(message);
+	}
 }

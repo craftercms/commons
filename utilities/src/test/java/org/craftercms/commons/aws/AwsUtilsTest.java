@@ -20,66 +20,66 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class AwsUtilsTest {
-    @Test
-    public void testBothBaseKeyAndPathEmpty() {
-        String baseKey = "";
-        String path = "";
-        String expected = "";
-        String result = AwsUtils.s3KeyFromPath(baseKey, path);
-        assertEquals(expected, result);
-    }
+	@Test
+	public void testBothBaseKeyAndPathEmpty() {
+		String baseKey = "";
+		String path = "";
+		String expected = "";
+		String result = AwsUtils.s3KeyFromPath(baseKey, path);
+		assertEquals(expected, result);
+	}
 
-    @Test
-    public void testBaseKeyEmptyPathNonEmpty() {
-        String baseKey = "";
-        String path = "path/to/object";
-        String expected = "path/to/object";
-        String result = AwsUtils.s3KeyFromPath(baseKey, path);
-        assertEquals(expected, result);
-    }
+	@Test
+	public void testBaseKeyEmptyPathNonEmpty() {
+		String baseKey = "";
+		String path = "path/to/object";
+		String expected = "path/to/object";
+		String result = AwsUtils.s3KeyFromPath(baseKey, path);
+		assertEquals(expected, result);
+	}
 
-    @Test
-    public void testBaseKeyNonEmptyPathEmpty() {
-        String baseKey = "base/key/";
-        String path = "";
-        String expected = "base/key/";
-        String result = AwsUtils.s3KeyFromPath(baseKey, path);
-        assertEquals(expected, result);
-    }
+	@Test
+	public void testBaseKeyNonEmptyPathEmpty() {
+		String baseKey = "base/key/";
+		String path = "";
+		String expected = "base/key/";
+		String result = AwsUtils.s3KeyFromPath(baseKey, path);
+		assertEquals(expected, result);
+	}
 
-    @Test
-    public void testBothBaseKeyAndPathNonEmpty() {
-        String baseKey = "base/key";
-        String path = "path/to/object";
-        String expected = "base/key/path/to/object";
-        String result = AwsUtils.s3KeyFromPath(baseKey, path);
-        assertEquals(expected, result);
-    }
+	@Test
+	public void testBothBaseKeyAndPathNonEmpty() {
+		String baseKey = "base/key";
+		String path = "path/to/object";
+		String expected = "base/key/path/to/object";
+		String result = AwsUtils.s3KeyFromPath(baseKey, path);
+		assertEquals(expected, result);
+	}
 
-    @Test
-    public void testBothBaseKeyAndPathWithDelimiters() {
-        String baseKey = "base/key/";
-        String path = "/path/to/object";
-        String expected = "base/key/path/to/object";
-        String result = AwsUtils.s3KeyFromPath(baseKey, path);
-        assertEquals(expected, result);
-    }
+	@Test
+	public void testBothBaseKeyAndPathWithDelimiters() {
+		String baseKey = "base/key/";
+		String path = "/path/to/object";
+		String expected = "base/key/path/to/object";
+		String result = AwsUtils.s3KeyFromPath(baseKey, path);
+		assertEquals(expected, result);
+	}
 
-    @Test
-    public void testBaseKeyAndPathWithLeadingTrailingSpaces() {
-        String baseKey = " base/key/ ";
-        String path = " /path/to/object ";
-        String expected = "base/key/path/to/object";
-        String result = AwsUtils.s3KeyFromPath(baseKey.trim(), path.trim());
-        assertEquals(expected, result);
-    }
+	@Test
+	public void testBaseKeyAndPathWithLeadingTrailingSpaces() {
+		String baseKey = " base/key/ ";
+		String path = " /path/to/object ";
+		String expected = "base/key/path/to/object";
+		String result = AwsUtils.s3KeyFromPath(baseKey.trim(), path.trim());
+		assertEquals(expected, result);
+	}
 
-    @Test
-    public void testBaseKeyEndsWithDelimiterPathStartsWithDelimiter() {
-        String baseKey = "base/key/";
-        String path = "/path/to/object";
-        String expected = "base/key/path/to/object";
-        String result = AwsUtils.s3KeyFromPath(baseKey, path);
-        assertEquals(expected, result);
-    }
+	@Test
+	public void testBaseKeyEndsWithDelimiterPathStartsWithDelimiter() {
+		String baseKey = "base/key/";
+		String path = "/path/to/object";
+		String expected = "base/key/path/to/object";
+		String result = AwsUtils.s3KeyFromPath(baseKey, path);
+		assertEquals(expected, result);
+	}
 }

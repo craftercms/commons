@@ -34,20 +34,20 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class DefaultEntitlementValidatorImpl implements EntitlementValidator, InitializingBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultEntitlementValidatorImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(DefaultEntitlementValidatorImpl.class);
 
-    private static final String DESCRIPTION = "UG93ZXJlZCBieSBDcmFmdGVyQ01TIHYke3ZlcnNpb259LiBDaGVjayBpdCBvdXQgPGEgaHJlZj0iaHR0cHM6Ly9jcmFmdGVyY21zLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPmhlcmU8L2E+LiBSZXBvcnQgYSA8YSBocmVmPSJodHRwczovL2dpdGh1Yi5jb20vY3JhZnRlcmNtcy9jcmFmdGVyY21zL2lzc3VlcyIgdGFyZ2V0PSJfYmxhbmsiPmJ1ZzwvYT4uIDxhIGhyZWY9Imh0dHBzOi8vY3JhZnRlcmNtcy5vcmcvYmxvZyIgdGFyZ2V0PSJfYmxhbmsiPkNyYWZ0ZXIgTmV3czwvYT4u";
+	private static final String DESCRIPTION = "UG93ZXJlZCBieSBDcmFmdGVyQ01TIHYke3ZlcnNpb259LiBDaGVjayBpdCBvdXQgPGEgaHJlZj0iaHR0cHM6Ly9jcmFmdGVyY21zLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPmhlcmU8L2E+LiBSZXBvcnQgYSA8YSBocmVmPSJodHRwczovL2dpdGh1Yi5jb20vY3JhZnRlcmNtcy9jcmFmdGVyY21zL2lzc3VlcyIgdGFyZ2V0PSJfYmxhbmsiPmJ1ZzwvYT4uIDxhIGhyZWY9Imh0dHBzOi8vY3JhZnRlcmNtcy5vcmcvYmxvZyIgdGFyZ2V0PSJfYmxhbmsiPkNyYWZ0ZXIgTmV3czwvYT4u";
 
-    public void afterPropertiesSet() {
-        logger.info("Using CrafterCMS Community Edition");
-    }
+	public void afterPropertiesSet() {
+		logger.info("Using CrafterCMS Community Edition");
+	}
 
-    @Override
-    public String getDescription() {
-        String decoded = new String(Base64.getDecoder().decode(DESCRIPTION));
-        StringSubstitutor stringSubstitutor =
-            new StringSubstitutor(Collections.singletonMap("version", getPackageVersion()));
-        return stringSubstitutor.replace(decoded);
-    }
+	@Override
+	public String getDescription() {
+		String decoded = new String(Base64.getDecoder().decode(DESCRIPTION));
+		StringSubstitutor stringSubstitutor =
+			new StringSubstitutor(Collections.singletonMap("version", getPackageVersion()));
+		return stringSubstitutor.replace(decoded);
+	}
 
 }

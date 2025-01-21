@@ -24,16 +24,17 @@ package org.craftercms.commons.plugin.model;
  */
 public interface SearchEngines {
 
-    /**
-     * Elasticsearch, the default since 3.1
-     */
-    String ELASTICSEARCH = "Elasticsearch";
+	/**
+	 * Elasticsearch, the default since 3.1
+	 */
+	String ELASTICSEARCH = "Elasticsearch";
 
-    /**
-     * Crafter Search with Apache Solr
-     * @deprecated since 4.0.0
-     */
-    @Deprecated(since = "4.0.0")
-    String CRAFTER_SEARCH = "CrafterSearch";
+	/**
+	 * Crafter Search with Apache Solr
+	 *
+	 * @deprecated since 4.0.0
+	 */
+	@Deprecated(since = "4.0.0")
+	String CRAFTER_SEARCH = "CrafterSearch";
 
 }

@@ -28,12 +28,13 @@ import java.io.IOException;
  */
 public interface BlobStoreResolver {
 
-    /**
-     * Returns the {@link BlobStore} for the given id
-     * @param provider provider to read the configuration file
-     * @param storeId the id
-     * @return the blob store
-     */
-    BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException;
+	/**
+	 * Returns the {@link BlobStore} for the given id
+	 *
+	 * @param provider provider to read the configuration file
+	 * @param storeId  the id
+	 * @return the blob store
+	 */
+	BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException;
 
 }

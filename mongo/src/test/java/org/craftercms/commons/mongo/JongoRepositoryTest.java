@@ -24,40 +24,40 @@ import org.junit.Test;
  */
 public class JongoRepositoryTest {
 
-    private static final String COLLECTION_NAME = "testPojo";
-    public static final String TESTPOJO = "testpojo";
+	private static final String COLLECTION_NAME = "testPojo";
+	public static final String TESTPOJO = "testpojo";
 
-    @Test
-    public void testAnnotatedPojoRepository() throws Exception {
-        TestAnnotated repository = new TestAnnotated();
-        repository.init();
-        Assert.assertEquals(COLLECTION_NAME, repository.collectionName);
-    }
+	@Test
+	public void testAnnotatedPojoRepository() throws Exception {
+		TestAnnotated repository = new TestAnnotated();
+		repository.init();
+		Assert.assertEquals(COLLECTION_NAME, repository.collectionName);
+	}
 
-    @Test
-    public void testNonAnnotatedPojoRepository() throws Exception {
-        TestSimple repository = new TestSimple();
-        repository.init();
-        Assert.assertEquals(TESTPOJO, repository.collectionName);
+	@Test
+	public void testNonAnnotatedPojoRepository() throws Exception {
+		TestSimple repository = new TestSimple();
+		repository.init();
+		Assert.assertEquals(TESTPOJO, repository.collectionName);
 
-    }
+	}
 
-    private class TestAnnotated extends AbstractJongoRepository<TestAnnotatedPojo>{
+	private class TestAnnotated extends AbstractJongoRepository<TestAnnotatedPojo> {
 
-        /**
-         * Creates A instance of a Jongo Repository.
-         */
-        public TestAnnotated() throws Exception {
-        }
-    }
+		/**
+		 * Creates A instance of a Jongo Repository.
+		 */
+		public TestAnnotated() throws Exception {
+		}
+	}
 
-    private class TestSimple extends AbstractJongoRepository<TestPojo>{
+	private class TestSimple extends AbstractJongoRepository<TestPojo> {
 
-        /**
-         * Creates A instance of a Jongo Repository.
-         */
-        public TestSimple() throws Exception {
-        }
-    }
+		/**
+		 * Creates A instance of a Jongo Repository.
+		 */
+		public TestSimple() throws Exception {
+		}
+	}
 
 }

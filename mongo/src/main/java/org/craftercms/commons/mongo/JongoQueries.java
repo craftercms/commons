@@ -26,9 +26,9 @@ import org.craftercms.commons.properties.OverrideProperties;
  */
 public class JongoQueries extends OverrideProperties {
 
-    @Override
-    protected void readPropertyFile(final InputStream input) throws IOException {
-        properties.loadFromXML(input);
-    }
+	@Override
+	protected void readPropertyFile(final InputStream input) throws IOException {
+		properties.loadFromXML(input);
+	}
 
 }

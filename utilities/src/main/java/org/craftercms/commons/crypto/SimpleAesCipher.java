@@ -29,54 +29,53 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * @author Sumer Jabri
- *
  */
 @Deprecated
 public class SimpleAesCipher {
-    private SecretKeySpec skeySpec;
-    private Cipher cipher;
+	private SecretKeySpec skeySpec;
+	private Cipher cipher;
 
-    public SimpleAesCipher(String base64Key) {
-        KeyGenerator kgen = null;
-        try {
-            kgen = KeyGenerator.getInstance("AES");
-        } catch (NoSuchAlgorithmException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+	public SimpleAesCipher(String base64Key) {
+		KeyGenerator kgen = null;
+		try {
+			kgen = KeyGenerator.getInstance("AES");
+		} catch (NoSuchAlgorithmException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
-        kgen.init(128); // 192 and 256 bits may not be available
+		kgen.init(128); // 192 and 256 bits may not be available
 
-        byte[] raw = Base64.decodeBase64(base64Key);
+		byte[] raw = Base64.decodeBase64(base64Key);
 
-        skeySpec = new SecretKeySpec(raw, "AES");
+		skeySpec = new SecretKeySpec(raw, "AES");
 
-        try {
-            cipher = Cipher.getInstance("AES");
-        } catch (NoSuchAlgorithmException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+		try {
+			cipher = Cipher.getInstance("AES");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-    public void setKey(byte[] key) {
-        skeySpec = new SecretKeySpec(key, "AES");
-    }
+	public void setKey(byte[] key) {
+		skeySpec = new SecretKeySpec(key, "AES");
+	}
 
-    public byte[] encrypt(byte[] clear) throws InvalidKeyException,
-        IllegalBlockSizeException, BadPaddingException {
-        cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+	public byte[] encrypt(byte[] clear) throws InvalidKeyException,
+		IllegalBlockSizeException, BadPaddingException {
+		cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
 
-        return cipher.doFinal(clear);
-    }
+		return cipher.doFinal(clear);
+	}
 
-    public byte[] decrypt(byte[] encrypted) throws InvalidKeyException,
-        IllegalBlockSizeException, BadPaddingException {
-        cipher.init(Cipher.DECRYPT_MODE, skeySpec);
+	public byte[] decrypt(byte[] encrypted) throws InvalidKeyException,
+		IllegalBlockSizeException, BadPaddingException {
+		cipher.init(Cipher.DECRYPT_MODE, skeySpec);
 
-        return cipher.doFinal(encrypted);
-    }
+		return cipher.doFinal(encrypted);
+	}
 }

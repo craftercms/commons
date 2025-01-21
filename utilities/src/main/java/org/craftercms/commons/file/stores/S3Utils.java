@@ -34,43 +34,42 @@ import java.util.function.Function;
  */
 public class S3Utils {
 
-    /**
-     * Creates an S3 client (sync or async) based on the given profile config.
-     *
-     * @param profile the configuration profile
-     *
-     * @return a client to an S3 client account
-     */
-    public static <T extends S3BaseClientBuilder<T, U>, U extends AwsClient> U createClient(
-            AbstractAwsProfile profile,
-            boolean useCustomEndpoint,
-            T builder,
-            Function<T, U> buildFunc) {
+	/**
+	 * Creates an S3 client (sync or async) based on the given profile config.
+	 *
+	 * @param profile the configuration profile
+	 * @return a client to an S3 client account
+	 */
+	public static <T extends S3BaseClientBuilder<T, U>, U extends AwsClient> U createClient(
+		AbstractAwsProfile profile,
+		boolean useCustomEndpoint,
+		T builder,
+		Function<T, U> buildFunc) {
 
-        builder.credentialsProvider(profile.getCredentialsProvider());
+		builder.credentialsProvider(profile.getCredentialsProvider());
 
-        if (useCustomEndpoint && StringUtils.isNotEmpty(profile.getEndpoint()) &&
-                StringUtils.isNotEmpty(profile.getRegion())) {
-            builder.endpointOverride(URI.create(profile.getEndpoint()))
-                    .region(Region.of(profile.getRegion()));
-            if (profile instanceof S3Profile) {
-                builder.serviceConfiguration(S3Configuration.builder()
-                        .pathStyleAccessEnabled(((S3Profile) profile).isPathStyleAccessEnabled())
-                        .build());
-            }
-        } else if (StringUtils.isNotEmpty(profile.getRegion())) {
-            builder.region(Region.of(profile.getRegion()));
-        }
+		if (useCustomEndpoint && StringUtils.isNotEmpty(profile.getEndpoint()) &&
+			StringUtils.isNotEmpty(profile.getRegion())) {
+			builder.endpointOverride(URI.create(profile.getEndpoint()))
+				.region(Region.of(profile.getRegion()));
+			if (profile instanceof S3Profile) {
+				builder.serviceConfiguration(S3Configuration.builder()
+					.pathStyleAccessEnabled(((S3Profile) profile).isPathStyleAccessEnabled())
+					.build());
+			}
+		} else if (StringUtils.isNotEmpty(profile.getRegion())) {
+			builder.region(Region.of(profile.getRegion()));
+		}
 
-        return buildFunc.apply(builder);
-    }
+		return buildFunc.apply(builder);
+	}
 
-    public static final S3Client createClient(AbstractAwsProfile profile) {
-        return createClient(profile, true, S3Client.builder(), S3ClientBuilder::build);
-    }
+	public static final S3Client createClient(AbstractAwsProfile profile) {
+		return createClient(profile, true, S3Client.builder(), S3ClientBuilder::build);
+	}
 
-    public static final S3AsyncClient createAsyncClient(AbstractAwsProfile profile) {
-        return createClient(profile, true, S3AsyncClient.builder(), S3AsyncClientBuilder::build);
-    }
+	public static final S3AsyncClient createAsyncClient(AbstractAwsProfile profile) {
+		return createClient(profile, true, S3AsyncClient.builder(), S3AsyncClientBuilder::build);
+	}
 
 }

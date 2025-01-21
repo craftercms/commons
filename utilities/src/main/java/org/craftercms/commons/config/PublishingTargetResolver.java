@@ -23,16 +23,17 @@ package org.craftercms.commons.config;
  */
 public interface PublishingTargetResolver {
 
-    String PREVIEW = "preview";
+	String PREVIEW = "preview";
 
-    String STAGING = "staging";
+	String STAGING = "staging";
 
-    String LIVE = "live";
+	String LIVE = "live";
 
-    /**
-     * Returns the current publishing target
-     * @return the publishing target
-     */
-    String getPublishingTarget();
+	/**
+	 * Returns the current publishing target
+	 *
+	 * @return the publishing target
+	 */
+	String getPublishingTarget();
 
 }

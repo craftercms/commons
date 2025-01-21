@@ -30,42 +30,42 @@ import static org.junit.Assert.assertEquals;
  */
 public class SimpleCipherTest {
 
-    public static final String CLEAR_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fringilla.";
+	public static final String CLEAR_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fringilla.";
 
-    @Test
-    public void testEncryption() throws Exception {
-        SimpleCipher encryptionCipher = new SimpleCipher();
-        String encrypted = encryptionCipher.encryptBase64(CLEAR_TEXT);
+	@Test
+	public void testEncryption() throws Exception {
+		SimpleCipher encryptionCipher = new SimpleCipher();
+		String encrypted = encryptionCipher.encryptBase64(CLEAR_TEXT);
 
-        Key key = encryptionCipher.getKey();
-        byte[] iv = encryptionCipher.getIv();
+		Key key = encryptionCipher.getKey();
+		byte[] iv = encryptionCipher.getIv();
 
-        Cipher decryptionCipher = Cipher.getInstance(CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
-        decryptionCipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+		Cipher decryptionCipher = Cipher.getInstance(CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
+		decryptionCipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
 
-        byte[] clearBytes = decryptionCipher.doFinal(Base64.decodeBase64(encrypted));
-        String clear = StringUtils.newStringUtf8(clearBytes);
+		byte[] clearBytes = decryptionCipher.doFinal(Base64.decodeBase64(encrypted));
+		String clear = StringUtils.newStringUtf8(clearBytes);
 
-        assertEquals(CLEAR_TEXT, clear);
-    }
+		assertEquals(CLEAR_TEXT, clear);
+	}
 
-    @Test
-    public void testDecryption() throws Exception {
-        Key key = CryptoUtils.generateAesKey();
-        byte[] iv = CryptoUtils.generateAesIv();
+	@Test
+	public void testDecryption() throws Exception {
+		Key key = CryptoUtils.generateAesKey();
+		byte[] iv = CryptoUtils.generateAesIv();
 
-        Cipher encryptionCipher = Cipher.getInstance(CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
-        encryptionCipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+		Cipher encryptionCipher = Cipher.getInstance(CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION);
+		encryptionCipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
 
-        String encrypted = Base64.encodeBase64String(encryptionCipher.doFinal(StringUtils.getBytesUtf8(CLEAR_TEXT)));
+		String encrypted = Base64.encodeBase64String(encryptionCipher.doFinal(StringUtils.getBytesUtf8(CLEAR_TEXT)));
 
-        SimpleCipher decryptionCipher = new SimpleCipher();
-        decryptionCipher.setKey(key);
-        decryptionCipher.setIv(iv);
+		SimpleCipher decryptionCipher = new SimpleCipher();
+		decryptionCipher.setKey(key);
+		decryptionCipher.setIv(iv);
 
-        String clear = decryptionCipher.decryptBase64(encrypted);
+		String clear = decryptionCipher.decryptBase64(encrypted);
 
-        assertEquals(CLEAR_TEXT, clear);
-    }
+		assertEquals(CLEAR_TEXT, clear);
+	}
 
 }

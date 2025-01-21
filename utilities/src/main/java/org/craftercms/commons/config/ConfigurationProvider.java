@@ -27,26 +27,29 @@ import java.util.Map;
  */
 public interface ConfigurationProvider {
 
-    /**
-     * Checks if the given configuration path exists
-     * @param path the configuration path
-     * @return true if the configuration exists
-     */
-    boolean configExists(String path);
+	/**
+	 * Checks if the given configuration path exists
+	 *
+	 * @param path the configuration path
+	 * @return true if the configuration exists
+	 */
+	boolean configExists(String path);
 
-    /**
-     * Get the content of the given configuration file
-     * @param path the configuration path
-     * @return the content of the configuration
-     * @throws IOException if there is any error reading the configuration
-     */
-    InputStream getConfig(String path) throws IOException;
+	/**
+	 * Get the content of the given configuration file
+	 *
+	 * @param path the configuration path
+	 * @return the content of the configuration
+	 * @throws IOException if there is any error reading the configuration
+	 */
+	InputStream getConfig(String path) throws IOException;
 
-    /**
-     * Get a Map of variables to be expanded during configuration files loading.
-     * e.g.: ${siteName} will be replaced by the value of the siteName variable
-     * @return the name of the site
-     */
-    Map<String, String> getLookupVariables();
+	/**
+	 * Get a Map of variables to be expanded during configuration files loading.
+	 * e.g.: ${siteName} will be replaced by the value of the siteName variable
+	 *
+	 * @return the name of the site
+	 */
+	Map<String, String> getLookupVariables();
 
 }

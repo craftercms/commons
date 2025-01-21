@@ -30,62 +30,62 @@ import org.apache.commons.collections4.Predicate;
 @SuppressWarnings("unchecked")
 public class TestAuditServiceImpl<T extends AuditModel> extends AuditService<T> {
 
-    HashMap<String, T> memoryPersistence;
+	HashMap<String, T> memoryPersistence;
 
-    public TestAuditServiceImpl() {
-        memoryPersistence = new HashMap<>();
-    }
+	public TestAuditServiceImpl() {
+		memoryPersistence = new HashMap<>();
+	}
 
 
-    public void clear() {
-        memoryPersistence.clear();
-    }
+	public void clear() {
+		memoryPersistence.clear();
+	}
 
-    public int countAuditLogs() {
-        return memoryPersistence.keySet().size();
-    }
+	public int countAuditLogs() {
+		return memoryPersistence.keySet().size();
+	}
 
-    @Override
-    public T getAuditLog(final String id) {
-        return memoryPersistence.get(id);
-    }
+	@Override
+	public T getAuditLog(final String id) {
+		return memoryPersistence.get(id);
+	}
 
-    @Override
-    protected void persistAudit(final T auditModel) {
-        if (memoryPersistence.containsKey(auditModel.getId())) {
-            throw new RuntimeException("Already save");
-        }
-        memoryPersistence.put(auditModel.getId(), auditModel);
-    }
+	@Override
+	protected void persistAudit(final T auditModel) {
+		if (memoryPersistence.containsKey(auditModel.getId())) {
+			throw new RuntimeException("Already save");
+		}
+		memoryPersistence.put(auditModel.getId(), auditModel);
+	}
 
-    @Override
-    public void deleteAudits(final List auditId) {
-        for (Object o : auditId) {
-             memoryPersistence.remove(o);
-        }
-    }
+	@Override
+	public void deleteAudits(final List auditId) {
+		for (Object o : auditId) {
+			memoryPersistence.remove(o);
+		}
+	}
 
-    @Override
-    public List<T> getAuditLogs(final Date from) {
-        return getAuditLogs(from, new Date());
-    }
+	@Override
+	public List<T> getAuditLogs(final Date from) {
+		return getAuditLogs(from, new Date());
+	}
 
-    @Override
-    public List<T> getAuditLogs(final Date from, final Date to) {
-        if(memoryPersistence.values()==null) {
-            return null;
-        }
-        List<T> valueSet = new ArrayList(memoryPersistence.values());
-        CollectionUtils.filter(valueSet, new Predicate<Object>() {
-            @Override
-            public boolean evaluate(final Object object) {
-                if (object instanceof AuditModel) {
-                    final Date auditDate = ((AuditModel)object).getAuditDate();
-                    return (auditDate.before(from)) || (auditDate.after(from) && auditDate.before(to));
-                }
-                return false;
-            }
-        });
-        return valueSet;
-    }
+	@Override
+	public List<T> getAuditLogs(final Date from, final Date to) {
+		if (memoryPersistence.values() == null) {
+			return null;
+		}
+		List<T> valueSet = new ArrayList(memoryPersistence.values());
+		CollectionUtils.filter(valueSet, new Predicate<Object>() {
+			@Override
+			public boolean evaluate(final Object object) {
+				if (object instanceof AuditModel) {
+					final Date auditDate = ((AuditModel) object).getAuditDate();
+					return (auditDate.before(from)) || (auditDate.after(from) && auditDate.before(to));
+				}
+				return false;
+			}
+		});
+		return valueSet;
+	}
 }

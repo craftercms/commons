@@ -25,10 +25,11 @@ import org.craftercms.commons.git.auth.GitAuthenticationConfigurator;
  */
 public interface AuthConfiguratorBuilder {
 
-    /**
-     * Creates an instance based on the current configuration
-     * @return a {@link GitAuthenticationConfigurator} object
-     */
-    GitAuthenticationConfigurator build();
+	/**
+	 * Creates an instance based on the current configuration
+	 *
+	 * @return a {@link GitAuthenticationConfigurator} object
+	 */
+	GitAuthenticationConfigurator build();
 
 }

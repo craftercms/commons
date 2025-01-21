@@ -24,78 +24,80 @@ import org.craftercms.commons.config.profiles.ConfigurationProfile;
  */
 public class WebDavProfile extends ConfigurationProfile {
 
-    protected String baseUrl;
-    protected String deliveryBaseUrl;
-    protected String username;
-    protected String password;
-    protected boolean preemptiveAuth;
+	protected String baseUrl;
+	protected String deliveryBaseUrl;
+	protected String username;
+	protected String password;
+	protected boolean preemptiveAuth;
 
-    /**
-     * Returns the base url of the webdav server.
-     */
-    public String getBaseUrl() {
-        return baseUrl;
-    }
+	/**
+	 * Returns the base url of the webdav server.
+	 */
+	public String getBaseUrl() {
+		return baseUrl;
+	}
 
-    /**
-     * Sets the base url of the webdav server.
-     */
-    public void setBaseUrl(final String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
+	/**
+	 * Sets the base url of the webdav server.
+	 */
+	public void setBaseUrl(final String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
 
-    /**
-     * Returns the base url to generate asset urls.
-     * @deprecated The new service will ignore this property and use a /remote-assets/... URL instead
-     */
-    @Deprecated
-    public String getDeliveryBaseUrl() {
-        return deliveryBaseUrl;
-    }
+	/**
+	 * Returns the base url to generate asset urls.
+	 *
+	 * @deprecated The new service will ignore this property and use a /remote-assets/... URL instead
+	 */
+	@Deprecated
+	public String getDeliveryBaseUrl() {
+		return deliveryBaseUrl;
+	}
 
-    /**
-     * Sets the base url to generate asset urls.
-     * @deprecated The new service will ignore this property and use a /remote-assets/... URL instead
-     */
-    @Deprecated
-    public void setDeliveryBaseUrl(final String deliveryBaseUrl) {
-        this.deliveryBaseUrl = deliveryBaseUrl;
-    }
+	/**
+	 * Sets the base url to generate asset urls.
+	 *
+	 * @deprecated The new service will ignore this property and use a /remote-assets/... URL instead
+	 */
+	@Deprecated
+	public void setDeliveryBaseUrl(final String deliveryBaseUrl) {
+		this.deliveryBaseUrl = deliveryBaseUrl;
+	}
 
-    /**
-     * Returns the username used to connect to the server.
-     */
-    public String getUsername() {
-        return username;
-    }
+	/**
+	 * Returns the username used to connect to the server.
+	 */
+	public String getUsername() {
+		return username;
+	}
 
-    /**
-     * Sets the username used to connect to the server.
-     */
-    public void setUsername(final String username) {
-        this.username = username;
-    }
+	/**
+	 * Sets the username used to connect to the server.
+	 */
+	public void setUsername(final String username) {
+		this.username = username;
+	}
 
-    /**
-     * Returns the password used to connect to the server.
-     */
-    public String getPassword() {
-        return password;
-    }
+	/**
+	 * Returns the password used to connect to the server.
+	 */
+	public String getPassword() {
+		return password;
+	}
 
-    /**
-     * Sets the password used to connect to the server.
-     */
-    public void setPassword(final String password) {
-        this.password = password;
-    }
+	/**
+	 * Sets the password used to connect to the server.
+	 */
+	public void setPassword(final String password) {
+		this.password = password;
+	}
 
-    public boolean isPreemptiveAuth() {
-        return preemptiveAuth;
-    }
+	public boolean isPreemptiveAuth() {
+		return preemptiveAuth;
+	}
 
-    public void setPreemptiveAuth(boolean preemptiveAuth) {
-        this.preemptiveAuth = preemptiveAuth;
-    }
+	public void setPreemptiveAuth(boolean preemptiveAuth) {
+		this.preemptiveAuth = preemptiveAuth;
+	}
 
 }

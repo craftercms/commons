@@ -19,6 +19,7 @@ import org.craftercms.commons.validation.validators.impl.StringValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -29,16 +30,16 @@ import static java.lang.annotation.ElementType.*;
 @Constraint(validatedBy = StringValidator.class)
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 public @interface ValidateStringParam {
-    String message() default "{validation.error.string.regexMatchingFailed}";
+	String message() default "{validation.error.string.regexMatchingFailed}";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 
-    String[] whitelistedPatterns() default {};
+	String[] whitelistedPatterns() default {};
 
-    String[] blacklistedPatterns() default {};
+	String[] blacklistedPatterns() default {};
 
-    boolean matchFullInput() default true;
+	boolean matchFullInput() default true;
 
 }

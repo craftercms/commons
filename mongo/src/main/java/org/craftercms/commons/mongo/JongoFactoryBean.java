@@ -38,49 +38,49 @@ import org.springframework.beans.factory.config.AbstractFactoryBean;
  */
 public class JongoFactoryBean extends AbstractFactoryBean<Jongo> {
 
-    private String dbName;
-    private String username;
-    private String password;
-    private MongoClient mongo;
-    private List<JsonSerializer<?>> serializers;
-    private Map<Class<?>, JsonDeserializer<?>> deserializers;
+	private String dbName;
+	private String username;
+	private String password;
+	private MongoClient mongo;
+	private List<JsonSerializer<?>> serializers;
+	private Map<Class<?>, JsonDeserializer<?>> deserializers;
 
-    public JongoFactoryBean(String dbName, MongoClient mongoClient) {
-        this.dbName = dbName;
-        this.mongo = mongoClient;
-    }
+	public JongoFactoryBean(String dbName, MongoClient mongoClient) {
+		this.dbName = dbName;
+		this.mongo = mongoClient;
+	}
 
-    public void setPassword(final String password) {
-        this.password = password;
-    }
+	public void setPassword(final String password) {
+		this.password = password;
+	}
 
-    public void setUsername(final String username) {
-        this.username = username;
-    }
+	public void setUsername(final String username) {
+		this.username = username;
+	}
 
-    public void setSerializers(List<JsonSerializer<?>> serializers) {
-        this.serializers = serializers;
-    }
+	public void setSerializers(List<JsonSerializer<?>> serializers) {
+		this.serializers = serializers;
+	}
 
-    public void setDeserializers(Map<Class<?>, JsonDeserializer<?>> deserializers) {
-        this.deserializers = deserializers;
-    }
+	public void setDeserializers(Map<Class<?>, JsonDeserializer<?>> deserializers) {
+		this.deserializers = deserializers;
+	}
 
-    @Override
-    public Class<?> getObjectType() {
-        return Jongo.class;
-    }
+	@Override
+	public Class<?> getObjectType() {
+		return Jongo.class;
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    protected Jongo createInstance() throws Exception {
-        DB db = mongo.getDB(dbName);
-        JacksonMapper.Builder builder = new JacksonMapper.Builder();
-        builder.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-        if (CollectionUtils.isNotEmpty(serializers) || MapUtils.isNotEmpty(deserializers)) {
-            builder.registerModule(JacksonUtils.createModule(serializers, deserializers));
-        }
-        return new Jongo(db, builder.build());
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	protected Jongo createInstance() throws Exception {
+		DB db = mongo.getDB(dbName);
+		JacksonMapper.Builder builder = new JacksonMapper.Builder();
+		builder.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+		if (CollectionUtils.isNotEmpty(serializers) || MapUtils.isNotEmpty(deserializers)) {
+			builder.registerModule(JacksonUtils.createModule(serializers, deserializers));
+		}
+		return new Jongo(db, builder.build());
+	}
 
 }

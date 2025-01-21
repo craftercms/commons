@@ -36,114 +36,114 @@ import org.craftercms.commons.i10n.I10nUtils;
  */
 public class SimpleCipher {
 
-    public static final String LOG_KEY_ENC_SUCCESSFUL = "crypto.cipher.encryptionSuccessful";
-    public static final String LOG_KEY_DEC_SUCCESSFUL = "crypto.cipher.decryptionSuccessful";
-    public static final String LOG_KEY_KEY_GEN = "crypto.cipher.keyGenerated";
-    public static final String LOG_KEY_IV_GEN = "crypto.cipher.ivGenerated";
-    public static final String LOG_KEY_DEF_CIPHER_CREATED = "crypto.cipher.defaultCipherCreated";
+	public static final String LOG_KEY_ENC_SUCCESSFUL = "crypto.cipher.encryptionSuccessful";
+	public static final String LOG_KEY_DEC_SUCCESSFUL = "crypto.cipher.decryptionSuccessful";
+	public static final String LOG_KEY_KEY_GEN = "crypto.cipher.keyGenerated";
+	public static final String LOG_KEY_IV_GEN = "crypto.cipher.ivGenerated";
+	public static final String LOG_KEY_DEF_CIPHER_CREATED = "crypto.cipher.defaultCipherCreated";
 
-    public static final String ERROR_KEY_KEY_NOT_SET = "crypto.cipher.keyNotSet";
-    public static final String ERROR_KEY_IV_NOT_SET = "crypto.cipher.ivNotSet";
-    public static final String ERROR_KEY_ENC_ERROR = "crypto.cipher.encryptionError";
-    public static final String ERROR_KEY_DEC_ERROR = "crypto.cipher.decryptionError";
+	public static final String ERROR_KEY_KEY_NOT_SET = "crypto.cipher.keyNotSet";
+	public static final String ERROR_KEY_IV_NOT_SET = "crypto.cipher.ivNotSet";
+	public static final String ERROR_KEY_ENC_ERROR = "crypto.cipher.encryptionError";
+	public static final String ERROR_KEY_DEC_ERROR = "crypto.cipher.decryptionError";
 
-    private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
+	private static final I10nLogger logger = new I10nLogger(SimpleCipher.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
-    private Key key;
-    private byte[] iv;
-    private Cipher cipher;
+	private Key key;
+	private byte[] iv;
+	private Cipher cipher;
 
-    public Key getKey() {
-        return key;
-    }
+	public Key getKey() {
+		return key;
+	}
 
-    public void setKey(Key key) {
-        this.key = key;
-    }
+	public void setKey(Key key) {
+		this.key = key;
+	}
 
-    public byte[] getIv() {
-        return iv;
-    }
+	public byte[] getIv() {
+		return iv;
+	}
 
-    public void setIv(byte[] iv) {
-        this.iv = iv;
-    }
+	public void setIv(byte[] iv) {
+		this.iv = iv;
+	}
 
-    public Cipher getCipher() {
-        return cipher;
-    }
+	public Cipher getCipher() {
+		return cipher;
+	}
 
-    public void setCipher(Cipher cipher) {
-        this.cipher = cipher;
-    }
+	public void setCipher(Cipher cipher) {
+		this.cipher = cipher;
+	}
 
-    public String encryptBase64(String clear) throws CryptoException {
-        return Base64.encodeBase64String(encrypt(StringUtils.getBytesUtf8(clear)));
-    }
+	public String encryptBase64(String clear) throws CryptoException {
+		return Base64.encodeBase64String(encrypt(StringUtils.getBytesUtf8(clear)));
+	}
 
-    public byte[] encrypt(byte[] clear) throws CryptoException {
-        if (key == null) {
-            key = CryptoUtils.generateAesKey();
+	public byte[] encrypt(byte[] clear) throws CryptoException {
+		if (key == null) {
+			key = CryptoUtils.generateAesKey();
 
-            logger.debug(LOG_KEY_KEY_GEN);
-        }
-        if (iv == null) {
-            iv = CryptoUtils.generateAesIv();
+			logger.debug(LOG_KEY_KEY_GEN);
+		}
+		if (iv == null) {
+			iv = CryptoUtils.generateAesIv();
 
-            logger.debug(LOG_KEY_IV_GEN);
-        }
-        if (cipher == null) {
-            cipher = createDefaultCipher();
-        }
+			logger.debug(LOG_KEY_IV_GEN);
+		}
+		if (cipher == null) {
+			cipher = createDefaultCipher();
+		}
 
-        try {
-            cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
+		try {
+			cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(iv));
 
-            return cipher.doFinal(clear);
-        } catch (GeneralSecurityException e) {
-            throw new CryptoException(ERROR_KEY_ENC_ERROR, e);
-        } finally {
-            logger.debug(LOG_KEY_ENC_SUCCESSFUL);
-        }
-    }
+			return cipher.doFinal(clear);
+		} catch (GeneralSecurityException e) {
+			throw new CryptoException(ERROR_KEY_ENC_ERROR, e);
+		} finally {
+			logger.debug(LOG_KEY_ENC_SUCCESSFUL);
+		}
+	}
 
-    public String decryptBase64(String encrypted) throws CryptoException {
-        return StringUtils.newStringUtf8(decrypt(Base64.decodeBase64(encrypted)));
-    }
+	public String decryptBase64(String encrypted) throws CryptoException {
+		return StringUtils.newStringUtf8(decrypt(Base64.decodeBase64(encrypted)));
+	}
 
-    public byte[] decrypt(byte[] encrypted) throws CryptoException {
-        if (key == null) {
-            throw new CryptoException(ERROR_KEY_KEY_NOT_SET);
-        }
-        if (iv == null) {
-            throw new CryptoException(ERROR_KEY_IV_NOT_SET);
-        }
-        if (cipher == null) {
-            cipher = createDefaultCipher();
-        }
+	public byte[] decrypt(byte[] encrypted) throws CryptoException {
+		if (key == null) {
+			throw new CryptoException(ERROR_KEY_KEY_NOT_SET);
+		}
+		if (iv == null) {
+			throw new CryptoException(ERROR_KEY_IV_NOT_SET);
+		}
+		if (cipher == null) {
+			cipher = createDefaultCipher();
+		}
 
-        try {
-            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+		try {
+			cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
 
-            return cipher.doFinal(encrypted);
-        } catch (GeneralSecurityException e) {
-            throw new CryptoException(ERROR_KEY_DEC_ERROR, e);
-        } finally {
-            logger.debug(LOG_KEY_DEC_SUCCESSFUL);
-        }
-    }
+			return cipher.doFinal(encrypted);
+		} catch (GeneralSecurityException e) {
+			throw new CryptoException(ERROR_KEY_DEC_ERROR, e);
+		} finally {
+			logger.debug(LOG_KEY_DEC_SUCCESSFUL);
+		}
+	}
 
-    protected Cipher createDefaultCipher() {
-        String cipherTransformation = CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
+	protected Cipher createDefaultCipher() {
+		String cipherTransformation = CryptoUtils.DEFAULT_AES_CIPHER_TRANSFORMATION;
 
-        try {
-            return Cipher.getInstance(cipherTransformation);
-        } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
-            // Should NEVER happen
-            throw new IllegalStateException("JVM doesn't support " + cipherTransformation, e);
-        } finally {
-            logger.debug(LOG_KEY_DEF_CIPHER_CREATED, cipherTransformation);
-        }
-    }
+		try {
+			return Cipher.getInstance(cipherTransformation);
+		} catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
+			// Should NEVER happen
+			throw new IllegalStateException("JVM doesn't support " + cipherTransformation, e);
+		} finally {
+			logger.debug(LOG_KEY_DEF_CIPHER_CREATED, cipherTransformation);
+		}
+	}
 
 }

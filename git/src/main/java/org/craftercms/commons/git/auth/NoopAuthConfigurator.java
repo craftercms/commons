@@ -25,9 +25,9 @@ import org.eclipse.jgit.api.TransportCommand;
  */
 public class NoopAuthConfigurator implements GitAuthenticationConfigurator {
 
-    @Override
-    public void configureAuthentication(TransportCommand<?, ?> command) {
-        // Do nothing
-    }
+	@Override
+	public void configureAuthentication(TransportCommand<?, ?> command) {
+		// Do nothing
+	}
 
 }

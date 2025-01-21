@@ -17,6 +17,7 @@ package org.craftercms.commons.proxy;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,32 +25,33 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 public class ProxyUtils {
-    @SuppressWarnings("unused")
-    public static final List<String> IGNORE_REQUEST_HEADERS = Arrays.asList("authorization", "x-xsrf-token");
-    public static final List<String> IGNORE_REQUEST_COOKIES = Arrays.asList("xsrf-token", "jsessionid", "refresh_token");
+	@SuppressWarnings("unused")
+	public static final List<String> IGNORE_REQUEST_HEADERS = Arrays.asList("authorization", "x-xsrf-token");
+	public static final List<String> IGNORE_REQUEST_COOKIES = Arrays.asList("xsrf-token", "jsessionid", "refresh_token");
 
-    /**
-     * Rebuild cookie header to filter out cookies should be ignored by the proxy
-     * @param request current request
-     * @return cookies' header string
-     */
-    public static String getProxyCookieHeader(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (isEmpty(cookies)) {
-            return "";
-        }
+	/**
+	 * Rebuild cookie header to filter out cookies should be ignored by the proxy
+	 *
+	 * @param request current request
+	 * @return cookies' header string
+	 */
+	public static String getProxyCookieHeader(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if (isEmpty(cookies)) {
+			return "";
+		}
 
-        StringBuilder cookieBuilder = new StringBuilder();
-        for (Cookie cookie : cookies) {
-            if (!IGNORE_REQUEST_COOKIES.contains(cookie.getName().toLowerCase())) {
-                if (cookieBuilder.length() == 0) {
-                    cookieBuilder.append(format("%s=%s", cookie.getName(), cookie.getValue()));
-                } else {
-                    cookieBuilder.append(format("; %s=%s", cookie.getName(), cookie.getValue()));
-                }
-            }
-        }
+		StringBuilder cookieBuilder = new StringBuilder();
+		for (Cookie cookie : cookies) {
+			if (!IGNORE_REQUEST_COOKIES.contains(cookie.getName().toLowerCase())) {
+				if (cookieBuilder.length() == 0) {
+					cookieBuilder.append(format("%s=%s", cookie.getName(), cookie.getValue()));
+				} else {
+					cookieBuilder.append(format("; %s=%s", cookie.getName(), cookie.getValue()));
+				}
+			}
+		}
 
-        return cookieBuilder.toString();
-    }
+		return cookieBuilder.toString();
+	}
 }

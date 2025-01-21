@@ -37,62 +37,62 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateHelperTest {
 
-    public static final String EXPECTED_ID = ObjectId.get().toString();
-    public static final String EXPECTED_MODIFIER = "{$set: #, $unset: #, $push: #, $pull: #}";
-    public static final String EXPECTED_PARAMS = "[{enabled=true}, {attributes.displayName=}, " +
-                                                 "{roles={$each=[ADMIN]}}, {roles={$in=[USER]}}]";
+	public static final String EXPECTED_ID = ObjectId.get().toString();
+	public static final String EXPECTED_MODIFIER = "{$set: #, $unset: #, $push: #, $pull: #}";
+	public static final String EXPECTED_PARAMS = "[{enabled=true}, {attributes.displayName=}, " +
+		"{roles={$each=[ADMIN]}}, {roles={$in=[USER]}}]";
 
-    @Mock
-    protected CrudRepository<?> repository;
-    protected UpdateHelper updateHelper;
+	@Mock
+	protected CrudRepository<?> repository;
+	protected UpdateHelper updateHelper;
 
-    protected String id;
-    protected String modifier;
-    protected List<Object> params;
+	protected String id;
+	protected String modifier;
+	protected List<Object> params;
 
-    @Before
-    public void setUp() throws Exception {
-        doAnswer(new Answer<Object>() {
+	@Before
+	public void setUp() throws Exception {
+		doAnswer(new Answer<Object>() {
 
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
+			@Override
+			public Object answer(InvocationOnMock invocation) throws Throwable {
+				Object[] args = invocation.getArguments();
 
-                id = (String)args[0];
-                modifier = (String)args[1];
+				id = (String) args[0];
+				modifier = (String) args[1];
 
-                params = new ArrayList<>(4);
-                params.add(args[4]);
-                params.add(args[5]);
-                params.add(args[6]);
-                params.add(args[7]);
+				params = new ArrayList<>(4);
+				params.add(args[4]);
+				params.add(args[5]);
+				params.add(args[6]);
+				params.add(args[7]);
 
-                return null;
-            }
+				return null;
+			}
 
-        }).when(repository).update(anyString(), anyString(), eq(false), eq(false), any(Object[].class));
+		}).when(repository).update(anyString(), anyString(), eq(false), eq(false), any(Object[].class));
 
-        updateHelper = new UpdateHelper();
-    }
+		updateHelper = new UpdateHelper();
+	}
 
-    @Test
-    public void testExecuteUpdate() throws Exception {
-        updateHelper.set("enabled", true);
-        updateHelper.unset("attributes.displayName");
-        updateHelper.pushAll("roles", Collections.<Object>singletonList("ADMIN"));
-        updateHelper.pullAll("roles", Collections.<Object>singletonList("USER"));
+	@Test
+	public void testExecuteUpdate() throws Exception {
+		updateHelper.set("enabled", true);
+		updateHelper.unset("attributes.displayName");
+		updateHelper.pushAll("roles", Collections.<Object>singletonList("ADMIN"));
+		updateHelper.pullAll("roles", Collections.<Object>singletonList("USER"));
 
-        updateHelper.executeUpdate(EXPECTED_ID, repository);
+		updateHelper.executeUpdate(EXPECTED_ID, repository);
 
-        assertNotNull(id);
-        assertEquals(EXPECTED_ID, id);
+		assertNotNull(id);
+		assertEquals(EXPECTED_ID, id);
 
-        assertNotNull(modifier);
-        assertEquals(EXPECTED_MODIFIER, modifier);
+		assertNotNull(modifier);
+		assertEquals(EXPECTED_MODIFIER, modifier);
 
-        assertNotNull(params);
-        assertEquals(4, params.size());
-        assertEquals(EXPECTED_PARAMS, params.toString());
-    }
+		assertNotNull(params);
+		assertEquals(4, params.size());
+		assertEquals(EXPECTED_PARAMS, params.toString());
+	}
 
 }

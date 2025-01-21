@@ -32,26 +32,26 @@ import org.springframework.mail.javamail.JavaMailSender;
  */
 public class EmailImpl implements Email {
 
-    public static final String LOG_KEY_EMAIL_SENT = "mail.emailSent";
-    private static final I10nLogger logger = new I10nLogger(EmailImpl.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
+	public static final String LOG_KEY_EMAIL_SENT = "mail.emailSent";
+	private static final I10nLogger logger = new I10nLogger(EmailImpl.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
-    protected JavaMailSender mailSender;
-    protected MimeMessage message;
+	protected JavaMailSender mailSender;
+	protected MimeMessage message;
 
-    public EmailImpl(JavaMailSender mailSender, MimeMessage message) {
-        this.mailSender = mailSender;
-        this.message = message;
-    }
+	public EmailImpl(JavaMailSender mailSender, MimeMessage message) {
+		this.mailSender = mailSender;
+		this.message = message;
+	}
 
-    @Override
-    public void send() throws EmailException {
-        try {
-            mailSender.send(message);
-        } catch (MailException e) {
-            throw new EmailSendException(e);
-        }
+	@Override
+	public void send() throws EmailException {
+		try {
+			mailSender.send(message);
+		} catch (MailException e) {
+			throw new EmailSendException(e);
+		}
 
-        logger.debug(LOG_KEY_EMAIL_SENT);
-    }
+		logger.debug(LOG_KEY_EMAIL_SENT);
+	}
 
 }

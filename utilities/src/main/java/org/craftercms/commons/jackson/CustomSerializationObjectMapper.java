@@ -30,24 +30,24 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class CustomSerializationObjectMapper extends ObjectMapper implements InitializingBean {
 
-    protected List<JsonSerializer<?>> serializers;
-    protected Map<Class<?>, JsonDeserializer<?>> deserializers;
+	protected List<JsonSerializer<?>> serializers;
+	protected Map<Class<?>, JsonDeserializer<?>> deserializers;
 
-    public void setSerializers(List<JsonSerializer<?>> serializers) {
-        this.serializers = serializers;
-    }
+	public void setSerializers(List<JsonSerializer<?>> serializers) {
+		this.serializers = serializers;
+	}
 
-    public void setDeserializers(Map<Class<?>, JsonDeserializer<?>> deserializers) {
-        this.deserializers = deserializers;
-    }
+	public void setDeserializers(Map<Class<?>, JsonDeserializer<?>> deserializers) {
+		this.deserializers = deserializers;
+	}
 
-    public void afterPropertiesSet() {
-        registerSerializationModule();
-    }
+	public void afterPropertiesSet() {
+		registerSerializationModule();
+	}
 
-    protected void registerSerializationModule() {
-        findAndRegisterModules();
-        registerModule(JacksonUtils.createModule(serializers, deserializers));
-    }
+	protected void registerSerializationModule() {
+		findAndRegisterModules();
+		registerModule(JacksonUtils.createModule(serializers, deserializers));
+	}
 
 }

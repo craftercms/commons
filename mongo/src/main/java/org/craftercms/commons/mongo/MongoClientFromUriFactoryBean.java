@@ -25,32 +25,31 @@ import org.springframework.beans.factory.config.AbstractFactoryBean;
  * closes the client when it's destroyed.
  *
  * @author avasquez
- *
  * @see <a href="http://api.mongodb.org/java/current/com/mongodb/MongoClientURI.html">MongoClientURI</a>
  */
 public class MongoClientFromUriFactoryBean extends AbstractFactoryBean<MongoClient> {
 
-    protected String uri;
+	protected String uri;
 
-    public MongoClientFromUriFactoryBean(String uri) {
-        this.uri = uri;
-    }
+	public MongoClientFromUriFactoryBean(String uri) {
+		this.uri = uri;
+	}
 
-    @Override
-    public Class<?> getObjectType() {
-        return MongoClient.class;
-    }
+	@Override
+	public Class<?> getObjectType() {
+		return MongoClient.class;
+	}
 
-    @Override
-    protected MongoClient createInstance() throws Exception {
-        final MongoClientURI client = new MongoClientURI(uri);
-        logger.debug("Connecting to :"+ client.getDatabase());
-        return new MongoClient(client);
-    }
+	@Override
+	protected MongoClient createInstance() throws Exception {
+		final MongoClientURI client = new MongoClientURI(uri);
+		logger.debug("Connecting to :" + client.getDatabase());
+		return new MongoClient(client);
+	}
 
-    @Override
-    protected void destroyInstance(MongoClient mongoClient) throws Exception {
-        mongoClient.close();
-    }
+	@Override
+	protected void destroyInstance(MongoClient mongoClient) throws Exception {
+		mongoClient.close();
+	}
 
 }

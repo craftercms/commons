@@ -45,74 +45,74 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultUpgradePipelineFactoryImplTest {
 
-    private static final String CONFIG_PATH = "pipeline-factory-test.yaml";
+	private static final String CONFIG_PATH = "pipeline-factory-test.yaml";
 
-    private static final String PIPELINE_NAME_VERSIONS = "test";
+	private static final String PIPELINE_NAME_VERSIONS = "test";
 
-    private static final String OPERATION_TYPE = "testUpgrader";
+	private static final String OPERATION_TYPE = "testUpgrader";
 
-    private static final String VERSION_1 = "1.0";
+	private static final String VERSION_1 = "1.0";
 
-    private static final String VERSION_2 = "2.0";
+	private static final String VERSION_2 = "2.0";
 
-    private static final String VERSION_3 = "3.0";
+	private static final String VERSION_3 = "3.0";
 
-    private static final String UNSUPPORTED_VERSION = "0.5.1";
+	private static final String UNSUPPORTED_VERSION = "0.5.1";
 
-    private DefaultUpgradePipelineFactoryImpl<String> factory;
+	private DefaultUpgradePipelineFactoryImpl<String> factory;
 
-    private final Resource config = new ClassPathResource(CONFIG_PATH);
+	private final Resource config = new ClassPathResource(CONFIG_PATH);
 
-    @Mock
-    private VersionProvider<String> versionProvider;
+	@Mock
+	private VersionProvider<String> versionProvider;
 
-    @Mock
-    private ApplicationContext applicationContext;
+	@Mock
+	private ApplicationContext applicationContext;
 
-    @Mock
-    private UpgradeContext<String> context;
+	@Mock
+	private UpgradeContext<String> context;
 
-    @Mock
-    private UpgradeOperation<String> testOperation;
+	@Mock
+	private UpgradeOperation<String> testOperation;
 
-    @Before
-    public void setUp() {
-        UpgradeConfigurationProvider<HierarchicalConfiguration> configProvider = new YamlConfigurationProvider(config);
-        factory = new DefaultUpgradePipelineFactoryImpl<>(PIPELINE_NAME_VERSIONS, configProvider, versionProvider);
-        factory.setApplicationContext(applicationContext);
+	@Before
+	public void setUp() {
+		UpgradeConfigurationProvider<HierarchicalConfiguration> configProvider = new YamlConfigurationProvider(config);
+		factory = new DefaultUpgradePipelineFactoryImpl<>(PIPELINE_NAME_VERSIONS, configProvider, versionProvider);
+		factory.setApplicationContext(applicationContext);
 
-        when(applicationContext.getBean(OPERATION_TYPE, UpgradeOperation.class)).thenReturn(testOperation);
-    }
+		when(applicationContext.getBean(OPERATION_TYPE, UpgradeOperation.class)).thenReturn(testOperation);
+	}
 
-    @Test
-    public void versionShouldNotBeUpdated() throws ConfigurationException, UpgradeException {
-        when(versionProvider.getVersion(context)).thenReturn(VERSION_1);
-        factory.setUpdateVersion(false);
+	@Test
+	public void versionShouldNotBeUpdated() throws ConfigurationException, UpgradeException {
+		when(versionProvider.getVersion(context)).thenReturn(VERSION_1);
+		factory.setUpdateVersion(false);
 
-        var pipeline = factory.getPipeline(context);
-        assertFalse("pipeline should not be empty", pipeline.isEmpty());
+		var pipeline = factory.getPipeline(context);
+		assertFalse("pipeline should not be empty", pipeline.isEmpty());
 
-        pipeline.execute(context);
-        verify(versionProvider, never()).setVersion(any(), any());
-    }
+		pipeline.execute(context);
+		verify(versionProvider, never()).setVersion(any(), any());
+	}
 
-    @Test
-    public void allVersionsShouldBeUpdated() throws UpgradeException, ConfigurationException {
-        when(versionProvider.getVersion(context)).thenReturn(VERSION_1);
+	@Test
+	public void allVersionsShouldBeUpdated() throws UpgradeException, ConfigurationException {
+		when(versionProvider.getVersion(context)).thenReturn(VERSION_1);
 
-        var pipeline = factory.getPipeline(context);
-        assertFalse("pipeline should not be empty", pipeline.isEmpty());
+		var pipeline = factory.getPipeline(context);
+		assertFalse("pipeline should not be empty", pipeline.isEmpty());
 
-        pipeline.execute(context);
-        verify(versionProvider).setVersion(context, VERSION_2);
-        verify(versionProvider).setVersion(context, VERSION_3);
-    }
+		pipeline.execute(context);
+		verify(versionProvider).setVersion(context, VERSION_2);
+		verify(versionProvider).setVersion(context, VERSION_3);
+	}
 
-    @Test(expected = UpgradeNotSupportedException.class)
-    public void shouldRejectUnsupportedVersion() throws UpgradeException, ConfigurationException {
-        when(versionProvider.getVersion(context)).thenReturn(UNSUPPORTED_VERSION);
+	@Test(expected = UpgradeNotSupportedException.class)
+	public void shouldRejectUnsupportedVersion() throws UpgradeException, ConfigurationException {
+		when(versionProvider.getVersion(context)).thenReturn(UNSUPPORTED_VERSION);
 
-        factory.getPipeline(context);
-    }
+		factory.getPipeline(context);
+	}
 
 }

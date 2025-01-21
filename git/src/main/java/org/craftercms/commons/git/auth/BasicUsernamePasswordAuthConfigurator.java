@@ -25,17 +25,17 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
  */
 public class BasicUsernamePasswordAuthConfigurator implements GitAuthenticationConfigurator {
 
-    private final String username;
-    private final String password;
+	private final String username;
+	private final String password;
 
-    public BasicUsernamePasswordAuthConfigurator(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+	public BasicUsernamePasswordAuthConfigurator(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
 
-    @Override
-    public void configureAuthentication(TransportCommand<?, ?> command) {
-        command.setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password));
-    }
+	@Override
+	public void configureAuthentication(TransportCommand<?, ?> command) {
+		command.setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password));
+	}
 
 }

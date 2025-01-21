@@ -18,6 +18,7 @@ package org.craftercms.commons.validation.annotations.param;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.constraints.Size;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -34,11 +35,11 @@ import static org.craftercms.commons.validation.annotations.param.ValidSiteId.MA
 @EsapiValidatedParam(type = SITE_ID)
 @Size(max = MAX_SITE_ID_LENGTH)
 public @interface ValidSiteId {
-    int MAX_SITE_ID_LENGTH = 50;
+	int MAX_SITE_ID_LENGTH = 50;
 
-    String message() default "";
+	String message() default "";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 }

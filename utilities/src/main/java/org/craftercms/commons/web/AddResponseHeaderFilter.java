@@ -18,6 +18,7 @@ package org.craftercms.commons.web;
 
 import java.io.IOException;
 import java.util.Map;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,39 +28,40 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
  * Filter to add headers to all responses
+ *
  * @author joseross
  * @since 3.1
  */
 public class AddResponseHeaderFilter extends OncePerRequestFilter {
 
-    /**
-     * Indicates if the headers should be added
-     */
-    protected boolean enabled = true;
+	/**
+	 * Indicates if the headers should be added
+	 */
+	protected boolean enabled = true;
 
-    /**
-     * Map of headers to add
-     */
-    protected Map<String, String> headers;
+	/**
+	 * Map of headers to add
+	 */
+	protected Map<String, String> headers;
 
-    public void setEnabled(final boolean enabled) {
-        this.enabled = enabled;
-    }
+	public void setEnabled(final boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    public AddResponseHeaderFilter(final Map<String, String> headers) {
-        this.headers = headers;
-    }
+	public AddResponseHeaderFilter(final Map<String, String> headers) {
+		this.headers = headers;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
-                                    final FilterChain filterChain) throws ServletException, IOException {
-        if (enabled) {
-            headers.forEach(response::setHeader);
-        }
-        filterChain.doFilter(request, response);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
+					final FilterChain filterChain) throws ServletException, IOException {
+		if (enabled) {
+			headers.forEach(response::setHeader);
+		}
+		filterChain.doFilter(request, response);
+	}
 
 }

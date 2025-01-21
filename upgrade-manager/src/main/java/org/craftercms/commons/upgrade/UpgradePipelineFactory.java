@@ -29,20 +29,20 @@ import org.craftercms.commons.upgrade.impl.UpgradeContext;
  */
 public interface UpgradePipelineFactory<T> {
 
-    String CONFIG_KEY_CURRENT_VERSION = "currentVersion";
-    String CONFIG_KEY_NEXT_VERSION = "nextVersion";
-    String CONFIG_KEY_OPERATIONS = "operations";
-    String CONFIG_KEY_TYPE = "type";
-    String CONFIG_KEY_REQUIRES = ".requires";
-    String CONFIG_KEY_VERSIONS = ".versions";
+	String CONFIG_KEY_CURRENT_VERSION = "currentVersion";
+	String CONFIG_KEY_NEXT_VERSION = "nextVersion";
+	String CONFIG_KEY_OPERATIONS = "operations";
+	String CONFIG_KEY_TYPE = "type";
+	String CONFIG_KEY_REQUIRES = ".requires";
+	String CONFIG_KEY_VERSIONS = ".versions";
 
-    /**
-     * Retrieves the needed upgrade operations for the given target
-     *
-     * @param context the upgrade context
-     * @return the upgrade pipeline
-     * @throws UpgradeException if there is any error retrieving the operations
-     */
-    UpgradePipeline<T> getPipeline(UpgradeContext<T> context) throws UpgradeException, ConfigurationException;
+	/**
+	 * Retrieves the needed upgrade operations for the given target
+	 *
+	 * @param context the upgrade context
+	 * @return the upgrade pipeline
+	 * @throws UpgradeException if there is any error retrieving the operations
+	 */
+	UpgradePipeline<T> getPipeline(UpgradeContext<T> context) throws UpgradeException, ConfigurationException;
 
 }

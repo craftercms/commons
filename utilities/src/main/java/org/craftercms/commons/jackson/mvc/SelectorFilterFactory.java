@@ -29,34 +29,34 @@ import org.springframework.beans.factory.config.AbstractFactoryBean;
  */
 public class SelectorFilterFactory extends AbstractFactoryBean<FilterProvider> {
 
-    private List<AbstractCrafterPropertyFilter> filters;
+	private List<AbstractCrafterPropertyFilter> filters;
 
-    public SelectorFilterFactory() {
-        filters = new ArrayList<>();
-    }
+	public SelectorFilterFactory() {
+		filters = new ArrayList<>();
+	}
 
-    public SelectorFilterFactory(final List<AbstractCrafterPropertyFilter> filters) {
-        this.filters = filters;
-    }
+	public SelectorFilterFactory(final List<AbstractCrafterPropertyFilter> filters) {
+		this.filters = filters;
+	}
 
-    @Override
-    public Class<?> getObjectType() {
-        return FilterProvider.class;
-    }
+	@Override
+	public Class<?> getObjectType() {
+		return FilterProvider.class;
+	}
 
-    @Override
-    protected FilterProvider createInstance() throws Exception {
-        SimpleFilterProvider provider = new SimpleFilterProvider();
-        for (AbstractCrafterPropertyFilter filter : filters) {
-            provider.addFilter(filter.getFilterName(), filter);
-        }
-        if (!filters.isEmpty()) {
-            provider.setDefaultFilter(filters.get(0));
-        }
-        return provider;
-    }
+	@Override
+	protected FilterProvider createInstance() throws Exception {
+		SimpleFilterProvider provider = new SimpleFilterProvider();
+		for (AbstractCrafterPropertyFilter filter : filters) {
+			provider.addFilter(filter.getFilterName(), filter);
+		}
+		if (!filters.isEmpty()) {
+			provider.setDefaultFilter(filters.get(0));
+		}
+		return provider;
+	}
 
-    public void setFilters(final List<AbstractCrafterPropertyFilter> filters) {
-        this.filters = filters;
-    }
+	public void setFilters(final List<AbstractCrafterPropertyFilter> filters) {
+		this.filters = filters;
+	}
 }

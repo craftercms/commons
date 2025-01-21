@@ -25,14 +25,14 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
  */
 public class SshUsernamePasswordCredentialsProvider extends UsernamePasswordCredentialsProvider {
 
-    public SshUsernamePasswordCredentialsProvider(String username, String password) {
-        super(username, password);
-    }
+	public SshUsernamePasswordCredentialsProvider(String username, String password) {
+		super(username, password);
+	}
 
-    // This allows it to be used for SSH sessions
-    @Override
-    public boolean isInteractive() {
-        return true;
-    }
+	// This allows it to be used for SSH sessions
+	@Override
+	public boolean isInteractive() {
+		return true;
+	}
 
 }

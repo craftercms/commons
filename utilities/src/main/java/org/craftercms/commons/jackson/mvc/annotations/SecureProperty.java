@@ -27,9 +27,10 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SecureProperty {
-    /**
-     * Role name to check if has access to the property.
-     * @return Role Name.
-     */
-    public String[] role();
+	/**
+	 * Role name to check if has access to the property.
+	 *
+	 * @return Role Name.
+	 */
+	public String[] role();
 }

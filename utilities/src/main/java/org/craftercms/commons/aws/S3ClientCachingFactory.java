@@ -26,9 +26,9 @@ import software.amazon.awssdk.services.s3.S3Client;
  */
 public class S3ClientCachingFactory extends AbstractAwsClientCachingFactory<S3Profile, S3Client> {
 
-    @Override
-    protected S3Client createClient(S3Profile profile) {
-        return S3Utils.createClient(profile);
-    }
+	@Override
+	protected S3Client createClient(S3Profile profile) {
+		return S3Utils.createClient(profile);
+	}
 
 }

@@ -23,60 +23,60 @@ import org.springframework.validation.Validator;
 import java.util.List;
 
 public class SqlSortValidatorTest implements ValidatorTest {
-    private Validator validator;
+	private Validator validator;
 
-    @Before
-    public void setUp() {
-        validator = new SqlSortValidator(List.of("id", "DATE", "name"));
-    }
+	@Before
+	public void setUp() {
+		validator = new SqlSortValidator(List.of("id", "DATE", "name"));
+	}
 
-    @Test
-    public void testSingleColumn() {
-        assertValid("date");
-    }
+	@Test
+	public void testSingleColumn() {
+		assertValid("date");
+	}
 
-    @Test
-    public void testSingleColumnAndSort() {
-        assertValid("date desc");
-    }
+	@Test
+	public void testSingleColumnAndSort() {
+		assertValid("date desc");
+	}
 
-    @Test
-    public void testDifferentCase() {
-        assertValid("DATE desc");
-    }
+	@Test
+	public void testDifferentCase() {
+		assertValid("DATE desc");
+	}
 
-    @Test
-    public void testDifferentCase2() {
-        assertValid("id ASc");
-    }
+	@Test
+	public void testDifferentCase2() {
+		assertValid("id ASc");
+	}
 
-    @Test
-    public void testTwoColumns() {
-        assertValid("date, name");
-    }
+	@Test
+	public void testTwoColumns() {
+		assertValid("date, name");
+	}
 
-    @Test
-    public void testMultipleColumnAndSorts() {
-        assertValid("date asc, name desc,id");
-    }
+	@Test
+	public void testMultipleColumnAndSorts() {
+		assertValid("date asc, name desc,id");
+	}
 
-    @Test
-    public void testInvalidColumn() {
-        assertRejected("date, parent");
-    }
+	@Test
+	public void testInvalidColumn() {
+		assertRejected("date, parent");
+	}
 
-    @Test
-    public void testInvalidOrder() {
-        assertRejected("date asce");
-    }
+	@Test
+	public void testInvalidOrder() {
+		assertRejected("date asce");
+	}
 
-    @Test
-    public void testMultipleOrder() {
-        assertRejected("date asc desc");
-    }
+	@Test
+	public void testMultipleOrder() {
+		assertRejected("date asc desc");
+	}
 
-    @Override
-    public Validator getValidator() {
-        return validator;
-    }
+	@Override
+	public Validator getValidator() {
+		return validator;
+	}
 }

@@ -24,55 +24,55 @@ import static org.craftercms.commons.validation.annotations.param.EsapiValidatio
 
 public class SiteIdValidatorTest implements ValidatorTest {
 
-    private Validator validator;
+	private Validator validator;
 
-    @Before
-    public void setUp() {
-        validator = new EsapiValidator(SITE_ID);
-    }
+	@Before
+	public void setUp() {
+		validator = new EsapiValidator(SITE_ID);
+	}
 
-    @Test
-    public void testSpace() {
-        assertRejected("my site");
-    }
+	@Test
+	public void testSpace() {
+		assertRejected("my site");
+	}
 
-    @Test
-    public void testStartWithDigit() {
-        assertValid("1mysite");
-    }
+	@Test
+	public void testStartWithDigit() {
+		assertValid("1mysite");
+	}
 
-    @Test
-    public void testStartWithDigit2() {
-        assertValid("7s1t3s");
-    }
+	@Test
+	public void testStartWithDigit2() {
+		assertValid("7s1t3s");
+	}
 
-    @Test
-    public void testSpaces() {
-        assertRejected("johnny mnemonic");
-    }
+	@Test
+	public void testSpaces() {
+		assertRejected("johnny mnemonic");
+	}
 
-    @Test
-    public void testSpecialCharsTags() {
-        assertRejected("<malicious>");
-    }
+	@Test
+	public void testSpecialCharsTags() {
+		assertRejected("<malicious>");
+	}
 
-    @Test
-    public void testSpecialChars() {
-        assertRejected("invalid;");
-    }
+	@Test
+	public void testSpecialChars() {
+		assertRejected("invalid;");
+	}
 
-    @Test
-    public void testUnderscore() {
-        assertValid("my_site");
-    }
+	@Test
+	public void testUnderscore() {
+		assertValid("my_site");
+	}
 
-    @Test
-    public void testDot() {
-        assertRejected("my.site");
-    }
+	@Test
+	public void testDot() {
+		assertRejected("my.site");
+	}
 
-    @Override
-    public Validator getValidator() {
-        return validator;
-    }
+	@Override
+	public Validator getValidator() {
+		return validator;
+	}
 }

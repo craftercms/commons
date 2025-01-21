@@ -26,79 +26,79 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public class RequestContext {
 
-    private static ThreadLocal<RequestContext> threadLocal = new ThreadLocal<>();
+	private static ThreadLocal<RequestContext> threadLocal = new ThreadLocal<>();
 
-    private HttpServletRequest request;
-    private HttpServletResponse response;
-    private ServletContext servletContext;
+	private HttpServletRequest request;
+	private HttpServletResponse response;
+	private ServletContext servletContext;
 
-    public RequestContext(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) {
-        this.request = request;
-        this.response = response;
-        this.servletContext = servletContext;
-    }
+	public RequestContext(HttpServletRequest request, HttpServletResponse response, ServletContext servletContext) {
+		this.request = request;
+		this.response = response;
+		this.servletContext = servletContext;
+	}
 
-    /**
-     * Returns the context for the current thread.
-     */
-    public static RequestContext getCurrent() {
-        return threadLocal.get();
-    }
+	/**
+	 * Returns the context for the current thread.
+	 */
+	public static RequestContext getCurrent() {
+		return threadLocal.get();
+	}
 
-    /**
-     * Sets the context for the current thread.
-     */
-    public static void setCurrent(RequestContext current) {
-        threadLocal.set(current);
-    }
+	/**
+	 * Sets the context for the current thread.
+	 */
+	public static void setCurrent(RequestContext current) {
+		threadLocal.set(current);
+	}
 
-    /**
-     * Removes the context from the current thread.
-     */
-    public static void clear() {
-        threadLocal.remove();
-    }
+	/**
+	 * Removes the context from the current thread.
+	 */
+	public static void clear() {
+		threadLocal.remove();
+	}
 
-    /**
-     * Returns the current request.
-     */
-    public HttpServletRequest getRequest() {
-        return request;
-    }
+	/**
+	 * Returns the current request.
+	 */
+	public HttpServletRequest getRequest() {
+		return request;
+	}
 
-    /**
-     * Returns the current request.
-     */
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
-    }
+	/**
+	 * Returns the current request.
+	 */
+	public void setRequest(HttpServletRequest request) {
+		this.request = request;
+	}
 
-    /**
-     * Returns the current response.
-     */
-    public HttpServletResponse getResponse() {
-        return response;
-    }
+	/**
+	 * Returns the current response.
+	 */
+	public HttpServletResponse getResponse() {
+		return response;
+	}
 
-    /**
-     * Sets the current response.
-     */
-    public void setResponse(HttpServletResponse response) {
-        this.response = response;
-    }
+	/**
+	 * Sets the current response.
+	 */
+	public void setResponse(HttpServletResponse response) {
+		this.response = response;
+	}
 
-    /**
-     * Returns the current servlet context.
-     */
-    public ServletContext getServletContext() {
-        return this.servletContext;
-    }
+	/**
+	 * Returns the current servlet context.
+	 */
+	public ServletContext getServletContext() {
+		return this.servletContext;
+	}
 
-    /**
-     * Sets the current servlet context.
-     */
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
+	/**
+	 * Sets the current servlet context.
+	 */
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
+	}
 
 }

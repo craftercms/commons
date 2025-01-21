@@ -23,13 +23,13 @@ import org.springframework.validation.Validator;
  */
 public interface ValidatorTest {
 
-    Validator getValidator();
+	Validator getValidator();
 
-    default void assertValid(String value) {
-        ValidationTestUtils.assertValid(getValidator(), value);
-    }
+	default void assertValid(String value) {
+		ValidationTestUtils.assertValid(getValidator(), value);
+	}
 
-    default void assertRejected(String value) {
-        ValidationTestUtils.assertInvalid(getValidator(), value);
-    }
+	default void assertRejected(String value) {
+		ValidationTestUtils.assertInvalid(getValidator(), value);
+	}
 }

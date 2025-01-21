@@ -24,75 +24,75 @@ import static org.craftercms.commons.validation.annotations.param.EsapiValidatio
 
 public class GroupNameValidatorTest implements ValidatorTest {
 
-    private Validator validator;
+	private Validator validator;
 
-    @Before
-    public void setUp() {
-        validator = new EsapiValidator(GROUP_NAME);
-    }
+	@Before
+	public void setUp() {
+		validator = new EsapiValidator(GROUP_NAME);
+	}
 
-    @Test
-    public void testStartWithDigits() {
-        assertRejected("1st_publisher");
-    }
+	@Test
+	public void testStartWithDigits() {
+		assertRejected("1st_publisher");
+	}
 
-    @Test
-    public void testSpaces() {
-        assertRejected("SITE reviewer");
-    }
+	@Test
+	public void testSpaces() {
+		assertRejected("SITE reviewer");
+	}
 
-    @Test
-    public void testStartWithDigits2() {
-        assertRejected("7s1t3s");
-    }
+	@Test
+	public void testStartWithDigits2() {
+		assertRejected("7s1t3s");
+	}
 
-    @Test
-    public void testSpecialChars() {
-        assertRejected("administrators;");
-    }
+	@Test
+	public void testSpecialChars() {
+		assertRejected("administrators;");
+	}
 
-    @Test
-    public void testSpecialCharsTags() {
-        assertRejected("<malicious>");
-    }
+	@Test
+	public void testSpecialCharsTags() {
+		assertRejected("<malicious>");
+	}
 
-    @Test
-    public void testUnderscore() {
-        assertValid("regional_reviewer");
-    }
+	@Test
+	public void testUnderscore() {
+		assertValid("regional_reviewer");
+	}
 
-    @Test
-    public void testUnderscoreAndDigits() {
-        assertValid("site_admin3");
-    }
+	@Test
+	public void testUnderscoreAndDigits() {
+		assertValid("site_admin3");
+	}
 
-    @Test
-    public void testOnlyLetters() {
-        assertValid("reviewer");
-    }
+	@Test
+	public void testOnlyLetters() {
+		assertValid("reviewer");
+	}
 
-    @Test
-    public void testDigits() {
-        assertValid("s1t3s");
-    }
+	@Test
+	public void testDigits() {
+		assertValid("s1t3s");
+	}
 
-    @Test
-    public void testDigits2() {
-        assertValid("a1d");
-    }
+	@Test
+	public void testDigits2() {
+		assertValid("a1d");
+	}
 
-    @Test
-    public void testDash() {
-        assertValid("division-owner");
-    }
+	@Test
+	public void testDash() {
+		assertValid("division-owner");
+	}
 
-    @Test
-    public void testDot() {
-        assertValid("division.owner");
-    }
+	@Test
+	public void testDot() {
+		assertValid("division.owner");
+	}
 
-    @Override
-    public Validator getValidator() {
-        return validator;
-    }
+	@Override
+	public Validator getValidator() {
+		return validator;
+	}
 }

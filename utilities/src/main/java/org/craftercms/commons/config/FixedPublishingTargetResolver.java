@@ -25,19 +25,19 @@ import java.beans.ConstructorProperties;
  */
 public class FixedPublishingTargetResolver implements PublishingTargetResolver {
 
-    /**
-     * The target to use
-     */
-    protected String target;
+	/**
+	 * The target to use
+	 */
+	protected String target;
 
-    @ConstructorProperties({"target"})
-    public FixedPublishingTargetResolver(String target) {
-        this.target = target;
-    }
+	@ConstructorProperties({"target"})
+	public FixedPublishingTargetResolver(String target) {
+		this.target = target;
+	}
 
-    @Override
-    public String getPublishingTarget() {
-        return target;
-    }
+	@Override
+	public String getPublishingTarget() {
+		return target;
+	}
 
 }

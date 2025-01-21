@@ -42,34 +42,34 @@ import static org.mockito.MockitoAnnotations.initMocks;
  */
 public class AbstractBlobStoreTest {
 
-    public static final Resource CONFIG_FILE = new ClassPathResource("config/stores.xml");
+	public static final Resource CONFIG_FILE = new ClassPathResource("config/stores.xml");
 
-    @InjectMocks
-    private AwsS3BlobStore store; // can't test abstract class so use the impl
+	@InjectMocks
+	private AwsS3BlobStore store; // can't test abstract class so use the impl
 
-    @Mock(answer = Answers.CALLS_REAL_METHODS)
-    private S3ProfileMapper profileMapper;
+	@Mock(answer = Answers.CALLS_REAL_METHODS)
+	private S3ProfileMapper profileMapper;
 
-    @Before
-    public void setUp() {
-        initMocks(this);
-        store.profileMapper = profileMapper;
-    }
+	@Before
+	public void setUp() {
+		initMocks(this);
+		store.profileMapper = profileMapper;
+	}
 
-    @Test
-    public void initTest() throws IOException, org.craftercms.commons.config.ConfigurationException {
-        try (InputStream is = CONFIG_FILE.getInputStream()) {
-            HierarchicalConfiguration<ImmutableNode> config = ConfigUtils.readXmlConfiguration(is, ',' ,emptyMap(), emptyMap());
+	@Test
+	public void initTest() throws IOException, org.craftercms.commons.config.ConfigurationException {
+		try (InputStream is = CONFIG_FILE.getInputStream()) {
+			HierarchicalConfiguration<ImmutableNode> config = ConfigUtils.readXmlConfiguration(is, ',', emptyMap(), emptyMap());
 
-            store.init(config.configurationsAt("blobStore").get(0));
+			store.init(config.configurationsAt("blobStore").get(0));
 
-            assertNotNull("profile should have an id", store.profile.getProfileId());
-            assertNull("profile should not have a bucket name", store.profile.getBucketName());
-            assertNotNull("profile should have a region", store.profile.getRegion());
+			assertNotNull("profile should have an id", store.profile.getProfileId());
+			assertNull("profile should not have a bucket name", store.profile.getBucketName());
+			assertNotNull("profile should have a region", store.profile.getRegion());
 
-            assertFalse("mappings should not be empty", isEmpty(store.mappings));
-            assertEquals("there should be 3 mappings", 3, store.mappings.size());
-        }
-    }
+			assertFalse("mappings should not be empty", isEmpty(store.mappings));
+			assertEquals("there should be 3 mappings", 3, store.mappings.size());
+		}
+	}
 
 }

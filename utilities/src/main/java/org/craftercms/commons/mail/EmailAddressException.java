@@ -22,10 +22,10 @@ package org.craftercms.commons.mail;
  */
 public class EmailAddressException extends EmailException {
 
-    private static final String KEY = "mail.addressError";
+	private static final String KEY = "mail.addressError";
 
-    public EmailAddressException(Throwable cause) {
-        super(KEY, cause);
-    }
+	public EmailAddressException(Throwable cause) {
+		super(KEY, cause);
+	}
 
 }

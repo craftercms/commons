@@ -22,54 +22,55 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ *
  */
 public class User extends Person {
-    private String username;
-    @JsonIgnore
-    private String password;
-    private List<String> roles;
-    private Address address;
+	private String username;
+	@JsonIgnore
+	private String password;
+	private List<String> roles;
+	private Address address;
 
 
-    public User() {
-        roles = Arrays.asList("Dr", "Dumpster Jedi", "Friend", "Slinky Owner");
+	public User() {
+		roles = Arrays.asList("Dr", "Dumpster Jedi", "Friend", "Slinky Owner");
 
-        username = "Dr.Zoidberg";
-        password = "thisIsAReallyLongPwd";
-        address = new Address();
-    }
-
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(final String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(final String password) {
-        this.password = password;
-    }
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(final List<String> roles) {
-        this.roles = roles;
-    }
+		username = "Dr.Zoidberg";
+		password = "thisIsAReallyLongPwd";
+		address = new Address();
+	}
 
 
-    public Address getAddress() {
-        return address;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setAddress(final Address address) {
-        this.address = address;
-    }
+	public void setUsername(final String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(final String password) {
+		this.password = password;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(final List<String> roles) {
+		this.roles = roles;
+	}
+
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(final Address address) {
+		this.address = address;
+	}
 }

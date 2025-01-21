@@ -24,15 +24,15 @@ import org.craftercms.commons.file.stores.RemotePath;
  */
 public class ProfileAwareRemotePath extends RemotePath {
 
-    private String profile;
+	private String profile;
 
-    public ProfileAwareRemotePath(String storeType, String path, String profile) {
-        super(storeType, path);
-        this.profile = profile;
-    }
+	public ProfileAwareRemotePath(String storeType, String path, String profile) {
+		super(storeType, path);
+		this.profile = profile;
+	}
 
-    public String getProfile() {
-        return profile;
-    }
+	public String getProfile() {
+		return profile;
+	}
 
 }

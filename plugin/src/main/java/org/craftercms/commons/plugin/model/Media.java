@@ -33,46 +33,46 @@ import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Media {
 
-    protected List<Asset> screenshots;
-    protected List<Asset> videos;
+	protected List<Asset> screenshots;
+	protected List<Asset> videos;
 
-    public List<Asset> getScreenshots() {
-        return screenshots;
-    }
+	public List<Asset> getScreenshots() {
+		return screenshots;
+	}
 
-    public void setScreenshots(List<Asset> screenshots) {
-        this.screenshots = screenshots;
-    }
+	public void setScreenshots(List<Asset> screenshots) {
+		this.screenshots = screenshots;
+	}
 
-    public List<Asset> getVideos() {
-        return videos;
-    }
+	public List<Asset> getVideos() {
+		return videos;
+	}
 
-    public void setVideos(List<Asset> videos) {
-        this.videos = videos;
-    }
+	public void setVideos(List<Asset> videos) {
+		this.videos = videos;
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Media)) {
-            return false;
-        }
-        final Media media = (Media)o;
-        return isEqualCollection(emptyIfNull(screenshots), emptyIfNull(media.screenshots)) &&
-            isEqualCollection(emptyIfNull(videos), emptyIfNull(media.videos));
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Media)) {
+			return false;
+		}
+		final Media media = (Media) o;
+		return isEqualCollection(emptyIfNull(screenshots), emptyIfNull(media.screenshots)) &&
+			isEqualCollection(emptyIfNull(videos), emptyIfNull(media.videos));
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(screenshots, videos);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(screenshots, videos);
+	}
 
-    @Override
-    public String toString() {
-        return "Media{" + "screenshots=" + screenshots + ", videos=" + videos + '}';
-    }
+	@Override
+	public String toString() {
+		return "Media{" + "screenshots=" + screenshots + ", videos=" + videos + '}';
+	}
 
 }

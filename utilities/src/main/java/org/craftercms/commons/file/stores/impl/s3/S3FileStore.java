@@ -34,18 +34,18 @@ import java.io.IOException;
  */
 public class S3FileStore extends AbstractProfileAwareRemoteFileStore<S3Profile> {
 
-    protected S3ClientCachingFactory clientFactory;
+	protected S3ClientCachingFactory clientFactory;
 
-    public S3FileStore(S3ClientCachingFactory clientFactory, ConfigurationProfileLoader<S3Profile> profileLoader) {
-        super(profileLoader);
-        this.clientFactory = clientFactory;
-    }
+	public S3FileStore(S3ClientCachingFactory clientFactory, ConfigurationProfileLoader<S3Profile> profileLoader) {
+		super(profileLoader);
+		this.clientFactory = clientFactory;
+	}
 
-    @Override
-    protected RemoteFile doGetFile(ProfileAwareRemotePath path, S3Profile profile) throws IOException {
-        Resource resource = new S3Resource(clientFactory, profile, path.getPath());
+	@Override
+	protected RemoteFile doGetFile(ProfileAwareRemotePath path, S3Profile profile) throws IOException {
+		Resource resource = new S3Resource(clientFactory, profile, path.getPath());
 
-        return new ResourceBasedRemoteFile(path, resource);
-    }
+		return new ResourceBasedRemoteFile(path, resource);
+	}
 
 }

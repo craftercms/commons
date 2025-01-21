@@ -30,70 +30,70 @@ import java.time.Duration;
  * @author joseross
  * @since 4.0.0
  */
-public class GuavaCacheFactoryBean<K, V>  extends AbstractFactoryBean<Cache<K, V>> implements BeanNameAware {
+public class GuavaCacheFactoryBean<K, V> extends AbstractFactoryBean<Cache<K, V>> implements BeanNameAware {
 
-    private static final Logger logger = LoggerFactory.getLogger(GuavaCacheFactoryBean.class);
+	private static final Logger logger = LoggerFactory.getLogger(GuavaCacheFactoryBean.class);
 
-    private String beanName;
+	private String beanName;
 
-    private boolean recordStats = false;
+	private boolean recordStats = false;
 
-    private long maxSize = -1;
+	private long maxSize = -1;
 
-    private long timeToLive = -1;
+	private long timeToLive = -1;
 
-    private long timeToIdle = -1;
+	private long timeToIdle = -1;
 
-    @Override
-    public void setBeanName(String name) {
-        beanName = name;
-    }
+	@Override
+	public void setBeanName(String name) {
+		beanName = name;
+	}
 
-    public void setRecordStats(boolean recordStats) {
-        this.recordStats = recordStats;
-    }
+	public void setRecordStats(boolean recordStats) {
+		this.recordStats = recordStats;
+	}
 
-    public void setMaxSize(long maxSize) {
-        this.maxSize = maxSize;
-    }
+	public void setMaxSize(long maxSize) {
+		this.maxSize = maxSize;
+	}
 
-    public void setTimeToLive(long timeToLive) {
-        this.timeToLive = timeToLive;
-    }
+	public void setTimeToLive(long timeToLive) {
+		this.timeToLive = timeToLive;
+	}
 
-    public void setTimeToIdle(long timeToIdle) {
-        this.timeToIdle = timeToIdle;
-    }
+	public void setTimeToIdle(long timeToIdle) {
+		this.timeToIdle = timeToIdle;
+	}
 
-    @Override
-    public Class<?> getObjectType() {
-        return Cache.class;
-    }
+	@Override
+	public Class<?> getObjectType() {
+		return Cache.class;
+	}
 
-    @Override
-    protected Cache<K, V> createInstance() {
-        logger.info("Creating cache for bean {}", beanName);
-        var cacheBuilder = CacheBuilder.newBuilder();
-        if (recordStats) {
-            cacheBuilder.recordStats();
-        }
-        if (maxSize >= 0) {
-            cacheBuilder.maximumSize(maxSize);
-        }
-        if (timeToLive >= 0) {
-            cacheBuilder.expireAfterWrite(Duration.ofSeconds(timeToLive));
-        }
-        if (timeToIdle >= 0) {
-            cacheBuilder.expireAfterAccess(Duration.ofSeconds(timeToIdle));
-        }
-        return cacheBuilder.build();
-    }
+	@Override
+	protected Cache<K, V> createInstance() {
+		logger.info("Creating cache for bean {}", beanName);
+		var cacheBuilder = CacheBuilder.newBuilder();
+		if (recordStats) {
+			cacheBuilder.recordStats();
+		}
+		if (maxSize >= 0) {
+			cacheBuilder.maximumSize(maxSize);
+		}
+		if (timeToLive >= 0) {
+			cacheBuilder.expireAfterWrite(Duration.ofSeconds(timeToLive));
+		}
+		if (timeToIdle >= 0) {
+			cacheBuilder.expireAfterAccess(Duration.ofSeconds(timeToIdle));
+		}
+		return cacheBuilder.build();
+	}
 
-    @Override
-    protected void destroyInstance(Cache<K, V> instance) {
-        logger.info("Cleaning up cache for bean {}", beanName);
-        instance.invalidateAll();
-        instance.cleanUp();
-    }
+	@Override
+	protected void destroyInstance(Cache<K, V> instance) {
+		logger.info("Cleaning up cache for bean {}", beanName);
+		instance.invalidateAll();
+		instance.cleanUp();
+	}
 
 }

@@ -26,46 +26,46 @@ import java.util.List;
  */
 public class IterableUtils {
 
-    private IterableUtils() {
-    }
+	private IterableUtils() {
+	}
 
-    /**
-     * Creates a new list from the iterable elements.
-     *
-     * @param iterable the iterable
-     * @return a list with the iterable elements
-     */
-    public static <T> List<T> toList(Iterable<T> iterable) {
-        List<T> list = null;
+	/**
+	 * Creates a new list from the iterable elements.
+	 *
+	 * @param iterable the iterable
+	 * @return a list with the iterable elements
+	 */
+	public static <T> List<T> toList(Iterable<T> iterable) {
+		List<T> list = null;
 
-        if (iterable != null) {
-            list = new ArrayList<>();
-            for (T elem : iterable) {
-                list.add(elem);
-            }
-        }
+		if (iterable != null) {
+			list = new ArrayList<>();
+			for (T elem : iterable) {
+				list.add(elem);
+			}
+		}
 
-        return list;
-    }
+		return list;
+	}
 
-    /**
-     * Returns the number of elements the iterable contains.
-     *
-     * @param iterable the iterable
-     * @return the element count of the iterable
-     */
-    public static <T> int count(Iterable<T> iterable) {
-        int count = 0;
+	/**
+	 * Returns the number of elements the iterable contains.
+	 *
+	 * @param iterable the iterable
+	 * @return the element count of the iterable
+	 */
+	public static <T> int count(Iterable<T> iterable) {
+		int count = 0;
 
-        if (iterable != null) {
-            Iterator<T> iter = iterable.iterator();
-            while (iter.hasNext()) {
-                iter.next();
-                count++;
-            }
-        }
+		if (iterable != null) {
+			Iterator<T> iter = iterable.iterator();
+			while (iter.hasNext()) {
+				iter.next();
+				count++;
+			}
+		}
 
-        return count;
-    }
+		return count;
+	}
 
 }

@@ -27,17 +27,17 @@ import org.craftercms.commons.i10n.I10nUtils;
  */
 public class CryptoException extends AbstractI10nException {
 
-    public CryptoException(String key, Object... args) {
-        super(key, args);
-    }
+	public CryptoException(String key, Object... args) {
+		super(key, args);
+	}
 
-    public CryptoException(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
-    }
+	public CryptoException(String key, Throwable cause, Object... args) {
+		super(key, cause, args);
+	}
 
-    @Override
-    protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME);
-    }
+	@Override
+	protected ResourceBundle getResourceBundle() {
+		return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME);
+	}
 
 }

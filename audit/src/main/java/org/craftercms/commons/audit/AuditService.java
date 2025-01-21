@@ -21,53 +21,55 @@ import java.util.List;
 
 /**
  * Defines  Basic Audit Service.
+ *
  * @param <T> Any Object that Extents AuditModel.
  */
 public abstract class AuditService<T extends AuditModel> {
-    /**
-     * Sets date and persist the Audit in the repository.
-     *
-     * @param auditModel Audit to be save.
-     */
-    public void audit(final T auditModel) {
-        persistAudit(auditModel);
-    }
+	/**
+	 * Sets date and persist the Audit in the repository.
+	 *
+	 * @param auditModel Audit to be save.
+	 */
+	public void audit(final T auditModel) {
+		persistAudit(auditModel);
+	}
 
-    /**
-     * Gets the audit log for its Id.
-     * @param id It of the audit log.
-     * @return Audit log with the given id, null if not found.
-     */
-    public abstract T getAuditLog(final String id);
+	/**
+	 * Gets the audit log for its Id.
+	 *
+	 * @param id It of the audit log.
+	 * @return Audit log with the given id, null if not found.
+	 */
+	public abstract T getAuditLog(final String id);
 
-    /**
-     * Defines the actual save of the audit to the given audit repository.
-     *
-     * @param auditModel Audit to be save.
-     */
-    protected abstract void persistAudit(final T auditModel);
+	/**
+	 * Defines the actual save of the audit to the given audit repository.
+	 *
+	 * @param auditModel Audit to be save.
+	 */
+	protected abstract void persistAudit(final T auditModel);
 
-    /**
-     * Deletes all audits where its it is in the given List.
-     *
-     * @param auditId List of audits id to delete.
-     */
-    protected abstract void deleteAudits(final List<String> auditId);
+	/**
+	 * Deletes all audits where its it is in the given List.
+	 *
+	 * @param auditId List of audits id to delete.
+	 */
+	protected abstract void deleteAudits(final List<String> auditId);
 
-    /**
-     * Returns all Audits starting the given date.
-     *
-     * @param from Date when the Audit was logged.
-     * @return List all audits where logged date is after or the given date.Empty if nothing is found
-     */
-    public abstract List<T> getAuditLogs(final Date from);
+	/**
+	 * Returns all Audits starting the given date.
+	 *
+	 * @param from Date when the Audit was logged.
+	 * @return List all audits where logged date is after or the given date.Empty if nothing is found
+	 */
+	public abstract List<T> getAuditLogs(final Date from);
 
-    /**
-     * Returns all Audits where logged date is between the given dates.
-     *
-     * @param from Start Date range.(including)
-     * @param to   End of Date range.(including)
-     * @return List of audits that were logged between the given date range.Empty if nothing match.
-     */
-    public abstract List<T> getAuditLogs(final Date from, final Date to);
+	/**
+	 * Returns all Audits where logged date is between the given dates.
+	 *
+	 * @param from Start Date range.(including)
+	 * @param to   End of Date range.(including)
+	 * @return List of audits that were logged between the given date range.Empty if nothing match.
+	 */
+	public abstract List<T> getAuditLogs(final Date from, final Date to);
 }

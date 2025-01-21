@@ -73,211 +73,217 @@ import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyKeyEncryptionMethodG
  */
 public abstract class PGPUtils {
 
-    public static final String ALGORITHM = "RSA";
-    public static final String PROVIDER = "BC";
+	public static final String ALGORITHM = "RSA";
+	public static final String PROVIDER = "BC";
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+	static {
+		Security.addProvider(new BouncyCastleProvider());
+	}
 
-    /**
-     * Creates a private/public PGP key pair.
-     * @param length length in bytes for the keys
-     * @param identity name used for the keys
-     * @param password passphrase used for the private key
-     * @param privateKeyStream stream to receive the encoded private key
-     * @param publicKeyStream stream to receive the encoded public key
-     * @throws NoSuchProviderException if there is an error with the security provider
-     * @throws NoSuchAlgorithmException is there is an error with the security provider
-     * @throws PGPException if there is an error creating the keys
-     * @throws IOException if there is an error writing to the streams
-     */
-    public static void createKeyPair(int length, String identity, char[] password, OutputStream privateKeyStream,
-                                     OutputStream
-                                         publicKeyStream) throws Exception {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
-        SecureRandom random = SecureRandom.getInstanceStrong();
-        keyPairGenerator.initialize(length, random);
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+	/**
+	 * Creates a private/public PGP key pair.
+	 *
+	 * @param length           length in bytes for the keys
+	 * @param identity         name used for the keys
+	 * @param password         passphrase used for the private key
+	 * @param privateKeyStream stream to receive the encoded private key
+	 * @param publicKeyStream  stream to receive the encoded public key
+	 * @throws NoSuchProviderException  if there is an error with the security provider
+	 * @throws NoSuchAlgorithmException is there is an error with the security provider
+	 * @throws PGPException             if there is an error creating the keys
+	 * @throws IOException              if there is an error writing to the streams
+	 */
+	public static void createKeyPair(int length, String identity, char[] password, OutputStream privateKeyStream,
+					 OutputStream
+						 publicKeyStream) throws Exception {
+		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM, PROVIDER);
+		SecureRandom random = SecureRandom.getInstanceStrong();
+		keyPairGenerator.initialize(length, random);
+		KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-        PGPPublicKey publicKey = new JcaPGPKeyConverter().getPGPPublicKey(PGPPublicKey.RSA_GENERAL, keyPair
-            .getPublic(), new Date());
-        RSAPrivateCrtKey privateCrtKey = (RSAPrivateCrtKey) keyPair.getPrivate();
-        RSASecretBCPGKey secretBCPGKey = new RSASecretBCPGKey(privateCrtKey.getPrivateExponent(), privateCrtKey
-            .getPrimeP(), privateCrtKey.getPrimeQ());
-        PGPPrivateKey privateKey = new PGPPrivateKey(publicKey.getKeyID(), publicKey.getPublicKeyPacket(),
-            secretBCPGKey);
-        PGPKeyPair pgpKeyPair = new PGPKeyPair(publicKey, privateKey);
-        PGPDigestCalculator calculator = new JcaPGPDigestCalculatorProviderBuilder().build().get
-            (HashAlgorithmTags.SHA1);
-        PGPSecretKey secretKey = new PGPSecretKey(PGPSignature.DEFAULT_CERTIFICATION, pgpKeyPair, identity,
-            calculator, null, null, new JcaPGPContentSignerBuilder(pgpKeyPair.getPublicKey().getAlgorithm(),
-            HashAlgorithmTags.SHA1), new JcePBESecretKeyEncryptorBuilder(PGPEncryptedData.CAST5, calculator)
-            .setProvider(PROVIDER).build(password));
+		PGPPublicKey publicKey = new JcaPGPKeyConverter().getPGPPublicKey(PGPPublicKey.RSA_GENERAL, keyPair
+			.getPublic(), new Date());
+		RSAPrivateCrtKey privateCrtKey = (RSAPrivateCrtKey) keyPair.getPrivate();
+		RSASecretBCPGKey secretBCPGKey = new RSASecretBCPGKey(privateCrtKey.getPrivateExponent(), privateCrtKey
+			.getPrimeP(), privateCrtKey.getPrimeQ());
+		PGPPrivateKey privateKey = new PGPPrivateKey(publicKey.getKeyID(), publicKey.getPublicKeyPacket(),
+			secretBCPGKey);
+		PGPKeyPair pgpKeyPair = new PGPKeyPair(publicKey, privateKey);
+		PGPDigestCalculator calculator = new JcaPGPDigestCalculatorProviderBuilder().build().get
+			(HashAlgorithmTags.SHA1);
+		PGPSecretKey secretKey = new PGPSecretKey(PGPSignature.DEFAULT_CERTIFICATION, pgpKeyPair, identity,
+			calculator, null, null, new JcaPGPContentSignerBuilder(pgpKeyPair.getPublicKey().getAlgorithm(),
+			HashAlgorithmTags.SHA1), new JcePBESecretKeyEncryptorBuilder(PGPEncryptedData.CAST5, calculator)
+			.setProvider(PROVIDER).build(password));
 
 
-        try(ArmoredOutputStream privateArm = new ArmoredOutputStream(privateKeyStream);
-            ArmoredOutputStream publicArm = new ArmoredOutputStream(publicKeyStream)) {
-            secretKey.encode(privateArm);
-            secretKey.getPublicKey().encode(publicArm);
-        }
-    }
+		try (ArmoredOutputStream privateArm = new ArmoredOutputStream(privateKeyStream);
+		     ArmoredOutputStream publicArm = new ArmoredOutputStream(publicKeyStream)) {
+			secretKey.encode(privateArm);
+			secretKey.getPublicKey().encode(publicArm);
+		}
+	}
 
-    /**
-     * Extracts the PGP public key from an encoded stream.
-     * @param content stream to extract the key
-     * @return key object
-     * @throws IOException if there is an error reading the stream
-     * @throws PGPException if the public key cannot be extracted
-     */
-    public static PGPPublicKey getPublicKey(InputStream content) throws Exception {
-        InputStream in = PGPUtil.getDecoderStream(content);
-        PGPPublicKeyRingCollection keyRingCollection = new PGPPublicKeyRingCollection(in, new BcKeyFingerprintCalculator());
-        PGPPublicKey key = null;
-        Iterator<PGPPublicKeyRing> keyRings = keyRingCollection.getKeyRings();
-        while(key == null && keyRings.hasNext()) {
-            PGPPublicKeyRing keyRing = keyRings.next();
-            Iterator<PGPPublicKey> keys = keyRing.getPublicKeys();
-            while(key == null && keys.hasNext()) {
-                PGPPublicKey current = keys.next();
-                if(current.isEncryptionKey()) {
-                    key = current;
-                }
-            }
-        }
-        return key;
-    }
+	/**
+	 * Extracts the PGP public key from an encoded stream.
+	 *
+	 * @param content stream to extract the key
+	 * @return key object
+	 * @throws IOException  if there is an error reading the stream
+	 * @throws PGPException if the public key cannot be extracted
+	 */
+	public static PGPPublicKey getPublicKey(InputStream content) throws Exception {
+		InputStream in = PGPUtil.getDecoderStream(content);
+		PGPPublicKeyRingCollection keyRingCollection = new PGPPublicKeyRingCollection(in, new BcKeyFingerprintCalculator());
+		PGPPublicKey key = null;
+		Iterator<PGPPublicKeyRing> keyRings = keyRingCollection.getKeyRings();
+		while (key == null && keyRings.hasNext()) {
+			PGPPublicKeyRing keyRing = keyRings.next();
+			Iterator<PGPPublicKey> keys = keyRing.getPublicKeys();
+			while (key == null && keys.hasNext()) {
+				PGPPublicKey current = keys.next();
+				if (current.isEncryptionKey()) {
+					key = current;
+				}
+			}
+		}
+		return key;
+	}
 
-    /**
-     * Performs encryption on a single file using a PGP public key.
-     * @param path file to be encrypted
-     * @param publicKeyStream stream providing the encoded public key
-     * @param targetStream stream to receive the encrypted data
-     * @throws IOException if there is an error reading or writing from the streams
-     * @throws PGPException if the encryption process fails
-     */
-    public static void encrypt(Path path, InputStream publicKeyStream, OutputStream targetStream) throws Exception {
-        PGPPublicKey publicKey = getPublicKey(publicKeyStream);
+	/**
+	 * Performs encryption on a single file using a PGP public key.
+	 *
+	 * @param path            file to be encrypted
+	 * @param publicKeyStream stream providing the encoded public key
+	 * @param targetStream    stream to receive the encrypted data
+	 * @throws IOException  if there is an error reading or writing from the streams
+	 * @throws PGPException if the encryption process fails
+	 */
+	public static void encrypt(Path path, InputStream publicKeyStream, OutputStream targetStream) throws Exception {
+		PGPPublicKey publicKey = getPublicKey(publicKeyStream);
 
-        try(ByteArrayOutputStream compressed = new ByteArrayOutputStream();
-            ArmoredOutputStream armOut = new ArmoredOutputStream(targetStream)) {
-            PGPCompressedDataGenerator compressedGenerator = new PGPCompressedDataGenerator(PGPCompressedData.ZIP);
-            PGPUtil.writeFileToLiteralData(compressedGenerator.open(compressed), PGPLiteralData.BINARY, path.toFile());
-            compressedGenerator.close();
+		try (ByteArrayOutputStream compressed = new ByteArrayOutputStream();
+		     ArmoredOutputStream armOut = new ArmoredOutputStream(targetStream)) {
+			PGPCompressedDataGenerator compressedGenerator = new PGPCompressedDataGenerator(PGPCompressedData.ZIP);
+			PGPUtil.writeFileToLiteralData(compressedGenerator.open(compressed), PGPLiteralData.BINARY, path.toFile());
+			compressedGenerator.close();
 
-            JcePGPDataEncryptorBuilder encryptorBuilder = new JcePGPDataEncryptorBuilder(PGPEncryptedData.CAST5)
-                .setWithIntegrityPacket(true).setSecureRandom(new SecureRandom()).setProvider(PROVIDER);
-            PGPEncryptedDataGenerator dataGenerator = new PGPEncryptedDataGenerator(encryptorBuilder);
-            JcePublicKeyKeyEncryptionMethodGenerator methodGenerator = new JcePublicKeyKeyEncryptionMethodGenerator
-                (publicKey).setProvider(PROVIDER).setSecureRandom(new SecureRandom());
-            dataGenerator.addMethod(methodGenerator);
+			JcePGPDataEncryptorBuilder encryptorBuilder = new JcePGPDataEncryptorBuilder(PGPEncryptedData.CAST5)
+				.setWithIntegrityPacket(true).setSecureRandom(new SecureRandom()).setProvider(PROVIDER);
+			PGPEncryptedDataGenerator dataGenerator = new PGPEncryptedDataGenerator(encryptorBuilder);
+			JcePublicKeyKeyEncryptionMethodGenerator methodGenerator = new JcePublicKeyKeyEncryptionMethodGenerator
+				(publicKey).setProvider(PROVIDER).setSecureRandom(new SecureRandom());
+			dataGenerator.addMethod(methodGenerator);
 
-            byte[] compressedData = compressed.toByteArray();
-            OutputStream encryptedOut = dataGenerator.open(armOut, compressedData.length);
-            encryptedOut.write(compressedData);
-            encryptedOut.close();
-        }
-    }
+			byte[] compressedData = compressed.toByteArray();
+			OutputStream encryptedOut = dataGenerator.open(armOut, compressedData.length);
+			encryptedOut.write(compressedData);
+			encryptedOut.close();
+		}
+	}
 
-    /**
-     * Performs decryption of a given stream using a PGP private key.
-     * @param encryptedStream stream providing the encrypted data
-     * @param targetStream stream to receive the decrypted data
-     * @param privateKeyStream stream providing the encoded PGP private key
-     * @param password passphrase for the private key
-     * @throws IOException if there is an error reading or writing from the streams
-     * @throws PGPException if the decryption process fails
-     */
-    @SuppressWarnings("rawtypes")
-    public static void decrypt(InputStream encryptedStream, OutputStream targetStream, InputStream
-        privateKeyStream, char[] password) throws Exception {
+	/**
+	 * Performs decryption of a given stream using a PGP private key.
+	 *
+	 * @param encryptedStream  stream providing the encrypted data
+	 * @param targetStream     stream to receive the decrypted data
+	 * @param privateKeyStream stream providing the encoded PGP private key
+	 * @param password         passphrase for the private key
+	 * @throws IOException  if there is an error reading or writing from the streams
+	 * @throws PGPException if the decryption process fails
+	 */
+	@SuppressWarnings("rawtypes")
+	public static void decrypt(InputStream encryptedStream, OutputStream targetStream, InputStream
+		privateKeyStream, char[] password) throws Exception {
 
-        BcKeyFingerprintCalculator calculator = new BcKeyFingerprintCalculator();
-        PGPObjectFactory factory = new PGPObjectFactory(PGPUtil.getDecoderStream(encryptedStream), calculator);
-        PGPEncryptedDataList dataList;
-        Object object = factory.nextObject();
-        if(object instanceof PGPEncryptedDataList) {
-            dataList = (PGPEncryptedDataList) object;
-        } else {
-            dataList = (PGPEncryptedDataList) factory.nextObject();
-        }
-        Iterator objects = dataList.getEncryptedDataObjects();
-        PGPPrivateKey privateKey = null;
-        PGPPublicKeyEncryptedData data = null;
-        while(privateKey == null && objects.hasNext()) {
-            data = (PGPPublicKeyEncryptedData) objects.next();
-            privateKey = findSecretKey(privateKeyStream, data.getKeyID(), password);
-        }
-        if(privateKey == null) {
-            throw new IllegalArgumentException("Secret key for message not found.");
-        }
+		BcKeyFingerprintCalculator calculator = new BcKeyFingerprintCalculator();
+		PGPObjectFactory factory = new PGPObjectFactory(PGPUtil.getDecoderStream(encryptedStream), calculator);
+		PGPEncryptedDataList dataList;
+		Object object = factory.nextObject();
+		if (object instanceof PGPEncryptedDataList) {
+			dataList = (PGPEncryptedDataList) object;
+		} else {
+			dataList = (PGPEncryptedDataList) factory.nextObject();
+		}
+		Iterator objects = dataList.getEncryptedDataObjects();
+		PGPPrivateKey privateKey = null;
+		PGPPublicKeyEncryptedData data = null;
+		while (privateKey == null && objects.hasNext()) {
+			data = (PGPPublicKeyEncryptedData) objects.next();
+			privateKey = findSecretKey(privateKeyStream, data.getKeyID(), password);
+		}
+		if (privateKey == null) {
+			throw new IllegalArgumentException("Secret key for message not found.");
+		}
 
-        decryptData(privateKey, data, calculator, targetStream);
-    }
+		decryptData(privateKey, data, calculator, targetStream);
+	}
 
-    /**
-     * Extracts the PGP private key from an encoded stream.
-     * @param keyStream stream providing the encoded private key
-     * @param keyId id of the secret key to extract
-     * @param password passphrase for the secret key
-     * @return the private key object
-     * @throws IOException if there is an error reading from the stream
-     * @throws PGPException if the secret key cannot be extracted
-     */
-    protected static PGPPrivateKey findSecretKey(InputStream keyStream, long keyId, char[] password) throws Exception {
-        PGPSecretKeyRingCollection keyRings = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(keyStream), new
-            BcKeyFingerprintCalculator());
-        PGPSecretKey secretKey = keyRings.getSecretKey(keyId);
-        if(secretKey == null) {
-            return null;
-        }
-        PBESecretKeyDecryptor decryptor = new JcePBESecretKeyDecryptorBuilder(
-            new JcaPGPDigestCalculatorProviderBuilder().setProvider(PROVIDER).build())
-            .setProvider(PROVIDER).build(password);
-        return secretKey.extractPrivateKey(decryptor);
-    }
+	/**
+	 * Extracts the PGP private key from an encoded stream.
+	 *
+	 * @param keyStream stream providing the encoded private key
+	 * @param keyId     id of the secret key to extract
+	 * @param password  passphrase for the secret key
+	 * @return the private key object
+	 * @throws IOException  if there is an error reading from the stream
+	 * @throws PGPException if the secret key cannot be extracted
+	 */
+	protected static PGPPrivateKey findSecretKey(InputStream keyStream, long keyId, char[] password) throws Exception {
+		PGPSecretKeyRingCollection keyRings = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(keyStream), new
+			BcKeyFingerprintCalculator());
+		PGPSecretKey secretKey = keyRings.getSecretKey(keyId);
+		if (secretKey == null) {
+			return null;
+		}
+		PBESecretKeyDecryptor decryptor = new JcePBESecretKeyDecryptorBuilder(
+			new JcaPGPDigestCalculatorProviderBuilder().setProvider(PROVIDER).build())
+			.setProvider(PROVIDER).build(password);
+		return secretKey.extractPrivateKey(decryptor);
+	}
 
-    /**
-     * Performs the decryption of the given data.
-     * @param privateKey PGP Private Key to decrypt
-     * @param data encrypted data
-     * @param calculator instance of {@link BcKeyFingerprintCalculator}
-     * @param targetStream stream to receive the decrypted data
-     * @throws PGPException if the decryption process fails
-     * @throws IOException if the stream write operation fails
-     */
-    protected static void decryptData(final PGPPrivateKey privateKey, final PGPPublicKeyEncryptedData data,
-                                      final BcKeyFingerprintCalculator calculator, final OutputStream targetStream)
-        throws PGPException, IOException {
-        PublicKeyDataDecryptorFactory decryptorFactory = new JcePublicKeyDataDecryptorFactoryBuilder().setProvider
-            (PROVIDER).setContentProvider(PROVIDER).build(privateKey);
+	/**
+	 * Performs the decryption of the given data.
+	 *
+	 * @param privateKey   PGP Private Key to decrypt
+	 * @param data         encrypted data
+	 * @param calculator   instance of {@link BcKeyFingerprintCalculator}
+	 * @param targetStream stream to receive the decrypted data
+	 * @throws PGPException if the decryption process fails
+	 * @throws IOException  if the stream write operation fails
+	 */
+	protected static void decryptData(final PGPPrivateKey privateKey, final PGPPublicKeyEncryptedData data,
+					  final BcKeyFingerprintCalculator calculator, final OutputStream targetStream)
+		throws PGPException, IOException {
+		PublicKeyDataDecryptorFactory decryptorFactory = new JcePublicKeyDataDecryptorFactoryBuilder().setProvider
+			(PROVIDER).setContentProvider(PROVIDER).build(privateKey);
 
-        InputStream content = data.getDataStream(decryptorFactory);
+		InputStream content = data.getDataStream(decryptorFactory);
 
-        PGPObjectFactory plainFactory = new PGPObjectFactory(content, calculator);
+		PGPObjectFactory plainFactory = new PGPObjectFactory(content, calculator);
 
-        Object message = plainFactory.nextObject();
+		Object message = plainFactory.nextObject();
 
-        if(message instanceof PGPCompressedData) {
-            PGPCompressedData compressedData = (PGPCompressedData) message;
-            PGPObjectFactory compressedFactory = new PGPObjectFactory(compressedData.getDataStream(), calculator);
-            message = compressedFactory.nextObject();
-        }
+		if (message instanceof PGPCompressedData) {
+			PGPCompressedData compressedData = (PGPCompressedData) message;
+			PGPObjectFactory compressedFactory = new PGPObjectFactory(compressedData.getDataStream(), calculator);
+			message = compressedFactory.nextObject();
+		}
 
-        if(message instanceof PGPLiteralData) {
-            PGPLiteralData literalData = (PGPLiteralData) message;
-            try(InputStream literalStream = literalData.getInputStream()) {
-                IOUtils.copy(literalStream, targetStream);
-            }
-        } else if(message instanceof PGPOnePassSignatureList) {
-            throw new PGPException("Encrypted message contains a signed message - not literal data.");
-        } else {
-            throw new PGPException("Message is not a simple encrypted file - type unknown.");
-        }
+		if (message instanceof PGPLiteralData) {
+			PGPLiteralData literalData = (PGPLiteralData) message;
+			try (InputStream literalStream = literalData.getInputStream()) {
+				IOUtils.copy(literalStream, targetStream);
+			}
+		} else if (message instanceof PGPOnePassSignatureList) {
+			throw new PGPException("Encrypted message contains a signed message - not literal data.");
+		} else {
+			throw new PGPException("Message is not a simple encrypted file - type unknown.");
+		}
 
-        if(data.isIntegrityProtected() && !data.verify()) {
-            throw new PGPException("Message failed integrity check");
-        }
-    }
+		if (data.isIntegrityProtected() && !data.verify()) {
+			throw new PGPException("Message failed integrity check");
+		}
+	}
 
 }

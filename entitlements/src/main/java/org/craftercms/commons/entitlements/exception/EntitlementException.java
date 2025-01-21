@@ -23,19 +23,19 @@ package org.craftercms.commons.entitlements.exception;
  */
 public class EntitlementException extends Exception {
 
-    public EntitlementException() {
-    }
+	public EntitlementException() {
+	}
 
-    public EntitlementException(final String message) {
-        super(message);
-    }
+	public EntitlementException(final String message) {
+		super(message);
+	}
 
-    public EntitlementException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
+	public EntitlementException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
 
-    public EntitlementException(final Throwable cause) {
-        super(cause);
-    }
+	public EntitlementException(final Throwable cause) {
+		super(cause);
+	}
 
 }

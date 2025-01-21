@@ -32,99 +32,99 @@ import org.craftercms.commons.i10n.I10nUtils;
  */
 public class SimpleDigest {
 
-    public static final String LOG_KEY_DEF_DIGEST_CREATED = "crypto.digest.defaultDigestCreated";
-    public static final String LOG_KEY_SALT_GEN = "crypto.digest.saltGenerated";
-    public static final String LOG_KEY_DIGEST_GEN = "crypto.digest.digestGenerated";
-    public static final String ERROR_KEY_INVALID_ALG = "crypto.digest.invalidDigestAlgorithm";
+	public static final String LOG_KEY_DEF_DIGEST_CREATED = "crypto.digest.defaultDigestCreated";
+	public static final String LOG_KEY_SALT_GEN = "crypto.digest.saltGenerated";
+	public static final String LOG_KEY_DIGEST_GEN = "crypto.digest.digestGenerated";
+	public static final String ERROR_KEY_INVALID_ALG = "crypto.digest.invalidDigestAlgorithm";
 
-    public static final String DEFAULT_ALGORITHM = "SHA-256";
-    public static final int DEFAULT_ITERATIONS = 1000;
-    public static final int DEFAULT_SALT_SIZE = 16;
+	public static final String DEFAULT_ALGORITHM = "SHA-256";
+	public static final int DEFAULT_ITERATIONS = 1000;
+	public static final int DEFAULT_SALT_SIZE = 16;
 
-    private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
+	private static final I10nLogger logger = new I10nLogger(SimpleDigest.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
-    private MessageDigest digest;
-    private int iterations;
-    private byte[] salt;
+	private MessageDigest digest;
+	private int iterations;
+	private byte[] salt;
 
-    public SimpleDigest() {
-        iterations = DEFAULT_ITERATIONS;
-    }
+	public SimpleDigest() {
+		iterations = DEFAULT_ITERATIONS;
+	}
 
-    public MessageDigest getDigest() {
-        return digest;
-    }
+	public MessageDigest getDigest() {
+		return digest;
+	}
 
-    public void setDigest(MessageDigest digest) {
-        this.digest = digest;
-    }
+	public void setDigest(MessageDigest digest) {
+		this.digest = digest;
+	}
 
-    public void setAlgorithm(String algorithm) throws CryptoException {
-        try {
-            this.digest = MessageDigest.getInstance(algorithm);
-        } catch (NoSuchAlgorithmException ex) {
-            throw new CryptoException(ERROR_KEY_INVALID_ALG, ex, algorithm);
-        }
-    }
+	public void setAlgorithm(String algorithm) throws CryptoException {
+		try {
+			this.digest = MessageDigest.getInstance(algorithm);
+		} catch (NoSuchAlgorithmException ex) {
+			throw new CryptoException(ERROR_KEY_INVALID_ALG, ex, algorithm);
+		}
+	}
 
-    public int getIterations() {
-        return iterations;
-    }
+	public int getIterations() {
+		return iterations;
+	}
 
-    public void setIterations(int iterations) {
-        this.iterations = iterations;
-    }
+	public void setIterations(int iterations) {
+		this.iterations = iterations;
+	}
 
-    public byte[] getSalt() {
-        return salt;
-    }
+	public byte[] getSalt() {
+		return salt;
+	}
 
-    public void setSalt(byte[] salt) {
-        this.salt = salt;
-    }
+	public void setSalt(byte[] salt) {
+		this.salt = salt;
+	}
 
-    public String getBase64Salt() {
-        return salt != null? Base64.encodeBase64String(salt): null;
-    }
+	public String getBase64Salt() {
+		return salt != null ? Base64.encodeBase64String(salt) : null;
+	}
 
-    public void setBase64Salt(String salt) {
-        this.salt = Base64.decodeBase64(salt);
-    }
+	public void setBase64Salt(String salt) {
+		this.salt = Base64.decodeBase64(salt);
+	}
 
-    public String digestBase64(String clear) {
-        return Base64.encodeBase64String(digest(StringUtils.getBytesUtf8(clear)));
-    }
+	public String digestBase64(String clear) {
+		return Base64.encodeBase64String(digest(StringUtils.getBytesUtf8(clear)));
+	}
 
-    public byte[] digest(byte[] clear) {
-        if (digest == null) {
-            try {
-                digest = MessageDigest.getInstance(DEFAULT_ALGORITHM);
-            } catch (NoSuchAlgorithmException e) {
-                // Should NEVER happen
-                throw new IllegalStateException("JVM doesn't support " + DEFAULT_ALGORITHM, e);
-            }
+	public byte[] digest(byte[] clear) {
+		if (digest == null) {
+			try {
+				digest = MessageDigest.getInstance(DEFAULT_ALGORITHM);
+			} catch (NoSuchAlgorithmException e) {
+				// Should NEVER happen
+				throw new IllegalStateException("JVM doesn't support " + DEFAULT_ALGORITHM, e);
+			}
 
-            logger.debug(LOG_KEY_DEF_DIGEST_CREATED, DEFAULT_ALGORITHM);
-        }
-        if (salt == null) {
-            salt = CryptoUtils.generateRandomBytes(DEFAULT_SALT_SIZE);
+			logger.debug(LOG_KEY_DEF_DIGEST_CREATED, DEFAULT_ALGORITHM);
+		}
+		if (salt == null) {
+			salt = CryptoUtils.generateRandomBytes(DEFAULT_SALT_SIZE);
 
-            logger.debug(LOG_KEY_SALT_GEN, DEFAULT_SALT_SIZE);
-        }
+			logger.debug(LOG_KEY_SALT_GEN, DEFAULT_SALT_SIZE);
+		}
 
-        digest.update(salt);
+		digest.update(salt);
 
-        byte[] hash = digest.digest(clear);
+		byte[] hash = digest.digest(clear);
 
-        for (int i = 0; i < iterations; i++) {
-            digest.reset();
+		for (int i = 0; i < iterations; i++) {
+			digest.reset();
 
-            hash = digest.digest(hash);
-        }
+			hash = digest.digest(hash);
+		}
 
-        logger.debug(LOG_KEY_DIGEST_GEN, iterations);
+		logger.debug(LOG_KEY_DIGEST_GEN, iterations);
 
-        return hash;
-    }
+		return hash;
+	}
 
 }

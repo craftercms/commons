@@ -22,15 +22,15 @@ package org.craftercms.commons.security.exception;
  */
 public class ActionDeniedException extends PermissionException {
 
-    private static final String GLOBAL_ACTION_DENIED_KEY = "security.permission.globalActionDenied";
-    private static final String ACTION_DENIED_KEY = "security.permission.actionDenied";
+	private static final String GLOBAL_ACTION_DENIED_KEY = "security.permission.globalActionDenied";
+	private static final String ACTION_DENIED_KEY = "security.permission.actionDenied";
 
-    public ActionDeniedException(String action) {
-        super(GLOBAL_ACTION_DENIED_KEY, action);
-    }
+	public ActionDeniedException(String action) {
+		super(GLOBAL_ACTION_DENIED_KEY, action);
+	}
 
-    public ActionDeniedException(String action, Object resource) {
-        super(ACTION_DENIED_KEY, action, resource);
-    }
+	public ActionDeniedException(String action, Object resource) {
+		super(ACTION_DENIED_KEY, action, resource);
+	}
 
 }

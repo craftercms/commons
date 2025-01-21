@@ -34,27 +34,27 @@ import java.nio.file.Paths;
  */
 public class SshPrivateKeyAuthConfigurator extends AbstractSshAuthConfigurator {
 
-    protected final String privateKeyPath;
-    protected final String passphrase;
+	protected final String privateKeyPath;
+	protected final String passphrase;
 
-    public SshPrivateKeyAuthConfigurator(File sshConfig, String privateKeyPath, String passphrase) {
-        super(sshConfig);
-        this.privateKeyPath = privateKeyPath;
-        this.passphrase = passphrase;
-    }
+	public SshPrivateKeyAuthConfigurator(File sshConfig, String privateKeyPath, String passphrase) {
+		super(sshConfig);
+		this.privateKeyPath = privateKeyPath;
+		this.passphrase = passphrase;
+	}
 
-    @Override
-    public void configureAuthentication(TransportCommand<?, ?> command) {
-        if (StringUtils.isNotEmpty(passphrase)) {
-            command.setCredentialsProvider(new UsernamePasswordCredentialsProvider(null, passphrase));
-        }
+	@Override
+	public void configureAuthentication(TransportCommand<?, ?> command) {
+		if (StringUtils.isNotEmpty(passphrase)) {
+			command.setCredentialsProvider(new UsernamePasswordCredentialsProvider(null, passphrase));
+		}
 
-        super.configureAuthentication(command);
-    }
+		super.configureAuthentication(command);
+	}
 
-    @Override
-    protected SshSessionFactory createSessionFactory() {
-        return new SshPrivateKeySessionFactory(sshConfig, Paths.get(privateKeyPath));
-    }
+	@Override
+	protected SshSessionFactory createSessionFactory() {
+		return new SshPrivateKeySessionFactory(sshConfig, Paths.get(privateKeyPath));
+	}
 
 }

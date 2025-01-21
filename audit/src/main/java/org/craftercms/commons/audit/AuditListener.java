@@ -27,17 +27,17 @@ import org.springframework.context.event.EventListener;
  */
 public class AuditListener {
 
-    private AuditService auditService;
-    private Logger log = LoggerFactory.getLogger(AuditListener.class);
+	private AuditService auditService;
+	private Logger log = LoggerFactory.getLogger(AuditListener.class);
 
-    @SuppressWarnings("unchecked") // cortiz, OK raw is data is needed.
-    @EventListener
-    public void onAudit(final AuditModel auditModel) {
-        log.debug("Auditing {}", auditModel);
-        auditService.audit(auditModel);
-    }
+	@SuppressWarnings("unchecked") // cortiz, OK raw is data is needed.
+	@EventListener
+	public void onAudit(final AuditModel auditModel) {
+		log.debug("Auditing {}", auditModel);
+		auditService.audit(auditModel);
+	}
 
-    public void setAuditService(final AuditService auditService) {
-        this.auditService = auditService;
-    }
+	public void setAuditService(final AuditService auditService) {
+		this.auditService = auditService;
+	}
 }

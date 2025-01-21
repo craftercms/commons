@@ -33,35 +33,35 @@ import java.io.File;
  */
 public class UrlBasedAuthConfiguratorBuilder extends AbstractAuthConfiguratorBuilder {
 
-    protected static final String GIT_SSH_URL_REGEX = "^(ssh://.+)|([a-zA-Z0-9._-]+@.+)$";
+	protected static final String GIT_SSH_URL_REGEX = "^(ssh://.+)|([a-zA-Z0-9._-]+@.+)$";
 
-    /**
-     * The Git URL
-     */
-    protected String url;
+	/**
+	 * The Git URL
+	 */
+	protected String url;
 
-    public UrlBasedAuthConfiguratorBuilder(File sshConfig, String url) {
-        super(sshConfig);
-        this.url = url;
-    }
+	public UrlBasedAuthConfiguratorBuilder(File sshConfig, String url) {
+		super(sshConfig);
+		this.url = url;
+	}
 
-    @Override
-    public GitAuthenticationConfigurator build() {
-        if (url.matches(GIT_SSH_URL_REGEX)) {
-            if (StringUtils.isNotEmpty(privateKeyPath)) {
-                logger.debug("SSH private key authentication will be used to connect to {}", url);
-                return new SshPrivateKeyAuthConfigurator(sshConfig, privateKeyPath, privateKeyPassphrase);
-            } else if (StringUtils.isNotEmpty(password)) {
-                logger.debug("SSH username/password authentication will be used to connect to {}", url);
-                return new SshPasswordAuthConfigurator(sshConfig, password);
-            }
-        } else if (StringUtils.isNotEmpty(username) || StringUtils.isNotEmpty(password)) {
-            logger.debug("Username/password authentication will be used to connect to {}", url);
-            return new BasicUsernamePasswordAuthConfigurator(username, password);
-        }
+	@Override
+	public GitAuthenticationConfigurator build() {
+		if (url.matches(GIT_SSH_URL_REGEX)) {
+			if (StringUtils.isNotEmpty(privateKeyPath)) {
+				logger.debug("SSH private key authentication will be used to connect to {}", url);
+				return new SshPrivateKeyAuthConfigurator(sshConfig, privateKeyPath, privateKeyPassphrase);
+			} else if (StringUtils.isNotEmpty(password)) {
+				logger.debug("SSH username/password authentication will be used to connect to {}", url);
+				return new SshPasswordAuthConfigurator(sshConfig, password);
+			}
+		} else if (StringUtils.isNotEmpty(username) || StringUtils.isNotEmpty(password)) {
+			logger.debug("Username/password authentication will be used to connect to {}", url);
+			return new BasicUsernamePasswordAuthConfigurator(username, password);
+		}
 
-        logger.debug("No authentication will be used to connect to {}", url);
-        return new NoopAuthConfigurator();
-    }
+		logger.debug("No authentication will be used to connect to {}", url);
+		return new NoopAuthConfigurator();
+	}
 
 }

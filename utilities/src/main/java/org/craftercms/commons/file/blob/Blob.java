@@ -28,38 +28,38 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Blob {
 
-    /**
-     * The id of the blob store
-     */
-    protected String storeId;
+	/**
+	 * The id of the blob store
+	 */
+	protected String storeId;
 
-    /**
-     * A hash that can be used to detect the specific version of the blobs
-     */
-    protected String hash;
+	/**
+	 * A hash that can be used to detect the specific version of the blobs
+	 */
+	protected String hash;
 
-    public Blob() {
-    }
+	public Blob() {
+	}
 
-    public Blob(String storeId, String hash) {
-        this.storeId = storeId;
-        this.hash = hash;
-    }
+	public Blob(String storeId, String hash) {
+		this.storeId = storeId;
+		this.hash = hash;
+	}
 
-    public String getStoreId() {
-        return storeId;
-    }
+	public String getStoreId() {
+		return storeId;
+	}
 
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
-    }
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
+	}
 
-    public String getHash() {
-        return hash;
-    }
+	public String getHash() {
+		return hash;
+	}
 
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 
 }

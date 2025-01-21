@@ -28,28 +28,28 @@ import java.util.List;
  */
 public class SshPrivateKeySessionFactory extends SshSessionFactory {
 
-    protected Path privateKey;
+	protected Path privateKey;
 
-    public SshPrivateKeySessionFactory(File sshConfig, Path privateKey) {
-        super(sshConfig);
-        this.privateKey = privateKey;
-    }
+	public SshPrivateKeySessionFactory(File sshConfig, Path privateKey) {
+		super(sshConfig);
+		this.privateKey = privateKey;
+	}
 
-    // Prevents other authentication methods from being used
-    @Override
-    protected String getDefaultPreferredAuthentications() {
-        return "publickey";
-    }
+	// Prevents other authentication methods from being used
+	@Override
+	protected String getDefaultPreferredAuthentications() {
+		return "publickey";
+	}
 
-    // Returns the configured private key additionally to the defaults
-    @Override
-    protected List<Path> getDefaultIdentities(File sshDir) {
-        List<Path> identities = new LinkedList<>();
-        if (privateKey != null) {
-            identities.add(privateKey);
-        }
-        identities.addAll(super.getDefaultIdentities(sshDir));
-        return identities;
-    }
+	// Returns the configured private key additionally to the defaults
+	@Override
+	protected List<Path> getDefaultIdentities(File sshDir) {
+		List<Path> identities = new LinkedList<>();
+		if (privateKey != null) {
+			identities.add(privateKey);
+		}
+		identities.addAll(super.getDefaultIdentities(sshDir));
+		return identities;
+	}
 
 }

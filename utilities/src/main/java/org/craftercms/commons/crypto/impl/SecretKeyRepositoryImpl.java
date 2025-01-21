@@ -38,109 +38,109 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class SecretKeyRepositoryImpl implements SecretKeyRepository, InitializingBean {
 
-    public static final String KEY_STORE_TYPE = "JCEKS";
+	public static final String KEY_STORE_TYPE = "JCEKS";
 
-    public static final String LOG_KEY_KEY_FOUND = "crypto.keyRepo.keyFound";
-    public static final String LOG_KEY_KEY_NOT_FOUND = "crypto.keyRepo.keyNotFound";
-    public static final String LOG_KEY_KEY_CREATED = "crypto.keyRepo.keyCreated";
-    public static final String LOG_KEY_KEY_SAVED = "crypto.keyRepo.keySaved";
-    public static final String LOG_KEY_KEY_STORE_LOADED = "crypto.keyRepo.keyStoreLoaded";
-    public static final String LOG_KEY_KEY_STORE_STORED = "crypto.keyRepo.keyStoreStored";
-    public static final String ERROR_KEY_KEY_STORE_LOAD_ERROR = "crypto.keyRepo.keyStoreLoadError";
-    public static final String ERROR_KEY_KEY_STORE_STORE_ERROR = "crypto.keyRepo.keyStoreStoreError";
-    public static final String ERROR_KEY_GET_KEY_ERROR = "crypto.keyRepo.getKeyError";
-    public static final String ERROR_KEY_SAVE_KEY_ERROR = "crypto.keyRepo.saveKeyError";
+	public static final String LOG_KEY_KEY_FOUND = "crypto.keyRepo.keyFound";
+	public static final String LOG_KEY_KEY_NOT_FOUND = "crypto.keyRepo.keyNotFound";
+	public static final String LOG_KEY_KEY_CREATED = "crypto.keyRepo.keyCreated";
+	public static final String LOG_KEY_KEY_SAVED = "crypto.keyRepo.keySaved";
+	public static final String LOG_KEY_KEY_STORE_LOADED = "crypto.keyRepo.keyStoreLoaded";
+	public static final String LOG_KEY_KEY_STORE_STORED = "crypto.keyRepo.keyStoreStored";
+	public static final String ERROR_KEY_KEY_STORE_LOAD_ERROR = "crypto.keyRepo.keyStoreLoadError";
+	public static final String ERROR_KEY_KEY_STORE_STORE_ERROR = "crypto.keyRepo.keyStoreStoreError";
+	public static final String ERROR_KEY_GET_KEY_ERROR = "crypto.keyRepo.getKeyError";
+	public static final String ERROR_KEY_SAVE_KEY_ERROR = "crypto.keyRepo.saveKeyError";
 
-    private static final I10nLogger logger = new I10nLogger(SecretKeyRepositoryImpl.class);
+	private static final I10nLogger logger = new I10nLogger(SecretKeyRepositoryImpl.class);
 
-    protected File keyStoreFile;
-    protected char[] keyStorePassword;
-    protected String defaultKeyAlgorithm;
+	protected File keyStoreFile;
+	protected char[] keyStorePassword;
+	protected String defaultKeyAlgorithm;
 
-    protected KeyStore keyStore;
+	protected KeyStore keyStore;
 
-    public SecretKeyRepositoryImpl(File keyStoreFile, String keyStorePassword) {
-        this.keyStoreFile = keyStoreFile;
-        this.keyStorePassword = keyStorePassword.toCharArray();
-        defaultKeyAlgorithm = CryptoUtils.AES_CIPHER_ALGORITHM;
-    }
+	public SecretKeyRepositoryImpl(File keyStoreFile, String keyStorePassword) {
+		this.keyStoreFile = keyStoreFile;
+		this.keyStorePassword = keyStorePassword.toCharArray();
+		defaultKeyAlgorithm = CryptoUtils.AES_CIPHER_ALGORITHM;
+	}
 
-    public void setDefaultKeyAlgorithm(String defaultKeyAlgorithm) {
-        this.defaultKeyAlgorithm = defaultKeyAlgorithm;
-    }
+	public void setDefaultKeyAlgorithm(String defaultKeyAlgorithm) {
+		this.defaultKeyAlgorithm = defaultKeyAlgorithm;
+	}
 
-    public void afterPropertiesSet() throws CryptoException {
-        loadKeyStore();
-    }
+	public void afterPropertiesSet() throws CryptoException {
+		loadKeyStore();
+	}
 
-    @Override
-    public SecretKey getKey(String name, boolean create) throws CryptoException {
-        try {
-            SecretKey key = (SecretKey) keyStore.getKey(name, keyStorePassword);
-            if (key == null) {
-                logger.debug(LOG_KEY_KEY_NOT_FOUND, name);
+	@Override
+	public SecretKey getKey(String name, boolean create) throws CryptoException {
+		try {
+			SecretKey key = (SecretKey) keyStore.getKey(name, keyStorePassword);
+			if (key == null) {
+				logger.debug(LOG_KEY_KEY_NOT_FOUND, name);
 
-                if (create) {
-                    key = CryptoUtils.generateKey(defaultKeyAlgorithm);
-                    saveKey(name, key);
+				if (create) {
+					key = CryptoUtils.generateKey(defaultKeyAlgorithm);
+					saveKey(name, key);
 
-                    logger.debug(LOG_KEY_KEY_CREATED, name);
-                }
-            } else {
-                logger.debug(LOG_KEY_KEY_FOUND, name);
-            }
+					logger.debug(LOG_KEY_KEY_CREATED, name);
+				}
+			} else {
+				logger.debug(LOG_KEY_KEY_FOUND, name);
+			}
 
-            return key;
-        } catch (GeneralSecurityException e) {
-            throw new CryptoException(ERROR_KEY_GET_KEY_ERROR, e);
-        }
-    }
+			return key;
+		} catch (GeneralSecurityException e) {
+			throw new CryptoException(ERROR_KEY_GET_KEY_ERROR, e);
+		}
+	}
 
-    @Override
-    public void saveKey(String name, SecretKey key) throws CryptoException {
-        KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(keyStorePassword);
-        KeyStore.SecretKeyEntry entry = new KeyStore.SecretKeyEntry(key);
+	@Override
+	public void saveKey(String name, SecretKey key) throws CryptoException {
+		KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(keyStorePassword);
+		KeyStore.SecretKeyEntry entry = new KeyStore.SecretKeyEntry(key);
 
-        try {
-            keyStore.setEntry(name, entry, protParam);
-        } catch (GeneralSecurityException e) {
-            throw new CryptoException(ERROR_KEY_SAVE_KEY_ERROR, e);
-        }
+		try {
+			keyStore.setEntry(name, entry, protParam);
+		} catch (GeneralSecurityException e) {
+			throw new CryptoException(ERROR_KEY_SAVE_KEY_ERROR, e);
+		}
 
-        logger.debug(LOG_KEY_KEY_SAVED, name);
+		logger.debug(LOG_KEY_KEY_SAVED, name);
 
-        storeKeyStore();
-    }
+		storeKeyStore();
+	}
 
-    protected void loadKeyStore() throws CryptoException {
-        try {
-            keyStore = KeyStore.getInstance(KEY_STORE_TYPE);
+	protected void loadKeyStore() throws CryptoException {
+		try {
+			keyStore = KeyStore.getInstance(KEY_STORE_TYPE);
 
-            if (keyStoreFile.exists()) {
-                try (InputStream in = new FileInputStream(keyStoreFile)) {
-                    keyStore.load(in, keyStorePassword);
-                }
+			if (keyStoreFile.exists()) {
+				try (InputStream in = new FileInputStream(keyStoreFile)) {
+					keyStore.load(in, keyStorePassword);
+				}
 
-                logger.debug(LOG_KEY_KEY_STORE_LOADED, keyStoreFile);
-            } else {
-                // Create new empty keystore
-                keyStore.load(null, keyStorePassword);
-            }
-        } catch (GeneralSecurityException | IOException e) {
-            throw new CryptoException(ERROR_KEY_KEY_STORE_LOAD_ERROR, e);
-        }
-    }
+				logger.debug(LOG_KEY_KEY_STORE_LOADED, keyStoreFile);
+			} else {
+				// Create new empty keystore
+				keyStore.load(null, keyStorePassword);
+			}
+		} catch (GeneralSecurityException | IOException e) {
+			throw new CryptoException(ERROR_KEY_KEY_STORE_LOAD_ERROR, e);
+		}
+	}
 
-    protected void storeKeyStore() throws CryptoException {
-        try {
-            try (OutputStream out = FileUtils.openOutputStream(keyStoreFile)) {
-                keyStore.store(out, keyStorePassword);
-            }
+	protected void storeKeyStore() throws CryptoException {
+		try {
+			try (OutputStream out = FileUtils.openOutputStream(keyStoreFile)) {
+				keyStore.store(out, keyStorePassword);
+			}
 
-            logger.debug(LOG_KEY_KEY_STORE_STORED, keyStoreFile);
-        } catch (GeneralSecurityException | IOException e) {
-            throw new CryptoException(ERROR_KEY_KEY_STORE_STORE_ERROR, e);
-        }
-    }
+			logger.debug(LOG_KEY_KEY_STORE_STORED, keyStoreFile);
+		} catch (GeneralSecurityException | IOException e) {
+			throw new CryptoException(ERROR_KEY_KEY_STORE_STORE_ERROR, e);
+		}
+	}
 
 }

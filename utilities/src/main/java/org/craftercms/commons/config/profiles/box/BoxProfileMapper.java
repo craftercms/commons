@@ -38,46 +38,46 @@ import static org.craftercms.commons.config.ConfigUtils.*;
  */
 public class BoxProfileMapper extends AbstractProfileConfigMapper<BoxProfile> {
 
-    private static final String KEY_BOX = "box";
-    private static final String KEY_CLIENT_ID = "clientId";
-    private static final String KEY_CLIENT_SECRET = "clientSecret";
-    private static final String KEY_ENTERPRISE_ID = "enterpriseId";
-    private static final String KEY_PUBLIC_KEY_ID = "publicKeyId";
-    private static final String KEY_PRIVATE_KEY_PASS = "privateKeyPassword";
-    private static final String KEY_PRIVATE_KEY_PATH = "privateKeyPath";
-    private static final String KEY_PRIVATE_KEY = "privateKey";
-    private static final String KEY_UPLOAD_FOLDER = "uploadFolder";
+	private static final String KEY_BOX = "box";
+	private static final String KEY_CLIENT_ID = "clientId";
+	private static final String KEY_CLIENT_SECRET = "clientSecret";
+	private static final String KEY_ENTERPRISE_ID = "enterpriseId";
+	private static final String KEY_PUBLIC_KEY_ID = "publicKeyId";
+	private static final String KEY_PRIVATE_KEY_PASS = "privateKeyPassword";
+	private static final String KEY_PRIVATE_KEY_PATH = "privateKeyPath";
+	private static final String KEY_PRIVATE_KEY = "privateKey";
+	private static final String KEY_UPLOAD_FOLDER = "uploadFolder";
 
-    @ConstructorProperties({"configurationResolver"})
-    public BoxProfileMapper(ConfigurationResolver configurationResolver) {
-        super(KEY_BOX, configurationResolver);
-    }
+	@ConstructorProperties({"configurationResolver"})
+	public BoxProfileMapper(ConfigurationResolver configurationResolver) {
+		super(KEY_BOX, configurationResolver);
+	}
 
-    @Override
-    protected BoxProfile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig)
-            throws ConfigurationException {
-        BoxProfile boxProfile = new BoxProfile();
-        boxProfile.setClientId(getRequiredStringProperty(profileConfig, KEY_CLIENT_ID));
-        boxProfile.setClientSecret(getRequiredStringProperty(profileConfig, KEY_CLIENT_SECRET));
-        boxProfile.setEnterpriseId(getRequiredStringProperty(profileConfig, KEY_ENTERPRISE_ID));
-        String boxPrivateKey = getRequiredStringProperty(profileConfig, KEY_PRIVATE_KEY);
+	@Override
+	protected BoxProfile mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig)
+		throws ConfigurationException {
+		BoxProfile boxProfile = new BoxProfile();
+		boxProfile.setClientId(getRequiredStringProperty(profileConfig, KEY_CLIENT_ID));
+		boxProfile.setClientSecret(getRequiredStringProperty(profileConfig, KEY_CLIENT_SECRET));
+		boxProfile.setEnterpriseId(getRequiredStringProperty(profileConfig, KEY_ENTERPRISE_ID));
+		String boxPrivateKey = getRequiredStringProperty(profileConfig, KEY_PRIVATE_KEY);
 
-        if (StringUtils.isNotBlank(boxPrivateKey)) {
-            boxProfile.setPrivateKey(boxPrivateKey);
-        } else {
-            Path privateKeyPath = Paths.get(getStringProperty(profileConfig, KEY_PRIVATE_KEY_PATH));
-            try {
-                boxProfile.setPrivateKey(new String(Files.readAllBytes(privateKeyPath)));
-            } catch (IOException e) {
-                throw new ConfigurationException("Unable to read private key file", e);
-            }
-        }
+		if (StringUtils.isNotBlank(boxPrivateKey)) {
+			boxProfile.setPrivateKey(boxPrivateKey);
+		} else {
+			Path privateKeyPath = Paths.get(getStringProperty(profileConfig, KEY_PRIVATE_KEY_PATH));
+			try {
+				boxProfile.setPrivateKey(new String(Files.readAllBytes(privateKeyPath)));
+			} catch (IOException e) {
+				throw new ConfigurationException("Unable to read private key file", e);
+			}
+		}
 
-        boxProfile.setPrivateKeyPassword(getRequiredStringProperty(profileConfig, KEY_PRIVATE_KEY_PASS));
-        boxProfile.setPublicKeyId(getRequiredStringProperty(profileConfig, KEY_PUBLIC_KEY_ID));
-        boxProfile.setUploadFolder(getStringProperty(profileConfig, KEY_UPLOAD_FOLDER));
+		boxProfile.setPrivateKeyPassword(getRequiredStringProperty(profileConfig, KEY_PRIVATE_KEY_PASS));
+		boxProfile.setPublicKeyId(getRequiredStringProperty(profileConfig, KEY_PUBLIC_KEY_ID));
+		boxProfile.setUploadFolder(getStringProperty(profileConfig, KEY_UPLOAD_FOLDER));
 
-        return boxProfile;
-    }
+		return boxProfile;
+	}
 
 }

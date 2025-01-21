@@ -28,31 +28,31 @@ import org.springframework.context.support.GenericApplicationContext;
  */
 public class RestrictedApplicationContext extends GenericApplicationContext {
 
-    protected String[] allowedBeans;
+	protected String[] allowedBeans;
 
-    public RestrictedApplicationContext(ApplicationContext parent, String[] allowedBeans) {
-        super(parent);
-        this.allowedBeans = allowedBeans;
-    }
+	public RestrictedApplicationContext(ApplicationContext parent, String[] allowedBeans) {
+		super(parent);
+		this.allowedBeans = allowedBeans;
+	}
 
-    protected boolean isAllowed(String name) {
-        return containsBeanDefinition(name) || RegexUtils.matchesAny(name, allowedBeans);
-    }
+	protected boolean isAllowed(String name) {
+		return containsBeanDefinition(name) || RegexUtils.matchesAny(name, allowedBeans);
+	}
 
-    @Override
-    public Object getBean(String name) throws BeansException {
-        if (isAllowed(name)) {
-            return super.getBean(name);
-        }
-        return null;
-    }
+	@Override
+	public Object getBean(String name) throws BeansException {
+		if (isAllowed(name)) {
+			return super.getBean(name);
+		}
+		return null;
+	}
 
-    @Override
-    public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
-        if (isAllowed(name)) {
-            return super.getBean(name, requiredType);
-        }
-        return null;
-    }
+	@Override
+	public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+		if (isAllowed(name)) {
+			return super.getBean(name, requiredType);
+		}
+		return null;
+	}
 
 }

@@ -26,50 +26,50 @@ import org.apache.commons.collections4.MapUtils;
 
 public class ValidationResult {
 
-    protected String message;
-    protected ResourceBundle errorMessageBundle;
-    protected Map<String, String> errors;
+	protected String message;
+	protected ResourceBundle errorMessageBundle;
+	protected Map<String, String> errors;
 
-    public ValidationResult() {
-        this("");
-    }
+	public ValidationResult() {
+		this("");
+	}
 
-    public ValidationResult(String message) {
-        this(message, ValidationUtils.getDefaultErrorMessageBundle());
-    }
+	public ValidationResult(String message) {
+		this(message, ValidationUtils.getDefaultErrorMessageBundle());
+	}
 
-    public ValidationResult(ResourceBundle errorMessageBundle) {
-        this("", errorMessageBundle);
-    }
+	public ValidationResult(ResourceBundle errorMessageBundle) {
+		this("", errorMessageBundle);
+	}
 
-    public ValidationResult(String message, ResourceBundle errorMessageBundle) {
-        this.message = message;
-        this.errorMessageBundle = errorMessageBundle;
-        this.errors = new HashMap<>();
-    }
+	public ValidationResult(String message, ResourceBundle errorMessageBundle) {
+		this.message = message;
+		this.errorMessageBundle = errorMessageBundle;
+		this.errors = new HashMap<>();
+	}
 
 
-    @JsonProperty("message")
-    public String getMessage() {
-        return message;
-    }
+	@JsonProperty("message")
+	public String getMessage() {
+		return message;
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-    @JsonIgnore
-    public boolean hasErrors() {
-        return MapUtils.isNotEmpty(errors);
-    }
+	@JsonIgnore
+	public boolean hasErrors() {
+		return MapUtils.isNotEmpty(errors);
+	}
 
-    @JsonProperty("errors")
-    public Map<String, String> getErrors() {
-        return errors;
-    }
+	@JsonProperty("errors")
+	public Map<String, String> getErrors() {
+		return errors;
+	}
 
-    public void addError(String key, String errorCode, Object... args) {
-        errors.put(key, ValidationUtils.getErrorMessage(errorMessageBundle, errorCode, args));
-    }
+	public void addError(String key, String errorCode, Object... args) {
+		errors.put(key, ValidationUtils.getErrorMessage(errorMessageBundle, errorCode, args));
+	}
 
 }

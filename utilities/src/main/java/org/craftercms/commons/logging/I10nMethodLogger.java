@@ -27,25 +27,25 @@ import org.craftercms.commons.i10n.I10nUtils;
  */
 public class I10nMethodLogger implements MethodLogger {
 
-    private static final I10nLogger logger = new I10nLogger(I10nMethodLogger.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
+	private static final I10nLogger logger = new I10nLogger(I10nMethodLogger.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
-    public static final String LOG_KEY_ENTRY =      "logging.method.entry";
-    public static final String LOG_KEY_EXIT =       "logging.method.exit";
-    public static final String LOG_KEY_EXCEPTION =  "logging.method.exception";
+	public static final String LOG_KEY_ENTRY = "logging.method.entry";
+	public static final String LOG_KEY_EXIT = "logging.method.exit";
+	public static final String LOG_KEY_EXCEPTION = "logging.method.exception";
 
-    @Override
-    public void logEntry(String className, String methodName, Object[] args) {
-        logger.trace(LOG_KEY_ENTRY, methodName, className, Arrays.toString(args));
-    }
+	@Override
+	public void logEntry(String className, String methodName, Object[] args) {
+		logger.trace(LOG_KEY_ENTRY, methodName, className, Arrays.toString(args));
+	}
 
-    @Override
-    public void logExit(String className, String methodName, Object returnValue) {
-        logger.trace(LOG_KEY_EXIT, methodName, className, returnValue);
-    }
+	@Override
+	public void logExit(String className, String methodName, Object returnValue) {
+		logger.trace(LOG_KEY_EXIT, methodName, className, returnValue);
+	}
 
-    @Override
-    public void logException(String className, String methodName, Throwable e) {
-        logger.debug(LOG_KEY_EXCEPTION, e, methodName, className);
-    }
+	@Override
+	public void logException(String className, String methodName, Throwable e) {
+		logger.debug(LOG_KEY_EXCEPTION, e, methodName, className);
+	}
 
 }

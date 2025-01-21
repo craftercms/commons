@@ -17,6 +17,7 @@ package org.craftercms.commons.validation.annotations.param;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -31,9 +32,9 @@ import static org.craftercms.commons.validation.annotations.param.EsapiValidatio
 @ValidateSecurePathParam
 @EsapiValidatedParam(type = CONFIGURATION_PATH)
 public @interface ValidConfigurationPath {
-    String message() default "";
+	String message() default "";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 }

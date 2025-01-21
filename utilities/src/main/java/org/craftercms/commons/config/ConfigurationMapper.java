@@ -26,31 +26,27 @@ import org.craftercms.commons.config.profiles.ConfigurationProfileNotFoundExcept
  */
 public interface ConfigurationMapper<T> {
 
-    /**
-     * Reads the configuration from the specified input stream, extracts the specific sub-configuration identified by
-     * {@code configId} and maps the configuration to a Java bean.
-     *
-     * @param provider the provider to read the configuration file
-     * @param encoding the charset encoding of the configuration file
-     * @param configId the ID of the specific sub-configuration to map
-     *
-     * @return the configuration object
-     *
-     * @throws ConfigurationException if an error occurs
-     * @throws ConfigurationProfileNotFoundException if profile is not found
-     */
-    T readConfig(ConfigurationProvider provider, String module, String path, String encoding, String configId)
-            throws ConfigurationException, ConfigurationProfileNotFoundException;
+	/**
+	 * Reads the configuration from the specified input stream, extracts the specific sub-configuration identified by
+	 * {@code configId} and maps the configuration to a Java bean.
+	 *
+	 * @param provider the provider to read the configuration file
+	 * @param encoding the charset encoding of the configuration file
+	 * @param configId the ID of the specific sub-configuration to map
+	 * @return the configuration object
+	 * @throws ConfigurationException                if an error occurs
+	 * @throws ConfigurationProfileNotFoundException if profile is not found
+	 */
+	T readConfig(ConfigurationProvider provider, String module, String path, String encoding, String configId)
+		throws ConfigurationException, ConfigurationProfileNotFoundException;
 
-    /**
-     * Reads a single profile from the given configuration
-     *
-     * @param config the profile configuration
-     *
-     * @return the configuration object
-     *
-     * @throws ConfigurationException if an error occurs
-     */
-    T processConfig(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException;
+	/**
+	 * Reads a single profile from the given configuration
+	 *
+	 * @param config the profile configuration
+	 * @return the configuration object
+	 * @throws ConfigurationException if an error occurs
+	 */
+	T processConfig(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException;
 
 }

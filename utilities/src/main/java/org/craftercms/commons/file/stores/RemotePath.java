@@ -22,26 +22,26 @@ package org.craftercms.commons.file.stores;
  */
 public class RemotePath {
 
-    private String storeType;
-    private String path;
+	private String storeType;
+	private String path;
 
-    public RemotePath(String storeType, String path) {
-        this.storeType = storeType;
-        this.path = path;
-    }
+	public RemotePath(String storeType, String path) {
+		this.storeType = storeType;
+		this.path = path;
+	}
 
-    /**
-     * Returns the remote store type (s3, box, etc).
-     */
-    public String getStoreType() {
-        return storeType;
-    }
+	/**
+	 * Returns the remote store type (s3, box, etc).
+	 */
+	public String getStoreType() {
+		return storeType;
+	}
 
-    /**
-     * Returns the path or ID of file in the remote store.
-     */
-    public String getPath() {
-        return path;
-    }
+	/**
+	 * Returns the path or ID of file in the remote store.
+	 */
+	public String getPath() {
+		return path;
+	}
 
 }

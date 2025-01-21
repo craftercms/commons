@@ -46,126 +46,126 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
  */
 public class DefaultUpgradePipelineFactoryImpl<T> implements UpgradePipelineFactory<T>, ApplicationContextAware {
 
-    public static final String DEFAULT_PIPELINE_PREFIX = "pipelines.";
+	public static final String DEFAULT_PIPELINE_PREFIX = "pipelines.";
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    /**
-     * The version provider
-     */
-    protected final VersionProvider<T> versionProvider;
+	/**
+	 * The version provider
+	 */
+	protected final VersionProvider<T> versionProvider;
 
-    /**
-     * Path of the configuration file
-     */
-    protected final UpgradeConfigurationProvider<HierarchicalConfiguration> configurationProvider;
+	/**
+	 * Path of the configuration file
+	 */
+	protected final UpgradeConfigurationProvider<HierarchicalConfiguration> configurationProvider;
 
-    /**
-     * The prefix for the pipelines in the configuration file, defaults to {@code DEFAULT_PIPELINE_PREFIX}
-     */
-    protected String pipelinePrefix = DEFAULT_PIPELINE_PREFIX;
+	/**
+	 * The prefix for the pipelines in the configuration file, defaults to {@code DEFAULT_PIPELINE_PREFIX}
+	 */
+	protected String pipelinePrefix = DEFAULT_PIPELINE_PREFIX;
 
-    /**
-     * Name used in the configuration file
-     */
-    protected String pipelineName;
+	/**
+	 * Name used in the configuration file
+	 */
+	protected String pipelineName;
 
-    /**
-     * Indicates if the version of the target should be updated after the pipeline is executed, default to {@code true}
-     */
-    protected boolean updateVersion = true;
+	/**
+	 * Indicates if the version of the target should be updated after the pipeline is executed, default to {@code true}
+	 */
+	protected boolean updateVersion = true;
 
-    /**
-     * The application context
-     */
-    protected ApplicationContext applicationContext;
+	/**
+	 * The application context
+	 */
+	protected ApplicationContext applicationContext;
 
-    public DefaultUpgradePipelineFactoryImpl(final String pipelineName, final UpgradeConfigurationProvider<HierarchicalConfiguration> configurationProvider,
-                                             final VersionProvider<T> versionProvider) {
-        this.pipelineName = pipelineName;
-        this.configurationProvider = configurationProvider;
-        this.versionProvider = versionProvider;
-    }
+	public DefaultUpgradePipelineFactoryImpl(final String pipelineName, final UpgradeConfigurationProvider<HierarchicalConfiguration> configurationProvider,
+						 final VersionProvider<T> versionProvider) {
+		this.pipelineName = pipelineName;
+		this.configurationProvider = configurationProvider;
+		this.versionProvider = versionProvider;
+	}
 
-    public void setPipelinePrefix(final String pipelinePrefix) {
-        this.pipelinePrefix = pipelinePrefix;
-    }
+	public void setPipelinePrefix(final String pipelinePrefix) {
+		this.pipelinePrefix = pipelinePrefix;
+	}
 
-    public void setUpdateVersion(final boolean updateVersion) {
-        this.updateVersion = updateVersion;
-    }
+	public void setUpdateVersion(final boolean updateVersion) {
+		this.updateVersion = updateVersion;
+	}
 
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+	public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 
-    protected UpgradePipeline<T> createPipeline(String name, List<UpgradeOperation<T>> operations) {
-        logger.debug("Creating pipeline instance for '{}'", name);
-        return new DefaultUpgradePipelineImpl<>(name, operations);
-    }
+	protected UpgradePipeline<T> createPipeline(String name, List<UpgradeOperation<T>> operations) {
+		logger.debug("Creating pipeline instance for '{}'", name);
+		return new DefaultUpgradePipelineImpl<>(name, operations);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("rawtypes, unchecked")
-    public UpgradePipeline<T> getPipeline(UpgradeContext<T> context) throws UpgradeException, ConfigurationException {
-        logger.debug("Building pipeline for target '{}'", context);
-        String currentVersion = versionProvider.getVersion(context);
-        if (VersionProvider.SKIP.equals(currentVersion)) {
-            // Return an empty pipeline to avoid errors & warnings in the log
-            return new DefaultUpgradePipelineImpl<>(pipelineName, Collections.emptyList());
-        }
-        List<UpgradeOperation<T>> operations = new LinkedList<>();
-        HierarchicalConfiguration config = configurationProvider.getConfiguration();
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@SuppressWarnings("rawtypes, unchecked")
+	public UpgradePipeline<T> getPipeline(UpgradeContext<T> context) throws UpgradeException, ConfigurationException {
+		logger.debug("Building pipeline for target '{}'", context);
+		String currentVersion = versionProvider.getVersion(context);
+		if (VersionProvider.SKIP.equals(currentVersion)) {
+			// Return an empty pipeline to avoid errors & warnings in the log
+			return new DefaultUpgradePipelineImpl<>(pipelineName, Collections.emptyList());
+		}
+		List<UpgradeOperation<T>> operations = new LinkedList<>();
+		HierarchicalConfiguration config = configurationProvider.getConfiguration();
 
-        var pipelineRoot = pipelinePrefix + pipelineName;
-        var requiredVersion = config.getString(pipelineRoot + CONFIG_KEY_REQUIRES);
-        if (isNotEmpty(requiredVersion)) {
-            logger.debug("Pipeline '{}' requires version '{}'", pipelineName, requiredVersion);
-            // NPM mode to support ranges
-            // withClearedSuffixAndBuild() because only major.minor.patch can be properly compared
-            var version = new Semver(currentVersion, Semver.SemverType.NPM).withClearedSuffixAndBuild();
-            if (!version.satisfies(requiredVersion)) {
-                throw new UpgradeNotSupportedException(format("Current version '%s' for '%s' cannot be upgraded " +
-                        "automatically, requires '%s'", currentVersion, context, requiredVersion));
-            }
-            pipelineRoot += CONFIG_KEY_VERSIONS;
-        }
+		var pipelineRoot = pipelinePrefix + pipelineName;
+		var requiredVersion = config.getString(pipelineRoot + CONFIG_KEY_REQUIRES);
+		if (isNotEmpty(requiredVersion)) {
+			logger.debug("Pipeline '{}' requires version '{}'", pipelineName, requiredVersion);
+			// NPM mode to support ranges
+			// withClearedSuffixAndBuild() because only major.minor.patch can be properly compared
+			var version = new Semver(currentVersion, Semver.SemverType.NPM).withClearedSuffixAndBuild();
+			if (!version.satisfies(requiredVersion)) {
+				throw new UpgradeNotSupportedException(format("Current version '%s' for '%s' cannot be upgraded " +
+					"automatically, requires '%s'", currentVersion, context, requiredVersion));
+			}
+			pipelineRoot += CONFIG_KEY_VERSIONS;
+		}
 
-        List<HierarchicalConfiguration> pipeline = config.configurationsAt(pipelineRoot);
+		List<HierarchicalConfiguration> pipeline = config.configurationsAt(pipelineRoot);
 
-        String nextVersion = currentVersion;
-        for (HierarchicalConfiguration release : pipeline) {
-            String sourceVersion = release.getString(CONFIG_KEY_CURRENT_VERSION);
-            String targetVersion = release.getString(CONFIG_KEY_NEXT_VERSION);
-            if (sourceVersion.equals(nextVersion)) {
-                logger.debug("Adding version '{}' to pipeline '{}'", sourceVersion, pipelineName);
-                List<HierarchicalConfiguration> operationsConfig = release.configurationsAt(CONFIG_KEY_OPERATIONS);
-                for (HierarchicalConfiguration operationConfig : operationsConfig) {
-                    UpgradeOperation<T> operation =
-                        applicationContext.getBean(operationConfig.getString(CONFIG_KEY_TYPE), UpgradeOperation.class);
-                    operation.init(sourceVersion, targetVersion, operationConfig);
-                    operations.add(operation);
-                }
+		String nextVersion = currentVersion;
+		for (HierarchicalConfiguration release : pipeline) {
+			String sourceVersion = release.getString(CONFIG_KEY_CURRENT_VERSION);
+			String targetVersion = release.getString(CONFIG_KEY_NEXT_VERSION);
+			if (sourceVersion.equals(nextVersion)) {
+				logger.debug("Adding version '{}' to pipeline '{}'", sourceVersion, pipelineName);
+				List<HierarchicalConfiguration> operationsConfig = release.configurationsAt(CONFIG_KEY_OPERATIONS);
+				for (HierarchicalConfiguration operationConfig : operationsConfig) {
+					UpgradeOperation<T> operation =
+						applicationContext.getBean(operationConfig.getString(CONFIG_KEY_TYPE), UpgradeOperation.class);
+					operation.init(sourceVersion, targetVersion, operationConfig);
+					operations.add(operation);
+				}
 
-                if (updateVersion) {
-                    logger.debug("Adding upgrade version operation for '{}' to pipeline '{}'", targetVersion,
-                            pipelineName);
-                    UpdateVersionUpgradeOperation<T> updateOp = new UpdateVersionUpgradeOperation<>(versionProvider);
-                    updateOp.init(sourceVersion, targetVersion, config);
-                    operations.add(updateOp);
-                } else {
-                    logger.debug("Skipping upgrade version operation for pipeline '{}'", pipelineName);
-                }
+				if (updateVersion) {
+					logger.debug("Adding upgrade version operation for '{}' to pipeline '{}'", targetVersion,
+						pipelineName);
+					UpdateVersionUpgradeOperation<T> updateOp = new UpdateVersionUpgradeOperation<>(versionProvider);
+					updateOp.init(sourceVersion, targetVersion, config);
+					operations.add(updateOp);
+				} else {
+					logger.debug("Skipping upgrade version operation for pipeline '{}'", pipelineName);
+				}
 
-                nextVersion = targetVersion;
-            } else {
-                logger.debug("Skipping version '{}' already applied", sourceVersion);
-            }
-        }
+				nextVersion = targetVersion;
+			} else {
+				logger.debug("Skipping version '{}' already applied", sourceVersion);
+			}
+		}
 
-        return createPipeline(pipelineName, operations);
-    }
+		return createPipeline(pipelineName, operations);
+	}
 
 }

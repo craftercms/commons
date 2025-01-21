@@ -25,28 +25,30 @@ import java.io.File;
  */
 public class AuthConfiguratorFactory {
 
-    protected final File sshConfig;
+	protected final File sshConfig;
 
-    public AuthConfiguratorFactory(File sshConfig) {
-        this.sshConfig = sshConfig;
-    }
+	public AuthConfiguratorFactory(File sshConfig) {
+		this.sshConfig = sshConfig;
+	}
 
-    /**
-     * Creates a new instance of {@link UrlBasedAuthConfiguratorBuilder}
-     * @param url the repository url
-     * @return the builder
-     */
-    public UrlBasedAuthConfiguratorBuilder forUrl(String url) {
-        return new UrlBasedAuthConfiguratorBuilder(sshConfig, url);
-    }
+	/**
+	 * Creates a new instance of {@link UrlBasedAuthConfiguratorBuilder}
+	 *
+	 * @param url the repository url
+	 * @return the builder
+	 */
+	public UrlBasedAuthConfiguratorBuilder forUrl(String url) {
+		return new UrlBasedAuthConfiguratorBuilder(sshConfig, url);
+	}
 
-    /**
-     * Creates a new instance of {@link TypeBasedAuthConfiguratorBuilder}
-     * @param type the auth type
-     * @return the builder
-     */
-    public TypeBasedAuthConfiguratorBuilder forType(String type) {
-        return new TypeBasedAuthConfiguratorBuilder(sshConfig, type);
-    }
+	/**
+	 * Creates a new instance of {@link TypeBasedAuthConfiguratorBuilder}
+	 *
+	 * @param type the auth type
+	 * @return the builder
+	 */
+	public TypeBasedAuthConfiguratorBuilder forType(String type) {
+		return new TypeBasedAuthConfiguratorBuilder(sshConfig, type);
+	}
 
 }

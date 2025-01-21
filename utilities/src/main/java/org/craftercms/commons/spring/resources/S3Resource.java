@@ -41,165 +41,167 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public class S3Resource implements RangeAwareResource {
 
-    private static final Logger logger = LoggerFactory.getLogger(S3Resource.class);
+	private static final Logger logger = LoggerFactory.getLogger(S3Resource.class);
 
-    private S3ClientCachingFactory clientFactory;
-    private S3Profile profile;
-    private String bucket;
-    private String key;
+	private S3ClientCachingFactory clientFactory;
+	private S3Profile profile;
+	private String bucket;
+	private String key;
 
-    public S3Resource(S3ClientCachingFactory clientFactory, S3Profile profile, String key) {
-        this(clientFactory, profile, null, key);
-    }
+	public S3Resource(S3ClientCachingFactory clientFactory, S3Profile profile, String key) {
+		this(clientFactory, profile, null, key);
+	}
 
-    public S3Resource(S3ClientCachingFactory clientFactory, S3Profile profile, String bucket, String key) {
-        this.clientFactory = clientFactory;
-        this.profile = profile;
-        this.bucket = bucket;
-        this.key = key;
-    }
+	public S3Resource(S3ClientCachingFactory clientFactory, S3Profile profile, String bucket, String key) {
+		this.clientFactory = clientFactory;
+		this.profile = profile;
+		this.bucket = bucket;
+		this.key = key;
+	}
 
-    protected String getActualKey() {
-        String keyUri = UrlUtils.concat(profile.getPrefix(), key);
-        try {
-            return URLDecoder.decode(keyUri, StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-            return keyUri;
-        }
-    }
+	protected String getActualKey() {
+		String keyUri = UrlUtils.concat(profile.getPrefix(), key);
+		try {
+			return URLDecoder.decode(keyUri, StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			return keyUri;
+		}
+	}
 
-    @Override
-    public boolean exists() {
-        try {
-            getClient().headObject(getHeadObjectRequest());
-            return true;
-        } catch (NoSuchKeyException e) {
-            logger.error(format("Error while checking if object '%s' exists", getDescription()), e);
-            return false;
-        }
-    }
+	@Override
+	public boolean exists() {
+		try {
+			getClient().headObject(getHeadObjectRequest());
+			return true;
+		} catch (NoSuchKeyException e) {
+			logger.error(format("Error while checking if object '%s' exists", getDescription()), e);
+			return false;
+		}
+	}
 
-    @Override
-    public boolean isReadable() {
-        return true;
-    }
+	@Override
+	public boolean isReadable() {
+		return true;
+	}
 
-    @Override
-    public boolean isOpen() {
-        return false;
-    }
+	@Override
+	public boolean isOpen() {
+		return false;
+	}
 
-    @Override
-    public URL getURL() throws IOException {
-        throw new IOException(getDescription() + " can't be resolved to a URL");
-    }
+	@Override
+	public URL getURL() throws IOException {
+		throw new IOException(getDescription() + " can't be resolved to a URL");
+	}
 
-    @Override
-    public URI getURI() throws IOException {
-        throw new IOException(getDescription() + " can't be resolved to a URI");
-    }
+	@Override
+	public URI getURI() throws IOException {
+		throw new IOException(getDescription() + " can't be resolved to a URI");
+	}
 
-    @Override
-    public File getFile() throws IOException {
-        throw new IOException(getDescription() + " can't be resolved to a File");
-    }
+	@Override
+	public File getFile() throws IOException {
+		throw new IOException(getDescription() + " can't be resolved to a File");
+	}
 
-    @Override
-    public long contentLength() throws IOException {
-        return getMetadata().contentLength();
-    }
+	@Override
+	public long contentLength() throws IOException {
+		return getMetadata().contentLength();
+	}
 
-    @Override
-    public long lastModified() throws IOException {
-        return getMetadata().lastModified().toEpochMilli();
-    }
+	@Override
+	public long lastModified() throws IOException {
+		return getMetadata().lastModified().toEpochMilli();
+	}
 
-    @Override
-    public Resource createRelative(String relativePath) throws IOException {
-        return new S3Resource(clientFactory, profile, UrlUtils.concat(getActualKey(), relativePath));
-    }
+	@Override
+	public Resource createRelative(String relativePath) throws IOException {
+		return new S3Resource(clientFactory, profile, UrlUtils.concat(getActualKey(), relativePath));
+	}
 
-    @Override
-    public String getFilename() {
-        return FilenameUtils.getName(getActualKey());
-    }
+	@Override
+	public String getFilename() {
+		return FilenameUtils.getName(getActualKey());
+	}
 
-    @Override
-    public String getDescription() {
-        return toString();
-    }
+	@Override
+	public String getDescription() {
+		return toString();
+	}
 
-    @Override
-    public InputStream getInputStream() throws IOException {
-        try {
-            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                    .bucket(getBucket())
-                    .key(getActualKey())
-                    .build();
-            return getClient().getObject(getObjectRequest);
-        } catch (NoSuchKeyException e) {
-            throw new FileNotFoundException(getDescription() + " not found");
-        } catch (Exception e) {
-            throw new IOException("Error while getting object content for " + getDescription(), e);
-        }
-    }
+	@Override
+	public InputStream getInputStream() throws IOException {
+		try {
+			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+				.bucket(getBucket())
+				.key(getActualKey())
+				.build();
+			return getClient().getObject(getObjectRequest);
+		} catch (NoSuchKeyException e) {
+			throw new FileNotFoundException(getDescription() + " not found");
+		} catch (Exception e) {
+			throw new IOException("Error while getting object content for " + getDescription(), e);
+		}
+	}
 
-    @Override
-    public InputStream getInputStream(long start, long end) throws IOException {
-        try {
-            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                    .bucket(getBucket())
-                    .key(getActualKey())
-                    .range("bytes=" + start + "-" + end)
-                    .build();
-            return getClient().getObject(getObjectRequest);
-        } catch (NoSuchKeyException e) {
-            throw new FileNotFoundException(getDescription() + " not found");
-        } catch (Exception e) {
-            throw new IOException("Error while getting object content for " + getDescription(), e);
-        }
-    }
+	@Override
+	public InputStream getInputStream(long start, long end) throws IOException {
+		try {
+			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+				.bucket(getBucket())
+				.key(getActualKey())
+				.range("bytes=" + start + "-" + end)
+				.build();
+			return getClient().getObject(getObjectRequest);
+		} catch (NoSuchKeyException e) {
+			throw new FileNotFoundException(getDescription() + " not found");
+		} catch (Exception e) {
+			throw new IOException("Error while getting object content for " + getDescription(), e);
+		}
+	}
 
-    @Override
-    public String toString() {
-        return "S3Resource{" +
-               "profile=" + profile +
-               ", key='" + key + '\'' +
-               '}';
-    }
+	@Override
+	public String toString() {
+		return "S3Resource{" +
+			"profile=" + profile +
+			", key='" + key + '\'' +
+			'}';
+	}
 
-    private S3Client getClient() {
-        return clientFactory.getClient(profile);
-    }
+	private S3Client getClient() {
+		return clientFactory.getClient(profile);
+	}
 
-    private String getBucket() {
-        return isEmpty(bucket)? profile.getBucketName() : bucket;
-    }
+	private String getBucket() {
+		return isEmpty(bucket) ? profile.getBucketName() : bucket;
+	}
 
-    /**
-     * Get head object request
-     * @return instance of {@link HeadObjectRequest}
-     */
-    private HeadObjectRequest getHeadObjectRequest() {
-        return HeadObjectRequest.builder()
-                .bucket(getBucket())
-                .key(getActualKey())
-                .build();
-    }
+	/**
+	 * Get head object request
+	 *
+	 * @return instance of {@link HeadObjectRequest}
+	 */
+	private HeadObjectRequest getHeadObjectRequest() {
+		return HeadObjectRequest.builder()
+			.bucket(getBucket())
+			.key(getActualKey())
+			.build();
+	}
 
-    /**
-     * Get S3 object metadata
-     * @return instance of {@link HeadObjectResponse}
-     * @throws IOException
-     */
-    private HeadObjectResponse getMetadata() throws IOException {
-        try {
-            return getClient().headObject(getHeadObjectRequest());
-        } catch (NoSuchKeyException e) {
-            throw new FileNotFoundException(getDescription() + " not found");
-        } catch (Exception e) {
-            throw new IOException("Error while getting object metadata for " + getDescription(), e);
-        }
-    }
+	/**
+	 * Get S3 object metadata
+	 *
+	 * @return instance of {@link HeadObjectResponse}
+	 * @throws IOException
+	 */
+	private HeadObjectResponse getMetadata() throws IOException {
+		try {
+			return getClient().headObject(getHeadObjectRequest());
+		} catch (NoSuchKeyException e) {
+			throw new FileNotFoundException(getDescription() + " not found");
+		} catch (Exception e) {
+			throw new IOException("Error while getting object metadata for " + getDescription(), e);
+		}
+	}
 
 }

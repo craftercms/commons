@@ -27,30 +27,30 @@ import org.springframework.context.ApplicationContextAware;
  */
 public class ApplicationContextAccessor implements ApplicationContextAware {
 
-    private ApplicationContext actualApplicationContext;
+	private ApplicationContext actualApplicationContext;
 
-    public ApplicationContextAccessor() {
-    }
+	public ApplicationContextAccessor() {
+	}
 
-    public ApplicationContextAccessor(ApplicationContext actualApplicationContext) {
-        this.actualApplicationContext = actualApplicationContext;
-    }
+	public ApplicationContextAccessor(ApplicationContext actualApplicationContext) {
+		this.actualApplicationContext = actualApplicationContext;
+	}
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.actualApplicationContext = applicationContext;
-    }
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.actualApplicationContext = applicationContext;
+	}
 
-    public Object get(String beanName) {
-        return getApplicationContext().getBean(beanName);
-    }
+	public Object get(String beanName) {
+		return getApplicationContext().getBean(beanName);
+	}
 
-    public <T> T get(String beanName, Class<T> requiredType) {
-        return getApplicationContext().getBean(beanName, requiredType);
-    }
+	public <T> T get(String beanName, Class<T> requiredType) {
+		return getApplicationContext().getBean(beanName, requiredType);
+	}
 
-    protected ApplicationContext getApplicationContext() {
-        return actualApplicationContext;
-    }
+	protected ApplicationContext getApplicationContext() {
+		return actualApplicationContext;
+	}
 
 }

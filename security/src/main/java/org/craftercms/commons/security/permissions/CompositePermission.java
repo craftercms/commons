@@ -26,25 +26,25 @@ import java.util.Collection;
  */
 public class CompositePermission implements Permission {
 
-    protected Collection<Permission> permissions;
+	protected Collection<Permission> permissions;
 
-    public CompositePermission(Permission... permissions) {
-        this(Arrays.asList(permissions));
-    }
+	public CompositePermission(Permission... permissions) {
+		this(Arrays.asList(permissions));
+	}
 
-    public CompositePermission(Collection<Permission> permissions) {
-        this.permissions = permissions;
-    }
+	public CompositePermission(Collection<Permission> permissions) {
+		this.permissions = permissions;
+	}
 
-    @Override
-    public boolean isAllowed(String action) {
-        for (Permission permission : permissions) {
-            if (!permission.isAllowed(action)) {
-                return false;
-            }
-        }
+	@Override
+	public boolean isAllowed(String action) {
+		for (Permission permission : permissions) {
+			if (!permission.isAllowed(action)) {
+				return false;
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
 }

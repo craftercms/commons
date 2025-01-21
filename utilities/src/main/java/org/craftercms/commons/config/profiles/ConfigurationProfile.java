@@ -25,27 +25,27 @@ import java.util.Objects;
  */
 public class ConfigurationProfile {
 
-    protected String profileId;
+	protected String profileId;
 
-    public String getProfileId() {
-        return profileId;
-    }
+	public String getProfileId() {
+		return profileId;
+	}
 
-    public void setProfileId(String profileId) {
-        this.profileId = profileId;
-    }
+	public void setProfileId(String profileId) {
+		this.profileId = profileId;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ConfigurationProfile that = (ConfigurationProfile) o;
-        return profileId.equals(that.profileId);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ConfigurationProfile that = (ConfigurationProfile) o;
+		return profileId.equals(that.profileId);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(profileId);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(profileId);
+	}
 
 }

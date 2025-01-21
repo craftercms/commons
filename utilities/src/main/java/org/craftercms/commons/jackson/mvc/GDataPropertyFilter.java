@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.ClassUtils;
@@ -42,136 +43,136 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 public class GDataPropertyFilter extends AbstractCrafterPropertyFilter {
 
-    public static final String SELECTOR_ALIAS_PREFIX = ":";
-    protected String selectorParameterName;
-    protected OverrideProperties alias;
-    protected Map<String, String> superClassCache;
-    protected Map<String, List<String>> aliasParsedCache;
-    protected Pattern p = Pattern.compile("\\w+\\(\\w+(\\,\\w+)*\\)", Pattern.CASE_INSENSITIVE);
-    private Logger log = LoggerFactory.getLogger(GDataPropertyFilter.class);
-    private InjectValueFactory injectValueFactory;
+	public static final String SELECTOR_ALIAS_PREFIX = ":";
+	protected String selectorParameterName;
+	protected OverrideProperties alias;
+	protected Map<String, String> superClassCache;
+	protected Map<String, List<String>> aliasParsedCache;
+	protected Pattern p = Pattern.compile("\\w+\\(\\w+(\\,\\w+)*\\)", Pattern.CASE_INSENSITIVE);
+	private Logger log = LoggerFactory.getLogger(GDataPropertyFilter.class);
+	private InjectValueFactory injectValueFactory;
 
-    public GDataPropertyFilter() {
-        superClassCache = new HashMap<>();
-        aliasParsedCache = new HashMap<>();
-    }
+	public GDataPropertyFilter() {
+		superClassCache = new HashMap<>();
+		aliasParsedCache = new HashMap<>();
+	}
 
-    @Override
-    public String getFilterName() {
-        return "gdata";
-    }
+	@Override
+	public String getFilterName() {
+		return "gdata";
+	}
 
 
-    @Override
-    protected boolean include(final BeanPropertyWriter writer) {
-        Class<?> clazz = writer.getMember().getDeclaringClass();
-        String propName = writer.getName();
-        if (!isPrimitive(clazz)) {
-            propName = getMostSuperClassName(clazz) + "." + propName;
-        }
-        checkForCrafterAnnotations(writer);
-        return checkProperty(propName);
-    }
+	@Override
+	protected boolean include(final BeanPropertyWriter writer) {
+		Class<?> clazz = writer.getMember().getDeclaringClass();
+		String propName = writer.getName();
+		if (!isPrimitive(clazz)) {
+			propName = getMostSuperClassName(clazz) + "." + propName;
+		}
+		checkForCrafterAnnotations(writer);
+		return checkProperty(propName);
+	}
 
-    private void checkForCrafterAnnotations(final BeanPropertyWriter writer) {
-        InjectValue annotations = writer.getAnnotation(InjectValue.class);
-        if(annotations!=null && injectValueFactory!=null){
+	private void checkForCrafterAnnotations(final BeanPropertyWriter writer) {
+		InjectValue annotations = writer.getAnnotation(InjectValue.class);
+		if (annotations != null && injectValueFactory != null) {
 
-        }
-    }
+		}
+	}
 
-    @Override
-    protected boolean include(final PropertyWriter writer) {
-        if (writer instanceof BeanPropertyWriter) {
-            return include((BeanPropertyWriter)writer);
-        }
-        return checkProperty(writer.getName());
-    }
+	@Override
+	protected boolean include(final PropertyWriter writer) {
+		if (writer instanceof BeanPropertyWriter) {
+			return include((BeanPropertyWriter) writer);
+		}
+		return checkProperty(writer.getName());
+	}
 
-    protected boolean checkProperty(final String propertyName) {
+	protected boolean checkProperty(final String propertyName) {
 
-        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes())
-            .getRequest();
-        Object attributes = request.getParameter(selectorParameterName);
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+			.getRequest();
+		Object attributes = request.getParameter(selectorParameterName);
 
-        if (attributes == null) {
-            return true;
-        } else {
-            List<String> query = parseRequestSelector(attributes.toString());
-            if (query == null || query.isEmpty()) {
-                log.warn("Result of parsing selector {} is null or empty ignoring selector", attributes);
-                return true;
-            } else {
-                return checkPropertyAgainstPattern(query, propertyName);
-            }
-        }
-    }
+		if (attributes == null) {
+			return true;
+		} else {
+			List<String> query = parseRequestSelector(attributes.toString());
+			if (query == null || query.isEmpty()) {
+				log.warn("Result of parsing selector {} is null or empty ignoring selector", attributes);
+				return true;
+			} else {
+				return checkPropertyAgainstPattern(query, propertyName);
+			}
+		}
+	}
 
-    protected List<String> parseRequestSelector(final String selectorStr) {
+	protected List<String> parseRequestSelector(final String selectorStr) {
 
-        if (selectorStr.startsWith(SELECTOR_ALIAS_PREFIX)) {
-            String cacheKey = selectorStr.substring(1);
-            if (aliasParsedCache.containsKey(cacheKey)) {
-                return aliasParsedCache.get(cacheKey);
-            } else {
-                String aliasStr = alias.get(cacheKey);
-                if (aliasStr == null || StringUtils.isWhitespace(aliasStr)) {
-                    log.error("Selector with name {} is not register or is whitespace ignoring", selectorStr);
-                    return null;
-                }
-                List<String> list = internalParser(aliasStr);
-                aliasParsedCache.put(cacheKey, list);
-                return list;
-            }
-        } else {
-            return internalParser(selectorStr);
-        }
-    }
+		if (selectorStr.startsWith(SELECTOR_ALIAS_PREFIX)) {
+			String cacheKey = selectorStr.substring(1);
+			if (aliasParsedCache.containsKey(cacheKey)) {
+				return aliasParsedCache.get(cacheKey);
+			} else {
+				String aliasStr = alias.get(cacheKey);
+				if (aliasStr == null || StringUtils.isWhitespace(aliasStr)) {
+					log.error("Selector with name {} is not register or is whitespace ignoring", selectorStr);
+					return null;
+				}
+				List<String> list = internalParser(aliasStr);
+				aliasParsedCache.put(cacheKey, list);
+				return list;
+			}
+		} else {
+			return internalParser(selectorStr);
+		}
+	}
 
-    protected List<String> internalParser(final String selectorStr) {
-        try {
-            Matcher m = p.matcher(selectorStr);
-            List<String> matches = new ArrayList<>();
-            while (m.find()) {
-                String str = m.group().toLowerCase();
-                String[] properties = str.substring(str.lastIndexOf("(")).replaceAll("\\(", "").replaceAll("\\)",
-                    "").split(",");
+	protected List<String> internalParser(final String selectorStr) {
+		try {
+			Matcher m = p.matcher(selectorStr);
+			List<String> matches = new ArrayList<>();
+			while (m.find()) {
+				String str = m.group().toLowerCase();
+				String[] properties = str.substring(str.lastIndexOf("(")).replaceAll("\\(", "").replaceAll("\\)",
+					"").split(",");
 
-                for (String property : properties) {
-                    matches.add(str.substring(0, str.lastIndexOf("(")) + "." + property);
-                }
-            }
-            return matches;
-        } catch (Exception ex) {
-            log.error("Unable to parse Selector " + selectorStr, ex);
-            return null;
-        }
-    }
+				for (String property : properties) {
+					matches.add(str.substring(0, str.lastIndexOf("(")) + "." + property);
+				}
+			}
+			return matches;
+		} catch (Exception ex) {
+			log.error("Unable to parse Selector " + selectorStr, ex);
+			return null;
+		}
+	}
 
-    protected String getMostSuperClassName(Class<?> clazz) {
-        if (!superClassCache.containsKey(clazz.getName())) {
-            List<Class<?>> superClasses = ClassUtils.getAllSuperclasses(clazz);
-            // WE don't count object
-            String className;
-            if (superClasses.size() == 1) {
-                className = clazz.getSimpleName();
-            } else {
-                className = superClasses.get(0).getSimpleName();
-            }
-            superClassCache.put(clazz.getName(), className);
-        }
-        return superClassCache.get(clazz.getName());
-    }
+	protected String getMostSuperClassName(Class<?> clazz) {
+		if (!superClassCache.containsKey(clazz.getName())) {
+			List<Class<?>> superClasses = ClassUtils.getAllSuperclasses(clazz);
+			// WE don't count object
+			String className;
+			if (superClasses.size() == 1) {
+				className = clazz.getSimpleName();
+			} else {
+				className = superClasses.get(0).getSimpleName();
+			}
+			superClassCache.put(clazz.getName(), className);
+		}
+		return superClassCache.get(clazz.getName());
+	}
 
-    protected boolean checkPropertyAgainstPattern(final List<String> pattern, final String propertyName) {
-        return pattern.contains(propertyName.toLowerCase());
-    }
+	protected boolean checkPropertyAgainstPattern(final List<String> pattern, final String propertyName) {
+		return pattern.contains(propertyName.toLowerCase());
+	}
 
-    public void setSelectorParameterName(final String selectorParameterName) {
-        this.selectorParameterName = selectorParameterName;
-    }
+	public void setSelectorParameterName(final String selectorParameterName) {
+		this.selectorParameterName = selectorParameterName;
+	}
 
-    public void setAlias(final OverrideProperties alias) {
-        this.alias = alias;
-    }
+	public void setAlias(final OverrideProperties alias) {
+		this.alias = alias;
+	}
 }

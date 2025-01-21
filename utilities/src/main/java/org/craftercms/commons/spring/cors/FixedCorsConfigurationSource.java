@@ -35,35 +35,35 @@ import static java.util.stream.Collectors.toList;
  */
 public class FixedCorsConfigurationSource implements CorsConfigurationSource {
 
-    protected CorsConfiguration config;
+	protected CorsConfiguration config;
 
-    @ConstructorProperties({"disableCORS", "allowOrigins", "allowMethods", "maxAge", "allowHeaders",
-            "allowCredentials"})
-    public FixedCorsConfigurationSource(boolean disableCORS, String allowOrigins, String allowMethods, String maxAge,
-                                        String allowHeaders, boolean allowCredentials) {
-        if (!disableCORS) {
-            config = new CorsConfiguration();
-            config.setAllowedOriginPatterns(getOrigins(allowOrigins));
-            config.setAllowedMethods(asList(allowMethods.split(",")));
-            config.setAllowedHeaders(asList(allowHeaders.split(",")));
-            config.setMaxAge(Long.parseLong(maxAge));
-            config.setAllowCredentials(allowCredentials);
-        }
+	@ConstructorProperties({"disableCORS", "allowOrigins", "allowMethods", "maxAge", "allowHeaders",
+		"allowCredentials"})
+	public FixedCorsConfigurationSource(boolean disableCORS, String allowOrigins, String allowMethods, String maxAge,
+					    String allowHeaders, boolean allowCredentials) {
+		if (!disableCORS) {
+			config = new CorsConfiguration();
+			config.setAllowedOriginPatterns(getOrigins(allowOrigins));
+			config.setAllowedMethods(asList(allowMethods.split(",")));
+			config.setAllowedHeaders(asList(allowHeaders.split(",")));
+			config.setMaxAge(Long.parseLong(maxAge));
+			config.setAllowCredentials(allowCredentials);
+		}
 
-    }
+	}
 
-    @Override
-    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-        return config;
-    }
+	@Override
+	public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+		return config;
+	}
 
-    //This is a special case because each pattern can contain additional commas, so we can't split on all of them
-    //The value should look like this "http://localhost:[8000\,3000], http://domain.com"
-    public static List<String> getOrigins(String value) {
-        return Arrays.stream(value.split("(?<!\\\\),")) // split on all commas not preceded by a backslash
-                .map(pattern -> pattern.replaceAll("\\\\,", ",")) //remove the backslash after split
-                .map(String::trim)
-                .collect(toList());
-    }
+	//This is a special case because each pattern can contain additional commas, so we can't split on all of them
+	//The value should look like this "http://localhost:[8000\,3000], http://domain.com"
+	public static List<String> getOrigins(String value) {
+		return Arrays.stream(value.split("(?<!\\\\),")) // split on all commas not preceded by a backslash
+			.map(pattern -> pattern.replaceAll("\\\\,", ",")) //remove the backslash after split
+			.map(String::trim)
+			.collect(toList());
+	}
 
 }

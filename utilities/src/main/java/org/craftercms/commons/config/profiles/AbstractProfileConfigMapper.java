@@ -30,44 +30,44 @@ import static java.lang.String.format;
  */
 public abstract class AbstractProfileConfigMapper<T extends ConfigurationProfile> implements ConfigurationMapper<T> {
 
-    private static final String CONFIG_KEY_PROFILE = "profile";
-    private static final String CONFIG_KEY_ID = "id";
+	private static final String CONFIG_KEY_PROFILE = "profile";
+	private static final String CONFIG_KEY_ID = "id";
 
-    protected String serviceName;
+	protected String serviceName;
 
-    protected ConfigurationResolver configurationResolver;
+	protected ConfigurationResolver configurationResolver;
 
-    public AbstractProfileConfigMapper(String serviceName, ConfigurationResolver configurationResolver) {
-        this.serviceName = serviceName;
-        this.configurationResolver = configurationResolver;
-    }
+	public AbstractProfileConfigMapper(String serviceName, ConfigurationResolver configurationResolver) {
+		this.serviceName = serviceName;
+		this.configurationResolver = configurationResolver;
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public T readConfig(ConfigurationProvider provider, String module, String path, String encoding, String profileId)
-            throws ConfigurationException, ConfigurationProfileNotFoundException {
-        HierarchicalConfiguration<ImmutableNode> config =
-                (HierarchicalConfiguration<ImmutableNode>)
-                        configurationResolver.getXmlConfiguration(module, path, provider);
+	@Override
+	@SuppressWarnings("unchecked")
+	public T readConfig(ConfigurationProvider provider, String module, String path, String encoding, String profileId)
+		throws ConfigurationException, ConfigurationProfileNotFoundException {
+		HierarchicalConfiguration<ImmutableNode> config =
+			(HierarchicalConfiguration<ImmutableNode>)
+				configurationResolver.getXmlConfiguration(module, path, provider);
 
-        List<HierarchicalConfiguration<ImmutableNode>> profiles =
-            config.configurationsAt(serviceName + "." + CONFIG_KEY_PROFILE);
-        HierarchicalConfiguration<ImmutableNode> profileConfig = profiles
-                .stream()
-                .filter(c -> profileId.equals(c.getString(CONFIG_KEY_ID)))
-                .findFirst()
-                .orElseThrow(() -> new ConfigurationProfileNotFoundException(format("Profile '%s' not found", profileId)));
+		List<HierarchicalConfiguration<ImmutableNode>> profiles =
+			config.configurationsAt(serviceName + "." + CONFIG_KEY_PROFILE);
+		HierarchicalConfiguration<ImmutableNode> profileConfig = profiles
+			.stream()
+			.filter(c -> profileId.equals(c.getString(CONFIG_KEY_ID)))
+			.findFirst()
+			.orElseThrow(() -> new ConfigurationProfileNotFoundException(format("Profile '%s' not found", profileId)));
 
-        T profile = processConfig(profileConfig);
-        profile.setProfileId(profileId);
-        return profile;
-    }
+		T profile = processConfig(profileConfig);
+		profile.setProfileId(profileId);
+		return profile;
+	}
 
-    @Override
-    public T processConfig(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException {
-        return mapProfile(config);
-    }
+	@Override
+	public T processConfig(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException {
+		return mapProfile(config);
+	}
 
-    protected abstract T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException;
+	protected abstract T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException;
 
 }

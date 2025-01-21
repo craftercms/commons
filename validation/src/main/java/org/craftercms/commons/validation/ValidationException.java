@@ -22,25 +22,25 @@ package org.craftercms.commons.validation;
  */
 public class ValidationException extends Exception implements ValidationResultAware {
 
-    protected ValidationResult result;
+	protected ValidationResult result;
 
-    public ValidationException(String message) {
-        super(message);
-    }
+	public ValidationException(String message) {
+		super(message);
+	}
 
-    public ValidationException(ValidationResult result) {
-        super(result.getMessage());
+	public ValidationException(ValidationResult result) {
+		super(result.getMessage());
 
-        this.result = result;
-    }
+		this.result = result;
+	}
 
-    public ValidationResult getResult() {
-        return result;
-    }
+	public ValidationResult getResult() {
+		return result;
+	}
 
-    @Override
-    public String getMessage() {
-        return super.getMessage() + "; validation errors: " + result.getErrors();
-    }
+	@Override
+	public String getMessage() {
+		return super.getMessage() + "; validation errors: " + result.getErrors();
+	}
 
 }

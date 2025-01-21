@@ -26,36 +26,36 @@ import org.craftercms.commons.entitlements.model.Module;
  */
 public class UnsupportedEntitlementException extends EntitlementException {
 
-    /**
-     * The requested module.
-     */
-    protected Module module;
+	/**
+	 * The requested module.
+	 */
+	protected Module module;
 
-    /**
-     * The requested entitlement.
-     */
-    protected EntitlementType entitlementType;
+	/**
+	 * The requested entitlement.
+	 */
+	protected EntitlementType entitlementType;
 
-    public UnsupportedEntitlementException(final Module module, final EntitlementType entitlementType) {
-        super(String.format("Unsupported entitlement '%s' for module '%s'", entitlementType, module));
-        this.module = module;
-        this.entitlementType = entitlementType;
-    }
+	public UnsupportedEntitlementException(final Module module, final EntitlementType entitlementType) {
+		super(String.format("Unsupported entitlement '%s' for module '%s'", entitlementType, module));
+		this.module = module;
+		this.entitlementType = entitlementType;
+	}
 
-    public Module getModule() {
-        return module;
-    }
+	public Module getModule() {
+		return module;
+	}
 
-    public void setModule(final Module module) {
-        this.module = module;
-    }
+	public void setModule(final Module module) {
+		this.module = module;
+	}
 
-    public EntitlementType getEntitlementType() {
-        return entitlementType;
-    }
+	public EntitlementType getEntitlementType() {
+		return entitlementType;
+	}
 
-    public void setEntitlementType(final EntitlementType entitlementType) {
-        this.entitlementType = entitlementType;
-    }
+	public void setEntitlementType(final EntitlementType entitlementType) {
+		this.entitlementType = entitlementType;
+	}
 
 }

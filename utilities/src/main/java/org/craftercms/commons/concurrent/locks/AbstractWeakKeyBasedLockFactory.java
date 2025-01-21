@@ -28,33 +28,32 @@ import java.util.WeakHashMap;
  * the map.
  *
  * @param <L> the class of the lock
- *
  * @author avasquez
  * @since 3.1.5
  */
 public abstract class AbstractWeakKeyBasedLockFactory<L> implements KeyBasedLockFactory<L> {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractWeakKeyBasedLockFactory.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractWeakKeyBasedLockFactory.class);
 
-    protected Map<Object, L> locks;
+	protected Map<Object, L> locks;
 
-    protected AbstractWeakKeyBasedLockFactory() {
-        locks = new WeakHashMap<>();
-    }
+	protected AbstractWeakKeyBasedLockFactory() {
+		locks = new WeakHashMap<>();
+	}
 
-    @Override
-    public synchronized L getLock(Object key) {
-        logger.debug("Getting lock for key '{}'", key);
+	@Override
+	public synchronized L getLock(Object key) {
+		logger.debug("Getting lock for key '{}'", key);
 
-        L lock = locks.get(key);
-        if (lock == null) {
-            lock = newLock();
-            locks.put(key, lock);
-        }
+		L lock = locks.get(key);
+		if (lock == null) {
+			lock = newLock();
+			locks.put(key, lock);
+		}
 
-        return lock;
-    }
+		return lock;
+	}
 
-    protected abstract L newLock();
+	protected abstract L newLock();
 
 }

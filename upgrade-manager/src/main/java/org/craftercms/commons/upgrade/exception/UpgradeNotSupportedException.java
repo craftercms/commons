@@ -24,12 +24,12 @@ package org.craftercms.commons.upgrade.exception;
  */
 public class UpgradeNotSupportedException extends UpgradeException {
 
-    public UpgradeNotSupportedException(String message) {
-        super(message);
-    }
+	public UpgradeNotSupportedException(String message) {
+		super(message);
+	}
 
-    public UpgradeNotSupportedException(String message, Exception cause) {
-        super(message, cause);
-    }
+	public UpgradeNotSupportedException(String message, Exception cause) {
+		super(message, cause);
+	}
 
 }

@@ -35,16 +35,16 @@ import java.io.IOException;
  */
 public class BoxFileStore extends AbstractProfileAwareRemoteFileStore<BoxProfile> {
 
-    public BoxFileStore(ConfigurationProfileLoader<BoxProfile> profileLoader) {
-        super(profileLoader);
-    }
+	public BoxFileStore(ConfigurationProfileLoader<BoxProfile> profileLoader) {
+		super(profileLoader);
+	}
 
-    @Override
-    protected RemoteFile doGetFile(ProfileAwareRemotePath path, BoxProfile profile) throws IOException {
-        String fileId = FilenameUtils.getBaseName(path.getPath());
-        Resource resource = new BoxResource(BoxUtils.createConnection(profile), fileId);
+	@Override
+	protected RemoteFile doGetFile(ProfileAwareRemotePath path, BoxProfile profile) throws IOException {
+		String fileId = FilenameUtils.getBaseName(path.getPath());
+		Resource resource = new BoxResource(BoxUtils.createConnection(profile), fileId);
 
-        return new ResourceBasedRemoteFile(path, resource);
-    }
+		return new ResourceBasedRemoteFile(path, resource);
+	}
 
 }

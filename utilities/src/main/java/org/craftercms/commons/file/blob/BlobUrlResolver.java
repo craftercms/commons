@@ -23,18 +23,20 @@ package org.craftercms.commons.file.blob;
  */
 public interface BlobUrlResolver {
 
-    /**
-     * Returns the blob file url for the given content
-     * @param contentUrl the url of the content
-     * @return the blob url
-     */
-    String getBlobUrl(String contentUrl);
+	/**
+	 * Returns the blob file url for the given content
+	 *
+	 * @param contentUrl the url of the content
+	 * @return the blob url
+	 */
+	String getBlobUrl(String contentUrl);
 
-    /**
-     * Returns the content url for the given blob file
-     * @param blobUrl the url of the blob file
-     * @return the content url
-     */
-    String getContentUrl(String blobUrl);
+	/**
+	 * Returns the content url for the given blob file
+	 *
+	 * @param blobUrl the url of the blob file
+	 * @return the content url
+	 */
+	String getContentUrl(String blobUrl);
 
 }

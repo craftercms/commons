@@ -27,25 +27,25 @@ import org.yaml.snakeyaml.constructor.Constructor;
  */
 public class DisableClassLoadingConstructor extends Constructor {
 
-    public DisableClassLoadingConstructor(LoaderOptions loadingConfig) {
-        super(loadingConfig);
-    }
+	public DisableClassLoadingConstructor(LoaderOptions loadingConfig) {
+		super(loadingConfig);
+	}
 
-    public DisableClassLoadingConstructor(Class<?> theRoot, LoaderOptions loadingConfig) {
-        super(theRoot, loadingConfig);
-    }
+	public DisableClassLoadingConstructor(Class<?> theRoot, LoaderOptions loadingConfig) {
+		super(theRoot, loadingConfig);
+	}
 
-    public DisableClassLoadingConstructor(TypeDescription theRoot, LoaderOptions loadingConfig) {
-        super(theRoot, loadingConfig);
-    }
+	public DisableClassLoadingConstructor(TypeDescription theRoot, LoaderOptions loadingConfig) {
+		super(theRoot, loadingConfig);
+	}
 
-    public DisableClassLoadingConstructor(String theRoot, LoaderOptions loadingConfig) throws ClassNotFoundException {
-        super(theRoot, loadingConfig);
-    }
+	public DisableClassLoadingConstructor(String theRoot, LoaderOptions loadingConfig) throws ClassNotFoundException {
+		super(theRoot, loadingConfig);
+	}
 
-    @Override
-    protected Class<?> getClassForName(String name) throws ClassNotFoundException {
-        throw new ClassNotFoundException();
-    }
+	@Override
+	protected Class<?> getClassForName(String name) throws ClassNotFoundException {
+		throw new ClassNotFoundException();
+	}
 
 }

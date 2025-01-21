@@ -25,16 +25,16 @@ import org.apache.commons.configuration2.HierarchicalConfiguration;
  */
 public interface ConfigurationResolver {
 
-    /**
-     * Get the content of a given configuration file
-     *
-     * @param module the name of the module
-     * @param path the path of the file
-     * @param provider the provider to read the file
-     * @return the configuration instance
-     * @throws ConfigurationException if there is any error reading the configuration
-     */
-    HierarchicalConfiguration<?> getXmlConfiguration(String module, String path, ConfigurationProvider provider)
-            throws ConfigurationException;
+	/**
+	 * Get the content of a given configuration file
+	 *
+	 * @param module   the name of the module
+	 * @param path     the path of the file
+	 * @param provider the provider to read the file
+	 * @return the configuration instance
+	 * @throws ConfigurationException if there is any error reading the configuration
+	 */
+	HierarchicalConfiguration<?> getXmlConfiguration(String module, String path, ConfigurationProvider provider)
+		throws ConfigurationException;
 
 }

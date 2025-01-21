@@ -32,31 +32,31 @@ import java.io.IOException;
  */
 public abstract class AbstractProfileAwareRemoteFileStore<T extends ConfigurationProfile> implements RemoteFileStore {
 
-    protected ConfigurationProfileLoader<T> profileLoader;
+	protected ConfigurationProfileLoader<T> profileLoader;
 
-    public AbstractProfileAwareRemoteFileStore(ConfigurationProfileLoader<T> profileLoader) {
-        this.profileLoader = profileLoader;
-    }
+	public AbstractProfileAwareRemoteFileStore(ConfigurationProfileLoader<T> profileLoader) {
+		this.profileLoader = profileLoader;
+	}
 
-    @Override
-    public RemoteFile getFile(RemotePath path) throws IOException {
-        if (path instanceof ProfileAwareRemotePath) {
-            ProfileAwareRemotePath p = (ProfileAwareRemotePath) path;
+	@Override
+	public RemoteFile getFile(RemotePath path) throws IOException {
+		if (path instanceof ProfileAwareRemotePath) {
+			ProfileAwareRemotePath p = (ProfileAwareRemotePath) path;
 
-            return doGetFile(p, loadProfile(p.getProfile()));
-        } else {
-            throw new IllegalArgumentException(path + " expected to be an instance of " + ProfileAwareRemotePath.class);
-        }
-    }
+			return doGetFile(p, loadProfile(p.getProfile()));
+		} else {
+			throw new IllegalArgumentException(path + " expected to be an instance of " + ProfileAwareRemotePath.class);
+		}
+	}
 
-    protected abstract RemoteFile doGetFile(ProfileAwareRemotePath path, T profile) throws IOException;
+	protected abstract RemoteFile doGetFile(ProfileAwareRemotePath path, T profile) throws IOException;
 
-    protected T loadProfile(String profile) throws IOException {
-        try {
-            return profileLoader.loadProfile(profile);
-        } catch (ConfigurationException e) {
-            throw new IOException("Unable to load configuration profile with ID " + profile, e);
-        }
-    }
+	protected T loadProfile(String profile) throws IOException {
+		try {
+			return profileLoader.loadProfile(profile);
+		} catch (ConfigurationException e) {
+			throw new IOException("Unable to load configuration profile with ID " + profile, e);
+		}
+	}
 
 }

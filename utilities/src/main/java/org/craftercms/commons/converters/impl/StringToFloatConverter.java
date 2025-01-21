@@ -24,23 +24,23 @@ import org.craftercms.commons.converters.Converter;
  */
 public class StringToFloatConverter implements Converter<String, Float> {
 
-    @Override
-    public Class<?> getSourceClass() {
-        return String.class;
-    }
+	@Override
+	public Class<?> getSourceClass() {
+		return String.class;
+	}
 
-    @Override
-    public Class<?> getTargetClass() {
-        return Float.class;
-    }
+	@Override
+	public Class<?> getTargetClass() {
+		return Float.class;
+	}
 
-    @Override
-    public Float convert(String source) {
-        try {
-            return Float.valueOf(source);
-        } catch (NullPointerException | NumberFormatException e) {
-            return null;
-        }
-    }
+	@Override
+	public Float convert(String source) {
+		try {
+			return Float.valueOf(source);
+		} catch (NullPointerException | NumberFormatException e) {
+			return null;
+		}
+	}
 
 }

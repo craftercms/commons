@@ -16,6 +16,7 @@
 package org.craftercms.commons.http;
 
 import java.io.IOException;
+
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -37,58 +38,58 @@ import org.craftercms.commons.i10n.I10nUtils;
  */
 public class RequestContextBindingFilter implements Filter {
 
-    public static final String LOG_KEY_BINGING_CONTEXT = "http.requestContext.bindingContext";
-    public static final String LOG_KEY_UNBINDING_CONTEXT = "http.requestContext.unbindingContext";
+	public static final String LOG_KEY_BINGING_CONTEXT = "http.requestContext.bindingContext";
+	public static final String LOG_KEY_UNBINDING_CONTEXT = "http.requestContext.unbindingContext";
 
-    private static final I10nLogger logger = new I10nLogger(RequestContextBindingFilter.class,
-                                                            I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
+	private static final I10nLogger logger = new I10nLogger(RequestContextBindingFilter.class,
+		I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
-    private ServletContext servletContext;
+	private ServletContext servletContext;
 
-    @Override
-    public void init(FilterConfig filterConfig) {
-        servletContext = filterConfig.getServletContext();
-    }
+	@Override
+	public void init(FilterConfig filterConfig) {
+		servletContext = filterConfig.getServletContext();
+	}
 
-    @Override
-    public void destroy() {
-    }
+	@Override
+	public void destroy() {
+	}
 
-    /**
-     * Binds a new {@link RequestContext} to the current thread, and after the the filter chain has finished
-     * executing, removes it from the current thread.
-     *
-     * @param request
-     * @param response
-     * @param chain
-     */
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-                         FilterChain chain) throws ServletException, IOException {
-        HttpServletRequest req = (HttpServletRequest)request;
-        HttpServletResponse resp = (HttpServletResponse)response;
-        RequestContext context = createRequestContext(req, resp);
-        String threadName = Thread.currentThread().getName();
+	/**
+	 * Binds a new {@link RequestContext} to the current thread, and after the the filter chain has finished
+	 * executing, removes it from the current thread.
+	 *
+	 * @param request
+	 * @param response
+	 * @param chain
+	 */
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response,
+			     FilterChain chain) throws ServletException, IOException {
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse resp = (HttpServletResponse) response;
+		RequestContext context = createRequestContext(req, resp);
+		String threadName = Thread.currentThread().getName();
 
-        logger.debug(LOG_KEY_BINGING_CONTEXT, req.getRequestURI(), threadName);
+		logger.debug(LOG_KEY_BINGING_CONTEXT, req.getRequestURI(), threadName);
 
-        RequestContext.setCurrent(context);
+		RequestContext.setCurrent(context);
 
-        try {
-            chain.doFilter(request, response);
-        } finally {
-            logger.debug(LOG_KEY_UNBINDING_CONTEXT, req.getRequestURI(), threadName);
+		try {
+			chain.doFilter(request, response);
+		} finally {
+			logger.debug(LOG_KEY_UNBINDING_CONTEXT, req.getRequestURI(), threadName);
 
-            RequestContext.clear();
-        }
-    }
+			RequestContext.clear();
+		}
+	}
 
-    /**
-     * Returns a new {@link RequestContext}, using the specified {@link HttpServletRequest} and {@link
-     * HttpServletResponse}.
-     */
-    protected RequestContext createRequestContext(HttpServletRequest request, HttpServletResponse response) {
-        return new RequestContext(request, response, servletContext);
-    }
+	/**
+	 * Returns a new {@link RequestContext}, using the specified {@link HttpServletRequest} and {@link
+	 * HttpServletResponse}.
+	 */
+	protected RequestContext createRequestContext(HttpServletRequest request, HttpServletResponse response) {
+		return new RequestContext(request, response, servletContext);
+	}
 
 }

@@ -46,93 +46,93 @@ import static org.craftercms.commons.file.blob.BlobStore.*;
 @SuppressWarnings("rawtypes, unchecked")
 public class BlobStoreResolverImpl implements BlobStoreResolver, ApplicationContextAware {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    /**
-     * The module of the configuration file
-     */
-    protected String configModule;
+	/**
+	 * The module of the configuration file
+	 */
+	protected String configModule;
 
-    /**
-     * The path of the configuration file
-     */
-    protected String configPath;
+	/**
+	 * The path of the configuration file
+	 */
+	protected String configPath;
 
-    protected ConfigurationResolver configurationResolver;
+	protected ConfigurationResolver configurationResolver;
 
-    protected ApplicationContext applicationContext;
+	protected ApplicationContext applicationContext;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 
-    public void setConfigModule(String configModule) {
-        this.configModule = configModule;
-    }
+	public void setConfigModule(String configModule) {
+		this.configModule = configModule;
+	}
 
-    public void setConfigPath(String configPath) {
-        this.configPath = configPath;
-    }
+	public void setConfigPath(String configPath) {
+		this.configPath = configPath;
+	}
 
-    public void setConfigurationResolver(ConfigurationResolver configurationResolver) {
-        this.configurationResolver = configurationResolver;
-    }
+	public void setConfigurationResolver(ConfigurationResolver configurationResolver) {
+		this.configurationResolver = configurationResolver;
+	}
 
-    protected String findStoreId(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate) {
-        if (config == null || config.isEmpty()) {
-            throw new BlobStoreConfigurationMissingException("No blob store configuration found");
-        }
-        Optional<HierarchicalConfiguration> storeConfig =
-                config.configurationsAt(CONFIG_KEY_STORE).stream().filter(predicate).findFirst();
-        if (storeConfig.isPresent()) {
-            HierarchicalConfiguration store = storeConfig.get();
-            return store.getString(CONFIG_KEY_ID);
-        }
-        return null;
-    }
+	protected String findStoreId(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate) {
+		if (config == null || config.isEmpty()) {
+			throw new BlobStoreConfigurationMissingException("No blob store configuration found");
+		}
+		Optional<HierarchicalConfiguration> storeConfig =
+			config.configurationsAt(CONFIG_KEY_STORE).stream().filter(predicate).findFirst();
+		if (storeConfig.isPresent()) {
+			HierarchicalConfiguration store = storeConfig.get();
+			return store.getString(CONFIG_KEY_ID);
+		}
+		return null;
+	}
 
-    protected BlobStore findStore(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate)
-            throws ConfigurationException {
-        if (config == null || config.isEmpty()) {
-            throw new BlobStoreConfigurationMissingException("No blob store configuration found");
-        }
-        Optional<HierarchicalConfiguration> storeConfig =
-                config.configurationsAt(CONFIG_KEY_STORE).stream().filter(predicate).findFirst();
-        if (storeConfig.isPresent()) {
-            HierarchicalConfiguration store = storeConfig.get();
-            String type = store.getString(CONFIG_KEY_TYPE);
-            try {
-                BlobStore instance = applicationContext.getBean(type, BlobStore.class);
-                instance.init(store);
-                return instance;
-            } catch (NoSuchBeanDefinitionException e) {
-                throw new BlobStoreMissingException(
-                        format("No blob store found with id '%s'", store.getString(CONFIG_KEY_ID)));
-            }
-        } else {
-            throw new BlobStoreMissingException("Blob store not found in the configuration file");
-        }
-    }
+	protected BlobStore findStore(HierarchicalConfiguration config, Predicate<HierarchicalConfiguration> predicate)
+		throws ConfigurationException {
+		if (config == null || config.isEmpty()) {
+			throw new BlobStoreConfigurationMissingException("No blob store configuration found");
+		}
+		Optional<HierarchicalConfiguration> storeConfig =
+			config.configurationsAt(CONFIG_KEY_STORE).stream().filter(predicate).findFirst();
+		if (storeConfig.isPresent()) {
+			HierarchicalConfiguration store = storeConfig.get();
+			String type = store.getString(CONFIG_KEY_TYPE);
+			try {
+				BlobStore instance = applicationContext.getBean(type, BlobStore.class);
+				instance.init(store);
+				return instance;
+			} catch (NoSuchBeanDefinitionException e) {
+				throw new BlobStoreMissingException(
+					format("No blob store found with id '%s'", store.getString(CONFIG_KEY_ID)));
+			}
+		} else {
+			throw new BlobStoreMissingException("Blob store not found in the configuration file");
+		}
+	}
 
-    protected HierarchicalConfiguration getConfiguration(ConfigurationProvider provider) throws ConfigurationException {
-        logger.debug("Reading blob store configuration");
-        try {
-            return configurationResolver.getXmlConfiguration(configModule, configPath, provider);
-        } catch (ConfigurationException e) {
-            logger.error("Error reading blob store configuration", e);
-            throw e;
-        }
-    }
+	protected HierarchicalConfiguration getConfiguration(ConfigurationProvider provider) throws ConfigurationException {
+		logger.debug("Reading blob store configuration");
+		try {
+			return configurationResolver.getXmlConfiguration(configModule, configPath, provider);
+		} catch (ConfigurationException e) {
+			logger.error("Error reading blob store configuration", e);
+			throw e;
+		}
+	}
 
-    @Override
-    public BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException {
-        return getById(getConfiguration(provider), storeId);
-    }
+	@Override
+	public BlobStore getById(ConfigurationProvider provider, String storeId) throws ConfigurationException {
+		return getById(getConfiguration(provider), storeId);
+	}
 
-    protected BlobStore getById(HierarchicalConfiguration config, String storeId) throws ConfigurationException {
-        logger.debug("Looking blob store with id {}", storeId);
-        return findStore(config, store -> StringUtils.equals(storeId, store.getString(CONFIG_KEY_ID)));
-    }
+	protected BlobStore getById(HierarchicalConfiguration config, String storeId) throws ConfigurationException {
+		logger.debug("Looking blob store with id {}", storeId);
+		return findStore(config, store -> StringUtils.equals(storeId, store.getString(CONFIG_KEY_ID)));
+	}
 
 }

@@ -32,25 +32,25 @@ import static org.junit.Assert.*;
 @ContextConfiguration(locations = {"classpath:/audit-test-context.xml"})
 public class TestSpringCtx {
 
-    @Autowired
-    protected ApplicationContext applicationContext;
+	@Autowired
+	protected ApplicationContext applicationContext;
 
-    @Autowired
-    private TestAuditServiceImpl<TestAuditModel> auditService;
+	@Autowired
+	private TestAuditServiceImpl<TestAuditModel> auditService;
 
-    @Test
-    public void test1ContextIsInit() {
-        // Nothing just make sure Spring ctx goes up.
-    }
+	@Test
+	public void test1ContextIsInit() {
+		// Nothing just make sure Spring ctx goes up.
+	}
 
-    @Test
-    public void testAuditListener() {
-        auditService.clear();
-        TestAuditModel testAuditModel = new TestAuditModel();
-        TestAuditModel testAuditModelNotSended = new TestAuditModel();
-        applicationContext.publishEvent(testAuditModel);
-        assertEquals(1, auditService.countAuditLogs());
-        assertNotNull(auditService.getAuditLog(testAuditModel.getId()));
-        assertNull(auditService.getAuditLog(testAuditModelNotSended.getId()));
-    }
+	@Test
+	public void testAuditListener() {
+		auditService.clear();
+		TestAuditModel testAuditModel = new TestAuditModel();
+		TestAuditModel testAuditModelNotSended = new TestAuditModel();
+		applicationContext.publishEvent(testAuditModel);
+		assertEquals(1, auditService.countAuditLogs());
+		assertNotNull(auditService.getAuditLog(testAuditModel.getId()));
+		assertNull(auditService.getAuditLog(testAuditModelNotSended.getId()));
+	}
 }

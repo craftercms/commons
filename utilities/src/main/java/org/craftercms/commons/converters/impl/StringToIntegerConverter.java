@@ -24,23 +24,23 @@ import org.craftercms.commons.converters.Converter;
  */
 public class StringToIntegerConverter implements Converter<String, Integer> {
 
-    @Override
-    public Class<?> getSourceClass() {
-        return String.class;
-    }
+	@Override
+	public Class<?> getSourceClass() {
+		return String.class;
+	}
 
-    @Override
-    public Class<?> getTargetClass() {
-        return Integer.class;
-    }
+	@Override
+	public Class<?> getTargetClass() {
+		return Integer.class;
+	}
 
-    @Override
-    public Integer convert(String source) {
-        try {
-            return Integer.valueOf(source);
-        } catch (NullPointerException | NumberFormatException e) {
-            return null;
-        }
-    }
+	@Override
+	public Integer convert(String source) {
+		try {
+			return Integer.valueOf(source);
+		} catch (NullPointerException | NumberFormatException e) {
+			return null;
+		}
+	}
 
 }

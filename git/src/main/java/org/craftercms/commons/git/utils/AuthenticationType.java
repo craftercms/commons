@@ -23,12 +23,12 @@ package org.craftercms.commons.git.utils;
  */
 public interface AuthenticationType {
 
-    String NONE = "none";
+	String NONE = "none";
 
-    String BASIC = "basic";
+	String BASIC = "basic";
 
-    String TOKEN = "token";
+	String TOKEN = "token";
 
-    String PRIVATE_KEY = "key";
+	String PRIVATE_KEY = "key";
 
 }

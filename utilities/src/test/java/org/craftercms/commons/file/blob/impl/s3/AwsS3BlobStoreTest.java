@@ -29,62 +29,62 @@ import static org.mockito.MockitoAnnotations.initMocks;
  */
 public class AwsS3BlobStoreTest {
 
-    private static final String MAPPING_TARGET = "my-target";
+	private static final String MAPPING_TARGET = "my-target";
 
-    private static final String MAPPING_PREFIX = "sandbox";
+	private static final String MAPPING_PREFIX = "sandbox";
 
-    private static final String URL = "/static-assets/s3/test.png";
+	private static final String URL = "/static-assets/s3/test.png";
 
-    @InjectMocks
-    private AwsS3BlobStore store;
+	@InjectMocks
+	private AwsS3BlobStore store;
 
-    @Before
-    public void setUp() {
-        initMocks(this);
-    }
+	@Before
+	public void setUp() {
+		initMocks(this);
+	}
 
-    @Test
-    public void getKeyTest() {
-        AbstractBlobStore.Mapping mapping = new AbstractBlobStore.Mapping();
-        mapping.target = MAPPING_TARGET;
+	@Test
+	public void getKeyTest() {
+		AbstractBlobStore.Mapping mapping = new AbstractBlobStore.Mapping();
+		mapping.target = MAPPING_TARGET;
 
-        // test with null prefix
-        String key = store.getKey(mapping, URL);
-        checkS3Key(key);
-        assertEquals("key should be equal to the url", removeStart(URL, "/"), key);
+		// test with null prefix
+		String key = store.getKey(mapping, URL);
+		checkS3Key(key);
+		assertEquals("key should be equal to the url", removeStart(URL, "/"), key);
 
-        // test with empty prefix
-        mapping.prefix = "";
-        key = store.getKey(mapping, URL);
-        checkS3Key(key);
-        assertEquals("key should be equal to the url", removeStart(URL, "/"), key);
+		// test with empty prefix
+		mapping.prefix = "";
+		key = store.getKey(mapping, URL);
+		checkS3Key(key);
+		assertEquals("key should be equal to the url", removeStart(URL, "/"), key);
 
-        // test with prefix
-        mapping.prefix = MAPPING_PREFIX;
-        key = store.getKey(mapping, URL);
-        checkS3Key(key);
-        assertEquals("key should use the prefix", MAPPING_PREFIX + URL, key);
+		// test with prefix
+		mapping.prefix = MAPPING_PREFIX;
+		key = store.getKey(mapping, URL);
+		checkS3Key(key);
+		assertEquals("key should use the prefix", MAPPING_PREFIX + URL, key);
 
-        mapping.prefix = "/sandbox";
-        key = store.getKey(mapping, URL);
-        checkS3Key(key);
-        assertEquals("key should use the prefix", MAPPING_PREFIX + URL, key);
+		mapping.prefix = "/sandbox";
+		key = store.getKey(mapping, URL);
+		checkS3Key(key);
+		assertEquals("key should use the prefix", MAPPING_PREFIX + URL, key);
 
-        mapping.prefix = "sandbox/";
-        key = store.getKey(mapping, URL);
-        checkS3Key(key);
-        assertEquals("key should use the prefix", MAPPING_PREFIX + URL, key);
+		mapping.prefix = "sandbox/";
+		key = store.getKey(mapping, URL);
+		checkS3Key(key);
+		assertEquals("key should use the prefix", MAPPING_PREFIX + URL, key);
 
-        key = store.getKey(mapping, removeStart(URL, "/"));
-        checkS3Key(key);
-        assertEquals("key should use the prefix", MAPPING_PREFIX + URL, key);
+		key = store.getKey(mapping, removeStart(URL, "/"));
+		checkS3Key(key);
+		assertEquals("key should use the prefix", MAPPING_PREFIX + URL, key);
 
-    }
+	}
 
-    private void checkS3Key(String key) {
-        assertFalse("key should not be empty", isEmpty(key));
-        assertFalse("key should not start with /", startsWith(key, "/"));
-        assertFalse("key should be a normalized path", contains(key, "//"));
-    }
+	private void checkS3Key(String key) {
+		assertFalse("key should not be empty", isEmpty(key));
+		assertFalse("key should not start with /", startsWith(key, "/"));
+		assertFalse("key should be a normalized path", contains(key, "//"));
+	}
 
 }

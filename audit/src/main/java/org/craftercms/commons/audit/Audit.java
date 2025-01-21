@@ -23,17 +23,18 @@ package org.craftercms.commons.audit;
  */
 public final class Audit {
 
-    /**
-     * Name/Key of the Listener Audit event.
-     */
-    public static final String AUDIT_EVENT = "crafterCommons.audit.Audit";
-    /**
-     * Name of the AuditReactor <b>Missing required @</b>.
-     */
-    public static final String AUDIT_REACTOR = "AuditReactor";
+	/**
+	 * Name/Key of the Listener Audit event.
+	 */
+	public static final String AUDIT_EVENT = "crafterCommons.audit.Audit";
+	/**
+	 * Name of the AuditReactor <b>Missing required @</b>.
+	 */
+	public static final String AUDIT_REACTOR = "AuditReactor";
 
-    /**
-     * Avoid accidental Instance of this class.
-     */
-    private Audit(){}
+	/**
+	 * Avoid accidental Instance of this class.
+	 */
+	private Audit() {
+	}
 }

@@ -32,32 +32,32 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractUpgradeOperationTest {
 
-    @Spy
-    private DummyUpgradeOperation operation;
+	@Spy
+	private DummyUpgradeOperation operation;
 
-    @Test
-    public void testEnabled() throws UpgradeException {
-        operation.setEnabled(true);
-        operation.execute(null);
+	@Test
+	public void testEnabled() throws UpgradeException {
+		operation.setEnabled(true);
+		operation.execute(null);
 
-        verify(operation).doExecute(null);
-    }
+		verify(operation).doExecute(null);
+	}
 
-    @Test
-    public void testDisabled() throws UpgradeException {
-        operation.setEnabled(false);
-        operation.execute(null);
+	@Test
+	public void testDisabled() throws UpgradeException {
+		operation.setEnabled(false);
+		operation.execute(null);
 
-        verify(operation, never()).doExecute(null);
-    }
+		verify(operation, never()).doExecute(null);
+	}
 
-    private static class DummyUpgradeOperation extends AbstractUpgradeOperation<Object> {
+	private static class DummyUpgradeOperation extends AbstractUpgradeOperation<Object> {
 
-        @Override
-        protected void doExecute(UpgradeContext<Object> target) {
-            // do nothing
-        }
+		@Override
+		protected void doExecute(UpgradeContext<Object> target) {
+			// do nothing
+		}
 
-    }
+	}
 
 }

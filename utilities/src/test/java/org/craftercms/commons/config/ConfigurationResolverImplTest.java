@@ -32,32 +32,32 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ConfigurationResolverImplTest {
 
-    private static final String SITE_NAME = "test-site";
-    private static final String SITE_NAME_VARIABLE = "siteName";
-    private static final String CONFIG_PATH = "test-configuration-path.xml";
-    private static final String BASE_PATH = "";
-    private static final String ENVIRONMENT = "test-env";
-    private static final String ENV_PATH = "envs/test-env";
+	private static final String SITE_NAME = "test-site";
+	private static final String SITE_NAME_VARIABLE = "siteName";
+	private static final String CONFIG_PATH = "test-configuration-path.xml";
+	private static final String BASE_PATH = "";
+	private static final String ENVIRONMENT = "test-env";
+	private static final String ENV_PATH = "envs/test-env";
 
-    @Mock
-    EncryptionAwareConfigurationReader configurationReader;
-    @Mock
-    ConfigurationProvider configurationProvider;
-    @InjectMocks
-    private ConfigurationResolverImpl configurationResolver;
+	@Mock
+	EncryptionAwareConfigurationReader configurationReader;
+	@Mock
+	ConfigurationProvider configurationProvider;
+	@InjectMocks
+	private ConfigurationResolverImpl configurationResolver;
 
-    @Before
-    public void setUp() throws Exception {
-        when(configurationProvider.configExists(anyString())).thenReturn(true);
-        Map<String, String> lookupVariables = Map.of(SITE_NAME_VARIABLE, SITE_NAME);
-        when(configurationProvider.getLookupVariables()).thenReturn(lookupVariables);
-        configurationResolver = new ConfigurationResolverImpl(ENVIRONMENT, BASE_PATH, ENV_PATH, configurationReader);
-    }
+	@Before
+	public void setUp() throws Exception {
+		when(configurationProvider.configExists(anyString())).thenReturn(true);
+		Map<String, String> lookupVariables = Map.of(SITE_NAME_VARIABLE, SITE_NAME);
+		when(configurationProvider.getLookupVariables()).thenReturn(lookupVariables);
+		configurationResolver = new ConfigurationResolverImpl(ENVIRONMENT, BASE_PATH, ENV_PATH, configurationReader);
+	}
 
-    @Test
-    public void testConfigurationWithVariable() throws ConfigurationException {
-        configurationResolver.getXmlConfiguration("", CONFIG_PATH, configurationProvider);
-        verify(configurationReader).readXmlConfiguration(isNull(InputStream.class),
-                argThat(variables -> variables.get(SITE_NAME_VARIABLE).equals(SITE_NAME)));
-    }
+	@Test
+	public void testConfigurationWithVariable() throws ConfigurationException {
+		configurationResolver.getXmlConfiguration("", CONFIG_PATH, configurationProvider);
+		verify(configurationReader).readXmlConfiguration(isNull(InputStream.class),
+			argThat(variables -> variables.get(SITE_NAME_VARIABLE).equals(SITE_NAME)));
+	}
 }

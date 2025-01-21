@@ -27,29 +27,29 @@ import org.springframework.beans.factory.FactoryBean;
  */
 public class SecretKeyFactoryBean implements FactoryBean<SecretKey> {
 
-    private String keyName;
-    private boolean create;
-    private SecretKeyRepository keyRepository;
+	private String keyName;
+	private boolean create;
+	private SecretKeyRepository keyRepository;
 
-    public SecretKeyFactoryBean(String keyName, boolean create, SecretKeyRepository keyRepository) {
-        this.keyName = keyName;
-        this.create = create;
-        this.keyRepository = keyRepository;
-    }
+	public SecretKeyFactoryBean(String keyName, boolean create, SecretKeyRepository keyRepository) {
+		this.keyName = keyName;
+		this.create = create;
+		this.keyRepository = keyRepository;
+	}
 
-    @Override
-    public SecretKey getObject() throws Exception {
-        return keyRepository.getKey(keyName, create);
-    }
+	@Override
+	public SecretKey getObject() throws Exception {
+		return keyRepository.getKey(keyName, create);
+	}
 
-    @Override
-    public Class<?> getObjectType() {
-        return SecretKey.class;
-    }
+	@Override
+	public Class<?> getObjectType() {
+		return SecretKey.class;
+	}
 
-    @Override
-    public boolean isSingleton() {
-        return true;
-    }
+	@Override
+	public boolean isSingleton() {
+		return true;
+	}
 
 }

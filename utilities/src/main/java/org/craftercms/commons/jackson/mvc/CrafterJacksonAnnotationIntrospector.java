@@ -27,39 +27,39 @@ import org.craftercms.commons.jackson.mvc.annotations.SecureProperty;
  * Extends JacksonAnnotationIntrospector so it will always a filter (so @JsonFilter) annotation is not needed.
  */
 public class CrafterJacksonAnnotationIntrospector extends JacksonAnnotationIntrospector {
-    private static final long serialVersionUID = -4614283468824831495L;
+	private static final long serialVersionUID = -4614283468824831495L;
 
-    private String defaultFilter;
-    private SecurePropertyHandler securityPropertyFilter;
+	private String defaultFilter;
+	private SecurePropertyHandler securityPropertyFilter;
 
-    public CrafterJacksonAnnotationIntrospector(final String defaultFilter) {
-        super();
-        this.defaultFilter = defaultFilter;
-    }
+	public CrafterJacksonAnnotationIntrospector(final String defaultFilter) {
+		super();
+		this.defaultFilter = defaultFilter;
+	}
 
-    @Override
-    public Object findFilterId(final Annotated a) {
-        Object base = super.findFilterId(a);
-        if (base == null) {
-            base = defaultFilter;
-        }
-        return base;
-    }
+	@Override
+	public Object findFilterId(final Annotated a) {
+		Object base = super.findFilterId(a);
+		if (base == null) {
+			base = defaultFilter;
+		}
+		return base;
+	}
 
-    @Override
-    public boolean hasIgnoreMarker(final AnnotatedMember m) {
-        if (m.getAnnotated().isAnnotationPresent(Exclude.class)) {
-            return true;
-        } else if (m.getAnnotated().isAnnotationPresent(SecureProperty.class) && securityPropertyFilter != null) {
-            SecureProperty property = m.getAnnotated().getAnnotation(SecureProperty.class);
-            return securityPropertyFilter.suppressProperty(m.getDeclaringClass().getCanonicalName() + "." + m.getName
-                (), property.role());
-        } else {
-            return super.hasIgnoreMarker(m);
-        }
-    }
+	@Override
+	public boolean hasIgnoreMarker(final AnnotatedMember m) {
+		if (m.getAnnotated().isAnnotationPresent(Exclude.class)) {
+			return true;
+		} else if (m.getAnnotated().isAnnotationPresent(SecureProperty.class) && securityPropertyFilter != null) {
+			SecureProperty property = m.getAnnotated().getAnnotation(SecureProperty.class);
+			return securityPropertyFilter.suppressProperty(m.getDeclaringClass().getCanonicalName() + "." + m.getName
+				(), property.role());
+		} else {
+			return super.hasIgnoreMarker(m);
+		}
+	}
 
-    public void setSecurityPropertyFilter(final SecurePropertyHandler securityPropertyFilter) {
-        this.securityPropertyFilter = securityPropertyFilter;
-    }
+	public void setSecurityPropertyFilter(final SecurePropertyHandler securityPropertyFilter) {
+		this.securityPropertyFilter = securityPropertyFilter;
+	}
 }

@@ -41,76 +41,76 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GDataPropertyFilterTest {
 
 
-    @Autowired
-    protected WebApplicationContext wac;
-    protected MockMvc mockMvc;
+	@Autowired
+	protected WebApplicationContext wac;
+	protected MockMvc mockMvc;
 
-    @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-    }
+	@Before
+	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+	}
 
-    @Test
-    public void testNoSelector() throws Exception {
-        this.mockMvc.perform(get(FilterTestController.SELECTOR) //Url
-            .contentType(MediaType.APPLICATION_JSON)) //
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
-            .andExpect(jsonPath("$.name").exists()).andExpect(jsonPath("$.birthday").exists()).andExpect(jsonPath("$"
-            + ".id").exists());
-    }
+	@Test
+	public void testNoSelector() throws Exception {
+		this.mockMvc.perform(get(FilterTestController.SELECTOR) //Url
+				.contentType(MediaType.APPLICATION_JSON)) //
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
+			.andExpect(jsonPath("$.name").exists()).andExpect(jsonPath("$.birthday").exists()).andExpect(jsonPath("$"
+				+ ".id").exists());
+	}
 
-    @Test
-    public void testSimpleSelector() throws Exception {
-        this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=Person(name)") //Url
-            .contentType(MediaType.APPLICATION_JSON)) //
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
-            .andExpect(jsonPath("$.name").exists()).andExpect(jsonPath("$.birthday").doesNotExist()).andExpect
-            (jsonPath("$" + ".id").doesNotExist());
-    }
+	@Test
+	public void testSimpleSelector() throws Exception {
+		this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=Person(name)") //Url
+				.contentType(MediaType.APPLICATION_JSON)) //
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
+			.andExpect(jsonPath("$.name").exists()).andExpect(jsonPath("$.birthday").doesNotExist()).andExpect
+				(jsonPath("$" + ".id").doesNotExist());
+	}
 
-    @Test
-    public void testAliasSelector() throws Exception {
-        this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=:noName") //Url
-            .contentType(MediaType.APPLICATION_JSON)) //
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
-            .andExpect(jsonPath("$.name").doesNotExist()).andExpect(jsonPath("$.birthday").exists()).andExpect
-            (jsonPath("$" + ".id").exists());
+	@Test
+	public void testAliasSelector() throws Exception {
+		this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=:noName") //Url
+				.contentType(MediaType.APPLICATION_JSON)) //
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
+			.andExpect(jsonPath("$.name").doesNotExist()).andExpect(jsonPath("$.birthday").exists()).andExpect
+				(jsonPath("$" + ".id").exists());
 
-        //Tests if the cache was done (coverage)
-        this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=:noName") //Url
-            .contentType(MediaType.APPLICATION_JSON)) //
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
-            .andExpect(jsonPath("$.name").doesNotExist()).andExpect(jsonPath("$.birthday").exists()).andExpect
-            (jsonPath("$" + ".id").exists());
-    }
+		//Tests if the cache was done (coverage)
+		this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=:noName") //Url
+				.contentType(MediaType.APPLICATION_JSON)) //
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
+			.andExpect(jsonPath("$.name").doesNotExist()).andExpect(jsonPath("$.birthday").exists()).andExpect
+				(jsonPath("$" + ".id").exists());
+	}
 
-    @Test
-    public void testAliasSelectorDontExists() throws Exception {
-        this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=:IDontExist") //Url
-            .contentType(MediaType.APPLICATION_JSON)) //
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
-            .andExpect(jsonPath("$.name").exists()).andExpect(jsonPath("$.birthday").exists()).andExpect(jsonPath("$"
-            + ".id").exists());
+	@Test
+	public void testAliasSelectorDontExists() throws Exception {
+		this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=:IDontExist") //Url
+				.contentType(MediaType.APPLICATION_JSON)) //
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
+			.andExpect(jsonPath("$.name").exists()).andExpect(jsonPath("$.birthday").exists()).andExpect(jsonPath("$"
+				+ ".id").exists());
 
-    }
+	}
 
-    @Test
-    public void testAliasSelectorIsBroken() throws Exception {
-        this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=:brokenSelector") //Url
-            .contentType(MediaType.APPLICATION_JSON)) //
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
-            .andExpect(jsonPath("$.name").exists()).andExpect(jsonPath("$.birthday").exists()).andExpect(jsonPath("$" +
-            ".id").exists());
+	@Test
+	public void testAliasSelectorIsBroken() throws Exception {
+		this.mockMvc.perform(get(FilterTestController.SELECTOR + "?selector=:brokenSelector") //Url
+				.contentType(MediaType.APPLICATION_JSON)) //
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
+			.andExpect(jsonPath("$.name").exists()).andExpect(jsonPath("$.birthday").exists()).andExpect(jsonPath("$" +
+				".id").exists());
 
-    }
+	}
 
-    @Test
-    public void testPasswordIsIgnore() throws Exception {
-        this.mockMvc.perform(get(FilterTestController.ALIAS_NESTED_SELECTOR) //Url
-            .contentType(MediaType.APPLICATION_JSON)) //
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
-            .andExpect(jsonPath("$.password").doesNotExist()).andExpect(jsonPath("$.username").exists());
+	@Test
+	public void testPasswordIsIgnore() throws Exception {
+		this.mockMvc.perform(get(FilterTestController.ALIAS_NESTED_SELECTOR) //Url
+				.contentType(MediaType.APPLICATION_JSON)) //
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE)) // Check that is JSON
+			.andExpect(jsonPath("$.password").doesNotExist()).andExpect(jsonPath("$.username").exists());
 
-    }
+	}
 }

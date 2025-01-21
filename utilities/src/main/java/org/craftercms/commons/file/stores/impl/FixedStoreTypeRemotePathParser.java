@@ -27,14 +27,14 @@ import java.util.regex.Matcher;
  */
 public class FixedStoreTypeRemotePathParser implements RemotePathParser {
 
-    private String storeType;
+	private String storeType;
 
-    public FixedStoreTypeRemotePathParser(String storeType) {
-        this.storeType = storeType;
-    }
+	public FixedStoreTypeRemotePathParser(String storeType) {
+		this.storeType = storeType;
+	}
 
-    @Override
-    public RemotePath parse(String pathStr, Matcher matcher) {
-        return new RemotePath(storeType, pathStr);
-    }
+	@Override
+	public RemotePath parse(String pathStr, Matcher matcher) {
+		return new RemotePath(storeType, pathStr);
+	}
 }

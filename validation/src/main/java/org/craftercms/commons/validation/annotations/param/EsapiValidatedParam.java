@@ -19,6 +19,7 @@ import org.craftercms.commons.validation.validators.impl.EsapiValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -34,11 +35,11 @@ import static java.lang.annotation.ElementType.*;
 @Constraint(validatedBy = {EsapiValidator.class})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 public @interface EsapiValidatedParam {
-    String message() default "";
+	String message() default "";
 
-    Class<?>[] groups() default { };
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
+	Class<? extends Payload>[] payload() default {};
 
-    EsapiValidationType type();
+	EsapiValidationType type();
 }

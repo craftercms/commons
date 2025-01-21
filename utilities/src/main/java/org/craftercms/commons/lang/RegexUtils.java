@@ -30,65 +30,62 @@ import org.apache.commons.lang3.ArrayUtils;
  */
 public class RegexUtils {
 
-    private RegexUtils() {
-    }
+	private RegexUtils() {
+	}
 
-    /**
-     * Returns true if the string matches any of the specified regexes.
-     *
-     * @param str       the string to match
-     * @param regexes   the regexes used for matching
-     *
-     * @return true if the string matches one or more of the regexes
-     */
-    public static boolean matchesAny(String str, String... regexes) {
-        if (ArrayUtils.isNotEmpty(regexes)) {
-            return matchesAny(str, Arrays.asList(regexes));
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * Returns true if the string matches any of the specified regexes.
+	 *
+	 * @param str     the string to match
+	 * @param regexes the regexes used for matching
+	 * @return true if the string matches one or more of the regexes
+	 */
+	public static boolean matchesAny(String str, String... regexes) {
+		if (ArrayUtils.isNotEmpty(regexes)) {
+			return matchesAny(str, Arrays.asList(regexes));
+		} else {
+			return false;
+		}
+	}
 
-    /**
-     * Returns true if the string matches (full match) any of the specified regexes.
-     *
-     * @param str       the string to match
-     * @param regexes   the regexes used for matching
-     *
-     * @return true if the string matches (full match) one or more of the regexes
-     */
-    public static boolean matchesAny(String str, List<String> regexes) {
-        return matchesAny(str, regexes, true);
-    }
+	/**
+	 * Returns true if the string matches (full match) any of the specified regexes.
+	 *
+	 * @param str     the string to match
+	 * @param regexes the regexes used for matching
+	 * @return true if the string matches (full match) one or more of the regexes
+	 */
+	public static boolean matchesAny(String str, List<String> regexes) {
+		return matchesAny(str, regexes, true);
+	}
 
-    /**
-     * Returns true if the string matches any of the specified regexes.
-     *
-     * @param str       the string to match
-     * @param regexes   the regexes used for matching
-     * @param fullMatch if the entire string should be matched
-     *
-     * @return true if the string matches one or more of the regexes
-     */
-    public static boolean matchesAny(String str, List<String> regexes, boolean fullMatch) {
-        if (CollectionUtils.isNotEmpty(regexes)) {
-            for (String regex : regexes) {
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(str);
+	/**
+	 * Returns true if the string matches any of the specified regexes.
+	 *
+	 * @param str       the string to match
+	 * @param regexes   the regexes used for matching
+	 * @param fullMatch if the entire string should be matched
+	 * @return true if the string matches one or more of the regexes
+	 */
+	public static boolean matchesAny(String str, List<String> regexes, boolean fullMatch) {
+		if (CollectionUtils.isNotEmpty(regexes)) {
+			for (String regex : regexes) {
+				Pattern pattern = Pattern.compile(regex);
+				Matcher matcher = pattern.matcher(str);
 
-                if (fullMatch) {
-                    if (matcher.matches()) {
-                        return true;
-                    }
-                } else {
-                    if (matcher.find()) {
-                        return true;
-                    }
-                }
-            }
-        }
+				if (fullMatch) {
+					if (matcher.matches()) {
+						return true;
+					}
+				} else {
+					if (matcher.find()) {
+						return true;
+					}
+				}
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 }

@@ -28,128 +28,124 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class UrlUtils {
 
-    public static final String RANGE_HEADER_NAME = "Range";
-    public static final String RANGE_HEADER_FORMAT = "bytes=%s-%s";
-    public static final String RANGE_NO_END_HEADER_FORMAT = "bytes=%s-";
-    private static final int MAX_LOGGED_URI_LENGTH = 2000;
+	public static final String RANGE_HEADER_NAME = "Range";
+	public static final String RANGE_HEADER_FORMAT = "bytes=%s-%s";
+	public static final String RANGE_NO_END_HEADER_FORMAT = "bytes=%s-";
+	private static final int MAX_LOGGED_URI_LENGTH = 2000;
 
-    private UrlUtils() {
-    }
+	private UrlUtils() {
+	}
 
-    /**
-     * Concats two urls, adding any "/" needed between them.
-     *
-     * @param mainUrl      the main url
-     * @param relativeUrl  the relative url
-     *
-     * @return mainPath + relativeUrl
-     */
-    public static String concat(String mainUrl, String relativeUrl) {
-        if (StringUtils.isEmpty(mainUrl)) {
-            return relativeUrl;
-        } else if (StringUtils.isEmpty(relativeUrl)) {
-            return mainUrl;
-        } else {
-            StringBuilder joinedUrl = new StringBuilder(mainUrl);
+	/**
+	 * Concats two urls, adding any "/" needed between them.
+	 *
+	 * @param mainUrl     the main url
+	 * @param relativeUrl the relative url
+	 * @return mainPath + relativeUrl
+	 */
+	public static String concat(String mainUrl, String relativeUrl) {
+		if (StringUtils.isEmpty(mainUrl)) {
+			return relativeUrl;
+		} else if (StringUtils.isEmpty(relativeUrl)) {
+			return mainUrl;
+		} else {
+			StringBuilder joinedUrl = new StringBuilder(mainUrl);
 
-            if (mainUrl.endsWith("/") && relativeUrl.startsWith("/")) {
-                relativeUrl = StringUtils.stripStart(relativeUrl, "/");
-            } else if (!mainUrl.endsWith("/") && !relativeUrl.startsWith("/")) {
-                joinedUrl.append("/");
-            }
+			if (mainUrl.endsWith("/") && relativeUrl.startsWith("/")) {
+				relativeUrl = StringUtils.stripStart(relativeUrl, "/");
+			} else if (!mainUrl.endsWith("/") && !relativeUrl.startsWith("/")) {
+				joinedUrl.append("/");
+			}
 
-            joinedUrl.append(relativeUrl);
+			joinedUrl.append(relativeUrl);
 
-            return joinedUrl.toString();
-        }
-    }
+			return joinedUrl.toString();
+		}
+	}
 
 
-    /**
-     * Concats two or more urls, adding any "/" needed between them.
-     *
-     * @param mainUrl       the main url
-     * @param relativeUrls  the array of relative urls
-     *
-     * @return mainPath + relativeUrls...
-     */
-    public static String concat(String mainUrl, String... relativeUrls) {
-        String concatenatedUrl = mainUrl;
+	/**
+	 * Concats two or more urls, adding any "/" needed between them.
+	 *
+	 * @param mainUrl      the main url
+	 * @param relativeUrls the array of relative urls
+	 * @return mainPath + relativeUrls...
+	 */
+	public static String concat(String mainUrl, String... relativeUrls) {
+		String concatenatedUrl = mainUrl;
 
-        if (ArrayUtils.isNotEmpty(relativeUrls)) {
-            for (String relativeUrl : relativeUrls) {
-                concatenatedUrl = concat(concatenatedUrl, relativeUrl);
-            }
-        }
+		if (ArrayUtils.isNotEmpty(relativeUrls)) {
+			for (String relativeUrl : relativeUrls) {
+				concatenatedUrl = concat(concatenatedUrl, relativeUrl);
+			}
+		}
 
-        return concatenatedUrl;
-    }
+		return concatenatedUrl;
+	}
 
-    /**
-     * Adds a query string param to the URL, adding a '?' if there's no query string yet.
-     *
-     * @param url       the URL
-     * @param name      the name of the param
-     * @param value     the value of the param
-     * @param charset   the charset to encode the param key/value with
-     *
-     * @return the URL with the query string param appended
-     */
-    public static String addParam(String url, String name, String value,
-                                  String charset) throws UnsupportedEncodingException {
-        StringBuilder newUrl = new StringBuilder(url);
+	/**
+	 * Adds a query string param to the URL, adding a '?' if there's no query string yet.
+	 *
+	 * @param url     the URL
+	 * @param name    the name of the param
+	 * @param value   the value of the param
+	 * @param charset the charset to encode the param key/value with
+	 * @return the URL with the query string param appended
+	 */
+	public static String addParam(String url, String name, String value,
+				      String charset) throws UnsupportedEncodingException {
+		StringBuilder newUrl = new StringBuilder(url);
 
-        if (!url.endsWith("?") && !url.endsWith("&")) {
-            if (url.contains("?")) {
-                newUrl.append('&');
-            } else {
-                newUrl.append('?');
-            }
-        }
+		if (!url.endsWith("?") && !url.endsWith("&")) {
+			if (url.contains("?")) {
+				newUrl.append('&');
+			} else {
+				newUrl.append('?');
+			}
+		}
 
-        newUrl.append(URLEncoder.encode(name, charset));
-        newUrl.append('=');
-        newUrl.append(URLEncoder.encode(value, charset));
+		newUrl.append(URLEncoder.encode(name, charset));
+		newUrl.append('=');
+		newUrl.append(URLEncoder.encode(value, charset));
 
-        return newUrl.toString();
-    }
+		return newUrl.toString();
+	}
 
-    /**
-     * Adds a query string fragment to the URL, adding a '?' if there's no query string yet.
-     *
-     * @param url       the URL
-     * @param fragment  the query string fragment
-     *
-     * @return the URL with the query string fragment appended
-     */
-    public static String addQueryStringFragment(String url, String fragment) {
-        StringBuilder newUrl = new StringBuilder(url);
+	/**
+	 * Adds a query string fragment to the URL, adding a '?' if there's no query string yet.
+	 *
+	 * @param url      the URL
+	 * @param fragment the query string fragment
+	 * @return the URL with the query string fragment appended
+	 */
+	public static String addQueryStringFragment(String url, String fragment) {
+		StringBuilder newUrl = new StringBuilder(url);
 
-        if (fragment.startsWith("?") || fragment.startsWith("&")) {
-            fragment = fragment.substring(1);
-        }
+		if (fragment.startsWith("?") || fragment.startsWith("&")) {
+			fragment = fragment.substring(1);
+		}
 
-        if (!url.endsWith("?") && !url.endsWith("&")) {
-            if (url.contains("?")) {
-                newUrl.append('&');
-            } else {
-                newUrl.append('?');
-            }
-        }
+		if (!url.endsWith("?") && !url.endsWith("&")) {
+			if (url.contains("?")) {
+				newUrl.append('&');
+			} else {
+				newUrl.append('?');
+			}
+		}
 
-        return newUrl.append(fragment).toString();
-    }
+		return newUrl.append(fragment).toString();
+	}
 
-    /**
-     * Clean a url for logging purposes.
-     * It truncates the url to 2000 characters and removes any line feeds or carriage returns.
-     *
-     * @param url the url to clean
-     * @return the cleaned url
-     */
-    public static String cleanUrlForLog(final String url) {
-        return StringUtils.truncate(url, MAX_LOGGED_URI_LENGTH).replaceAll("[\\r\\n]", "");
-    }
+	/**
+	 * Clean a url for logging purposes.
+	 * It truncates the url to 2000 characters and removes any line feeds or carriage returns.
+	 *
+	 * @param url the url to clean
+	 * @return the cleaned url
+	 */
+	public static String cleanUrlForLog(final String url) {
+		return StringUtils.truncate(url, MAX_LOGGED_URI_LENGTH).replaceAll("[\\r\\n]", "");
+	}
 
 
 }

@@ -26,50 +26,50 @@ import org.craftercms.commons.entitlements.model.Module;
  */
 public class EntitlementExceededException extends EntitlementException {
 
-    /**
-     * The module that requested the validation.
-     */
-    protected Module module;
+	/**
+	 * The module that requested the validation.
+	 */
+	protected Module module;
 
-    /**
-     * The entitlement that was being validated.
-     */
-    protected EntitlementType entitlementType;
+	/**
+	 * The entitlement that was being validated.
+	 */
+	protected EntitlementType entitlementType;
 
-    /**
-     * The entitlement value found in the license file.
-     */
-    protected Number entitlementValue;
+	/**
+	 * The entitlement value found in the license file.
+	 */
+	protected Number entitlementValue;
 
-    /**
-     * The actual value provided by the module.
-     */
-    protected Number currentValue;
+	/**
+	 * The actual value provided by the module.
+	 */
+	protected Number currentValue;
 
-    public EntitlementExceededException(final Module module, final EntitlementType entitlementType,
-                                        final Number entitlementValue, final Number currentValue) {
-        super(String.format("Exceeded entitlement '%s' for module '%s': using %s but allowed is %s", entitlementType,
-            module, currentValue, entitlementValue));
-        this.module = module;
-        this.entitlementType = entitlementType;
-        this.entitlementValue = entitlementValue;
-        this.currentValue = currentValue;
-    }
+	public EntitlementExceededException(final Module module, final EntitlementType entitlementType,
+					    final Number entitlementValue, final Number currentValue) {
+		super(String.format("Exceeded entitlement '%s' for module '%s': using %s but allowed is %s", entitlementType,
+			module, currentValue, entitlementValue));
+		this.module = module;
+		this.entitlementType = entitlementType;
+		this.entitlementValue = entitlementValue;
+		this.currentValue = currentValue;
+	}
 
-    public Module getModule() {
-        return module;
-    }
+	public Module getModule() {
+		return module;
+	}
 
-    public EntitlementType getEntitlementType() {
-        return entitlementType;
-    }
+	public EntitlementType getEntitlementType() {
+		return entitlementType;
+	}
 
-    public Number getEntitlementValue() {
-        return entitlementValue;
-    }
+	public Number getEntitlementValue() {
+		return entitlementValue;
+	}
 
-    public Number getCurrentValue() {
-        return currentValue;
-    }
+	public Number getCurrentValue() {
+		return currentValue;
+	}
 
 }

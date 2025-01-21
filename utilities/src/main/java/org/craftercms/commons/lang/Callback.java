@@ -22,11 +22,11 @@ package org.craftercms.commons.lang;
  */
 public interface Callback<T> {
 
-    /**
-     * Executes the callback, returning the result or throwing a runtime exception if an error occurs.
-     *
-     * @return the result of the execution
-     */
-    T execute();
+	/**
+	 * Executes the callback, returning the result or throwing a runtime exception if an error occurs.
+	 *
+	 * @return the result of the execution
+	 */
+	T execute();
 
 }

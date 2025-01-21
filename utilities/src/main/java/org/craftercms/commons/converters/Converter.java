@@ -22,23 +22,22 @@ package org.craftercms.commons.converters;
  */
 public interface Converter<S, T> {
 
-    /**
-     * Returns the class of the objects this converter converts from.
-     */
-    Class<?> getSourceClass();
+	/**
+	 * Returns the class of the objects this converter converts from.
+	 */
+	Class<?> getSourceClass();
 
-    /**
-     * Returns the class of the objects this converter converts to.
-     */
-    Class<?> getTargetClass();
+	/**
+	 * Returns the class of the objects this converter converts to.
+	 */
+	Class<?> getTargetClass();
 
-    /**
-     * Converts the source object from S type to T type.
-     *
-     * @param source the object to convert
-     *
-     * @return the converted object
-     */
-    T convert(S source);
+	/**
+	 * Converts the source object from S type to T type.
+	 *
+	 * @param source the object to convert
+	 * @return the converted object
+	 */
+	T convert(S source);
 
 }

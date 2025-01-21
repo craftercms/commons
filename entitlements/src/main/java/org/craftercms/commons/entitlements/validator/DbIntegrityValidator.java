@@ -28,19 +28,21 @@ import org.craftercms.commons.entitlements.exception.EntitlementException;
  */
 public interface DbIntegrityValidator {
 
-    /**
-     * Generates the validator value for a new database.
-     * @param connection connection to the database
-     * @throws SQLException if there is any connection error
-     */
-    void store(Connection connection) throws SQLException;
+	/**
+	 * Generates the validator value for a new database.
+	 *
+	 * @param connection connection to the database
+	 * @throws SQLException if there is any connection error
+	 */
+	void store(Connection connection) throws SQLException;
 
-    /**
-     * Checks the validation value for an existing database.
-     * @param connection connection to the database
-     * @throws EntitlementException if the validation fails
-     * @throws SQLException if there is any connection error
-     */
-    void validate(Connection connection) throws EntitlementException, SQLException;
+	/**
+	 * Checks the validation value for an existing database.
+	 *
+	 * @param connection connection to the database
+	 * @throws EntitlementException if the validation fails
+	 * @throws SQLException         if there is any connection error
+	 */
+	void validate(Connection connection) throws EntitlementException, SQLException;
 
 }

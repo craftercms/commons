@@ -39,120 +39,120 @@ import static org.craftercms.commons.config.ConfigUtils.getRequiredStringPropert
  */
 public abstract class AbstractBlobStore<T extends ConfigurationProfile> implements BlobStore {
 
-    /**
-     * The id of the store
-     */
-    protected String id;
+	/**
+	 * The id of the store
+	 */
+	protected String id;
 
-    /**
-     * The regex to check for compatible paths
-     */
-    protected String pattern;
+	/**
+	 * The regex to check for compatible paths
+	 */
+	protected String pattern;
 
-    /**
-     * The mappings for the different environments
-     */
-    protected Map<String, Mapping> mappings;
+	/**
+	 * The mappings for the different environments
+	 */
+	protected Map<String, Mapping> mappings;
 
-    /**
-     * The profile to connect to the remote store
-     */
-    protected T profile;
+	/**
+	 * The profile to connect to the remote store
+	 */
+	protected T profile;
 
-    /**
-     * The mapper to load the profile configuration
-     */
-    protected ConfigurationMapper<T> profileMapper;
+	/**
+	 * The mapper to load the profile configuration
+	 */
+	protected ConfigurationMapper<T> profileMapper;
 
-    /**
-     * The publishing target resolver
-     */
-    protected PublishingTargetResolver publishingTargetResolver;
+	/**
+	 * The publishing target resolver
+	 */
+	protected PublishingTargetResolver publishingTargetResolver;
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
-    }
+	public void setPattern(String pattern) {
+		this.pattern = pattern;
+	}
 
-    public void setProfileMapper(ConfigurationMapper<T> profileMapper) {
-        this.profileMapper = profileMapper;
-    }
+	public void setProfileMapper(ConfigurationMapper<T> profileMapper) {
+		this.profileMapper = profileMapper;
+	}
 
-    public void setPublishingTargetResolver(PublishingTargetResolver publishingTargetResolver) {
-        this.publishingTargetResolver = publishingTargetResolver;
-    }
+	public void setPublishingTargetResolver(PublishingTargetResolver publishingTargetResolver) {
+		this.publishingTargetResolver = publishingTargetResolver;
+	}
 
-    @Override
-    public boolean isCompatible(String path) {
-        return path != null && path.matches(pattern);
-    }
+	@Override
+	public boolean isCompatible(String path) {
+		return path != null && path.matches(pattern);
+	}
 
-    @Override
-    public void init(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException {
-        id = getRequiredStringProperty(config, CONFIG_KEY_ID);
-        pattern = getRequiredStringProperty(config, CONFIG_KEY_PATTERN);
+	@Override
+	public void init(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException {
+		id = getRequiredStringProperty(config, CONFIG_KEY_ID);
+		pattern = getRequiredStringProperty(config, CONFIG_KEY_PATTERN);
 
-        mappings = new LinkedHashMap<>();
-        config.configurationsAt(CONFIG_KEY_MAPPING).forEach(bucketConfig -> {
-            Mapping mapping = new Mapping();
-            mapping.target = bucketConfig.getString(CONFIG_KEY_MAPPING_STORE_TARGET);
-            mapping.prefix = bucketConfig.getString(CONFIG_KEY_MAPPING_PREFIX);
-            mappings.put(bucketConfig.getString(CONFIG_KEY_MAPPING_PUBLISHING_TARGET), mapping);
-        });
+		mappings = new LinkedHashMap<>();
+		config.configurationsAt(CONFIG_KEY_MAPPING).forEach(bucketConfig -> {
+			Mapping mapping = new Mapping();
+			mapping.target = bucketConfig.getString(CONFIG_KEY_MAPPING_STORE_TARGET);
+			mapping.prefix = bucketConfig.getString(CONFIG_KEY_MAPPING_PREFIX);
+			mappings.put(bucketConfig.getString(CONFIG_KEY_MAPPING_PUBLISHING_TARGET), mapping);
+		});
 
-        profile = profileMapper.processConfig(config.configurationAt(CONFIG_KEY_CONFIGURATION));
-        profile.setProfileId(config.getString(CONFIG_KEY_ID));
+		profile = profileMapper.processConfig(config.configurationAt(CONFIG_KEY_CONFIGURATION));
+		profile.setProfileId(config.getString(CONFIG_KEY_ID));
 
-        doInit(config);
-    }
+		doInit(config);
+	}
 
-    protected abstract void doInit(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException;
+	protected abstract void doInit(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException;
 
-    @Override
-    public Resource getResource(String path, Blob blob) {
-        return doGetContent(getMapping(publishingTargetResolver.getPublishingTarget()), path);
-    }
+	@Override
+	public Resource getResource(String path, Blob blob) {
+		return doGetContent(getMapping(publishingTargetResolver.getPublishingTarget()), path);
+	}
 
-    protected abstract Resource doGetContent(Mapping mapping, String path);
+	protected abstract Resource doGetContent(Mapping mapping, String path);
 
-    protected Mapping getMapping(String publishingTarget) {
-        return mappings.get(publishingTarget);
-    }
+	protected Mapping getMapping(String publishingTarget) {
+		return mappings.get(publishingTarget);
+	}
 
-    /**
-     * Internal class used when loading the configuration
-     */
-    public static class Mapping {
+	/**
+	 * Internal class used when loading the configuration
+	 */
+	public static class Mapping {
 
-        /**
-         * The target in the store
-         */
-        public String target;
+		/**
+		 * The target in the store
+		 */
+		public String target;
 
-        /**
-         * The prefix to use in the store
-         */
-        public String prefix;
+		/**
+		 * The prefix to use in the store
+		 */
+		public String prefix;
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Mapping mapping = (Mapping) o;
-            return Objects.equals(target, mapping.target) && Objects.equals(prefix, mapping.prefix);
-        }
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+			Mapping mapping = (Mapping) o;
+			return Objects.equals(target, mapping.target) && Objects.equals(prefix, mapping.prefix);
+		}
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(target, prefix);
-        }
-    }
+		@Override
+		public int hashCode() {
+			return Objects.hash(target, prefix);
+		}
+	}
 
 }

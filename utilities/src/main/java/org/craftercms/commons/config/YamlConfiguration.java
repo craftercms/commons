@@ -68,98 +68,98 @@ import org.yaml.snakeyaml.Yaml;
  */
 public class YamlConfiguration extends BaseHierarchicalConfiguration implements FileBasedConfiguration, InputStreamSupport {
 
-    public static final String LOG_KEY_YAML_LOADED = "configuration.yaml.yamlLoaded";
-    public static final String ERROR_KEY_WRITE_NOT_SUPPORTED = "configuration.yaml.writeNotSupported";
-    public static final String ERROR_KEY_LOAD_ERROR = "configuration.yaml.loadError";
+	public static final String LOG_KEY_YAML_LOADED = "configuration.yaml.yamlLoaded";
+	public static final String ERROR_KEY_WRITE_NOT_SUPPORTED = "configuration.yaml.writeNotSupported";
+	public static final String ERROR_KEY_LOAD_ERROR = "configuration.yaml.loadError";
 
-    private static final I10nLogger logger = new I10nLogger(YamlConfiguration.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
+	private static final I10nLogger logger = new I10nLogger(YamlConfiguration.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
-    protected final LoaderOptions loaderOptions = new LoaderOptions();
+	protected final LoaderOptions loaderOptions = new LoaderOptions();
 
-    public YamlConfiguration() {
-        // Disabled by default
-        loaderOptions.setMaxAliasesForCollections(0);
-    }
+	public YamlConfiguration() {
+		// Disabled by default
+		loaderOptions.setMaxAliasesForCollections(0);
+	}
 
-    public LoaderOptions getLoaderOptions() {
-        return loaderOptions;
-    }
+	public LoaderOptions getLoaderOptions() {
+		return loaderOptions;
+	}
 
-    @Override
-    public void read(Reader in) throws ConfigurationException, IOException {
-        load(in);
-    }
+	@Override
+	public void read(Reader in) throws ConfigurationException, IOException {
+		load(in);
+	}
 
-    @Override
-    public void read(InputStream in) throws ConfigurationException, IOException {
-        load(new InputStreamReader(in, StandardCharsets.UTF_8));
-    }
+	@Override
+	public void read(InputStream in) throws ConfigurationException, IOException {
+		load(new InputStreamReader(in, StandardCharsets.UTF_8));
+	}
 
-    @Override
-    public void write(Writer out) throws ConfigurationException, IOException {
-        throw new UnsupportedOperationException(I10nUtils.getLocalizedMessage(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME,
-                                                                              ERROR_KEY_WRITE_NOT_SUPPORTED));
-    }
+	@Override
+	public void write(Writer out) throws ConfigurationException, IOException {
+		throw new UnsupportedOperationException(I10nUtils.getLocalizedMessage(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME,
+			ERROR_KEY_WRITE_NOT_SUPPORTED));
+	}
 
-    @SuppressWarnings("unchecked")
-    protected void load(Reader in) throws ConfigurationException {
-        try {
-            Yaml yaml = new Yaml(new DisableClassLoadingConstructor(loaderOptions));
+	@SuppressWarnings("unchecked")
+	protected void load(Reader in) throws ConfigurationException {
+		try {
+			Yaml yaml = new Yaml(new DisableClassLoadingConstructor(loaderOptions));
 
-            Map<String, Object> yamlObj = (Map<String, Object>) yaml.load(in);
+			Map<String, Object> yamlObj = (Map<String, Object>) yaml.load(in);
 
-            logger.debug(LOG_KEY_YAML_LOADED, yamlObj);
+			logger.debug(LOG_KEY_YAML_LOADED, yamlObj);
 
-            buildConfig(yamlObj);
-        } catch (Exception e) {
-            throw new ConfigurationException(I10nUtils.getLocalizedMessage(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME,
-                                                                           ERROR_KEY_LOAD_ERROR), e);
-        }
-    }
+			buildConfig(yamlObj);
+		} catch (Exception e) {
+			throw new ConfigurationException(I10nUtils.getLocalizedMessage(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME,
+				ERROR_KEY_LOAD_ERROR), e);
+		}
+	}
 
-    protected void buildConfig(Map<String, Object> yamlObj) {
-        ImmutableNode.Builder root = new ImmutableNode.Builder();
+	protected void buildConfig(Map<String, Object> yamlObj) {
+		ImmutableNode.Builder root = new ImmutableNode.Builder();
 
-        if (MapUtils.isNotEmpty(yamlObj)) {
-            buildConfigFromMap(yamlObj, root);
-        }
+		if (MapUtils.isNotEmpty(yamlObj)) {
+			buildConfigFromMap(yamlObj, root);
+		}
 
-        addNodes(null, root.create().getChildren());
-    }
+		addNodes(null, root.create().getChildren());
+	}
 
-    @SuppressWarnings("unchecked")
-    protected void buildConfigFromKeyValuePair(String name, Object value, ImmutableNode.Builder parent) {
-        if (value instanceof Map) {
-            ImmutableNode.Builder node = new ImmutableNode.Builder();
-            node.name(name);
+	@SuppressWarnings("unchecked")
+	protected void buildConfigFromKeyValuePair(String name, Object value, ImmutableNode.Builder parent) {
+		if (value instanceof Map) {
+			ImmutableNode.Builder node = new ImmutableNode.Builder();
+			node.name(name);
 
-            buildConfigFromMap((Map<String, Object>)value, node);
+			buildConfigFromMap((Map<String, Object>) value, node);
 
-            parent.addChild(node.create());
-        } else if (value instanceof Collection) {
-            buildConfigFromCollection(name, (Collection<Object>)value, parent);
-        } else {
-            ImmutableNode.Builder node = new ImmutableNode.Builder();
-            node.name(name);
-            node.value(value);
+			parent.addChild(node.create());
+		} else if (value instanceof Collection) {
+			buildConfigFromCollection(name, (Collection<Object>) value, parent);
+		} else {
+			ImmutableNode.Builder node = new ImmutableNode.Builder();
+			node.name(name);
+			node.value(value);
 
-            parent.addChild(node.create());
-        }
-    }
+			parent.addChild(node.create());
+		}
+	}
 
-    protected void buildConfigFromMap(Map<String, Object> map, ImmutableNode.Builder parent) {
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            String name = entry.getKey();
-            Object value = entry.getValue();
+	protected void buildConfigFromMap(Map<String, Object> map, ImmutableNode.Builder parent) {
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			String name = entry.getKey();
+			Object value = entry.getValue();
 
-            buildConfigFromKeyValuePair(name, value, parent);
-        }
-    }
+			buildConfigFromKeyValuePair(name, value, parent);
+		}
+	}
 
-    protected void buildConfigFromCollection(String name, Collection<Object> collection, ImmutableNode.Builder parent) {
-        for (Object value : collection) {
-            buildConfigFromKeyValuePair(name, value, parent);
-        }
-    }
+	protected void buildConfigFromCollection(String name, Collection<Object> collection, ImmutableNode.Builder parent) {
+		for (Object value : collection) {
+			buildConfigFromKeyValuePair(name, value, parent);
+		}
+	}
 
 }

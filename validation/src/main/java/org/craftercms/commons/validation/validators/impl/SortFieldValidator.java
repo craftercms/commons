@@ -23,6 +23,7 @@ import org.springframework.validation.Validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -34,37 +35,37 @@ import static org.craftercms.commons.validation.ErrorCodes.SQL_SORT_VALIDATION_F
  */
 public class SortFieldValidator implements ConstraintValidator<SqlSort, SortField>, Validator {
 
-    private List<String> columns;
+	private List<String> columns;
 
-    @Override
-    public void initialize(SqlSort sqlSort) {
-        setColumns(List.of(sqlSort.columns().split("\\s+")));
-    }
+	@Override
+	public void initialize(SqlSort sqlSort) {
+		setColumns(List.of(sqlSort.columns().split("\\s+")));
+	}
 
-    private void setColumns(final List<String> columns) {
-        this.columns = columns.stream().map(String::toLowerCase).collect(toList());
-    }
+	private void setColumns(final List<String> columns) {
+		this.columns = columns.stream().map(String::toLowerCase).collect(toList());
+	}
 
-    @Override
-    public boolean isValid(SortField value, ConstraintValidatorContext context) {
-        return value == null || doValidate(value);
-    }
+	@Override
+	public boolean isValid(SortField value, ConstraintValidatorContext context) {
+		return value == null || doValidate(value);
+	}
 
-    private boolean doValidate(final @NonNull SortField value) {
-        String columnName = value.getField().toLowerCase();
+	private boolean doValidate(final @NonNull SortField value) {
+		String columnName = value.getField().toLowerCase();
 
-        return columns.contains(columnName);
-    }
+		return columns.contains(columnName);
+	}
 
-    @Override
-    public boolean supports(@NonNull Class<?> clazz) {
-        return SortField.class.equals(clazz);
-    }
+	@Override
+	public boolean supports(@NonNull Class<?> clazz) {
+		return SortField.class.equals(clazz);
+	}
 
-    @Override
-    public void validate(@NonNull Object target, @NonNull Errors errors) {
-        if (!doValidate((SortField) target)) {
-            errors.reject(SQL_SORT_VALIDATION_FAILED_ERROR_CODE);
-        }
-    }
+	@Override
+	public void validate(@NonNull Object target, @NonNull Errors errors) {
+		if (!doValidate((SortField) target)) {
+			errors.reject(SQL_SORT_VALIDATION_FAILED_ERROR_CODE);
+		}
+	}
 }

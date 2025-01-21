@@ -23,25 +23,25 @@ package org.craftercms.commons.mongo;
  */
 public class MongoDataException extends Exception {
 
-    private static final long serialVersionUID = 658758865887694336L;
+	private static final long serialVersionUID = 658758865887694336L;
 
-    public MongoDataException() {
-    }
+	public MongoDataException() {
+	}
 
-    public MongoDataException(final String message) {
-        super(message);
-    }
+	public MongoDataException(final String message) {
+		super(message);
+	}
 
-    public MongoDataException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
+	public MongoDataException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
 
-    public MongoDataException(final Throwable cause) {
-        super(cause);
-    }
+	public MongoDataException(final Throwable cause) {
+		super(cause);
+	}
 
-    public MongoDataException(final String message, final Throwable cause, final boolean enableSuppression,
-                              final boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+	public MongoDataException(final String message, final Throwable cause, final boolean enableSuppression,
+				  final boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
 }

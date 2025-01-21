@@ -17,20 +17,20 @@ package org.craftercms.commons.validation;
 
 public class ValidationError {
 
-    private String targetId;
-    private String message;
+	private String targetId;
+	private String message;
 
-    public ValidationError(String targetId, String message) {
-        this.targetId = targetId;
-        this.message = message;
-    }
+	public ValidationError(String targetId, String message) {
+		this.targetId = targetId;
+		this.message = message;
+	}
 
-    public String getTargetId() {
-        return targetId;
-    }
+	public String getTargetId() {
+		return targetId;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public String getMessage() {
+		return message;
+	}
 
 }

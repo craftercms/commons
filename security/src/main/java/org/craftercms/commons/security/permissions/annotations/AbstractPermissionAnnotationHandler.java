@@ -30,105 +30,105 @@ import java.util.Map;
  * Base class for Permission Annotation Handlers.
  */
 public abstract class AbstractPermissionAnnotationHandler {
-    private static final String ERROR_KEY_EVALUATOR_NOT_FOUND = "security.permission.evaluatorNotFound";
-    private static final String ERROR_KEY_EVALUATION_FAILED = "security.permission.evaluationFailed";
+	private static final String ERROR_KEY_EVALUATOR_NOT_FOUND = "security.permission.evaluatorNotFound";
+	private static final String ERROR_KEY_EVALUATION_FAILED = "security.permission.evaluationFailed";
 
-    protected final Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators;
+	protected final Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators;
 
-    public AbstractPermissionAnnotationHandler(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators) {
-        this.permissionEvaluators = permissionEvaluators;
-    }
+	public AbstractPermissionAnnotationHandler(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators) {
+		this.permissionEvaluators = permissionEvaluators;
+	}
 
-    /**
-     * Get a permission annotation of the given type from the given method or its containing class if exists
-     *
-     * @param method         the method to get the annotation from
-     * @param pjp            the join point
-     * @param annotationType the desired annotation type
-     * @param <T>            the annotation type
-     * @return the annotation, or null if none found
-     */
-    protected <T extends Annotation> T getHasPermissionAnnotation(Method method, ProceedingJoinPoint pjp, Class<T> annotationType) {
-        T hasPermission = method.getAnnotation(annotationType);
+	/**
+	 * Get a permission annotation of the given type from the given method or its containing class if exists
+	 *
+	 * @param method         the method to get the annotation from
+	 * @param pjp            the join point
+	 * @param annotationType the desired annotation type
+	 * @param <T>            the annotation type
+	 * @return the annotation, or null if none found
+	 */
+	protected <T extends Annotation> T getHasPermissionAnnotation(Method method, ProceedingJoinPoint pjp, Class<T> annotationType) {
+		T hasPermission = method.getAnnotation(annotationType);
 
-        if (hasPermission == null) {
-            Class<?> targetClass = pjp.getTarget().getClass();
-            hasPermission = targetClass.getAnnotation(annotationType);
-        }
+		if (hasPermission == null) {
+			Class<?> targetClass = pjp.getTarget().getClass();
+			hasPermission = targetClass.getAnnotation(annotationType);
+		}
 
-        return hasPermission;
-    }
+		return hasPermission;
+	}
 
-    /**
-     * Gets the protected resource (parameter annotated with {@link ProtectedResource}) from the method parameters.
-     *
-     * @param method the method to extract protected resource from
-     * @param params the parameter values
-     * @return the protected resource, or null if none found
-     */
-    protected Object getAnnotatedProtectedResource(Method method, Object[] params) {
-        Annotation[][] paramAnnotations = method.getParameterAnnotations();
+	/**
+	 * Gets the protected resource (parameter annotated with {@link ProtectedResource}) from the method parameters.
+	 *
+	 * @param method the method to extract protected resource from
+	 * @param params the parameter values
+	 * @return the protected resource, or null if none found
+	 */
+	protected Object getAnnotatedProtectedResource(Method method, Object[] params) {
+		Annotation[][] paramAnnotations = method.getParameterAnnotations();
 
-        for (int i = 0; i < paramAnnotations.length; i++) {
-            for (Annotation a : paramAnnotations[i]) {
-                if (a instanceof ProtectedResource) {
-                    return params[i];
-                }
-            }
-        }
+		for (int i = 0; i < paramAnnotations.length; i++) {
+			for (Annotation a : paramAnnotations[i]) {
+				if (a instanceof ProtectedResource) {
+					return params[i];
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    /**
-     * Gets the protected resource ids (e.g.: siteId, path) from the method parameters.
-     *
-     * @param method      the method to extract parameters from
-     * @param paramValues the parameter values
-     * @return a map with the protected resource ids
-     */
-    protected Map<String, Object> getAnnotatedProtectedResourceIds(Method method, Object[] paramValues) {
-        Parameter[] methodParameters = method.getParameters();
-        Map<String, Object> resourceIds = null;
+	/**
+	 * Gets the protected resource ids (e.g.: siteId, path) from the method parameters.
+	 *
+	 * @param method      the method to extract parameters from
+	 * @param paramValues the parameter values
+	 * @return a map with the protected resource ids
+	 */
+	protected Map<String, Object> getAnnotatedProtectedResourceIds(Method method, Object[] paramValues) {
+		Parameter[] methodParameters = method.getParameters();
+		Map<String, Object> resourceIds = null;
 
-        for (int i = 0; i < methodParameters.length; i++) {
-            ProtectedResourceId resourceIdAnnotation = AnnotationUtils.findAnnotation(methodParameters[i], ProtectedResourceId.class);
-            if (resourceIdAnnotation != null) {
-                String idName = resourceIdAnnotation.value();
+		for (int i = 0; i < methodParameters.length; i++) {
+			ProtectedResourceId resourceIdAnnotation = AnnotationUtils.findAnnotation(methodParameters[i], ProtectedResourceId.class);
+			if (resourceIdAnnotation != null) {
+				String idName = resourceIdAnnotation.value();
 
-                if (resourceIds == null) {
-                    resourceIds = new HashMap<>();
-                }
+				if (resourceIds == null) {
+					resourceIds = new HashMap<>();
+				}
 
-                resourceIds.put(idName, paramValues[i]);
-            }
-        }
+				resourceIds.put(idName, paramValues[i]);
+			}
+		}
 
-        return resourceIds;
-    }
+		return resourceIds;
+	}
 
-    /**
-     * Checks the permissions to perform the action configured in the {@link HasPermission} to the securedResource (if any)
-     *
-     * @param method          the {@link Method} to secure
-     * @param hasPermission   the {@link HasPermission} annotation
-     * @param securedResource the securedResource, if any
-     * @return true if the action is allowed, false otherwise
-     */
-    @SuppressWarnings("unchecked")
-    protected boolean checkPermissions(final Method method, final HasPermission hasPermission, final Object securedResource) {
-        Class<?> type = hasPermission.type();
-        String action = hasPermission.action();
-        PermissionEvaluator permissionEvaluator = permissionEvaluators.get(type);
+	/**
+	 * Checks the permissions to perform the action configured in the {@link HasPermission} to the securedResource (if any)
+	 *
+	 * @param method          the {@link Method} to secure
+	 * @param hasPermission   the {@link HasPermission} annotation
+	 * @param securedResource the securedResource, if any
+	 * @return true if the action is allowed, false otherwise
+	 */
+	@SuppressWarnings("unchecked")
+	protected boolean checkPermissions(final Method method, final HasPermission hasPermission, final Object securedResource) {
+		Class<?> type = hasPermission.type();
+		String action = hasPermission.action();
+		PermissionEvaluator permissionEvaluator = permissionEvaluators.get(type);
 
-        if (permissionEvaluator == null) {
-            throw new PermissionException(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
-        }
+		if (permissionEvaluator == null) {
+			throw new PermissionException(ERROR_KEY_EVALUATOR_NOT_FOUND, type);
+		}
 
-        try {
-            return permissionEvaluator.isAllowed(securedResource, action);
-        } catch (PermissionException e) {
-            throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
-        }
-    }
+		try {
+			return permissionEvaluator.isAllowed(securedResource, action);
+		} catch (PermissionException e) {
+			throw new PermissionException(ERROR_KEY_EVALUATION_FAILED, e);
+		}
+	}
 }

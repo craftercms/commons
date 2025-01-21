@@ -30,9 +30,9 @@ import java.io.IOException;
  */
 public class UrlBasedFileStore implements RemoteFileStore {
 
-    @Override
-    public RemoteFile getFile(RemotePath path) throws IOException {
-        return new ResourceBasedRemoteFile(path, new RangeAwareUrlResource(path.getPath()));
-    }
+	@Override
+	public RemoteFile getFile(RemotePath path) throws IOException {
+		return new ResourceBasedRemoteFile(path, new RangeAwareUrlResource(path.getPath()));
+	}
 
 }

@@ -27,447 +27,447 @@ import java.util.List;
 @Deprecated
 public class BlueprintDescriptor {
 
-    private String descriptorVersion;
-    private Blueprint blueprint;
-
-    public String getDescriptorVersion() {
-        return descriptorVersion;
-    }
-
-    public void setDescriptorVersion(String descriptorVersion) {
-        this.descriptorVersion = descriptorVersion;
-    }
-
-    public Blueprint getBlueprint() {
-        return blueprint;
-    }
-
-    public void setBlueprint(Blueprint blueprint) {
-        this.blueprint = blueprint;
-    }
-
-    public static class Blueprint {
-
-        private String id;
-        private String name;
-        private String tags;
-        private Version version;
-        private String description;
-        private Website website;
-        private Media media;
-        private Build build;
-        private License license;
-        private List<CraftercmsVersionSupported> craftercmsVersionsSupported;
-        private String searchEngine;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getTags() {
-            return tags;
-        }
-
-        public void setTags(String tags) {
-            this.tags = tags;
-        }
-
-        public Version getVersion() {
-            return version;
-        }
-
-        public void setVersion(Version version) {
-            this.version = version;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public Website getWebsite() {
-            return website;
-        }
-
-        public void setWebsite(Website website) {
-            this.website = website;
-        }
-
-        public Media getMedia() {
-            return media;
-        }
-
-        public void setMedia(Media media) {
-            this.media = media;
-        }
-
-        public Build getBuild() {
-            return build;
-        }
-
-        public void setBuild(Build build) {
-            this.build = build;
-        }
-
-        public License getLicense() {
-            return license;
-        }
-
-        public void setLicense(License license) {
-            this.license = license;
-        }
+	private String descriptorVersion;
+	private Blueprint blueprint;
+
+	public String getDescriptorVersion() {
+		return descriptorVersion;
+	}
+
+	public void setDescriptorVersion(String descriptorVersion) {
+		this.descriptorVersion = descriptorVersion;
+	}
+
+	public Blueprint getBlueprint() {
+		return blueprint;
+	}
+
+	public void setBlueprint(Blueprint blueprint) {
+		this.blueprint = blueprint;
+	}
+
+	public static class Blueprint {
+
+		private String id;
+		private String name;
+		private String tags;
+		private Version version;
+		private String description;
+		private Website website;
+		private Media media;
+		private Build build;
+		private License license;
+		private List<CraftercmsVersionSupported> craftercmsVersionsSupported;
+		private String searchEngine;
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getTags() {
+			return tags;
+		}
+
+		public void setTags(String tags) {
+			this.tags = tags;
+		}
+
+		public Version getVersion() {
+			return version;
+		}
+
+		public void setVersion(Version version) {
+			this.version = version;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		public Website getWebsite() {
+			return website;
+		}
+
+		public void setWebsite(Website website) {
+			this.website = website;
+		}
+
+		public Media getMedia() {
+			return media;
+		}
+
+		public void setMedia(Media media) {
+			this.media = media;
+		}
+
+		public Build getBuild() {
+			return build;
+		}
+
+		public void setBuild(Build build) {
+			this.build = build;
+		}
+
+		public License getLicense() {
+			return license;
+		}
+
+		public void setLicense(License license) {
+			this.license = license;
+		}
 
-        public List<CraftercmsVersionSupported> getCraftercmsVersionsSupported() {
-            return craftercmsVersionsSupported;
-        }
+		public List<CraftercmsVersionSupported> getCraftercmsVersionsSupported() {
+			return craftercmsVersionsSupported;
+		}
 
-        public void setCraftercmsVersionsSupported(List<CraftercmsVersionSupported> craftercmsVersionsSupported) {
-            this.craftercmsVersionsSupported = craftercmsVersionsSupported;
-        }
+		public void setCraftercmsVersionsSupported(List<CraftercmsVersionSupported> craftercmsVersionsSupported) {
+			this.craftercmsVersionsSupported = craftercmsVersionsSupported;
+		}
 
-        public String getSearchEngine() {
-            return searchEngine;
-        }
+		public String getSearchEngine() {
+			return searchEngine;
+		}
 
-        public void setSearchEngine(final String searchEngine) {
-            this.searchEngine = searchEngine;
-        }
-    }
+		public void setSearchEngine(final String searchEngine) {
+			this.searchEngine = searchEngine;
+		}
+	}
 
-    public static class Version {
+	public static class Version {
 
-        private int major;
-        private int minor;
-        private int patch;
+		private int major;
+		private int minor;
+		private int patch;
 
-        public int getMajor() {
-            return major;
-        }
+		public int getMajor() {
+			return major;
+		}
 
-        public void setMajor(int major) {
-            this.major = major;
-        }
+		public void setMajor(int major) {
+			this.major = major;
+		}
 
-        public int getMinor() {
-            return minor;
-        }
+		public int getMinor() {
+			return minor;
+		}
 
-        public void setMinor(int minor) {
-            this.minor = minor;
-        }
+		public void setMinor(int minor) {
+			this.minor = minor;
+		}
 
-        public int getPatch() {
-            return patch;
-        }
+		public int getPatch() {
+			return patch;
+		}
 
-        public void setPatch(int patch) {
-            this.patch = patch;
-        }
-    }
+		public void setPatch(int patch) {
+			this.patch = patch;
+		}
+	}
 
-    public static class Website {
+	public static class Website {
 
-        private String name;
-        private String url;
+		private String name;
+		private String url;
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
+		public void setName(String name) {
+			this.name = name;
+		}
 
-        public String getUrl() {
-            return url;
-        }
+		public String getUrl() {
+			return url;
+		}
 
-        public void setUrl(String url) {
-            this.url = url;
-        }
-    }
+		public void setUrl(String url) {
+			this.url = url;
+		}
+	}
 
-    public static class Media {
+	public static class Media {
 
-        private List<ScreenshotWrapper> screenshots;
-        private List<VideoWrapper> videos;
-        private Developer developer;
+		private List<ScreenshotWrapper> screenshots;
+		private List<VideoWrapper> videos;
+		private Developer developer;
 
-        public List<ScreenshotWrapper> getScreenshots() {
-            return screenshots;
-        }
+		public List<ScreenshotWrapper> getScreenshots() {
+			return screenshots;
+		}
 
-        public void setScreenshots(List<ScreenshotWrapper> screenshots) {
-            this.screenshots = screenshots;
-        }
+		public void setScreenshots(List<ScreenshotWrapper> screenshots) {
+			this.screenshots = screenshots;
+		}
 
-        public List<VideoWrapper> getVideos() {
-            return videos;
-        }
+		public List<VideoWrapper> getVideos() {
+			return videos;
+		}
 
-        public void setVideos(List<VideoWrapper> videos) {
-            this.videos = videos;
-        }
+		public void setVideos(List<VideoWrapper> videos) {
+			this.videos = videos;
+		}
 
-        public Developer getDeveloper() {
-            return developer;
-        }
+		public Developer getDeveloper() {
+			return developer;
+		}
 
-        public void setDeveloper(Developer developer) {
-            this.developer = developer;
-        }
-    }
+		public void setDeveloper(Developer developer) {
+			this.developer = developer;
+		}
+	}
 
-    public static class ScreenshotWrapper {
-        private Screenshot screenshot;
+	public static class ScreenshotWrapper {
+		private Screenshot screenshot;
 
-        public Screenshot getScreenshot() {
-            return screenshot;
-        }
+		public Screenshot getScreenshot() {
+			return screenshot;
+		}
 
-        public void setScreenshot(Screenshot screenshot) {
-            this.screenshot = screenshot;
-        }
-    }
+		public void setScreenshot(Screenshot screenshot) {
+			this.screenshot = screenshot;
+		}
+	}
 
-    public static class Screenshot {
+	public static class Screenshot {
 
-        private String title;
-        private String description;
-        private String url;
+		private String title;
+		private String description;
+		private String url;
 
-        public String getTitle() {
-            return title;
-        }
+		public String getTitle() {
+			return title;
+		}
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
+		public void setTitle(String title) {
+			this.title = title;
+		}
 
-        public String getDescription() {
-            return description;
-        }
+		public String getDescription() {
+			return description;
+		}
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
+		public void setDescription(String description) {
+			this.description = description;
+		}
 
-        public String getUrl() {
-            return url;
-        }
+		public String getUrl() {
+			return url;
+		}
 
-        public void setUrl(String url) {
-            this.url = url;
-        }
-    }
+		public void setUrl(String url) {
+			this.url = url;
+		}
+	}
 
-    public static class VideoWrapper {
+	public static class VideoWrapper {
 
-        private Video video;
+		private Video video;
 
-        public Video getVideo() {
-            return video;
-        }
+		public Video getVideo() {
+			return video;
+		}
 
-        public void setVideo(Video video) {
-            this.video = video;
-        }
-    }
+		public void setVideo(Video video) {
+			this.video = video;
+		}
+	}
 
-    public static class Video {
+	public static class Video {
 
-        private String title;
-        private String description;
-        private String url;
+		private String title;
+		private String description;
+		private String url;
 
-        public String getTitle() {
-            return title;
-        }
+		public String getTitle() {
+			return title;
+		}
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
+		public void setTitle(String title) {
+			this.title = title;
+		}
 
-        public String getDescription() {
-            return description;
-        }
+		public String getDescription() {
+			return description;
+		}
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
+		public void setDescription(String description) {
+			this.description = description;
+		}
 
-        public String getUrl() {
-            return url;
-        }
+		public String getUrl() {
+			return url;
+		}
 
-        public void setUrl(String url) {
-            this.url = url;
-        }
-    }
+		public void setUrl(String url) {
+			this.url = url;
+		}
+	}
 
-    public static class Developer {
+	public static class Developer {
 
-        private List<PersonWrapper> people;
-        private Company company;
+		private List<PersonWrapper> people;
+		private Company company;
 
-        public List<PersonWrapper> getPeople() {
-            return people;
-        }
+		public List<PersonWrapper> getPeople() {
+			return people;
+		}
 
-        public void setPeople(List<PersonWrapper> people) {
-            this.people = people;
-        }
+		public void setPeople(List<PersonWrapper> people) {
+			this.people = people;
+		}
 
-        public Company getCompany() {
-            return company;
-        }
+		public Company getCompany() {
+			return company;
+		}
 
-        public void setCompany(Company company) {
-            this.company = company;
-        }
-    }
+		public void setCompany(Company company) {
+			this.company = company;
+		}
+	}
 
-    public static class PersonWrapper {
-        private Person person;
+	public static class PersonWrapper {
+		private Person person;
 
-        public Person getPerson() {
-            return person;
-        }
+		public Person getPerson() {
+			return person;
+		}
 
-        public void setPerson(Person person) {
-            this.person = person;
-        }
-    }
+		public void setPerson(Person person) {
+			this.person = person;
+		}
+	}
 
-    public static class Person {
+	public static class Person {
 
-        private String name;
-        private String email;
-        private String url;
+		private String name;
+		private String email;
+		private String url;
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
+		public void setName(String name) {
+			this.name = name;
+		}
 
-        public String getEmail() {
-            return email;
-        }
+		public String getEmail() {
+			return email;
+		}
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
+		public void setEmail(String email) {
+			this.email = email;
+		}
 
-        public String getUrl() {
-            return url;
-        }
+		public String getUrl() {
+			return url;
+		}
 
-        public void setUrl(String url) {
-            this.url = url;
-        }
-    }
+		public void setUrl(String url) {
+			this.url = url;
+		}
+	}
 
-    public static class Company {
+	public static class Company {
 
-        private String name;
-        private String email;
-        private String url;
+		private String name;
+		private String email;
+		private String url;
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
+		public void setName(String name) {
+			this.name = name;
+		}
 
-        public String getEmail() {
-            return email;
-        }
+		public String getEmail() {
+			return email;
+		}
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
+		public void setEmail(String email) {
+			this.email = email;
+		}
 
-        public String getUrl() {
-            return url;
-        }
+		public String getUrl() {
+			return url;
+		}
 
-        public void setUrl(String url) {
-            this.url = url;
-        }
-    }
+		public void setUrl(String url) {
+			this.url = url;
+		}
+	}
 
-    public static class Build {
+	public static class Build {
 
-        private String id;
-        private String date;
+		private String id;
+		private String date;
 
-        public String getId() {
-            return id;
-        }
+		public String getId() {
+			return id;
+		}
 
-        public void setId(String id) {
-            this.id = id;
-        }
+		public void setId(String id) {
+			this.id = id;
+		}
 
-        public String getDate() {
-            return date;
-        }
+		public String getDate() {
+			return date;
+		}
 
-        public void setDate(String date) {
-            this.date = date;
-        }
-    }
+		public void setDate(String date) {
+			this.date = date;
+		}
+	}
 
-    public static class License {
-        private String url;
-        private String name;
+	public static class License {
+		private String url;
+		private String name;
 
-        public String getUrl() {
-            return url;
-        }
+		public String getUrl() {
+			return url;
+		}
 
-        public void setUrl(String url) {
-            this.url = url;
-        }
+		public void setUrl(String url) {
+			this.url = url;
+		}
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
 
-    public static class CraftercmsVersionSupported {
-        private String version;
+	public static class CraftercmsVersionSupported {
+		private String version;
 
-        public String getVersion() {
-            return version;
-        }
+		public String getVersion() {
+			return version;
+		}
 
-        public void setVersion(String version) {
-            this.version = version;
-        }
-    }
+		public void setVersion(String version) {
+			this.version = version;
+		}
+	}
 }

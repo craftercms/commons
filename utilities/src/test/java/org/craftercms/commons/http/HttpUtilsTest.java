@@ -21,12 +21,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class HttpUtilsTest {
-    public static final String INPUT_URI_WITH_MACRO = "s3://sample-uri/with/{siteName}";
-    public static final String EXPECT_OUTPUT_URI_ENCODED_MACRO = "s3://sample-uri/with/%7BsiteName%7D";
-    @Test
-    public void testEncodeUrlMacro() {
-        String output = HttpUtils.encodeUrlMacro(INPUT_URI_WITH_MACRO);
-        assertEquals(output, EXPECT_OUTPUT_URI_ENCODED_MACRO);
-        assertEquals(HttpUtils.encodeUrlMacro(""), "");
-    }
+	public static final String INPUT_URI_WITH_MACRO = "s3://sample-uri/with/{siteName}";
+	public static final String EXPECT_OUTPUT_URI_ENCODED_MACRO = "s3://sample-uri/with/%7BsiteName%7D";
+
+	@Test
+	public void testEncodeUrlMacro() {
+		String output = HttpUtils.encodeUrlMacro(INPUT_URI_WITH_MACRO);
+		assertEquals(output, EXPECT_OUTPUT_URI_ENCODED_MACRO);
+		assertEquals(HttpUtils.encodeUrlMacro(""), "");
+	}
 }

@@ -30,21 +30,21 @@ import org.craftercms.commons.upgrade.impl.UpgradeContext;
  */
 public interface UpgradeOperation<T> {
 
-    /**
-     * Initializes the instance with the given configuration
-     *
-     * @param currentVersion the current version
-     * @param nextVersion    the next version
-     * @param config         the operation configuration
-     */
-    void init(String currentVersion, String nextVersion, HierarchicalConfiguration<?> config) throws ConfigurationException;
+	/**
+	 * Initializes the instance with the given configuration
+	 *
+	 * @param currentVersion the current version
+	 * @param nextVersion    the next version
+	 * @param config         the operation configuration
+	 */
+	void init(String currentVersion, String nextVersion, HierarchicalConfiguration<?> config) throws ConfigurationException;
 
-    /**
-     * Performs a single upgrade operation.
-     *
-     * @param context the upgrade context
-     * @throws UpgradeException if there is any error performing the upgrade
-     */
-    void execute(UpgradeContext<T> context) throws UpgradeException;
+	/**
+	 * Performs a single upgrade operation.
+	 *
+	 * @param context the upgrade context
+	 * @throws UpgradeException if there is any error performing the upgrade
+	 */
+	void execute(UpgradeContext<T> context) throws UpgradeException;
 
 }

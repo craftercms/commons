@@ -24,14 +24,14 @@ package org.craftercms.commons.plugin.model;
  */
 public interface CrafterCmsEditions {
 
-    /**
-     * The community edition
-     */
-    String COMMUNITY = "community";
+	/**
+	 * The community edition
+	 */
+	String COMMUNITY = "community";
 
-    /**
-     * The enterprise edition
-     */
-    String ENTERPRISE = "enterprise";
+	/**
+	 * The enterprise edition
+	 */
+	String ENTERPRISE = "enterprise";
 
 }

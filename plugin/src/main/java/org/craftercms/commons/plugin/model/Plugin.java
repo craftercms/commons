@@ -34,248 +34,248 @@ import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Plugin {
 
-    /**
-     * The type of plugin
-     */
-    protected String type;
+	/**
+	 * The type of plugin
+	 */
+	protected String type;
 
-    /**
-     * The unique id of the plugin
-     */
-    protected String id;
+	/**
+	 * The unique id of the plugin
+	 */
+	protected String id;
 
-    /**
-     * The name of the plugin
-     */
-    protected String name;
+	/**
+	 * The name of the plugin
+	 */
+	protected String name;
 
-    /**
-     * The tags of the plugin
-     */
-    protected List<String> tags;
+	/**
+	 * The tags of the plugin
+	 */
+	protected List<String> tags;
 
-    /**
-     * The version of the plugin
-     */
-    protected Version version;
+	/**
+	 * The version of the plugin
+	 */
+	protected Version version;
 
-    /**
-     * The description of the plugin
-     */
-    protected String description;
+	/**
+	 * The description of the plugin
+	 */
+	protected String description;
 
-    /**
-     * The website information of the plugin
-     */
-    protected Link website;
+	/**
+	 * The website information of the plugin
+	 */
+	protected Link website;
 
-    /**
-     * The media assets of the plugin
-     */
-    protected Media media;
+	/**
+	 * The media assets of the plugin
+	 */
+	protected Media media;
 
-    /**
-     * The developer information of the plugin
-     */
-    protected Developer developer;
+	/**
+	 * The developer information of the plugin
+	 */
+	protected Developer developer;
 
-    /**
-     * The license of the plugin
-     */
-    protected Link license;
+	/**
+	 * The license of the plugin
+	 */
+	protected Link license;
 
-    /**
-     * The supported CrafterCMS editions of the plugin
-     */
-    protected List<String> crafterCmsEditions;
+	/**
+	 * The supported CrafterCMS editions of the plugin
+	 */
+	protected List<String> crafterCmsEditions;
 
-    /**
-     * The supported CrafterCMS versions of the plugin
-     */
-    protected List<Version> crafterCmsVersions;
+	/**
+	 * The supported CrafterCMS versions of the plugin
+	 */
+	protected List<Version> crafterCmsVersions;
 
-    /**
-     * The search engine required by the plugin
-     */
-    protected String searchEngine = SearchEngines.ELASTICSEARCH;
+	/**
+	 * The search engine required by the plugin
+	 */
+	protected String searchEngine = SearchEngines.ELASTICSEARCH;
 
-    /**
-     * The parameters supported by the plugin
-     */
-    protected List<Parameter> parameters;
+	/**
+	 * The parameters supported by the plugin
+	 */
+	protected List<Parameter> parameters;
 
-    /**
-     * List of installations to perform for the plugin
-     */
-    protected List<Installation> installation = emptyList();
+	/**
+	 * List of installations to perform for the plugin
+	 */
+	protected List<Installation> installation = emptyList();
 
-    /**
-     * The URL for the documentation
-     */
-    protected String documentation;
+	/**
+	 * The URL for the documentation
+	 */
+	protected String documentation;
 
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setType(final String type) {
-        this.type = type;
-    }
+	public void setType(final String type) {
+		this.type = type;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public List<String> getTags() {
-        return tags;
-    }
+	public List<String> getTags() {
+		return tags;
+	}
 
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
 
-    public Version getVersion() {
-        return version;
-    }
+	public Version getVersion() {
+		return version;
+	}
 
-    public void setVersion(Version version) {
-        this.version = version;
-    }
+	public void setVersion(Version version) {
+		this.version = version;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public Link getWebsite() {
-        return website;
-    }
+	public Link getWebsite() {
+		return website;
+	}
 
-    public void setWebsite(Link website) {
-        this.website = website;
-    }
+	public void setWebsite(Link website) {
+		this.website = website;
+	}
 
-    public Media getMedia() {
-        return media;
-    }
+	public Media getMedia() {
+		return media;
+	}
 
-    public void setMedia(Media media) {
-        this.media = media;
-    }
+	public void setMedia(Media media) {
+		this.media = media;
+	}
 
-    public Developer getDeveloper() {
-        return developer;
-    }
+	public Developer getDeveloper() {
+		return developer;
+	}
 
-    public void setDeveloper(final Developer developer) {
-        this.developer = developer;
-    }
+	public void setDeveloper(final Developer developer) {
+		this.developer = developer;
+	}
 
-    public Link getLicense() {
-        return license;
-    }
+	public Link getLicense() {
+		return license;
+	}
 
-    public void setLicense(Link link) {
-        this.license = link;
-    }
+	public void setLicense(Link link) {
+		this.license = link;
+	}
 
-    public List<String> getCrafterCmsEditions() {
-        return crafterCmsEditions;
-    }
+	public List<String> getCrafterCmsEditions() {
+		return crafterCmsEditions;
+	}
 
-    public void setCrafterCmsEditions(final List<String> crafterCmsEditions) {
-        this.crafterCmsEditions = crafterCmsEditions;
-    }
+	public void setCrafterCmsEditions(final List<String> crafterCmsEditions) {
+		this.crafterCmsEditions = crafterCmsEditions;
+	}
 
-    public List<Version> getCrafterCmsVersions() {
-        return crafterCmsVersions;
-    }
+	public List<Version> getCrafterCmsVersions() {
+		return crafterCmsVersions;
+	}
 
-    public void setCrafterCmsVersions(final List<Version> crafterCmsVersions) {
-        this.crafterCmsVersions = crafterCmsVersions;
-    }
+	public void setCrafterCmsVersions(final List<Version> crafterCmsVersions) {
+		this.crafterCmsVersions = crafterCmsVersions;
+	}
 
-    public String getSearchEngine() {
-        return searchEngine;
-    }
+	public String getSearchEngine() {
+		return searchEngine;
+	}
 
-    public void setSearchEngine(final String searchEngine) {
-        this.searchEngine = searchEngine;
-    }
+	public void setSearchEngine(final String searchEngine) {
+		this.searchEngine = searchEngine;
+	}
 
-    public List<Parameter> getParameters() {
-        return parameters;
-    }
+	public List<Parameter> getParameters() {
+		return parameters;
+	}
 
-    public void setParameters(final List<Parameter> parameters) {
-        this.parameters = parameters;
-    }
+	public void setParameters(final List<Parameter> parameters) {
+		this.parameters = parameters;
+	}
 
-    public List<Installation> getInstallation() {
-        return installation;
-    }
+	public List<Installation> getInstallation() {
+		return installation;
+	}
 
-    public void setInstallation(List<Installation> installation) {
-        this.installation = installation;
-    }
+	public void setInstallation(List<Installation> installation) {
+		this.installation = installation;
+	}
 
-    public String getDocumentation() {
-        return documentation;
-    }
+	public String getDocumentation() {
+		return documentation;
+	}
 
-    public void setDocumentation(String documentation) {
-        this.documentation = documentation;
-    }
+	public void setDocumentation(String documentation) {
+		this.documentation = documentation;
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Plugin)) {
-            return false;
-        }
-        final Plugin plugin = (Plugin)o;
-        return Objects.equals(type, plugin.type) && Objects.equals(id, plugin.id) && Objects.equals(name,
-            plugin.name) && isEqualCollection(emptyIfNull(tags), emptyIfNull(plugin.tags)) &&
-            Objects.equals(version, plugin.version) &&
-            Objects.equals(description, plugin.description) && Objects.equals(website, plugin.website) &&
-            Objects.equals(media, plugin.media) && Objects.equals(developer, plugin.developer) &&
-            Objects.equals(license, plugin.license) &&
-            isEqualCollection(emptyIfNull(crafterCmsEditions), emptyIfNull(plugin.crafterCmsEditions)) &&
-            isEqualCollection(emptyIfNull(crafterCmsVersions), emptyIfNull(plugin.crafterCmsVersions)) &&
-            Objects.equals(searchEngine, plugin.searchEngine) &&
-            isEqualCollection(emptyIfNull(parameters), emptyIfNull(plugin.parameters));
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Plugin)) {
+			return false;
+		}
+		final Plugin plugin = (Plugin) o;
+		return Objects.equals(type, plugin.type) && Objects.equals(id, plugin.id) && Objects.equals(name,
+			plugin.name) && isEqualCollection(emptyIfNull(tags), emptyIfNull(plugin.tags)) &&
+			Objects.equals(version, plugin.version) &&
+			Objects.equals(description, plugin.description) && Objects.equals(website, plugin.website) &&
+			Objects.equals(media, plugin.media) && Objects.equals(developer, plugin.developer) &&
+			Objects.equals(license, plugin.license) &&
+			isEqualCollection(emptyIfNull(crafterCmsEditions), emptyIfNull(plugin.crafterCmsEditions)) &&
+			isEqualCollection(emptyIfNull(crafterCmsVersions), emptyIfNull(plugin.crafterCmsVersions)) &&
+			Objects.equals(searchEngine, plugin.searchEngine) &&
+			isEqualCollection(emptyIfNull(parameters), emptyIfNull(plugin.parameters));
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(type, id, name, tags, version, description, website, media, developer, license,
-            crafterCmsEditions, crafterCmsVersions, searchEngine, parameters);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, id, name, tags, version, description, website, media, developer, license,
+			crafterCmsEditions, crafterCmsVersions, searchEngine, parameters);
+	}
 
-    @Override
-    public String toString() {
-        return "Plugin{" + "type='" + type + '\'' + ", id='" + id + '\'' + ", name='" + name + '\'' + ", tags=" +
-            tags + ", version=" + version + ", description='" + description + '\'' + ", website=" + website +
-            ", media=" + media + ", developer=" + developer + ", license=" + license +
-            ", crafterCmsEditions=" + crafterCmsEditions + ", crafterCmsVersions=" + crafterCmsVersions +
-            ", searchEngine='" + searchEngine + '\'' + ", parameters=" + parameters + '}';
-    }
+	@Override
+	public String toString() {
+		return "Plugin{" + "type='" + type + '\'' + ", id='" + id + '\'' + ", name='" + name + '\'' + ", tags=" +
+			tags + ", version=" + version + ", description='" + description + '\'' + ", website=" + website +
+			", media=" + media + ", developer=" + developer + ", license=" + license +
+			", crafterCmsEditions=" + crafterCmsEditions + ", crafterCmsVersions=" + crafterCmsVersions +
+			", searchEngine='" + searchEngine + '\'' + ", parameters=" + parameters + '}';
+	}
 
 }

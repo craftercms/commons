@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,231 +40,231 @@ import static org.mockito.Mockito.*;
 @SuppressWarnings("unchecked")
 public class HasPermissionAnnotationHandlerTest {
 
-    private static final String TOKEN_PARAMETER = "token";
-    private static final String VALID_TOKEN = "THE_CONFIGURED_TOKEN";
-    private static final String WRONG_TOKEN = "THE_WRONG_TOKEN";
+	private static final String TOKEN_PARAMETER = "token";
+	private static final String VALID_TOKEN = "THE_CONFIGURED_TOKEN";
+	private static final String WRONG_TOKEN = "THE_WRONG_TOKEN";
 
-    private MockSubjectResolver subjectResolver;
-    private HasPermissionAnnotationHandler annotationHandler;
-    private MockSecuredService service;
+	private MockSubjectResolver subjectResolver;
+	private HasPermissionAnnotationHandler annotationHandler;
+	private MockSecuredService service;
 
-    @Before
-    public void setUp() throws Exception {
-        createTestSubjectResolver();
-        createTestAnnotationHandler();
-        createTestService();
-    }
+	@Before
+	public void setUp() throws Exception {
+		createTestSubjectResolver();
+		createTestAnnotationHandler();
+		createTestService();
+	}
 
-    @Test
-    public void testAllowed() throws Exception {
-        MockProtectedResource object1 = new MockProtectedResource();
-        object1.id = 1;
+	@Test
+	public void testAllowed() throws Exception {
+		MockProtectedResource object1 = new MockProtectedResource();
+		object1.id = 1;
 
-        subjectResolver.subject = "user1";
+		subjectResolver.subject = "user1";
 
-        String result = service.doSomethingWithObject(object1);
+		String result = service.doSomethingWithObject(object1);
 
-        assertEquals(String.format("I did something with resource '%s'", object1), result);
+		assertEquals(String.format("I did something with resource '%s'", object1), result);
 
-        subjectResolver.subject = "user2";
+		subjectResolver.subject = "user2";
 
-        result = service.doAnotherThingWithObjectId(2);
+		result = service.doAnotherThingWithObjectId(2);
 
-        assertEquals(String.format("I did another thing with resource ID '%s'", 2), result);
+		assertEquals(String.format("I did another thing with resource ID '%s'", 2), result);
 
-        result = service.doYetAnotherThingWithNoObject();
+		result = service.doYetAnotherThingWithNoObject();
 
-        assertEquals("I did yet another thing", result);
-    }
+		assertEquals("I did yet another thing", result);
+	}
 
-    @Test
-    public void testNotAllowed() throws Exception {
-        subjectResolver.subject = "user1";
+	@Test
+	public void testNotAllowed() throws Exception {
+		subjectResolver.subject = "user1";
 
-        try {
-            service.doAnotherThingWithObjectId(1);
-            fail("ActionDeniedException expected");
-        } catch (ActionDeniedException e) {
-            // expected, so continue
-        }
+		try {
+			service.doAnotherThingWithObjectId(1);
+			fail("ActionDeniedException expected");
+		} catch (ActionDeniedException e) {
+			// expected, so continue
+		}
 
-        subjectResolver.subject = "user3";
+		subjectResolver.subject = "user3";
 
-        try {
-            service.doYetAnotherThingWithNoObject();
-            fail("ActionDeniedException expected");
-        } catch (ActionDeniedException e) {
-            // expected, so continue
-        }
-    }
+		try {
+			service.doYetAnotherThingWithNoObject();
+			fail("ActionDeniedException expected");
+		} catch (ActionDeniedException e) {
+			// expected, so continue
+		}
+	}
 
-    @Test
-    public void testExceptions() throws Exception {
-        try {
-            service.doSomethingWrongPermissionType();
-            fail("PermissionException expected");
-        } catch (PermissionException e) {
-            // expected, so continue
-        }
+	@Test
+	public void testExceptions() throws Exception {
+		try {
+			service.doSomethingWrongPermissionType();
+			fail("PermissionException expected");
+		} catch (PermissionException e) {
+			// expected, so continue
+		}
 
-        subjectResolver.subject = null;
+		subjectResolver.subject = null;
 
-        try {
-            service.doYetAnotherThingWithNoObject();
-            fail("PermissionException expected");
-        } catch (PermissionException e) {
-            // expected, so continue
-        }
-    }
+		try {
+			service.doYetAnotherThingWithNoObject();
+			fail("PermissionException expected");
+		} catch (PermissionException e) {
+			// expected, so continue
+		}
+	}
 
-    @Test(expected = PermissionException.class)
-    public void testManagementTokenWithNoToken() {
-        service.doSomethingWithManagementToken();
-    }
+	@Test(expected = PermissionException.class)
+	public void testManagementTokenWithNoToken() {
+		service.doSomethingWithManagementToken();
+	}
 
-    @Test(expected = PermissionException.class)
-    public void testManagementTokenWrongToken() {
-        RequestContext current = mock(RequestContext.class);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.getParameter(TOKEN_PARAMETER)).thenReturn(WRONG_TOKEN);
-        when(current.getRequest()).thenReturn(request);
-        RequestContext.setCurrent(current);
+	@Test(expected = PermissionException.class)
+	public void testManagementTokenWrongToken() {
+		RequestContext current = mock(RequestContext.class);
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		when(request.getParameter(TOKEN_PARAMETER)).thenReturn(WRONG_TOKEN);
+		when(current.getRequest()).thenReturn(request);
+		RequestContext.setCurrent(current);
 
-        service.doSomethingWithManagementToken();
-    }
+		service.doSomethingWithManagementToken();
+	}
 
-    @Test
-    public void testManagementTokenValidToken() throws Throwable {
-        RequestContext current = mock(RequestContext.class);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.getParameter(TOKEN_PARAMETER)).thenReturn(VALID_TOKEN);
-        when(current.getRequest()).thenReturn(request);
-        RequestContext.setCurrent(current);
+	@Test
+	public void testManagementTokenValidToken() throws Throwable {
+		RequestContext current = mock(RequestContext.class);
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		when(request.getParameter(TOKEN_PARAMETER)).thenReturn(VALID_TOKEN);
+		when(current.getRequest()).thenReturn(request);
+		RequestContext.setCurrent(current);
 
-        assertNotNull(service.doSomethingWithManagementToken());
-    }
+		assertNotNull(service.doSomethingWithManagementToken());
+	}
 
-    @Test(expected = PermissionException.class)
-    public void testNoTokenAllowed() {
-        RequestContext current = mock(RequestContext.class);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.getParameter(TOKEN_PARAMETER)).thenReturn(VALID_TOKEN);
-        when(current.getRequest()).thenReturn(request);
-        RequestContext.setCurrent(current);
+	@Test(expected = PermissionException.class)
+	public void testNoTokenAllowed() {
+		RequestContext current = mock(RequestContext.class);
+		HttpServletRequest request = mock(HttpServletRequest.class);
+		when(request.getParameter(TOKEN_PARAMETER)).thenReturn(VALID_TOKEN);
+		when(current.getRequest()).thenReturn(request);
+		RequestContext.setCurrent(current);
 
-        service.doSomethingNoTokenAllowed();
-    }
+		service.doSomethingNoTokenAllowed();
+	}
 
-    private void createTestAnnotationHandler() throws PermissionException {
-        Map<Class<?>, PermissionEvaluator<?, ?>> evaluators = new HashMap<>(1);
-        evaluators.put(DefaultPermission.class, createTestPermissionEvaluator());
+	private void createTestAnnotationHandler() throws PermissionException {
+		Map<Class<?>, PermissionEvaluator<?, ?>> evaluators = new HashMap<>(1);
+		evaluators.put(DefaultPermission.class, createTestPermissionEvaluator());
 
-        annotationHandler = new HasPermissionAnnotationHandler(evaluators, VALID_TOKEN);
-    }
+		annotationHandler = new HasPermissionAnnotationHandler(evaluators, VALID_TOKEN);
+	}
 
-    private void createTestService() throws PermissionException {
-        AspectJProxyFactory proxyFactory = new AspectJProxyFactory(new MockSecuredServiceImpl());
-        proxyFactory.addAspect(annotationHandler);
+	private void createTestService() throws PermissionException {
+		AspectJProxyFactory proxyFactory = new AspectJProxyFactory(new MockSecuredServiceImpl());
+		proxyFactory.addAspect(annotationHandler);
 
-        service = proxyFactory.getProxy();
-    }
+		service = proxyFactory.getProxy();
+	}
 
-    private PermissionEvaluator<String, Object> createTestPermissionEvaluator() throws PermissionException {
-        PermissionEvaluatorImpl<String, Object> evaluator = new PermissionEvaluatorImpl<>(subjectResolver, createTestPermissionResolver());
+	private PermissionEvaluator<String, Object> createTestPermissionEvaluator() throws PermissionException {
+		PermissionEvaluatorImpl<String, Object> evaluator = new PermissionEvaluatorImpl<>(subjectResolver, createTestPermissionResolver());
 
-        return evaluator;
-    }
+		return evaluator;
+	}
 
-    private void createTestSubjectResolver() {
-        subjectResolver = new MockSubjectResolver();
-    }
+	private void createTestSubjectResolver() {
+		subjectResolver = new MockSubjectResolver();
+	}
 
-    private PermissionResolver<String, Object> createTestPermissionResolver() throws PermissionException {
-        Permission permission1 = new DefaultPermission().allow("doSomething");
-        Permission permission2 = new DefaultPermission().allowAny();
-        Permission permission3 = new DefaultPermission().allow("doYetAnotherThing");
+	private PermissionResolver<String, Object> createTestPermissionResolver() throws PermissionException {
+		Permission permission1 = new DefaultPermission().allow("doSomething");
+		Permission permission2 = new DefaultPermission().allowAny();
+		Permission permission3 = new DefaultPermission().allow("doYetAnotherThing");
 
-        PermissionResolver<String, Object> resolver = mock(PermissionResolver.class);
-        when(resolver.getPermission(eq("user1"), any())).thenReturn(permission1);
-        when(resolver.getPermission(eq("user2"), any())).thenReturn(permission2);
-        when(resolver.getGlobalPermission("user2")).thenReturn(permission3);
+		PermissionResolver<String, Object> resolver = mock(PermissionResolver.class);
+		when(resolver.getPermission(eq("user1"), any())).thenReturn(permission1);
+		when(resolver.getPermission(eq("user2"), any())).thenReturn(permission2);
+		when(resolver.getGlobalPermission("user2")).thenReturn(permission3);
 
-        return resolver;
-    }
+		return resolver;
+	}
 
-    private interface MockSecuredService {
+	private interface MockSecuredService {
 
-        String doSomethingWithObject(MockProtectedResource object);
+		String doSomethingWithObject(MockProtectedResource object);
 
-        String doAnotherThingWithObjectId(long id);
+		String doAnotherThingWithObjectId(long id);
 
-        String doYetAnotherThingWithNoObject();
+		String doYetAnotherThingWithNoObject();
 
-        void doSomethingWrongPermissionType();
+		void doSomethingWrongPermissionType();
 
-        String doSomethingWithManagementToken();
+		String doSomethingWithManagementToken();
 
-        String doSomethingNoTokenAllowed();
-    }
+		String doSomethingNoTokenAllowed();
+	}
 
-    private static class MockSubjectResolver implements SubjectResolver<String> {
+	private static class MockSubjectResolver implements SubjectResolver<String> {
 
-        private String subject;
+		private String subject;
 
-        @Override
-        public String getCurrentSubject() {
-            return subject;
-        }
+		@Override
+		public String getCurrentSubject() {
+			return subject;
+		}
 
-    }
+	}
 
-    private static class MockProtectedResource {
+	private static class MockProtectedResource {
 
-        private long id;
+		private long id;
 
-        @Override
-        public String toString() {
-            return "MockProtectedResource{" +
-                "id='" + id + '\'' +
-                '}';
-        }
+		@Override
+		public String toString() {
+			return "MockProtectedResource{" +
+				"id='" + id + '\'' +
+				'}';
+		}
 
-    }
+	}
 
-    @HasPermission(type = DefaultPermission.class, action = "doSomething")
-    private static class MockSecuredServiceImpl implements MockSecuredService {
+	@HasPermission(type = DefaultPermission.class, action = "doSomething")
+	private static class MockSecuredServiceImpl implements MockSecuredService {
 
-        @Override
-        public String doSomethingWithObject(@ProtectedResource MockProtectedResource object) {
-            return String.format("I did something with resource '%s'", object);
-        }
+		@Override
+		public String doSomethingWithObject(@ProtectedResource MockProtectedResource object) {
+			return String.format("I did something with resource '%s'", object);
+		}
 
-        @Override
-        @HasPermission(type = DefaultPermission.class, action = "doAnotherThing")
-        public String doAnotherThingWithObjectId(@ProtectedResource long id) {
-            return String.format("I did another thing with resource ID '%s'", id);
-        }
+		@Override
+		@HasPermission(type = DefaultPermission.class, action = "doAnotherThing")
+		public String doAnotherThingWithObjectId(@ProtectedResource long id) {
+			return String.format("I did another thing with resource ID '%s'", id);
+		}
 
-        @Override
-        @HasPermission(type = DefaultPermission.class, action = "doYetAnotherThing")
-        public String doYetAnotherThingWithNoObject() {
-            return "I did yet another thing";
-        }
+		@Override
+		@HasPermission(type = DefaultPermission.class, action = "doYetAnotherThing")
+		public String doYetAnotherThingWithNoObject() {
+			return "I did yet another thing";
+		}
 
-        @HasPermission(type = Permission.class, action = "doSomething")
-        public void doSomethingWrongPermissionType() {
-        }
+		@HasPermission(type = Permission.class, action = "doSomething")
+		public void doSomethingWrongPermissionType() {
+		}
 
-        @HasPermission(type = DefaultPermission.class, action = "forbidden", acceptManagementToken = false)
-        public String doSomethingNoTokenAllowed() {
-            return "valid";
-        }
+		@HasPermission(type = DefaultPermission.class, action = "forbidden", acceptManagementToken = false)
+		public String doSomethingNoTokenAllowed() {
+			return "valid";
+		}
 
-        @HasPermission(type = DefaultPermission.class, action = "doSomething", acceptManagementToken = true)
-        public String doSomethingWithManagementToken() {
-            return "valid";
-        }
+		@HasPermission(type = DefaultPermission.class, action = "doSomething", acceptManagementToken = true)
+		public String doSomethingWithManagementToken() {
+			return "valid";
+		}
 
-    }
+	}
 
 }

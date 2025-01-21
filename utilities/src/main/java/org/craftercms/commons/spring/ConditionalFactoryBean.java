@@ -16,6 +16,7 @@
 package org.craftercms.commons.spring;
 
 import org.springframework.beans.factory.FactoryBean;
+
 import java.beans.ConstructorProperties;
 
 /**
@@ -25,32 +26,32 @@ import java.beans.ConstructorProperties;
  */
 public class ConditionalFactoryBean implements FactoryBean<Object> {
 
-    private Object actualBean;
-    private boolean flag;
+	private Object actualBean;
+	private boolean flag;
 
-    @ConstructorProperties({"flag", "actualBean"})
-    public ConditionalFactoryBean(final boolean flag, final Object actualBean) {
-        this.flag = flag;
-        this.actualBean = actualBean;
-    }
+	@ConstructorProperties({"flag", "actualBean"})
+	public ConditionalFactoryBean(final boolean flag, final Object actualBean) {
+		this.flag = flag;
+		this.actualBean = actualBean;
+	}
 
-    @Override
-    public Object getObject() throws Exception {
-        if (flag) {
-            return actualBean;
-        } else {
-            return null;
-        }
-    }
+	@Override
+	public Object getObject() throws Exception {
+		if (flag) {
+			return actualBean;
+		} else {
+			return null;
+		}
+	}
 
-    @Override
-    public Class<?> getObjectType() {
-        return actualBean.getClass();
-    }
+	@Override
+	public Class<?> getObjectType() {
+		return actualBean.getClass();
+	}
 
-    @Override
-    public boolean isSingleton() {
-        return true;
-    }
+	@Override
+	public boolean isSingleton() {
+		return true;
+	}
 
 }

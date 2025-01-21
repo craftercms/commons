@@ -27,28 +27,28 @@ import static org.junit.Assert.assertArrayEquals;
  */
 public class SimpleDigestTest {
 
-    public static final String CLEAR_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fringilla.";
+	public static final String CLEAR_TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fringilla.";
 
-    @Test
-    public void testDigest() throws Exception {
-        SimpleDigest digest = new SimpleDigest();
+	@Test
+	public void testDigest() throws Exception {
+		SimpleDigest digest = new SimpleDigest();
 
-        String hash = digest.digestBase64(CLEAR_TEXT);
-        String salt = digest.getBase64Salt();
+		String hash = digest.digestBase64(CLEAR_TEXT);
+		String salt = digest.getBase64Salt();
 
-        MessageDigest actualDigest = MessageDigest.getInstance(SimpleDigest.DEFAULT_ALGORITHM);
+		MessageDigest actualDigest = MessageDigest.getInstance(SimpleDigest.DEFAULT_ALGORITHM);
 
-        actualDigest.update(Base64.decodeBase64(salt));
+		actualDigest.update(Base64.decodeBase64(salt));
 
-        byte[] hashedBytes = actualDigest.digest(CLEAR_TEXT.getBytes("UTF-8"));
+		byte[] hashedBytes = actualDigest.digest(CLEAR_TEXT.getBytes("UTF-8"));
 
-        for (int i = 0; i < SimpleDigest.DEFAULT_ITERATIONS; i++) {
-            actualDigest.reset();
+		for (int i = 0; i < SimpleDigest.DEFAULT_ITERATIONS; i++) {
+			actualDigest.reset();
 
-            hashedBytes = actualDigest.digest(hashedBytes);
-        }
+			hashedBytes = actualDigest.digest(hashedBytes);
+		}
 
-        assertArrayEquals(hashedBytes, Base64.decodeBase64(hash));
-    }
+		assertArrayEquals(hashedBytes, Base64.decodeBase64(hash));
+	}
 
 }

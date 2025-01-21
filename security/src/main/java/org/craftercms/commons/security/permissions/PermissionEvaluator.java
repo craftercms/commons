@@ -24,26 +24,26 @@ import org.craftercms.commons.security.exception.PermissionException;
  */
 public interface PermissionEvaluator<S, R> {
 
-    /**
-     * Checks if the current subject (according to {@link org.craftercms.commons.security.permissions.SubjectResolver})
-     * is allowed to perform the specified action on the given resource.
-     *
-     * @param resource the resource or ID/IDs of the resource whose permissions should be checked. If null,
-     *                 the global permission should be checked
-     * @param action the action the subject wants to perform (not null)
-     * @return true if the subject is allowed to execute the action, false otherwise
-     */
-    boolean isAllowed(R resource, String action) throws PermissionException;
+	/**
+	 * Checks if the current subject (according to {@link org.craftercms.commons.security.permissions.SubjectResolver})
+	 * is allowed to perform the specified action on the given resource.
+	 *
+	 * @param resource the resource or ID/IDs of the resource whose permissions should be checked. If null,
+	 *                 the global permission should be checked
+	 * @param action   the action the subject wants to perform (not null)
+	 * @return true if the subject is allowed to execute the action, false otherwise
+	 */
+	boolean isAllowed(R resource, String action) throws PermissionException;
 
-    /**
-     * Checks if the given subject is allowed to perform the specified action on the given resource
-     *
-     * @param subject the subject (not null)
-     * @param resource the resource or ID/IDs of the resource whose permissions should be checked. If null,
-     *                 the global permission should be checked
-     * @param action the action the subject wants to perform (not null)
-     * @return true if the subject is allowed to execute the action, false otherwise
-     */
-    boolean isAllowed(S subject, R resource, String action) throws PermissionException;
+	/**
+	 * Checks if the given subject is allowed to perform the specified action on the given resource
+	 *
+	 * @param subject  the subject (not null)
+	 * @param resource the resource or ID/IDs of the resource whose permissions should be checked. If null,
+	 *                 the global permission should be checked
+	 * @param action   the action the subject wants to perform (not null)
+	 * @return true if the subject is allowed to execute the action, false otherwise
+	 */
+	boolean isAllowed(S subject, R resource, String action) throws PermissionException;
 
 }

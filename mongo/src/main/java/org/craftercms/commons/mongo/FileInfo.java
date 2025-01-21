@@ -32,153 +32,153 @@ import org.craftercms.commons.file.FileUtils;
  */
 public class FileInfo {
 
-    private String md5;
-    private ObjectId fileId;
-    private String contentType;
-    private String fileSize;
-    private String storeName;
-    private String fileName;
-    private Date savedDate;
-    private long fileSizeBytes;
-    private Map<String,Object> attributes;
-    @JsonIgnore
-    private InputStream inputStream;
+	private String md5;
+	private ObjectId fileId;
+	private String contentType;
+	private String fileSize;
+	private String storeName;
+	private String fileName;
+	private Date savedDate;
+	private long fileSizeBytes;
+	private Map<String, Object> attributes;
+	@JsonIgnore
+	private InputStream inputStream;
 
 
-    FileInfo(final GridFSFile savedFile,final boolean withInputStream) {
-        this.fileId = (ObjectId)savedFile.getId();
-        this.contentType = savedFile.getContentType();
-        this.fileSize = FileUtils.readableFileSize(savedFile.getLength());
-        this.storeName = savedFile.getFilename();
-        this.savedDate = savedFile.getUploadDate();
-        this.fileSizeBytes = savedFile.getLength();
-        if (withInputStream && savedFile instanceof GridFSDBFile) {
-            this.inputStream = ((GridFSDBFile)savedFile).getInputStream();
-        }
-        attributes=new HashMap<>();
-    }
+	FileInfo(final GridFSFile savedFile, final boolean withInputStream) {
+		this.fileId = (ObjectId) savedFile.getId();
+		this.contentType = savedFile.getContentType();
+		this.fileSize = FileUtils.readableFileSize(savedFile.getLength());
+		this.storeName = savedFile.getFilename();
+		this.savedDate = savedFile.getUploadDate();
+		this.fileSizeBytes = savedFile.getLength();
+		if (withInputStream && savedFile instanceof GridFSDBFile) {
+			this.inputStream = ((GridFSDBFile) savedFile).getInputStream();
+		}
+		attributes = new HashMap<>();
+	}
 
-    public FileInfo() {
-        attributes=new HashMap<>();
-    }
+	public FileInfo() {
+		attributes = new HashMap<>();
+	}
 
-    public String getMd5() {
-        return md5;
-    }
+	public String getMd5() {
+		return md5;
+	}
 
-    public void setMd5(final String md5) {
-        this.md5 = md5;
-    }
+	public void setMd5(final String md5) {
+		this.md5 = md5;
+	}
 
-    public ObjectId getFileId() {
-        return fileId;
-    }
+	public ObjectId getFileId() {
+		return fileId;
+	}
 
-    public void setFileId(final ObjectId fileId) {
-        this.fileId = fileId;
-    }
+	public void setFileId(final ObjectId fileId) {
+		this.fileId = fileId;
+	}
 
-    public String getContentType() {
-        return contentType;
-    }
+	public String getContentType() {
+		return contentType;
+	}
 
-    public void setContentType(final String contentType) {
-        this.contentType = contentType;
-    }
+	public void setContentType(final String contentType) {
+		this.contentType = contentType;
+	}
 
-    public String getFileSize() {
-        return fileSize;
-    }
+	public String getFileSize() {
+		return fileSize;
+	}
 
-    public void setFileSize(final String fileSize) {
-        this.fileSize = fileSize;
-    }
+	public void setFileSize(final String fileSize) {
+		this.fileSize = fileSize;
+	}
 
-    public String getStoreName() {
-        return storeName;
-    }
+	public String getStoreName() {
+		return storeName;
+	}
 
-    public void setStoreName(final String storeName) {
-        this.storeName = storeName;
-    }
+	public void setStoreName(final String storeName) {
+		this.storeName = storeName;
+	}
 
-    public Date getSavedDate() {
-        return savedDate;
-    }
+	public Date getSavedDate() {
+		return savedDate;
+	}
 
-    public void setSavedDate(final Date savedDate) {
-        this.savedDate = savedDate;
-    }
+	public void setSavedDate(final Date savedDate) {
+		this.savedDate = savedDate;
+	}
 
-    public InputStream getInputStream() {
-        return inputStream;
-    }
+	public InputStream getInputStream() {
+		return inputStream;
+	}
 
-    public long getFileSizeBytes() {
-        return fileSizeBytes;
-    }
+	public long getFileSizeBytes() {
+		return fileSizeBytes;
+	}
 
-    public void setFileSizeBytes(final long fileSizeBytes) {
-        this.fileSizeBytes = fileSizeBytes;
-    }
+	public void setFileSizeBytes(final long fileSizeBytes) {
+		this.fileSizeBytes = fileSizeBytes;
+	}
 
-    public String getFileName() {
-        return fileName;
-    }
+	public String getFileName() {
+		return fileName;
+	}
 
-    public void setFileName(final String fileName) {
-        this.fileName = fileName;
-    }
+	public void setFileName(final String fileName) {
+		this.fileName = fileName;
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        final FileInfo fileInfo = (FileInfo)o;
+		final FileInfo fileInfo = (FileInfo) o;
 
-        if (!fileId.equals(fileInfo.fileId)) {
-            return false;
-        }
-        if (!storeName.equals(fileInfo.storeName)) {
-            return false;
-        }
+		if (!fileId.equals(fileInfo.fileId)) {
+			return false;
+		}
+		if (!storeName.equals(fileInfo.storeName)) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    public void setAttribute(final String key,final Object value){
-        attributes.put(key,value);
-    }
+	public void setAttribute(final String key, final Object value) {
+		attributes.put(key, value);
+	}
 
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
 
-    public void setAttributes(final Map<String, Object> attributes) {
-        this.attributes = attributes;
-    }
+	public void setAttributes(final Map<String, Object> attributes) {
+		this.attributes = attributes;
+	}
 
-    @Override
-    public int hashCode() {
-        int result = fileId.hashCode();
-        result = 31 * result + storeName.hashCode();
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		int result = fileId.hashCode();
+		result = 31 * result + storeName.hashCode();
+		return result;
+	}
 
-    @Override
-    public String toString() {
-        return "FileInfo{" +
-            "md5='" + md5 + '\'' +
-            ", fileId=" + fileId +
-            ", contentType='" + contentType + '\'' +
-            ", fileSize='" + fileSize + '\'' +
-            ", storeName='" + storeName + '\'' +
-            ", savedDate=" + savedDate +
-            '}';
-    }
+	@Override
+	public String toString() {
+		return "FileInfo{" +
+			"md5='" + md5 + '\'' +
+			", fileId=" + fileId +
+			", contentType='" + contentType + '\'' +
+			", fileSize='" + fileSize + '\'' +
+			", storeName='" + storeName + '\'' +
+			", savedDate=" + savedDate +
+			'}';
+	}
 }

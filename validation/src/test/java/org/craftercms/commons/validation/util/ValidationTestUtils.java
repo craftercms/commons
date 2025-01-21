@@ -27,17 +27,17 @@ import static org.junit.Assert.assertTrue;
  */
 public class ValidationTestUtils {
 
-    public static boolean isValid(Validator validator, String value) {
-        ValidationResult errors = ValidationUtils.validateValue(validator, value, "key");
-        return !errors.hasErrors();
-    }
+	public static boolean isValid(Validator validator, String value) {
+		ValidationResult errors = ValidationUtils.validateValue(validator, value, "key");
+		return !errors.hasErrors();
+	}
 
-    public static void assertValid(Validator validator, String value){
-        assertTrue(isValid(validator, value));
-    }
+	public static void assertValid(Validator validator, String value) {
+		assertTrue(isValid(validator, value));
+	}
 
-    public static void assertInvalid(Validator validator, String value){
-        assertFalse(isValid(validator, value));
-    }
+	public static void assertInvalid(Validator validator, String value) {
+		assertFalse(isValid(validator, value));
+	}
 
 }

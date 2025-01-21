@@ -26,22 +26,21 @@ import java.util.Set;
  */
 public class SetUtils {
 
-    private SetUtils() {
-    }
+	private SetUtils() {
+	}
 
-    /**
-     * Creates a set from the array elements.
-     *
-     * @param array the array with the elements
-     *
-     * @return the set with the elements
-     */
-    @SafeVarargs
-    public static <T> Set<T> asSet(T... array) {
-        Set<T> set = null;
-        if (array != null) {
-           set = new HashSet<>(Arrays.asList(array));
-        }
-        return set;
-    }
+	/**
+	 * Creates a set from the array elements.
+	 *
+	 * @param array the array with the elements
+	 * @return the set with the elements
+	 */
+	@SafeVarargs
+	public static <T> Set<T> asSet(T... array) {
+		Set<T> set = null;
+		if (array != null) {
+			set = new HashSet<>(Arrays.asList(array));
+		}
+		return set;
+	}
 }

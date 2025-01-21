@@ -36,27 +36,27 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateVersionUpgradeOperationTest {
 
-    public static final String INITIAL_VERSION = "1.0";
-    public static final String FINAL_VERSION = "2.0";
+	public static final String INITIAL_VERSION = "1.0";
+	public static final String FINAL_VERSION = "2.0";
 
-    @Mock
-    private VersionProvider<Object> versionProvider;
+	@Mock
+	private VersionProvider<Object> versionProvider;
 
-    @InjectMocks
-    private UpdateVersionUpgradeOperation<?> operation;
+	@InjectMocks
+	private UpdateVersionUpgradeOperation<?> operation;
 
-    @Before
-    public void setUp() throws ConfigurationException {
-        operation.init(INITIAL_VERSION, FINAL_VERSION, null);
-    }
+	@Before
+	public void setUp() throws ConfigurationException {
+		operation.init(INITIAL_VERSION, FINAL_VERSION, null);
+	}
 
-    @Test
-    public void versionShouldBeUpdated() throws UpgradeException {
-        // when(versionProvider.getVersion(any())).thenReturn(INITIAL_VERSION); // TODO Mockit fails due to unnecessary stubbing, figure out why
+	@Test
+	public void versionShouldBeUpdated() throws UpgradeException {
+		// when(versionProvider.getVersion(any())).thenReturn(INITIAL_VERSION); // TODO Mockit fails due to unnecessary stubbing, figure out why
 
-        operation.execute(null);
+		operation.execute(null);
 
-        verify(versionProvider).setVersion(any(), eq(FINAL_VERSION));
-    }
+		verify(versionProvider).setVersion(any(), eq(FINAL_VERSION));
+	}
 
 }

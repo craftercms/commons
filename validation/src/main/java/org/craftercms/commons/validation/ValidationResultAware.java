@@ -20,5 +20,5 @@ package org.craftercms.commons.validation;
  */
 public interface ValidationResultAware {
 
-    ValidationResult getResult();
+	ValidationResult getResult();
 }

@@ -24,19 +24,19 @@ import org.craftercms.commons.converters.Converter;
  */
 public class StringToBooleanConverter implements Converter<String, Boolean> {
 
-    @Override
-    public Class<?> getSourceClass() {
-        return String.class;
-    }
+	@Override
+	public Class<?> getSourceClass() {
+		return String.class;
+	}
 
-    @Override
-    public Class<?> getTargetClass() {
-        return Boolean.class;
-    }
+	@Override
+	public Class<?> getTargetClass() {
+		return Boolean.class;
+	}
 
-    @Override
-    public Boolean convert(String source) {
-        return Boolean.valueOf(source);
-    }
+	@Override
+	public Boolean convert(String source) {
+		return Boolean.valueOf(source);
+	}
 
 }

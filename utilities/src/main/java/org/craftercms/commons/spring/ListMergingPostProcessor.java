@@ -37,78 +37,78 @@ import java.util.List;
  */
 public class ListMergingPostProcessor implements BeanDefinitionRegistryPostProcessor, PriorityOrdered {
 
-    private int order = Ordered.LOWEST_PRECEDENCE;
+	private int order = Ordered.LOWEST_PRECEDENCE;
 
-    private String beanName;
-    private String propertyName;
-    private List<String> additionalElements;
+	private String beanName;
+	private String propertyName;
+	private List<String> additionalElements;
 
-    @Override
-    public int getOrder() {
-        return order;
-    }
+	@Override
+	public int getOrder() {
+		return order;
+	}
 
-    public void setOrder(int order) {
-        this.order = order;
-    }
+	public void setOrder(int order) {
+		this.order = order;
+	}
 
-    public void setBeanName(String beanName) {
-        this.beanName = beanName;
-    }
+	public void setBeanName(String beanName) {
+		this.beanName = beanName;
+	}
 
-    public void setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
-    }
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
+	}
 
-    public void setAdditionalElements(List<String> additionalElements) {
-        this.additionalElements = additionalElements;
-    }
+	public void setAdditionalElements(List<String> additionalElements) {
+		this.additionalElements = additionalElements;
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        assertRequiredProperty("beanName", beanName);
-        assertRequiredProperty("propertyName", propertyName);
-        assertRequiredProperty("additionalElements", additionalElements);
+	@Override
+	@SuppressWarnings("unchecked")
+	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+		assertRequiredProperty("beanName", beanName);
+		assertRequiredProperty("propertyName", propertyName);
+		assertRequiredProperty("additionalElements", additionalElements);
 
-        if (registry.containsBeanDefinition(beanName)) {
-            BeanDefinition bean = registry.getBeanDefinition(this.beanName);
-            MutablePropertyValues values = bean.getPropertyValues();
+		if (registry.containsBeanDefinition(beanName)) {
+			BeanDefinition bean = registry.getBeanDefinition(this.beanName);
+			MutablePropertyValues values = bean.getPropertyValues();
 
-            PropertyValue propertyValue = values.getPropertyValue(propertyName);
-            if (propertyValue == null) {
-                values.add(propertyName, additionalElements);
-            } else {
-                Object value = propertyValue.getValue();
-                if (value == null) {
-                    values.add(propertyName, additionalElements);
-                } else if (value instanceof List) {
-                    List<TypedStringValue> mergedList = new ManagedList<>();
-                    mergedList.addAll((List) value);
+			PropertyValue propertyValue = values.getPropertyValue(propertyName);
+			if (propertyValue == null) {
+				values.add(propertyName, additionalElements);
+			} else {
+				Object value = propertyValue.getValue();
+				if (value == null) {
+					values.add(propertyName, additionalElements);
+				} else if (value instanceof List) {
+					List<TypedStringValue> mergedList = new ManagedList<>();
+					mergedList.addAll((List) value);
 
-                    for (String element : additionalElements) {
-                        mergedList.add(new TypedStringValue(element));
-                    }
+					for (String element : additionalElements) {
+						mergedList.add(new TypedStringValue(element));
+					}
 
-                    values.add(propertyName, mergedList);
-                } else {
-                    throw new IllegalStateException("Property '" + propertyName + "' of bean '" + beanName +
-                                                    "' expected to be of type " + List.class.getName() +
-                                                    ", but instead is of type " + value.getClass().getName());
-                }
-            }
-        }
-    }
+					values.add(propertyName, mergedList);
+				} else {
+					throw new IllegalStateException("Property '" + propertyName + "' of bean '" + beanName +
+						"' expected to be of type " + List.class.getName() +
+						", but instead is of type " + value.getClass().getName());
+				}
+			}
+		}
+	}
 
-    @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        // no-op but required by interface class hierarchy
-    }
+	@Override
+	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+		// no-op but required by interface class hierarchy
+	}
 
-    private void assertRequiredProperty(String name, Object value) {
-        if (value == null) {
-            throw new IllegalStateException("Required property '" + name + "' not specified");
-        }
-    }
+	private void assertRequiredProperty(String name, Object value) {
+		if (value == null) {
+			throw new IllegalStateException("Required property '" + name + "' not specified");
+		}
+	}
 
 }

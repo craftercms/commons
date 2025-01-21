@@ -29,24 +29,24 @@ import static org.junit.Assert.assertEquals;
  */
 public class YamlConfigurationTest {
 
-    private YamlConfiguration yamlConfiguration;
+	private YamlConfiguration yamlConfiguration;
 
-    @Before
-    public void setUp() throws Exception {
-        yamlConfiguration = new YamlConfiguration();
-        yamlConfiguration.loaderOptions.setMaxAliasesForCollections(50);
-    }
+	@Before
+	public void setUp() throws Exception {
+		yamlConfiguration = new YamlConfiguration();
+		yamlConfiguration.loaderOptions.setMaxAliasesForCollections(50);
+	}
 
-    @Test
-    public void testRead() throws Exception {
-        Resource invoiceResource = new ClassPathResource("yaml/invoice.yaml");
+	@Test
+	public void testRead() throws Exception {
+		Resource invoiceResource = new ClassPathResource("yaml/invoice.yaml");
 
-        yamlConfiguration.read(invoiceResource.getInputStream());
+		yamlConfiguration.read(invoiceResource.getInputStream());
 
-        assertEquals(34843, yamlConfiguration.getInt("invoice"));
-        assertEquals("Royal Oak", yamlConfiguration.getString("billTo.address.city"));
-        assertEquals("Super Hoop", yamlConfiguration.getString("product(1).description"));
-        assertEquals(4443.52, yamlConfiguration.getDouble("total"), 0);
-    }
+		assertEquals(34843, yamlConfiguration.getInt("invoice"));
+		assertEquals("Royal Oak", yamlConfiguration.getString("billTo.address.city"));
+		assertEquals("Super Hoop", yamlConfiguration.getString("product(1).description"));
+		assertEquals(4443.52, yamlConfiguration.getDouble("total"), 0);
+	}
 
 }

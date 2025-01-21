@@ -29,37 +29,37 @@ import org.springframework.context.ApplicationContextAware;
  */
 public class BeanListFactoryBean implements FactoryBean<List<Object>>, ApplicationContextAware {
 
-    protected ApplicationContext applicationContext;
-    protected String[] beanNames;
+	protected ApplicationContext applicationContext;
+	protected String[] beanNames;
 
-    public BeanListFactoryBean(String[] beanNames) {
-        this.beanNames = beanNames;
-    }
+	public BeanListFactoryBean(String[] beanNames) {
+		this.beanNames = beanNames;
+	}
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 
-    @Override
-    public List<Object> getObject() throws Exception {
-        List<Object> beans = new ArrayList<>(beanNames.length);
+	@Override
+	public List<Object> getObject() throws Exception {
+		List<Object> beans = new ArrayList<>(beanNames.length);
 
-        for (String beanName : beanNames) {
-            beans.add(applicationContext.getBean(beanName));
-        }
+		for (String beanName : beanNames) {
+			beans.add(applicationContext.getBean(beanName));
+		}
 
-        return beans;
-    }
+		return beans;
+	}
 
-    @Override
-    public Class<?> getObjectType() {
-        return List.class;
-    }
+	@Override
+	public Class<?> getObjectType() {
+		return List.class;
+	}
 
-    @Override
-    public boolean isSingleton() {
-        return false;
-    }
+	@Override
+	public boolean isSingleton() {
+		return false;
+	}
 
 }

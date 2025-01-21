@@ -36,28 +36,28 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class BaseRestExceptionHandlers extends ResponseEntityExceptionHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(BaseRestExceptionHandlers.class);
+	private final Logger logger = LoggerFactory.getLogger(BaseRestExceptionHandlers.class);
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest webRequest) {
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, webRequest);
-    }
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest webRequest) {
+		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, webRequest);
+	}
 
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, String message, HttpHeaders headers, HttpStatus status,
-                                                             WebRequest request) {
-        return handleExceptionInternal(ex, new Result(message), headers, status, request);
-    }
+	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, String message, HttpHeaders headers, HttpStatus status,
+								 WebRequest request) {
+		return handleExceptionInternal(ex, new Result(message), headers, status, request);
+	}
 
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(
-            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-        logger.error("Request '{}' failed with status '{}'", ((ServletWebRequest) request).getRequest().getRequestURI(), statusCode, ex);
+	@Override
+	protected ResponseEntity<Object> handleExceptionInternal(
+		Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+		logger.error("Request '{}' failed with status '{}'", ((ServletWebRequest) request).getRequest().getRequestURI(), statusCode, ex);
 
-        if (body == null) {
-            body = new Result(ex.getMessage());
-        }
+		if (body == null) {
+			body = new Result(ex.getMessage());
+		}
 
-        return new ResponseEntity<>(body, headers, statusCode);
-    }
+		return new ResponseEntity<>(body, headers, statusCode);
+	}
 
 }

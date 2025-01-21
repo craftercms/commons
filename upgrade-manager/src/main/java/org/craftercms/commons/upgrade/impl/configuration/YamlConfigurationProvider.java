@@ -26,37 +26,38 @@ import java.io.InputStream;
 /**
  * {@link UpgradeConfigurationProvider} implementation that loads a YAML configuration file.
  * This implementation also caches the configuration, so it the configuration file is loaded only once.
+ *
  * @since 4.1.2
  */
 public class YamlConfigurationProvider implements UpgradeConfigurationProvider<HierarchicalConfiguration> {
 
-    private final Resource configurationFile;
-    private volatile HierarchicalConfiguration configuration;
+	private final Resource configurationFile;
+	private volatile HierarchicalConfiguration configuration;
 
-    public YamlConfigurationProvider(final Resource configurationFile) {
-        this.configurationFile = configurationFile;
-    }
+	public YamlConfigurationProvider(final Resource configurationFile) {
+		this.configurationFile = configurationFile;
+	}
 
-    @Override
-    public HierarchicalConfiguration getConfiguration() throws UpgradeException {
-        if (configuration != null) {
-            return configuration;
-        }
-        synchronized (this) {
-            if (configuration == null) {
-                configuration = loadConfiguration();
-            }
-        }
-        return configuration;
-    }
+	@Override
+	public HierarchicalConfiguration getConfiguration() throws UpgradeException {
+		if (configuration != null) {
+			return configuration;
+		}
+		synchronized (this) {
+			if (configuration == null) {
+				configuration = loadConfiguration();
+			}
+		}
+		return configuration;
+	}
 
-    private HierarchicalConfiguration loadConfiguration() throws UpgradeException {
-        YamlConfiguration configuration = new YamlConfiguration();
-        try (InputStream is = configurationFile.getInputStream()) {
-            configuration.read(is);
-        } catch (Exception e) {
-            throw new UpgradeException("Failed to read configuration file", e);
-        }
-        return configuration;
-    }
+	private HierarchicalConfiguration loadConfiguration() throws UpgradeException {
+		YamlConfiguration configuration = new YamlConfiguration();
+		try (InputStream is = configurationFile.getInputStream()) {
+			configuration.read(is);
+		} catch (Exception e) {
+			throw new UpgradeException("Failed to read configuration file", e);
+		}
+		return configuration;
+	}
 }

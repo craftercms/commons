@@ -26,22 +26,22 @@ import org.springframework.web.client.RestClientException;
  */
 public class RestServiceException extends RestClientException {
 
-    protected HttpStatusCode responseStatus;
-    protected Object errorDetails;
+	protected HttpStatusCode responseStatus;
+	protected Object errorDetails;
 
-    public RestServiceException(HttpStatusCode responseStatus, Object errorDetails) {
-        super("responseStatus = " + responseStatus.value() + ", errorDetails = " + errorDetails);
+	public RestServiceException(HttpStatusCode responseStatus, Object errorDetails) {
+		super("responseStatus = " + responseStatus.value() + ", errorDetails = " + errorDetails);
 
-        this.responseStatus = responseStatus;
-        this.errorDetails = errorDetails;
-    }
+		this.responseStatus = responseStatus;
+		this.errorDetails = errorDetails;
+	}
 
-    public HttpStatusCode getResponseStatus() {
-        return responseStatus;
-    }
+	public HttpStatusCode getResponseStatus() {
+		return responseStatus;
+	}
 
-    public Object getErrorDetails() {
-        return errorDetails;
-    }
+	public Object getErrorDetails() {
+		return errorDetails;
+	}
 
 }

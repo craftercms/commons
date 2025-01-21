@@ -23,28 +23,28 @@ package org.craftercms.commons.entitlements.model;
  */
 public class Entitlement {
 
-    protected EntitlementType type;
-    protected int value;
+	protected EntitlementType type;
+	protected int value;
 
-    public EntitlementType getType() {
-        return type;
-    }
+	public EntitlementType getType() {
+		return type;
+	}
 
-    public void setType(final EntitlementType type) {
-        this.type = type;
-    }
+	public void setType(final EntitlementType type) {
+		this.type = type;
+	}
 
-    public int getValue() {
-        return value;
-    }
+	public int getValue() {
+		return value;
+	}
 
-    public void setValue(final int value) {
-        this.value = value;
-    }
+	public void setValue(final int value) {
+		this.value = value;
+	}
 
-    @Override
-    public String toString() {
-        return "Entitlement{" + "type=" + type + ", value=" + value + '}';
-    }
+	@Override
+	public String toString() {
+		return "Entitlement{" + "type=" + type + ", value=" + value + '}';
+	}
 
 }

@@ -30,120 +30,120 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Parameter {
 
-    public static String NAME_REGEX = "[a-z]+([A-Z][a-z0-9]+)*";
+	public static String NAME_REGEX = "[a-z]+([A-Z][a-z0-9]+)*";
 
-    /**
-     * The label to display for the parameter
-     */
-    protected String label;
+	/**
+	 * The label to display for the parameter
+	 */
+	protected String label;
 
-    /**
-     * The name of the parameter (must be camelCase)
-     */
-    protected String name;
+	/**
+	 * The name of the parameter (must be camelCase)
+	 */
+	protected String name;
 
-    /**
-     * The description of the parameter
-     */
-    protected String description;
+	/**
+	 * The description of the parameter
+	 */
+	protected String description;
 
-    /**
-     * The default value of the parameter
-     */
-    protected String defaultValue;
+	/**
+	 * The default value of the parameter
+	 */
+	protected String defaultValue;
 
-    /**
-     * The type of the parameter
-     */
-    protected Type type = Type.STRING;
+	/**
+	 * The type of the parameter
+	 */
+	protected Type type = Type.STRING;
 
-    /**
-     * Indicates if the parameter is required
-     */
-    protected boolean required = true;
+	/**
+	 * Indicates if the parameter is required
+	 */
+	protected boolean required = true;
 
-    public String getLabel() {
-        return label;
-    }
+	public String getLabel() {
+		return label;
+	}
 
-    public void setLabel(final String label) {
-        this.label = label;
-    }
+	public void setLabel(final String label) {
+		this.label = label;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(final String name) {
-        if (StringUtils.isEmpty(name) || !name.matches(NAME_REGEX)) {
-            throw new IllegalArgumentException(name + " is not a valid parameter name");
-        }
-        this.name = name;
-    }
+	public void setName(final String name) {
+		if (StringUtils.isEmpty(name) || !name.matches(NAME_REGEX)) {
+			throw new IllegalArgumentException(name + " is not a valid parameter name");
+		}
+		this.name = name;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(final String description) {
-        this.description = description;
-    }
+	public void setDescription(final String description) {
+		this.description = description;
+	}
 
-    public String getDefaultValue() {
-        return defaultValue;
-    }
+	public String getDefaultValue() {
+		return defaultValue;
+	}
 
-    public void setDefaultValue(final String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
+	public void setDefaultValue(final String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
 
-    public Type getType() {
-        return type;
-    }
+	public Type getType() {
+		return type;
+	}
 
-    public void setType(final Type type) {
-        this.type = type;
-    }
+	public void setType(final Type type) {
+		this.type = type;
+	}
 
-    public boolean isRequired() {
-        return required;
-    }
+	public boolean isRequired() {
+		return required;
+	}
 
-    public void setRequired(final boolean required) {
-        this.required = required;
-    }
+	public void setRequired(final boolean required) {
+		this.required = required;
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Parameter)) {
-            return false;
-        }
-        final Parameter parameter = (Parameter)o;
-        return required == parameter.required && Objects.equals(label, parameter.label) && Objects.equals(name,
-            parameter.name) && Objects.equals(description, parameter.description) && Objects.equals(defaultValue,
-            parameter.defaultValue) && type == parameter.type;
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Parameter)) {
+			return false;
+		}
+		final Parameter parameter = (Parameter) o;
+		return required == parameter.required && Objects.equals(label, parameter.label) && Objects.equals(name,
+			parameter.name) && Objects.equals(description, parameter.description) && Objects.equals(defaultValue,
+			parameter.defaultValue) && type == parameter.type;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(label, name, description, defaultValue, type, required);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(label, name, description, defaultValue, type, required);
+	}
 
-    @Override
-    public String toString() {
-        return "Parameter{" + "label='" + label + '\'' + ", name='" + name + '\'' + ", description='" + description +
-            '\'' + ", defaultValue='" + defaultValue + '\'' + ", type=" + type + ", required=" + required + '}';
-    }
+	@Override
+	public String toString() {
+		return "Parameter{" + "label='" + label + '\'' + ", name='" + name + '\'' + ", description='" + description +
+			'\'' + ", defaultValue='" + defaultValue + '\'' + ", type=" + type + ", required=" + required + '}';
+	}
 
-    /**
-     * Possible types for the parameters
-     */
-    public enum Type {
-        STRING,
-        PASSWORD
-    }
+	/**
+	 * Possible types for the parameters
+	 */
+	public enum Type {
+		STRING,
+		PASSWORD
+	}
 
 }

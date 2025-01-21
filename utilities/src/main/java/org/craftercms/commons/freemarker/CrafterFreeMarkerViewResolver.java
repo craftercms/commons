@@ -25,9 +25,9 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
  */
 public class CrafterFreeMarkerViewResolver extends FreeMarkerViewResolver {
 
-    @Override
-    @NonNull
-    protected Class<?> requiredViewClass() {
-        return CrafterFreeMarkerView.class;
-    }
+	@Override
+	@NonNull
+	protected Class<?> requiredViewClass() {
+		return CrafterFreeMarkerView.class;
+	}
 }

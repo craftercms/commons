@@ -29,15 +29,15 @@ import org.bson.types.ObjectId;
  */
 public class ObjectIdSerializer extends JsonSerializer<ObjectId> {
 
-    @Override
-    public void serialize(final ObjectId objectId, final JsonGenerator jsonGenerator,
-                          final SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString(objectId.toString());
-    }
+	@Override
+	public void serialize(final ObjectId objectId, final JsonGenerator jsonGenerator,
+			      final SerializerProvider serializerProvider) throws IOException {
+		jsonGenerator.writeString(objectId.toString());
+	}
 
-    @Override
-    public Class<ObjectId> handledType() {
-        return ObjectId.class;
-    }
+	@Override
+	public Class<ObjectId> handledType() {
+		return ObjectId.class;
+	}
 
 }

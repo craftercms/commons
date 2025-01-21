@@ -31,66 +31,66 @@ import org.slf4j.LoggerFactory;
  */
 public class AuditReaper {
 
-    /**
-     * Audit Service implementation.
-     */
-    protected AuditService<? extends AuditModel> auditService;
-    /**
-     * Maximum days to keep in the log.
-     */
-    protected int maxAuditAllowedDays;
+	/**
+	 * Audit Service implementation.
+	 */
+	protected AuditService<? extends AuditModel> auditService;
+	/**
+	 * Maximum days to keep in the log.
+	 */
+	protected int maxAuditAllowedDays;
 
-    /**
-     * Logger of the class.
-     */
-    private Logger log = LoggerFactory.getLogger(AuditReaper.class);
+	/**
+	 * Logger of the class.
+	 */
+	private Logger log = LoggerFactory.getLogger(AuditReaper.class);
 
-    /**
-     * <p>Search all logs to be deleted and send there id's to the audit service to be deleted.</p>
-     * <p>If maximum days is set to  -1 nothing will deleted, 0 it delete all audits daily.</p>
-     */
-    public void scythe() {
-        log.debug("Starting Audit Cleanup");
-        if (maxAuditAllowedDays >= 0) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_MONTH, maxAuditAllowedDays * -1);
-            final Date since = new Date(calendar.getTimeInMillis());
-            final List<? extends AuditModel> toDelete = auditService.getAuditLogs(since, new Date());
-            if (toDelete != null) {
-                final List<String> idstoDel = getIdList(toDelete);
-                log.info("Deleting {} audit entries ", idstoDel.size());
-                if (toDelete != null) {
-                    auditService.deleteAudits(idstoDel);
-                }
-                log.info("Going to sleep now");
-            } else {
-                log.info("AuditService return null when ask to give audits with in this range {} {}", since,
-                    new Date());
-            }
-        } else {
-            log.info("Skipping scythe maxAuditAllowedDays is set to infinity");
-        }
-    }
+	/**
+	 * <p>Search all logs to be deleted and send there id's to the audit service to be deleted.</p>
+	 * <p>If maximum days is set to  -1 nothing will deleted, 0 it delete all audits daily.</p>
+	 */
+	public void scythe() {
+		log.debug("Starting Audit Cleanup");
+		if (maxAuditAllowedDays >= 0) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.DAY_OF_MONTH, maxAuditAllowedDays * -1);
+			final Date since = new Date(calendar.getTimeInMillis());
+			final List<? extends AuditModel> toDelete = auditService.getAuditLogs(since, new Date());
+			if (toDelete != null) {
+				final List<String> idstoDel = getIdList(toDelete);
+				log.info("Deleting {} audit entries ", idstoDel.size());
+				if (toDelete != null) {
+					auditService.deleteAudits(idstoDel);
+				}
+				log.info("Going to sleep now");
+			} else {
+				log.info("AuditService return null when ask to give audits with in this range {} {}", since,
+					new Date());
+			}
+		} else {
+			log.info("Skipping scythe maxAuditAllowedDays is set to infinity");
+		}
+	}
 
-    /**
-     * Gets the list of Id's of the given List of Models.
-     *
-     * @param toDelete List of AuditModels to get there Ids.
-     * @return A List of Ids.
-     */
-    private List<String> getIdList(final List<? extends AuditModel> toDelete) {
-        List<String> ids = new ArrayList<>(toDelete.size());
-        for (AuditModel auditModel : toDelete) {
-            ids.add(auditModel.getId());
-        }
-        return ids;
-    }
+	/**
+	 * Gets the list of Id's of the given List of Models.
+	 *
+	 * @param toDelete List of AuditModels to get there Ids.
+	 * @return A List of Ids.
+	 */
+	private List<String> getIdList(final List<? extends AuditModel> toDelete) {
+		List<String> ids = new ArrayList<>(toDelete.size());
+		for (AuditModel auditModel : toDelete) {
+			ids.add(auditModel.getId());
+		}
+		return ids;
+	}
 
-    public void setAuditService(final AuditService<?> auditService) {
-        this.auditService = auditService;
-    }
+	public void setAuditService(final AuditService<?> auditService) {
+		this.auditService = auditService;
+	}
 
-    public void setMaxAuditAllowedDays(final int maxAuditAllowedDays) {
-        this.maxAuditAllowedDays = maxAuditAllowedDays;
-    }
+	public void setMaxAuditAllowedDays(final int maxAuditAllowedDays) {
+		this.maxAuditAllowedDays = maxAuditAllowedDays;
+	}
 }

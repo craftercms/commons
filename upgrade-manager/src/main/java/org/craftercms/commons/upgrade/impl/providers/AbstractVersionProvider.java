@@ -33,45 +33,45 @@ import static org.springframework.util.StringUtils.isEmpty;
  */
 public abstract class AbstractVersionProvider<T> implements VersionProvider<T> {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    /**
-     * The default value to use when no version is found, defaults to {@link VersionProvider#SKIP}
-     */
-    protected String defaultValue = SKIP;
+	/**
+	 * The default value to use when no version is found, defaults to {@link VersionProvider#SKIP}
+	 */
+	protected String defaultValue = SKIP;
 
-    public void setDefaultValue(final String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
+	public void setDefaultValue(final String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
 
-    @Override
-    public String getVersion(final UpgradeContext<T> context) throws UpgradeException {
-        logger.debug("Getting current version for {}", context);
-        try {
-            String currentValue = doGetVersion(context);
-            logger.debug("Found version {} for {}", currentValue, context);
-            if (isEmpty(currentValue)) {
-                currentValue = defaultValue;
-            }
-            return currentValue;
-        } catch (Exception e) {
-            throw new UpgradeException("Error getting current version for " + context, e);
-        }
-    }
+	@Override
+	public String getVersion(final UpgradeContext<T> context) throws UpgradeException {
+		logger.debug("Getting current version for {}", context);
+		try {
+			String currentValue = doGetVersion(context);
+			logger.debug("Found version {} for {}", currentValue, context);
+			if (isEmpty(currentValue)) {
+				currentValue = defaultValue;
+			}
+			return currentValue;
+		} catch (Exception e) {
+			throw new UpgradeException("Error getting current version for " + context, e);
+		}
+	}
 
-    protected abstract String doGetVersion(UpgradeContext<T> context) throws Exception;
+	protected abstract String doGetVersion(UpgradeContext<T> context) throws Exception;
 
-    @Override
-    public void setVersion(final UpgradeContext<T> context, final String version) throws UpgradeException {
-        logger.debug("Updating current version for {} to {}", context, version);
-        try {
-            doSetVersion(context, version);
-            logger.debug("Version successfully updated for {}", context);
-        } catch (Exception e) {
-            throw new UpgradeException("Error updating version for " + context, e);
-        }
-    }
+	@Override
+	public void setVersion(final UpgradeContext<T> context, final String version) throws UpgradeException {
+		logger.debug("Updating current version for {} to {}", context, version);
+		try {
+			doSetVersion(context, version);
+			logger.debug("Version successfully updated for {}", context);
+		} catch (Exception e) {
+			throw new UpgradeException("Error updating version for " + context, e);
+		}
+	}
 
-    protected abstract void doSetVersion(UpgradeContext<T> context, String version) throws Exception;
+	protected abstract void doSetVersion(UpgradeContext<T> context, String version) throws Exception;
 
 }

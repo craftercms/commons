@@ -33,53 +33,53 @@ import static org.apache.commons.collections4.CollectionUtils.isEqualCollection;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Developer {
 
-    /**
-     * The list of people that worked on the plugin
-     */
-    protected List<Contact> people;
+	/**
+	 * The list of people that worked on the plugin
+	 */
+	protected List<Contact> people;
 
-    /**
-     * The company that worked on the plugin
-     */
-    protected Contact company;
+	/**
+	 * The company that worked on the plugin
+	 */
+	protected Contact company;
 
-    public List<Contact> getPeople() {
-        return people;
-    }
+	public List<Contact> getPeople() {
+		return people;
+	}
 
-    public void setPeople(List<Contact> people) {
-        this.people = people;
-    }
+	public void setPeople(List<Contact> people) {
+		this.people = people;
+	}
 
-    public Contact getCompany() {
-        return company;
-    }
+	public Contact getCompany() {
+		return company;
+	}
 
-    public void setCompany(Contact company) {
-        this.company = company;
-    }
+	public void setCompany(Contact company) {
+		this.company = company;
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Developer)) {
-            return false;
-        }
-        final Developer developer = (Developer)o;
-        return isEqualCollection(emptyIfNull(people), emptyIfNull(developer.people)) &&
-            Objects.equals(company, developer.company);
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Developer)) {
+			return false;
+		}
+		final Developer developer = (Developer) o;
+		return isEqualCollection(emptyIfNull(people), emptyIfNull(developer.people)) &&
+			Objects.equals(company, developer.company);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(people, company);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(people, company);
+	}
 
-    @Override
-    public String toString() {
-        return "Developer{" + "people=" + people + ", company=" + company + '}';
-    }
+	@Override
+	public String toString() {
+		return "Developer{" + "people=" + people + ", company=" + company + '}';
+	}
 
 }

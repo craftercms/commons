@@ -39,9 +39,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ProtectedResourceId {
 
-    /**
-     * The name of the ID, e.g. site, path, etc.
-     */
-    String value();
+	/**
+	 * The name of the ID, e.g. site, path, etc.
+	 */
+	String value();
 
 }

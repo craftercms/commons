@@ -30,20 +30,22 @@ import org.craftercms.commons.plugin.model.PluginDescriptor;
  */
 public interface PluginDescriptorReader {
 
-    /**
-     * Parses a {@link PluginDescriptor} from the given stream
-     * @param is the stream to parse
-     * @return the plugin descriptor
-     * @throws PluginException if there is any error parsing the stream
-     */
-    PluginDescriptor read(InputStream is) throws PluginException;
+	/**
+	 * Parses a {@link PluginDescriptor} from the given stream
+	 *
+	 * @param is the stream to parse
+	 * @return the plugin descriptor
+	 * @throws PluginException if there is any error parsing the stream
+	 */
+	PluginDescriptor read(InputStream is) throws PluginException;
 
-    /**
-     * Parses a {@link PluginDescriptor} from the given reader
-     * @param reader the reader to parse
-     * @return the plugin descriptor
-     * @throws PluginException if there is any error parsing the reader
-     */
-    PluginDescriptor read(Reader reader) throws PluginException;
+	/**
+	 * Parses a {@link PluginDescriptor} from the given reader
+	 *
+	 * @param reader the reader to parse
+	 * @return the plugin descriptor
+	 * @throws PluginException if there is any error parsing the reader
+	 */
+	PluginDescriptor read(Reader reader) throws PluginException;
 
 }

@@ -20,6 +20,7 @@ import org.craftercms.commons.validation.validators.impl.SqlSortValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -40,11 +41,11 @@ import static java.lang.annotation.ElementType.*;
 @Constraint(validatedBy = {SqlSortValidator.class, SortFieldValidator.class})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 public @interface SqlSort {
-    String message() default "{validation.error.sql.sort.failed}";
+	String message() default "{validation.error.sql.sort.failed}";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 
-    String columns();
+	String columns();
 }

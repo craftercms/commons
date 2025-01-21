@@ -29,78 +29,78 @@ import org.apache.commons.lang3.ArrayUtils;
  */
 public class DefaultPermission implements Permission {
 
-    public static final String ANY_ACTION = "*";
+	public static final String ANY_ACTION = "*";
 
-    protected Set<String> allowedActions;
+	protected Set<String> allowedActions;
 
-    @Override
-    public boolean isAllowed(String action) {
-        return CollectionUtils.isNotEmpty(allowedActions) &&
-               (allowedActions.contains(ANY_ACTION) || allowedActions.contains(action));
-    }
+	@Override
+	public boolean isAllowed(String action) {
+		return CollectionUtils.isNotEmpty(allowedActions) &&
+			(allowedActions.contains(ANY_ACTION) || allowedActions.contains(action));
+	}
 
-    public Set<String> getAllowedActions() {
-        return allowedActions;
-    }
+	public Set<String> getAllowedActions() {
+		return allowedActions;
+	}
 
-    public void setAllowedActions(Set<String> allowedActions) {
-        this.allowedActions = allowedActions;
-    }
+	public void setAllowedActions(Set<String> allowedActions) {
+		this.allowedActions = allowedActions;
+	}
 
-    public DefaultPermission allowAny() {
-        allow(ANY_ACTION);
+	public DefaultPermission allowAny() {
+		allow(ANY_ACTION);
 
-        return this;
-    }
+		return this;
+	}
 
-    public DefaultPermission allow(String action) {
-        if (allowedActions == null) {
-            allowedActions = new HashSet<>();
-        }
+	public DefaultPermission allow(String action) {
+		if (allowedActions == null) {
+			allowedActions = new HashSet<>();
+		}
 
-        allowedActions.add(action);
+		allowedActions.add(action);
 
-        return this;
-    }
+		return this;
+	}
 
-    public DefaultPermission allow(String... actions) {
-        if (ArrayUtils.isNotEmpty(actions)) {
-            for (String action : actions) {
-                allow(action);
-            }
-        }
+	public DefaultPermission allow(String... actions) {
+		if (ArrayUtils.isNotEmpty(actions)) {
+			for (String action : actions) {
+				allow(action);
+			}
+		}
 
-        return this;
-    }
+		return this;
+	}
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "{" +
-            "allowedActions=" + allowedActions +
-            '}';
-    }
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{" +
+			"allowedActions=" + allowedActions +
+			'}';
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 
-        DefaultPermission that = (DefaultPermission)o;
+		DefaultPermission that = (DefaultPermission) o;
 
-        if (allowedActions != null? !allowedActions.equals(that.allowedActions): that.allowedActions != null) {
-            return false;
-        }
+		if (allowedActions != null ? !allowedActions.equals(that.allowedActions) : that.allowedActions != null) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-        return allowedActions != null? allowedActions.hashCode(): 0;
-    }
+	@Override
+	public int hashCode() {
+		return allowedActions != null ? allowedActions.hashCode() : 0;
+	}
 
 }

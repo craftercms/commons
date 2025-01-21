@@ -38,70 +38,70 @@ import org.springframework.context.ApplicationContextAware;
  */
 public abstract class AbstractUpgradeManager<T> implements UpgradeManager<T>, ApplicationContextAware {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected ApplicationContext applicationContext;
+	protected ApplicationContext applicationContext;
 
-    /**
-     * Indicates if errors during a target upgrade should stop the process
-     */
-    protected boolean continueOnFailure = true;
+	/**
+	 * Indicates if errors during a target upgrade should stop the process
+	 */
+	protected boolean continueOnFailure = true;
 
-    public void setContinueOnFailure(final boolean continueOnFailure) {
-        this.continueOnFailure = continueOnFailure;
-    }
+	public void setContinueOnFailure(final boolean continueOnFailure) {
+		this.continueOnFailure = continueOnFailure;
+	}
 
-    @Override
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+	@Override
+	public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 
-    @Override
-    public void upgrade(final T target) throws UpgradeException {
-        logger.info("Starting upgrade for target '{}'", target);
-        try {
-            doUpgrade(createUpgradeContext(target));
-        } catch (Exception e) {
-            UpgradeException ex = new UpgradeException("Error during upgrade for target " + target, e);
-            if (!continueOnFailure) {
-                throw ex;
-            } else {
-                logger.error("Error during upgrade for target " + target, ex);
-            }
-        } finally {
-            logger.debug("Upgrade completed for target '{}'", target);
-        }
-    }
+	@Override
+	public void upgrade(final T target) throws UpgradeException {
+		logger.info("Starting upgrade for target '{}'", target);
+		try {
+			doUpgrade(createUpgradeContext(target));
+		} catch (Exception e) {
+			UpgradeException ex = new UpgradeException("Error during upgrade for target " + target, e);
+			if (!continueOnFailure) {
+				throw ex;
+			} else {
+				logger.error("Error during upgrade for target " + target, ex);
+			}
+		} finally {
+			logger.debug("Upgrade completed for target '{}'", target);
+		}
+	}
 
-    @Override
-    public void upgrade() throws UpgradeException {
-        logger.info("Starting upgrade of all targets");
-        List<T> targets = getTargets();
-        for (T target : targets) {
-            upgrade(target);
-        }
-    }
+	@Override
+	public void upgrade() throws UpgradeException {
+		logger.info("Starting upgrade of all targets");
+		List<T> targets = getTargets();
+		for (T target : targets) {
+			upgrade(target);
+		}
+	}
 
-    @Override
-    public List<T> getTargets() throws UpgradeException {
-        logger.debug("Collecting target names");
-        try {
-            return doGetTargets();
-        } catch (Exception e) {
-            throw new UpgradeException("Error collecting target names", e);
-        }
-    }
+	@Override
+	public List<T> getTargets() throws UpgradeException {
+		logger.debug("Collecting target names");
+		try {
+			return doGetTargets();
+		} catch (Exception e) {
+			throw new UpgradeException("Error collecting target names", e);
+		}
+	}
 
-    protected abstract List<T> doGetTargets() throws Exception;
+	protected abstract List<T> doGetTargets() throws Exception;
 
-    protected abstract UpgradeContext<T> createUpgradeContext(T target);
+	protected abstract UpgradeContext<T> createUpgradeContext(T target);
 
-    protected abstract void doUpgrade(UpgradeContext<T> context) throws Exception;
+	protected abstract void doUpgrade(UpgradeContext<T> context) throws Exception;
 
-    protected void executePipeline(UpgradeContext<T> context, UpgradePipelineFactory<T> pipelineFactory)
-            throws ConfigurationException, UpgradeException {
-        UpgradePipeline<T> pipeline = pipelineFactory.getPipeline(context);
-        pipeline.execute(context);
-    }
+	protected void executePipeline(UpgradeContext<T> context, UpgradePipelineFactory<T> pipelineFactory)
+		throws ConfigurationException, UpgradeException {
+		UpgradePipeline<T> pipeline = pipelineFactory.getPipeline(context);
+		pipeline.execute(context);
+	}
 
 }

@@ -39,64 +39,64 @@ import static org.junit.Assert.assertNull;
 @SuppressWarnings("deprecation")
 public class PluginDescriptorReaderImplTest {
 
-    protected Resource descriptorV1 = new ClassPathResource("plugin/craftercms-plugin-v1.yaml");
-    protected Resource descriptorV2 = new ClassPathResource("plugin/craftercms-plugin-v2.yaml");
-    protected Resource descriptorParams = new ClassPathResource("plugin/craftercms-plugin-params.yaml");
-    protected PluginDescriptorReader reader = new PluginDescriptorReaderImpl();
+	protected Resource descriptorV1 = new ClassPathResource("plugin/craftercms-plugin-v1.yaml");
+	protected Resource descriptorV2 = new ClassPathResource("plugin/craftercms-plugin-v2.yaml");
+	protected Resource descriptorParams = new ClassPathResource("plugin/craftercms-plugin-params.yaml");
+	protected PluginDescriptorReader reader = new PluginDescriptorReaderImpl();
 
-    @Test
-    public void testV1() throws IOException, PluginException {
-        try (InputStream is = descriptorV1.getInputStream()) {
-            PluginDescriptor descriptor = reader.read(is);
-            assertEquals("1", descriptor.getDescriptorVersion());
-            assertNotNull(descriptor.getBlueprint());
-            assertNull(descriptor.getPlugin());
+	@Test
+	public void testV1() throws IOException, PluginException {
+		try (InputStream is = descriptorV1.getInputStream()) {
+			PluginDescriptor descriptor = reader.read(is);
+			assertEquals("1", descriptor.getDescriptorVersion());
+			assertNotNull(descriptor.getBlueprint());
+			assertNull(descriptor.getPlugin());
 
-            BlueprintDescriptor.Blueprint blueprint = descriptor.getBlueprint();
-            assertEquals("Website Editorial Blueprint", blueprint.getName());
-        }
-    }
+			BlueprintDescriptor.Blueprint blueprint = descriptor.getBlueprint();
+			assertEquals("Website Editorial Blueprint", blueprint.getName());
+		}
+	}
 
-    @Test
-    public void testV2() throws IOException, PluginException {
-        try (InputStream is = descriptorV2.getInputStream()) {
-            PluginDescriptor descriptor = reader.read(is);
-            assertEquals("2", descriptor.getDescriptorVersion());
-            assertNull(descriptor.getBlueprint());
-            assertNotNull(descriptor.getPlugin());
+	@Test
+	public void testV2() throws IOException, PluginException {
+		try (InputStream is = descriptorV2.getInputStream()) {
+			PluginDescriptor descriptor = reader.read(is);
+			assertEquals("2", descriptor.getDescriptorVersion());
+			assertNull(descriptor.getBlueprint());
+			assertNotNull(descriptor.getPlugin());
 
-            Plugin plugin = descriptor.getPlugin();
-            assertEquals("Website Editorial Blueprint", plugin.getName());
-            assertEquals("blueprint", plugin.getType());
-            assertEquals(3, plugin.getTags().size());
-            assertEquals(4, plugin.getCrafterCmsVersions().get(0).getMajor());
-            assertEquals(2, plugin.getCrafterCmsEditions().size());
-            assertEquals(6, plugin.getMedia().getScreenshots().size());
-            assertEquals("CrafterCMS", plugin.getDeveloper().getCompany().getName());
-        }
-    }
+			Plugin plugin = descriptor.getPlugin();
+			assertEquals("Website Editorial Blueprint", plugin.getName());
+			assertEquals("blueprint", plugin.getType());
+			assertEquals(3, plugin.getTags().size());
+			assertEquals(4, plugin.getCrafterCmsVersions().get(0).getMajor());
+			assertEquals(2, plugin.getCrafterCmsEditions().size());
+			assertEquals(6, plugin.getMedia().getScreenshots().size());
+			assertEquals("CrafterCMS", plugin.getDeveloper().getCompany().getName());
+		}
+	}
 
-    @Test
-    public void testParameters() throws IOException, PluginException {
-        Parameter param = new Parameter();
-        param.setLabel("Optional Key");
-        param.setName("optionalKey");
-        param.setRequired(false);
-        param.setType(Parameter.Type.PASSWORD);
+	@Test
+	public void testParameters() throws IOException, PluginException {
+		Parameter param = new Parameter();
+		param.setLabel("Optional Key");
+		param.setName("optionalKey");
+		param.setRequired(false);
+		param.setType(Parameter.Type.PASSWORD);
 
-        try (InputStream is = descriptorParams.getInputStream()) {
-            PluginDescriptor descriptor = reader.read(is);
-            assertNull(descriptor.getBlueprint());
-            assertNotNull(descriptor.getPlugin());
+		try (InputStream is = descriptorParams.getInputStream()) {
+			PluginDescriptor descriptor = reader.read(is);
+			assertNull(descriptor.getBlueprint());
+			assertNotNull(descriptor.getPlugin());
 
-            Plugin plugin = descriptor.getPlugin();
-            assertNotNull(plugin.getParameters());
-            assertEquals(3, plugin.getParameters().size());
-            assertEquals("AWS Access Key", plugin.getParameters().get(0).getLabel());
-            assertEquals("awsAccessKey", plugin.getParameters().get(0).getName());
+			Plugin plugin = descriptor.getPlugin();
+			assertNotNull(plugin.getParameters());
+			assertEquals(3, plugin.getParameters().size());
+			assertEquals("AWS Access Key", plugin.getParameters().get(0).getLabel());
+			assertEquals("awsAccessKey", plugin.getParameters().get(0).getName());
 
-            assertEquals(param, plugin.getParameters().get(2));
-        }
-    }
+			assertEquals(param, plugin.getParameters().get(2));
+		}
+	}
 
 }

@@ -33,23 +33,23 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  */
 public class SshPasswordAuthConfigurator extends AbstractSshAuthConfigurator {
 
-    protected final String password;
+	protected final String password;
 
-    public SshPasswordAuthConfigurator(File sshConfig, String password) {
-        super(sshConfig);
-        this.password = password;
-    }
+	public SshPasswordAuthConfigurator(File sshConfig, String password) {
+		super(sshConfig);
+		this.password = password;
+	}
 
-    @Override
-    public void configureAuthentication(TransportCommand<?, ?> command) {
-        command.setCredentialsProvider(new SshUsernamePasswordCredentialsProvider(EMPTY, password));
+	@Override
+	public void configureAuthentication(TransportCommand<?, ?> command) {
+		command.setCredentialsProvider(new SshUsernamePasswordCredentialsProvider(EMPTY, password));
 
-        super.configureAuthentication(command);
-    }
+		super.configureAuthentication(command);
+	}
 
-    @Override
-    protected SshSessionFactory createSessionFactory() {
-        return new SshSessionFactory(sshConfig);
-    }
+	@Override
+	protected SshSessionFactory createSessionFactory() {
+		return new SshSessionFactory(sshConfig);
+	}
 
 }

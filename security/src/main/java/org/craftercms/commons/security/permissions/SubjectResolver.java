@@ -22,9 +22,9 @@ package org.craftercms.commons.security.permissions;
  */
 public interface SubjectResolver<S> {
 
-    /**
-     * Returns the current subject.
-     */
-    S getCurrentSubject();
+	/**
+	 * Returns the current subject.
+	 */
+	S getCurrentSubject();
 
 }

@@ -22,10 +22,10 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 /**
  * {@link AbstractAwsClientCachingFactory} for S3 async clients.
  */
-public class S3AsyncClientCachingFactory extends AbstractAwsClientCachingFactory<S3Profile, S3AsyncClient>{
+public class S3AsyncClientCachingFactory extends AbstractAwsClientCachingFactory<S3Profile, S3AsyncClient> {
 
-    @Override
-    protected S3AsyncClient createClient(S3Profile profile) {
-        return S3Utils.createAsyncClient(profile);
-    }
+	@Override
+	protected S3AsyncClient createClient(S3Profile profile) {
+		return S3Utils.createAsyncClient(profile);
+	}
 }

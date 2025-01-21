@@ -33,66 +33,66 @@ import java.util.Map;
  */
 public class ConfigurationResolverImpl implements ConfigurationResolver {
 
-    public static final String DEFAULT_ENVIRONMENT = "default";
+	public static final String DEFAULT_ENVIRONMENT = "default";
 
-    public static final String PLACEHOLDER_MODULE = "module";
+	public static final String PLACEHOLDER_MODULE = "module";
 
-    public static final String PLACEHOLDER_ENVIRONMENT = "environment";
+	public static final String PLACEHOLDER_ENVIRONMENT = "environment";
 
-    /**
-     * The active environment
-     */
-    protected String environment;
+	/**
+	 * The active environment
+	 */
+	protected String environment;
 
-    /**
-     * The path pattern for the default environment
-     */
-    protected String basePath;
+	/**
+	 * The path pattern for the default environment
+	 */
+	protected String basePath;
 
-    /**
-     * The path pattern for a specific environment
-     */
-    protected String envPath;
+	/**
+	 * The path pattern for a specific environment
+	 */
+	protected String envPath;
 
-    protected EncryptionAwareConfigurationReader configurationReader;
+	protected EncryptionAwareConfigurationReader configurationReader;
 
-    @ConstructorProperties({"environment", "basePath", "envPath", "configurationReader"})
-    public ConfigurationResolverImpl(String environment, String basePath, String envPath,
-                                     EncryptionAwareConfigurationReader configurationReader) {
-        this.environment = environment;
-        this.basePath = basePath;
-        this.envPath = envPath;
-        this.configurationReader = configurationReader;
-    }
+	@ConstructorProperties({"environment", "basePath", "envPath", "configurationReader"})
+	public ConfigurationResolverImpl(String environment, String basePath, String envPath,
+					 EncryptionAwareConfigurationReader configurationReader) {
+		this.environment = environment;
+		this.basePath = basePath;
+		this.envPath = envPath;
+		this.configurationReader = configurationReader;
+	}
 
-    @Override
-    public HierarchicalConfiguration<?> getXmlConfiguration(String module, String path, ConfigurationProvider provider)
-            throws ConfigurationException {
-        Map<String, String> values = new HashMap<>();
-        values.put(PLACEHOLDER_MODULE, module);
-        values.put(PLACEHOLDER_ENVIRONMENT, environment);
-        StrSubstitutor substitutor = new StrSubstitutor(values, "{", "}");
+	@Override
+	public HierarchicalConfiguration<?> getXmlConfiguration(String module, String path, ConfigurationProvider provider)
+		throws ConfigurationException {
+		Map<String, String> values = new HashMap<>();
+		values.put(PLACEHOLDER_MODULE, module);
+		values.put(PLACEHOLDER_ENVIRONMENT, environment);
+		StrSubstitutor substitutor = new StrSubstitutor(values, "{", "}");
 
-        String url = null;
+		String url = null;
 
-        try {
-            if (!StringUtils.equals(environment, DEFAULT_ENVIRONMENT)) {
-                url = Paths.get(substitutor.replace(envPath), path).toString();
+		try {
+			if (!StringUtils.equals(environment, DEFAULT_ENVIRONMENT)) {
+				url = Paths.get(substitutor.replace(envPath), path).toString();
 
-                if (!provider.configExists(url)) {
-                    url = Paths.get(substitutor.replace(basePath), path).toString();
-                }
-            } else {
-                url = Paths.get(substitutor.replace(basePath), path).toString();
-            }
+				if (!provider.configExists(url)) {
+					url = Paths.get(substitutor.replace(basePath), path).toString();
+				}
+			} else {
+				url = Paths.get(substitutor.replace(basePath), path).toString();
+			}
 
-            if (provider.configExists(url)) {
-                return configurationReader.readXmlConfiguration(provider.getConfig(url), provider.getLookupVariables());
-            }
-            return null;
-        } catch (IOException e) {
-            throw new ConfigurationException("Error reading configuration file at " + url, e);
-        }
-    }
+			if (provider.configExists(url)) {
+				return configurationReader.readXmlConfiguration(provider.getConfig(url), provider.getLookupVariables());
+			}
+			return null;
+		} catch (IOException e) {
+			throw new ConfigurationException("Error reading configuration file at " + url, e);
+		}
+	}
 
 }

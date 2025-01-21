@@ -23,15 +23,15 @@ package org.craftercms.commons.file.blob.exception;
  */
 public class BlobStoreMissingException extends BlobStoreException {
 
-    public BlobStoreMissingException() {
-    }
+	public BlobStoreMissingException() {
+	}
 
-    public BlobStoreMissingException(String message) {
-        super(message);
-    }
+	public BlobStoreMissingException(String message) {
+		super(message);
+	}
 
-    public BlobStoreMissingException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public BlobStoreMissingException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

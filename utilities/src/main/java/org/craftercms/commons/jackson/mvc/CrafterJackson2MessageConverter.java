@@ -42,138 +42,137 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 
 public class CrafterJackson2MessageConverter extends MappingJackson2HttpMessageConverter {
 
-    protected String jsonPrefix;
-    protected FilterProvider filter;
-    protected InjectValueFactory injectValueFactory;
-    protected SecurePropertyHandler securePropertyHandler;
-    private Logger log = LoggerFactory.getLogger(CrafterJackson2MessageConverter.class);
+	protected String jsonPrefix;
+	protected FilterProvider filter;
+	protected InjectValueFactory injectValueFactory;
+	protected SecurePropertyHandler securePropertyHandler;
+	private Logger log = LoggerFactory.getLogger(CrafterJackson2MessageConverter.class);
 
-    public CrafterJackson2MessageConverter(final FilterProvider filter) {
-        super();
-        this.filter = filter;
-    }
+	public CrafterJackson2MessageConverter(final FilterProvider filter) {
+		super();
+		this.filter = filter;
+	}
 
-    @Override
-    protected void writeInternal(Object object, Type type, HttpOutputMessage outputMessage) throws IOException,
-            HttpMessageNotWritableException {
-        JsonEncoding encoding = getJsonEncoding(outputMessage.getHeaders().getContentType());
-        JsonGenerator jsonGenerator = this.getObjectMapper().getFactory().createGenerator(outputMessage.getBody(),
-                encoding);
-        // A workaround for JsonGenerators not applying serialization features
-        // https://github.com/FasterXML/jackson-databind/issues/12
-        if (this.getObjectMapper().isEnabled(SerializationFeature.INDENT_OUTPUT)) {
-            jsonGenerator.useDefaultPrettyPrinter();
-        }
+	@Override
+	protected void writeInternal(Object object, Type type, HttpOutputMessage outputMessage) throws IOException,
+		HttpMessageNotWritableException {
+		JsonEncoding encoding = getJsonEncoding(outputMessage.getHeaders().getContentType());
+		JsonGenerator jsonGenerator = this.getObjectMapper().getFactory().createGenerator(outputMessage.getBody(),
+			encoding);
+		// A workaround for JsonGenerators not applying serialization features
+		// https://github.com/FasterXML/jackson-databind/issues/12
+		if (this.getObjectMapper().isEnabled(SerializationFeature.INDENT_OUTPUT)) {
+			jsonGenerator.useDefaultPrettyPrinter();
+		}
 
-        try {
-            if (this.jsonPrefix != null) {
-                jsonGenerator.writeRaw(this.jsonPrefix);
-            }
+		try {
+			if (this.jsonPrefix != null) {
+				jsonGenerator.writeRaw(this.jsonPrefix);
+			}
 
-            runAnnotations(object);
+			runAnnotations(object);
 
-            ObjectWriter writer = this.getObjectMapper().writer(filter);
-            writer.writeValue(jsonGenerator, object);
-        } catch (JsonProcessingException ex) {
-            throw new HttpMessageNotWritableException("Could not write JSON: " + ex.getMessage(), ex);
-        }
-    }
+			ObjectWriter writer = this.getObjectMapper().writer(filter);
+			writer.writeValue(jsonGenerator, object);
+		} catch (JsonProcessingException ex) {
+			throw new HttpMessageNotWritableException("Could not write JSON: " + ex.getMessage(), ex);
+		}
+	}
 
-    private void runAnnotations(final Object object) {
-        try {
+	private void runAnnotations(final Object object) {
+		try {
 
-            if (Iterable.class.isInstance(object) && !Iterator.class.isInstance(object)) {
-                for (Object element : (Iterable)object) {
-                    runAnnotations(element);
-                }
-            }
-            PropertyDescriptor[] propertiesDescriptor = PropertyUtils.getPropertyDescriptors(object);
-            for (PropertyDescriptor propertyDescriptor : propertiesDescriptor) {
-                // Avoid the "getClass" as a property
-                if(propertyDescriptor.getPropertyType().equals(Class.class) ||
-                    (propertyDescriptor.getReadMethod() == null && propertyDescriptor.getWriteMethod() == null)){
-                    continue;
-                }
-                Field field = findField(object.getClass(), propertyDescriptor.getName());
+			if (Iterable.class.isInstance(object) && !Iterator.class.isInstance(object)) {
+				for (Object element : (Iterable) object) {
+					runAnnotations(element);
+				}
+			}
+			PropertyDescriptor[] propertiesDescriptor = PropertyUtils.getPropertyDescriptors(object);
+			for (PropertyDescriptor propertyDescriptor : propertiesDescriptor) {
+				// Avoid the "getClass" as a property
+				if (propertyDescriptor.getPropertyType().equals(Class.class) ||
+					(propertyDescriptor.getReadMethod() == null && propertyDescriptor.getWriteMethod() == null)) {
+					continue;
+				}
+				Field field = findField(object.getClass(), propertyDescriptor.getName());
 
-                if (field != null && field.isAnnotationPresent(SecureProperty.class) && securePropertyHandler!=null) {
-                    secureProperty(object, field);
-                }
+				if (field != null && field.isAnnotationPresent(SecureProperty.class) && securePropertyHandler != null) {
+					secureProperty(object, field);
+				}
 
-                if (field != null && field.isAnnotationPresent(InjectValue.class) && injectValueFactory!=null) {
-                    injectValue(object, field);
-                    continue;
-                }
+				if (field != null && field.isAnnotationPresent(InjectValue.class) && injectValueFactory != null) {
+					injectValue(object, field);
+					continue;
+				}
 
-                Object fieldValue = PropertyUtils.getProperty(object, propertyDescriptor.getName());
-                if (Iterable.class.isInstance(fieldValue) && !Iterator.class.isInstance(object)) {
-                    for (Object element : (Iterable)fieldValue) {
-                        runAnnotations(element);
-                    }
-                }
-            }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            log.error("Unable to secure value for " + object.getClass(), e);
-        }
-    }
+				Object fieldValue = PropertyUtils.getProperty(object, propertyDescriptor.getName());
+				if (Iterable.class.isInstance(fieldValue) && !Iterator.class.isInstance(object)) {
+					for (Object element : (Iterable) fieldValue) {
+						runAnnotations(element);
+					}
+				}
+			}
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			log.error("Unable to secure value for " + object.getClass(), e);
+		}
+	}
 
-    private void secureProperty(final Object object, final Field field) {
-        //Should be null due we ask before if the annotation exists !!
-        String[] roles = field.getAnnotation(SecureProperty.class).role();
-        try {
-            if (!securePropertyHandler.suppressProperty(object, roles)) {
-                PropertyUtils.setProperty(object, field.getName(), null);
-            }
-        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            log.error("Unable to inject value " + field.getName() + " for class " + object.getClass(), e);
-        }
-    }
+	private void secureProperty(final Object object, final Field field) {
+		//Should be null due we ask before if the annotation exists !!
+		String[] roles = field.getAnnotation(SecureProperty.class).role();
+		try {
+			if (!securePropertyHandler.suppressProperty(object, roles)) {
+				PropertyUtils.setProperty(object, field.getName(), null);
+			}
+		} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+			log.error("Unable to inject value " + field.getName() + " for class " + object.getClass(), e);
+		}
+	}
 
 
+	private Field findField(final Class<?> object, final String fieldName) {
+		if (object != null) {
+			try {
+				return object.getDeclaredField(fieldName);
+			} catch (NoSuchFieldException e) {
+				return findField(object.getSuperclass(), fieldName);
+			}
+		}
 
-    private Field findField(final Class<?> object, final String fieldName) {
-        if (object != null) {
-            try {
-                return object.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                return findField(object.getSuperclass(), fieldName);
-            }
-        }
+		log.debug("Field {} does not exist", fieldName);
 
-        log.debug("Field {} does not exist", fieldName);
+		return null;
+	}
 
-        return null;
-    }
+	private void injectValue(final Object object, final Field field) {
+		//Should be null due we ask before if the annotation exists !!
+		String propertyToUseName = field.getAnnotation(InjectValue.class).useProperty();
+		try {
+			Object propertyValue = PropertyUtils.getProperty(object, propertyToUseName);
+			Object valueToInject = injectValueFactory.getObjectFor(PropertyUtils.getPropertyType(object,
+				field.getName()), propertyValue, propertyToUseName, object);
+			if (valueToInject != null) {
+				PropertyUtils.setProperty(object, field.getName(), valueToInject);
+			}
+		} catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+			log.error("Unable to inject value " + field.getName() + " for class " + object.getClass(), e);
+		}
+	}
 
-    private void injectValue(final Object object, final Field field) {
-        //Should be null due we ask before if the annotation exists !!
-        String propertyToUseName = field.getAnnotation(InjectValue.class).useProperty();
-        try {
-            Object propertyValue = PropertyUtils.getProperty(object, propertyToUseName);
-            Object valueToInject = injectValueFactory.getObjectFor(PropertyUtils.getPropertyType(object,
-                    field.getName()), propertyValue,propertyToUseName, object);
-            if(valueToInject!=null) {
-                PropertyUtils.setProperty(object, field.getName(), valueToInject);
-            }
-        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            log.error("Unable to inject value " + field.getName() + " for class " + object.getClass(), e);
-        }
-    }
+	public String getJsonPrefix() {
+		return jsonPrefix;
+	}
 
-    public String getJsonPrefix() {
-        return jsonPrefix;
-    }
+	public void setJsonPrefix(final String jsonPrefix) {
+		this.jsonPrefix = jsonPrefix;
+		super.setJsonPrefix(jsonPrefix);
+	}
 
-    public void setJsonPrefix(final String jsonPrefix) {
-        this.jsonPrefix = jsonPrefix;
-        super.setJsonPrefix(jsonPrefix);
-    }
+	public void setSecurePropertyHandler(final SecurePropertyHandler securePropertyHandler) {
+		this.securePropertyHandler = securePropertyHandler;
+	}
 
-    public void setSecurePropertyHandler(final SecurePropertyHandler securePropertyHandler) {
-        this.securePropertyHandler = securePropertyHandler;
-    }
-
-    public void setInjectValueFactory(final InjectValueFactory injectValueFactory) {
-        this.injectValueFactory = injectValueFactory;
-    }
+	public void setInjectValueFactory(final InjectValueFactory injectValueFactory) {
+		this.injectValueFactory = injectValueFactory;
+	}
 }

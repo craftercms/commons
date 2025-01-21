@@ -18,6 +18,7 @@ package org.craftercms.commons.validation.annotations.param;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.constraints.Size;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -35,10 +36,11 @@ import static org.craftercms.commons.validation.annotations.param.ValidUsername.
 @Size(max = MAX_USERNAME_LENGTH)
 public @interface ValidUsername {
 
-    int MAX_USERNAME_LENGTH = 255;
-    String message() default "";
+	int MAX_USERNAME_LENGTH = 255;
 
-    Class<?>[] groups() default {};
+	String message() default "";
 
-    Class<? extends Payload>[] payload() default {};
+	Class<?>[] groups() default {};
+
+	Class<? extends Payload>[] payload() default {};
 }

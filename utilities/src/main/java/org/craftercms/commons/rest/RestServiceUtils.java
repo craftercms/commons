@@ -27,14 +27,14 @@ import org.springframework.web.util.UriComponentsBuilder;
  */
 public class RestServiceUtils {
 
-    private RestServiceUtils() {
-    }
+	private RestServiceUtils() {
+	}
 
-    public static HttpHeaders setLocationHeader(HttpHeaders headers, String url, Object... variables) {
-        URI location = UriComponentsBuilder.fromUriString(url).buildAndExpand(variables).toUri();
-        headers.setLocation(location);
+	public static HttpHeaders setLocationHeader(HttpHeaders headers, String url, Object... variables) {
+		URI location = UriComponentsBuilder.fromUriString(url).buildAndExpand(variables).toUri();
+		headers.setLocation(location);
 
-        return headers;
-    }
-    
+		return headers;
+	}
+
 }

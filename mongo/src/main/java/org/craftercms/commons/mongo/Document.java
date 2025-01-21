@@ -27,11 +27,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.TYPE)
 public @interface Document {
-    /**
-     * Name where all Documents will be save.
-     *
-     * @return name of the collection where documents annotated will be save by {@link org.craftercms.commons.mongo
-     * .JongoRepository}
-     */
-    String collectionName();
+	/**
+	 * Name where all Documents will be save.
+	 *
+	 * @return name of the collection where documents annotated will be save by {@link org.craftercms.commons.mongo
+	 * .JongoRepository}
+	 */
+	String collectionName();
 }

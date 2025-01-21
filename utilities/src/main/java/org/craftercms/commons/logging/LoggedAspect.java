@@ -28,35 +28,35 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public class LoggedAspect {
 
-    protected MethodLogger methodLogger;
+	protected MethodLogger methodLogger;
 
-    public LoggedAspect() {
-        methodLogger = new I10nMethodLogger();
-    }
+	public LoggedAspect() {
+		methodLogger = new I10nMethodLogger();
+	}
 
-    public void setMethodLogger(MethodLogger methodLogger) {
-        this.methodLogger = methodLogger;
-    }
+	public void setMethodLogger(MethodLogger methodLogger) {
+		this.methodLogger = methodLogger;
+	}
 
-    @Around("@within(org.craftercms.commons.logging.Logged) || @annotation(org.craftercms.commons.logging.Logged)")
-    public Object logMethod(ProceedingJoinPoint pjp) throws Throwable {
-        String className = pjp.getTarget().getClass().getName();
-        String methodName = pjp.getSignature().getName();
-        Object[] args = pjp.getArgs();
+	@Around("@within(org.craftercms.commons.logging.Logged) || @annotation(org.craftercms.commons.logging.Logged)")
+	public Object logMethod(ProceedingJoinPoint pjp) throws Throwable {
+		String className = pjp.getTarget().getClass().getName();
+		String methodName = pjp.getSignature().getName();
+		Object[] args = pjp.getArgs();
 
-        methodLogger.logEntry(className, methodName, args);
+		methodLogger.logEntry(className, methodName, args);
 
-        try {
-            Object returnValue = pjp.proceed();
+		try {
+			Object returnValue = pjp.proceed();
 
-            methodLogger.logExit(className, methodName, returnValue);
+			methodLogger.logExit(className, methodName, returnValue);
 
-            return returnValue;
-        } catch (Throwable e) {
-            methodLogger.logException(className, methodName, e);
+			return returnValue;
+		} catch (Throwable e) {
+			methodLogger.logException(className, methodName, e);
 
-            throw e;
-        }
-    }
+			throw e;
+		}
+	}
 
 }

@@ -30,77 +30,77 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class UpdateHelper {
 
-    protected Map<String, Object> setValues;
-    protected Map<String, Object> unsetValues;
-    protected Map<String, Object> pushValues;
-    protected Map<String, Object> pullValues;
+	protected Map<String, Object> setValues;
+	protected Map<String, Object> unsetValues;
+	protected Map<String, Object> pushValues;
+	protected Map<String, Object> pullValues;
 
-    public void set(String field, Object value) {
-        setValues = add(setValues, field, value);
-    }
+	public void set(String field, Object value) {
+		setValues = add(setValues, field, value);
+	}
 
-    public void unset(String field) {
-        unsetValues = add(unsetValues, field, "");
-    }
+	public void unset(String field) {
+		unsetValues = add(unsetValues, field, "");
+	}
 
-    public void push(String field, Object value) {
-        pushValues = add(pushValues, field, value);
-    }
+	public void push(String field, Object value) {
+		pushValues = add(pushValues, field, value);
+	}
 
-    public void pushAll(String field, Collection<?> values) {
-        pushValues = add(pushValues, field, Collections.singletonMap("$each", values));
-    }
+	public void pushAll(String field, Collection<?> values) {
+		pushValues = add(pushValues, field, Collections.singletonMap("$each", values));
+	}
 
-    public void pull(String field, Object value) {
-        pullValues = add(pullValues, field, value);
-    }
+	public void pull(String field, Object value) {
+		pullValues = add(pullValues, field, value);
+	}
 
-    public void pullAll(String field, Collection<?> values) {
-        pullValues = add(pullValues, field, Collections.singletonMap("$in", values));
-    }
+	public void pullAll(String field, Collection<?> values) {
+		pullValues = add(pullValues, field, Collections.singletonMap("$in", values));
+	}
 
-    public void pullAllDocuments(String field, String embeddedField, Collection<?> values) {
-        pullValues = add(pullValues, field, Collections.singletonMap(embeddedField, Collections.singletonMap("$in",
-            values)));
-    }
+	public void pullAllDocuments(String field, String embeddedField, Collection<?> values) {
+		pullValues = add(pullValues, field, Collections.singletonMap(embeddedField, Collections.singletonMap("$in",
+			values)));
+	}
 
-    public void executeUpdate(String id, CrudRepository<?> repository) throws MongoDataException {
-        List<String> modifiers = new ArrayList<>();
-        List<Map<String, Object>> params = new ArrayList<>();
+	public void executeUpdate(String id, CrudRepository<?> repository) throws MongoDataException {
+		List<String> modifiers = new ArrayList<>();
+		List<Map<String, Object>> params = new ArrayList<>();
 
-        if (MapUtils.isNotEmpty(setValues)) {
-            modifiers.add("$set: #");
-            params.add(setValues);
-        }
-        if (MapUtils.isNotEmpty(unsetValues)) {
-            modifiers.add("$unset: #");
-            params.add(unsetValues);
-        }
-        if (MapUtils.isNotEmpty(pushValues)) {
-            modifiers.add("$push: #");
-            params.add(pushValues);
-        }
-        if (MapUtils.isNotEmpty(pullValues)) {
-            modifiers.add("$pull: #");
-            params.add(pullValues);
-        }
+		if (MapUtils.isNotEmpty(setValues)) {
+			modifiers.add("$set: #");
+			params.add(setValues);
+		}
+		if (MapUtils.isNotEmpty(unsetValues)) {
+			modifiers.add("$unset: #");
+			params.add(unsetValues);
+		}
+		if (MapUtils.isNotEmpty(pushValues)) {
+			modifiers.add("$push: #");
+			params.add(pushValues);
+		}
+		if (MapUtils.isNotEmpty(pullValues)) {
+			modifiers.add("$pull: #");
+			params.add(pullValues);
+		}
 
-        if(!modifiers.isEmpty() && !params.isEmpty()) {
-            String finalModifier = "{" + StringUtils.join(modifiers, ", ") + "}";
-            Object[] paramsArray = params.toArray(new Object[params.size()]);
+		if (!modifiers.isEmpty() && !params.isEmpty()) {
+			String finalModifier = "{" + StringUtils.join(modifiers, ", ") + "}";
+			Object[] paramsArray = params.toArray(new Object[params.size()]);
 
-            repository.update(id, finalModifier, false, false, paramsArray);
-        }
-    }
+			repository.update(id, finalModifier, false, false, paramsArray);
+		}
+	}
 
-    protected Map<String, Object> add(Map<String, Object> map, String field, Object value) {
-        if (map == null) {
-            map = new HashMap<>();
-        }
+	protected Map<String, Object> add(Map<String, Object> map, String field, Object value) {
+		if (map == null) {
+			map = new HashMap<>();
+		}
 
-        map.put(field, value);
+		map.put(field, value);
 
-        return map;
-    }
+		return map;
+	}
 
 }

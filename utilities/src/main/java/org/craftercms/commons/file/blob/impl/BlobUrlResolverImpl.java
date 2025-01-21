@@ -28,24 +28,24 @@ import java.beans.ConstructorProperties;
  */
 public class BlobUrlResolverImpl implements BlobUrlResolver {
 
-    /**
-     * Extension used for the blob files
-     */
-    protected String fileExtension;
+	/**
+	 * Extension used for the blob files
+	 */
+	protected String fileExtension;
 
-    @ConstructorProperties({"fileExtension"})
-    public BlobUrlResolverImpl(String fileExtension) {
-        this.fileExtension = fileExtension;
-    }
+	@ConstructorProperties({"fileExtension"})
+	public BlobUrlResolverImpl(String fileExtension) {
+		this.fileExtension = fileExtension;
+	}
 
-    @Override
-    public String getBlobUrl(String contentUrl) {
-        return StringUtils.appendIfMissing(contentUrl, "." + fileExtension);
-    }
+	@Override
+	public String getBlobUrl(String contentUrl) {
+		return StringUtils.appendIfMissing(contentUrl, "." + fileExtension);
+	}
 
-    @Override
-    public String getContentUrl(String blobUrl) {
-        return StringUtils.removeEnd(blobUrl, "." + fileExtension);
-    }
+	@Override
+	public String getContentUrl(String blobUrl) {
+		return StringUtils.removeEnd(blobUrl, "." + fileExtension);
+	}
 
 }

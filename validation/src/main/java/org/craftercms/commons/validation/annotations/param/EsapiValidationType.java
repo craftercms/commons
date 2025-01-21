@@ -20,21 +20,21 @@ package org.craftercms.commons.validation.annotations.param;
  */
 public enum EsapiValidationType {
 
-    ALPHANUMERIC("ALPHANUMERIC"),
-    CONTENT_PATH_WRITE("CONTENT_PATH_WRITE"),
-    CONTENT_PATH_READ("CONTENT_PATH_READ"),
-    CONFIGURATION_PATH("CONFIGURATION_PATH"),
-    HTTPParameterName("HTTPParameterName"),
-    SITE_ID("SITEID"),
-    EMAIL("EMAIL"),
-    USERNAME("USERNAME"),
-    GROUP_NAME("GROUP_NAME"),
-    SEARCH_KEYWORDS("SEARCH_KEYWORDS"),
-    SQL_ORDER_BY("SQL_ORDER_BY");
+	ALPHANUMERIC("ALPHANUMERIC"),
+	CONTENT_PATH_WRITE("CONTENT_PATH_WRITE"),
+	CONTENT_PATH_READ("CONTENT_PATH_READ"),
+	CONFIGURATION_PATH("CONFIGURATION_PATH"),
+	HTTPParameterName("HTTPParameterName"),
+	SITE_ID("SITEID"),
+	EMAIL("EMAIL"),
+	USERNAME("USERNAME"),
+	GROUP_NAME("GROUP_NAME"),
+	SEARCH_KEYWORDS("SEARCH_KEYWORDS"),
+	SQL_ORDER_BY("SQL_ORDER_BY");
 
-    public final String typeKey;
+	public final String typeKey;
 
-    EsapiValidationType(final String typeKey) {
-        this.typeKey = typeKey;
-    }
+	EsapiValidationType(final String typeKey) {
+		this.typeKey = typeKey;
+	}
 }

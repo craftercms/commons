@@ -28,44 +28,47 @@ import org.springframework.core.io.Resource;
  */
 public interface BlobStore {
 
-    String CONFIG_KEY_ID = "id";
-    String CONFIG_KEY_PATTERN = "pattern";
-    String CONFIG_KEY_MAPPING = "mappings.mapping";
-    String CONFIG_KEY_MAPPING_PUBLISHING_TARGET = "publishingTarget";
-    String CONFIG_KEY_MAPPING_STORE_TARGET = "storeTarget";
-    String CONFIG_KEY_MAPPING_PREFIX = "prefix";
-    String CONFIG_KEY_CONFIGURATION = "configuration";
-    String CONFIG_KEY_STORE = "blobStore";
-    String CONFIG_KEY_TYPE = "type";
-    String CONFIG_KEY_READ_ONLY = "readOnly";
+	String CONFIG_KEY_ID = "id";
+	String CONFIG_KEY_PATTERN = "pattern";
+	String CONFIG_KEY_MAPPING = "mappings.mapping";
+	String CONFIG_KEY_MAPPING_PUBLISHING_TARGET = "publishingTarget";
+	String CONFIG_KEY_MAPPING_STORE_TARGET = "storeTarget";
+	String CONFIG_KEY_MAPPING_PREFIX = "prefix";
+	String CONFIG_KEY_CONFIGURATION = "configuration";
+	String CONFIG_KEY_STORE = "blobStore";
+	String CONFIG_KEY_TYPE = "type";
+	String CONFIG_KEY_READ_ONLY = "readOnly";
 
-    /**
-     * Performs all setup needed with the given configuration
-     *
-     * @param config the configuration object
-     * @throws ConfigurationException is any error occurs
-     */
-    void init(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException;
+	/**
+	 * Performs all setup needed with the given configuration
+	 *
+	 * @param config the configuration object
+	 * @throws ConfigurationException is any error occurs
+	 */
+	void init(HierarchicalConfiguration<ImmutableNode> config) throws ConfigurationException;
 
-    /**
-     * Returns the unique id of the store
-     * @return the id
-     */
-    String getId();
+	/**
+	 * Returns the unique id of the store
+	 *
+	 * @return the id
+	 */
+	String getId();
 
-    /**
-     * Indicates if the given path is compatible with the store
-     * @param path path to check
-     * @return true if the path is compatible
-     */
-    boolean isCompatible(String path);
+	/**
+	 * Indicates if the given path is compatible with the store
+	 *
+	 * @param path path to check
+	 * @return true if the path is compatible
+	 */
+	boolean isCompatible(String path);
 
-    /**
-     * Resolves the given blob to a readable resource
-     * @param path the path of the resource
-     * @param blob the blob file
-     * @return the resource object
-     */
-    Resource getResource(String path, Blob blob);
+	/**
+	 * Resolves the given blob to a readable resource
+	 *
+	 * @param path the path of the resource
+	 * @param blob the blob file
+	 * @return the resource object
+	 */
+	Resource getResource(String path, Blob blob);
 
 }

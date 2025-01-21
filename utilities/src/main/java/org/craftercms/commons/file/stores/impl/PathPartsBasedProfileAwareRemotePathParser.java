@@ -27,39 +27,39 @@ import java.util.regex.Matcher;
  */
 public class PathPartsBasedProfileAwareRemotePathParser implements RemotePathParser {
 
-    private static final int DEFAULT_STORE_TYPE_GROUP = 1;
-    private static final int DEFAULT_PROFILE_GROUP = 2;
-    private static final int DEFAULT_ACTUAL_PATH_GROUP = 3;
+	private static final int DEFAULT_STORE_TYPE_GROUP = 1;
+	private static final int DEFAULT_PROFILE_GROUP = 2;
+	private static final int DEFAULT_ACTUAL_PATH_GROUP = 3;
 
-    private int storeTypeGroup;
-    private int profileGroup;
-    private int actualPathGroup;
+	private int storeTypeGroup;
+	private int profileGroup;
+	private int actualPathGroup;
 
-    public PathPartsBasedProfileAwareRemotePathParser() {
-        storeTypeGroup = DEFAULT_STORE_TYPE_GROUP;
-        profileGroup = DEFAULT_PROFILE_GROUP;
-        actualPathGroup = DEFAULT_ACTUAL_PATH_GROUP;
-    }
+	public PathPartsBasedProfileAwareRemotePathParser() {
+		storeTypeGroup = DEFAULT_STORE_TYPE_GROUP;
+		profileGroup = DEFAULT_PROFILE_GROUP;
+		actualPathGroup = DEFAULT_ACTUAL_PATH_GROUP;
+	}
 
-    public void setStoreTypeGroup(int storeTypeGroup) {
-        this.storeTypeGroup = storeTypeGroup;
-    }
+	public void setStoreTypeGroup(int storeTypeGroup) {
+		this.storeTypeGroup = storeTypeGroup;
+	}
 
-    public void setProfileGroup(int profileGroup) {
-        this.profileGroup = profileGroup;
-    }
+	public void setProfileGroup(int profileGroup) {
+		this.profileGroup = profileGroup;
+	}
 
-    public void setActualPathGroup(int actualPathGroup) {
-        this.actualPathGroup = actualPathGroup;
-    }
+	public void setActualPathGroup(int actualPathGroup) {
+		this.actualPathGroup = actualPathGroup;
+	}
 
-    @Override
-    public RemotePath parse(String pathStr, Matcher matcher) {
-        String storeType = matcher.group(storeTypeGroup);
-        String profile = matcher.group(profileGroup);
-        String actualPath = matcher.group(actualPathGroup);
+	@Override
+	public RemotePath parse(String pathStr, Matcher matcher) {
+		String storeType = matcher.group(storeTypeGroup);
+		String profile = matcher.group(profileGroup);
+		String actualPath = matcher.group(actualPathGroup);
 
-        return new ProfileAwareRemotePath(storeType, actualPath, profile);
-    }
+		return new ProfileAwareRemotePath(storeType, actualPath, profile);
+	}
 
 }

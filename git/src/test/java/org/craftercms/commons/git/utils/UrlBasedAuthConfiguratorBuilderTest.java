@@ -28,46 +28,46 @@ import java.io.File;
  */
 public class UrlBasedAuthConfiguratorBuilderTest extends AbstractAuthConfiguratorBuilderTest {
 
-    protected UrlBasedAuthConfiguratorBuilder createBuilder(String url) {
-        // The config path is not important for this test
-        return new UrlBasedAuthConfiguratorBuilder(new File("."), url);
-    }
+	protected UrlBasedAuthConfiguratorBuilder createBuilder(String url) {
+		// The config path is not important for this test
+		return new UrlBasedAuthConfiguratorBuilder(new File("."), url);
+	}
 
-    @Test
-    public void testPublicHttpRepo() {
-        verify(createBuilder("https://github.com/craftercms/test.git"), NoopAuthConfigurator.class);
-    }
+	@Test
+	public void testPublicHttpRepo() {
+		verify(createBuilder("https://github.com/craftercms/test.git"), NoopAuthConfigurator.class);
+	}
 
-    @Test
-    public void testUserPassHttpRepo() {
-        verify(createBuilder("https://github.com/craftercms/test.git")
-                .withUsername("joe")
-                .withPassword("secret"), BasicUsernamePasswordAuthConfigurator.class);
-    }
+	@Test
+	public void testUserPassHttpRepo() {
+		verify(createBuilder("https://github.com/craftercms/test.git")
+			.withUsername("joe")
+			.withPassword("secret"), BasicUsernamePasswordAuthConfigurator.class);
+	}
 
-    @Test
-    public void testPublicSshRepo() {
-        verify(createBuilder("ssh://git@github.com/craftercms/test.git"), NoopAuthConfigurator.class);
-    }
+	@Test
+	public void testPublicSshRepo() {
+		verify(createBuilder("ssh://git@github.com/craftercms/test.git"), NoopAuthConfigurator.class);
+	}
 
-    @Test
-    public void testUserPassSshRepo() {
-        verify(createBuilder("ssh://git@github.com/craftercms/test.git")
-                .withUsername("joe")
-                .withPassword("secret"), SshPasswordAuthConfigurator.class);
-    }
+	@Test
+	public void testUserPassSshRepo() {
+		verify(createBuilder("ssh://git@github.com/craftercms/test.git")
+			.withUsername("joe")
+			.withPassword("secret"), SshPasswordAuthConfigurator.class);
+	}
 
-    @Test
-    public void testUnencryptedSshKeyRepo() {
-        verify(createBuilder("ssh://git@github.com/craftercms/test.git")
-                .withPrivateKeyPath("/some/key"), SshPrivateKeyAuthConfigurator.class);
-    }
+	@Test
+	public void testUnencryptedSshKeyRepo() {
+		verify(createBuilder("ssh://git@github.com/craftercms/test.git")
+			.withPrivateKeyPath("/some/key"), SshPrivateKeyAuthConfigurator.class);
+	}
 
-    @Test
-    public void testEncryptedSshKeyRepo() {
-        verify(createBuilder("ssh://git@github.com/craftercms/test.git")
-                .withPrivateKeyPath("/some/key")
-                .withPrivateKeyPassphrase("secret"), SshPrivateKeyAuthConfigurator.class);
-    }
+	@Test
+	public void testEncryptedSshKeyRepo() {
+		verify(createBuilder("ssh://git@github.com/craftercms/test.git")
+			.withPrivateKeyPath("/some/key")
+			.withPrivateKeyPassphrase("secret"), SshPrivateKeyAuthConfigurator.class);
+	}
 
 }

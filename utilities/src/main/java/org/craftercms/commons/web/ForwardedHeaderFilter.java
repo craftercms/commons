@@ -16,6 +16,7 @@
 package org.craftercms.commons.web;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.beans.ConstructorProperties;
 
 /**
@@ -26,16 +27,16 @@ import java.beans.ConstructorProperties;
  */
 public class ForwardedHeaderFilter extends org.springframework.web.filter.ForwardedHeaderFilter {
 
-    protected boolean enabled;
+	protected boolean enabled;
 
-    @ConstructorProperties({"enabled"})
-    public ForwardedHeaderFilter(boolean enabled) {
-        this.enabled = enabled;
-    }
+	@ConstructorProperties({"enabled"})
+	public ForwardedHeaderFilter(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !enabled || super.shouldNotFilter(request);
-    }
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		return !enabled || super.shouldNotFilter(request);
+	}
 
 }

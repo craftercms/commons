@@ -24,9 +24,9 @@ package org.craftercms.commons.plugin.model;
  */
 public interface PluginTypes {
 
-    /**
-     * Site blueprints
-     */
-    String BLUEPRINT = "blueprint";
+	/**
+	 * Site blueprints
+	 */
+	String BLUEPRINT = "blueprint";
 
 }

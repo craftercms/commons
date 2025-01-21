@@ -31,39 +31,39 @@ import static org.craftercms.commons.config.ConfigUtils.*;
  */
 public abstract class AbstractAwsProfileMapper<T extends AbstractAwsProfile> extends AbstractProfileConfigMapper<T> {
 
-    private static final String CONFIG_KEY_REGION = "region";
-    private static final String CONFIG_KEY_ACCESS_KEY = "credentials.accessKey";
-    private static final String CONFIG_KEY_SECRET_KEY = "credentials.secretKey";
-    private static final String CONFIG_KEY_ENDPOINT = "endpoint";
+	private static final String CONFIG_KEY_REGION = "region";
+	private static final String CONFIG_KEY_ACCESS_KEY = "credentials.accessKey";
+	private static final String CONFIG_KEY_SECRET_KEY = "credentials.secretKey";
+	private static final String CONFIG_KEY_ENDPOINT = "endpoint";
 
-    public AbstractAwsProfileMapper(String serviceName, ConfigurationResolver configurationResolver) {
-        super(serviceName, configurationResolver);
-    }
+	public AbstractAwsProfileMapper(String serviceName, ConfigurationResolver configurationResolver) {
+		super(serviceName, configurationResolver);
+	}
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException {
-        AbstractAwsProfile profile = createProfile();
+	@Override
+	@SuppressWarnings("unchecked")
+	protected T mapProfile(HierarchicalConfiguration<ImmutableNode> profileConfig) throws ConfigurationException {
+		AbstractAwsProfile profile = createProfile();
 
-        if (profileConfig.containsKey(CONFIG_KEY_ACCESS_KEY)) {
-            profile.setAccessKey(getStringProperty(profileConfig, CONFIG_KEY_ACCESS_KEY));
-        }
+		if (profileConfig.containsKey(CONFIG_KEY_ACCESS_KEY)) {
+			profile.setAccessKey(getStringProperty(profileConfig, CONFIG_KEY_ACCESS_KEY));
+		}
 
-        if (profileConfig.containsKey(CONFIG_KEY_SECRET_KEY)) {
-            profile.setSecretKey(getStringProperty(profileConfig, CONFIG_KEY_SECRET_KEY));
-        }
+		if (profileConfig.containsKey(CONFIG_KEY_SECRET_KEY)) {
+			profile.setSecretKey(getStringProperty(profileConfig, CONFIG_KEY_SECRET_KEY));
+		}
 
-        if (profileConfig.containsKey(CONFIG_KEY_REGION)) {
-            profile.setRegion(getStringProperty(profileConfig, CONFIG_KEY_REGION));
-        }
+		if (profileConfig.containsKey(CONFIG_KEY_REGION)) {
+			profile.setRegion(getStringProperty(profileConfig, CONFIG_KEY_REGION));
+		}
 
-        if (profileConfig.containsKey(CONFIG_KEY_ENDPOINT)) {
-            profile.setEndpoint(getStringProperty(profileConfig, CONFIG_KEY_ENDPOINT));
-        }
+		if (profileConfig.containsKey(CONFIG_KEY_ENDPOINT)) {
+			profile.setEndpoint(getStringProperty(profileConfig, CONFIG_KEY_ENDPOINT));
+		}
 
-        return (T) profile;
-    }
+		return (T) profile;
+	}
 
-    protected abstract AbstractAwsProfile createProfile();
+	protected abstract AbstractAwsProfile createProfile();
 
 }

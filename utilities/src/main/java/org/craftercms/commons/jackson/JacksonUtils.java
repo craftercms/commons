@@ -32,38 +32,37 @@ import java.util.Map;
  */
 public class JacksonUtils {
 
-    private JacksonUtils() {
-    }
+	private JacksonUtils() {
+	}
 
-    /**
-     * Creates a module from a set of serializers and deserializes.
-     *
-     * @param serializers   the serializers, can be null or empty
-     * @param deserializers the deserializers, can be null or empty
-     *
-     * @return a non-reusable Jackson module composed of the specified serializers and deserializers
-     */
-    @SuppressWarnings("unchecked")
-    public static final Module createModule(List<JsonSerializer<?>> serializers,
-                                            Map<Class<?>, JsonDeserializer<?>> deserializers) {
-        SimpleModule module = new SimpleModule();
+	/**
+	 * Creates a module from a set of serializers and deserializes.
+	 *
+	 * @param serializers   the serializers, can be null or empty
+	 * @param deserializers the deserializers, can be null or empty
+	 * @return a non-reusable Jackson module composed of the specified serializers and deserializers
+	 */
+	@SuppressWarnings("unchecked")
+	public static final Module createModule(List<JsonSerializer<?>> serializers,
+						Map<Class<?>, JsonDeserializer<?>> deserializers) {
+		SimpleModule module = new SimpleModule();
 
-        if (CollectionUtils.isNotEmpty(serializers)) {
-            for (JsonSerializer<?> serializer : serializers) {
-                module.addSerializer(serializer);
-            }
-        }
+		if (CollectionUtils.isNotEmpty(serializers)) {
+			for (JsonSerializer<?> serializer : serializers) {
+				module.addSerializer(serializer);
+			}
+		}
 
-        if (MapUtils.isNotEmpty(deserializers)) {
-            for (Map.Entry<Class<?>, JsonDeserializer<?>> entry : deserializers.entrySet()) {
-                Class<Object> type = (Class<Object>) entry.getKey();
-                JsonDeserializer<Object> des = (JsonDeserializer<Object>) entry.getValue();
+		if (MapUtils.isNotEmpty(deserializers)) {
+			for (Map.Entry<Class<?>, JsonDeserializer<?>> entry : deserializers.entrySet()) {
+				Class<Object> type = (Class<Object>) entry.getKey();
+				JsonDeserializer<Object> des = (JsonDeserializer<Object>) entry.getValue();
 
-                module.addDeserializer(type, des);
-            }
-        }
+				module.addDeserializer(type, des);
+			}
+		}
 
-        return module;
-    }
+		return module;
+	}
 
 }

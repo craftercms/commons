@@ -19,11 +19,11 @@ package org.craftercms.commons.config.profiles;
  * Exception thrown by classes that handle configuration if the profile Id does not exist
  */
 public class ConfigurationProfileNotFoundException extends Exception {
-    public ConfigurationProfileNotFoundException(String message) {
-        super(message);
-    }
+	public ConfigurationProfileNotFoundException(String message) {
+		super(message);
+	}
 
-    public ConfigurationProfileNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public ConfigurationProfileNotFoundException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

@@ -18,15 +18,16 @@ package org.craftercms.commons.validation.validators.impl;
 import org.craftercms.commons.validation.annotations.param.ValidateSecurePathParam;
 
 import jakarta.validation.ConstraintValidator;
+
 import java.util.List;
 
 public class SecurePathValidator extends AbstractStringValidator implements ConstraintValidator<ValidateSecurePathParam, String> {
 
-    public static final String[] DEFAULT_BLACKLISTED_REGEXES =
-            {"^[^:\\/]+:", "^(\\.+|~)$", "^(\\.+|~)[\\/]", "[\\/](\\.+|~)$", "[\\/](\\.+|~)[\\/]"};
+	public static final String[] DEFAULT_BLACKLISTED_REGEXES =
+		{"^[^:\\/]+:", "^(\\.+|~)$", "^(\\.+|~)[\\/]", "[\\/](\\.+|~)$", "[\\/](\\.+|~)[\\/]"};
 
-    public SecurePathValidator() {
-        matchFullInput = false;
-        blacklistRegexes = List.of(DEFAULT_BLACKLISTED_REGEXES);
-    }
+	public SecurePathValidator() {
+		matchFullInput = false;
+		blacklistRegexes = List.of(DEFAULT_BLACKLISTED_REGEXES);
+	}
 }

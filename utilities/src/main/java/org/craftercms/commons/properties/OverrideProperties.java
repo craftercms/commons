@@ -29,79 +29,79 @@ import org.springframework.core.io.Resource;
  *
  */
 public class OverrideProperties {
-    /**
-     * List of all Query files to be load.
-     */
-    protected List<Resource> resources;
-    /**
-     * Backend properties file.
-     */
-    protected Properties properties;
-    /**
-     * Logger.
-     */
-    private Logger log = LoggerFactory.getLogger(OverrideProperties.class);
+	/**
+	 * List of all Query files to be load.
+	 */
+	protected List<Resource> resources;
+	/**
+	 * Backend properties file.
+	 */
+	protected Properties properties;
+	/**
+	 * Logger.
+	 */
+	private Logger log = LoggerFactory.getLogger(OverrideProperties.class);
 
-    /**
-     * Create a JongoQueries instance.
-     */
-    public OverrideProperties() {
-        properties = new Properties();
-    }
+	/**
+	 * Create a JongoQueries instance.
+	 */
+	public OverrideProperties() {
+		properties = new Properties();
+	}
 
-    /**
-     * Checks and starts the reading of the given Resources.
-     */
-    public void init() {
-        for (Resource resource : resources) {
-            if (resource.exists()) {
-                try (InputStream in = resource.getInputStream()) {
-                    readPropertyFile(in);
-                } catch (IOException ex) {
-                    log.debug("Unable to load queries from " + resource.getDescription(), ex);
-                }
-            } else {
-                log.info("Query file at {} not found. Ignoring it...", resource.getDescription());
-            }
-        }
-    }
+	/**
+	 * Checks and starts the reading of the given Resources.
+	 */
+	public void init() {
+		for (Resource resource : resources) {
+			if (resource.exists()) {
+				try (InputStream in = resource.getInputStream()) {
+					readPropertyFile(in);
+				} catch (IOException ex) {
+					log.debug("Unable to load queries from " + resource.getDescription(), ex);
+				}
+			} else {
+				log.info("Query file at {} not found. Ignoring it...", resource.getDescription());
+			}
+		}
+	}
 
-    /**
-     * Does the actual Reading of the properties file (of the given inputstream).
-     *
-     * @param input Input to be read.
-     * @throws IOException If unable to read the given inputstream
-     */
-    protected void readPropertyFile(final InputStream input) throws IOException {
-        properties.load(input);
-    }
+	/**
+	 * Does the actual Reading of the properties file (of the given inputstream).
+	 *
+	 * @param input Input to be read.
+	 * @throws IOException If unable to read the given inputstream
+	 */
+	protected void readPropertyFile(final InputStream input) throws IOException {
+		properties.load(input);
+	}
 
-    /**
-     * Gets the Query with the given name. Null if query is not found.
-     *
-     * @param name Name of the query.
-     * @return Query with the given name. Null if nothing with that name if found.
-     */
-    public String get(String name) {
-        return properties.getProperty(name);
-    }
+	/**
+	 * Gets the Query with the given name. Null if query is not found.
+	 *
+	 * @param name Name of the query.
+	 * @return Query with the given name. Null if nothing with that name if found.
+	 */
+	public String get(String name) {
+		return properties.getProperty(name);
+	}
 
-    /**
-     * Reload the Query map.
-     */
-    public void reload() {
-        destroy();
-        init();
-    }
+	/**
+	 * Reload the Query map.
+	 */
+	public void reload() {
+		destroy();
+		init();
+	}
 
-    /**
-     * Delete all the queries from the map.
-     */
-    private void destroy() {
-        properties.clear();
-    }
+	/**
+	 * Delete all the queries from the map.
+	 */
+	private void destroy() {
+		properties.clear();
+	}
 
-    public void setResources(final List<Resource> resources) {
-        this.resources = resources;
-    }
+	public void setResources(final List<Resource> resources) {
+		this.resources = resources;
+	}
 }

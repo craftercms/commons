@@ -20,8 +20,8 @@ package org.craftercms.commons.entitlements.model;
  * Holds the available modules when requesting an entitlement validation.
  */
 public enum Module {
-    STUDIO,
-    ENGINE,
-    PROFILE,
-    SOCIAL
+	STUDIO,
+	ENGINE,
+	PROFILE,
+	SOCIAL
 }

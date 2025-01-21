@@ -26,26 +26,26 @@ import org.craftercms.commons.i10n.AbstractI10nRuntimeException;
  */
 public class SecurityException extends AbstractI10nRuntimeException {
 
-    public static final String BUNDLE_NAME = "crafter.security.messages.errors";
+	public static final String BUNDLE_NAME = "crafter.security.messages.errors";
 
-    public SecurityException() {
-    }
+	public SecurityException() {
+	}
 
-    public SecurityException(String key, Object... args) {
-        super(key, args);
-    }
+	public SecurityException(String key, Object... args) {
+		super(key, args);
+	}
 
-    public SecurityException(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
-    }
+	public SecurityException(String key, Throwable cause, Object... args) {
+		super(key, cause, args);
+	}
 
-    public SecurityException(Throwable cause) {
-        super(cause);
-    }
+	public SecurityException(Throwable cause) {
+		super(cause);
+	}
 
-    @Override
-    protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(BUNDLE_NAME);
-    }
+	@Override
+	protected ResourceBundle getResourceBundle() {
+		return ResourceBundle.getBundle(BUNDLE_NAME);
+	}
 
 }

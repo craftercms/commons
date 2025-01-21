@@ -28,36 +28,36 @@ import java.io.File;
  */
 public class SshSessionFactory extends SshdSessionFactory {
 
-    /**
-     * The folder for the SSH configuration
-     */
-    protected File sshConfig;
+	/**
+	 * The folder for the SSH configuration
+	 */
+	protected File sshConfig;
 
-    public SshSessionFactory(File sshConfig) {
-        this.sshConfig = sshConfig;
-    }
+	public SshSessionFactory(File sshConfig) {
+		this.sshConfig = sshConfig;
+	}
 
-    // Prevents the current user's home from being used
-    @Override
-    public File getHomeDirectory() {
-        return sshConfig.getParentFile();
-    }
+	// Prevents the current user's home from being used
+	@Override
+	public File getHomeDirectory() {
+		return sshConfig.getParentFile();
+	}
 
-    @Override
-    public File getSshDirectory() {
-        return sshConfig;
-    }
+	@Override
+	public File getSshDirectory() {
+		return sshConfig;
+	}
 
-    // Prevents other authentication methods from being used
-    @Override
-    protected String getDefaultPreferredAuthentications() {
-        return "password";
-    }
+	// Prevents other authentication methods from being used
+	@Override
+	protected String getDefaultPreferredAuthentications() {
+		return "password";
+	}
 
-    // Prevents using the native ssh agent
-    @Override
-    protected ConnectorFactory getConnectorFactory() {
-        return null;
-    }
+	// Prevents using the native ssh agent
+	@Override
+	protected ConnectorFactory getConnectorFactory() {
+		return null;
+	}
 
 }

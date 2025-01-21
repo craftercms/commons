@@ -28,36 +28,36 @@ import java.io.File;
  */
 public abstract class AbstractAuthConfiguratorBuilder implements AuthConfiguratorBuilder {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected File sshConfig;
-    protected String username;
-    protected String password;
-    protected String privateKeyPath;
-    protected String privateKeyPassphrase;
+	protected File sshConfig;
+	protected String username;
+	protected String password;
+	protected String privateKeyPath;
+	protected String privateKeyPassphrase;
 
-    public AbstractAuthConfiguratorBuilder(File sshConfig) {
-        this.sshConfig = sshConfig;
-    }
+	public AbstractAuthConfiguratorBuilder(File sshConfig) {
+		this.sshConfig = sshConfig;
+	}
 
-    public AbstractAuthConfiguratorBuilder withUsername(String username) {
-        this.username = username;
-        return this;
-    }
+	public AbstractAuthConfiguratorBuilder withUsername(String username) {
+		this.username = username;
+		return this;
+	}
 
-    public AbstractAuthConfiguratorBuilder withPassword(String password) {
-        this.password = password;
-        return this;
-    }
+	public AbstractAuthConfiguratorBuilder withPassword(String password) {
+		this.password = password;
+		return this;
+	}
 
-    public AbstractAuthConfiguratorBuilder withPrivateKeyPath(String privateKeyPath) {
-        this.privateKeyPath = privateKeyPath;
-        return this;
-    }
+	public AbstractAuthConfiguratorBuilder withPrivateKeyPath(String privateKeyPath) {
+		this.privateKeyPath = privateKeyPath;
+		return this;
+	}
 
-    public AbstractAuthConfiguratorBuilder withPrivateKeyPassphrase(String privateKeyPassphrase) {
-        this.privateKeyPassphrase = privateKeyPassphrase;
-        return this;
-    }
+	public AbstractAuthConfiguratorBuilder withPrivateKeyPassphrase(String privateKeyPassphrase) {
+		this.privateKeyPassphrase = privateKeyPassphrase;
+		return this;
+	}
 
 }

@@ -19,34 +19,34 @@ package org.craftercms.commons.rest.parameters;
  * Represents a sort field-order pair.
  */
 public class SortField {
-    private final String field;
-    private Order order = Order.ASC;
+	private final String field;
+	private Order order = Order.ASC;
 
-    public SortField(final String sort) {
-        String[] sortItems = sort.split("\\s+");
-        if (sortItems.length > 2) {
-            throw new IllegalArgumentException("Invalid sort field: " + sort);
-        }
-        this.field = sortItems[0];
-        if (sortItems.length > 1) {
-            this.order = Order.valueOf(sortItems[1].toUpperCase());
-        }
-    }
+	public SortField(final String sort) {
+		String[] sortItems = sort.split("\\s+");
+		if (sortItems.length > 2) {
+			throw new IllegalArgumentException("Invalid sort field: " + sort);
+		}
+		this.field = sortItems[0];
+		if (sortItems.length > 1) {
+			this.order = Order.valueOf(sortItems[1].toUpperCase());
+		}
+	}
 
-    public SortField(final String field, final Order order) {
-        this.field = field;
-        this.order = order;
-    }
+	public SortField(final String field, final Order order) {
+		this.field = field;
+		this.order = order;
+	}
 
-    public String getField() {
-        return field;
-    }
+	public String getField() {
+		return field;
+	}
 
-    public Order getOrder() {
-        return order;
-    }
+	public Order getOrder() {
+		return order;
+	}
 
-    public enum Order {
-        ASC, DESC
-    }
+	public enum Order {
+		ASC, DESC
+	}
 }

@@ -22,9 +22,9 @@ package org.craftercms.commons.mail;
  */
 public interface Email {
 
-    /**
-     * Sends the email.
-     */
-    void send() throws EmailException;
+	/**
+	 * Sends the email.
+	 */
+	void send() throws EmailException;
 
 }

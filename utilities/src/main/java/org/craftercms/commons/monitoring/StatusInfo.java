@@ -25,48 +25,49 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Gets current basic JVM status
- * @since 3.0
+ *
  * @author Carlos Ortiz
  * @author Jose Ross
+ * @since 3.0
  */
 public class StatusInfo {
 
-    protected static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.of("UTC"));
+	protected static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.of("UTC"));
 
-    protected long uptime;
+	protected long uptime;
 
-    protected String startup;
+	protected String startup;
 
-    /**
-     * Create the StatusInfo with current information.
-     */
-    protected StatusInfo() {
-        RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
-        startup = FORMATTER.format(Instant.ofEpochMilli(runtime.getStartTime()));
-        uptime = TimeUnit.MILLISECONDS.toSeconds(runtime.getUptime());
-    }
+	/**
+	 * Create the StatusInfo with current information.
+	 */
+	protected StatusInfo() {
+		RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
+		startup = FORMATTER.format(Instant.ofEpochMilli(runtime.getStartTime()));
+		uptime = TimeUnit.MILLISECONDS.toSeconds(runtime.getUptime());
+	}
 
-    /**
-     * Create the StatusInfo with current information.
-     */
-    public static StatusInfo getCurrentStatus(){
-        return new StatusInfo();
-    }
+	/**
+	 * Create the StatusInfo with current information.
+	 */
+	public static StatusInfo getCurrentStatus() {
+		return new StatusInfo();
+	}
 
-    public long getUptime() {
-        return uptime;
-    }
+	public long getUptime() {
+		return uptime;
+	}
 
-    public String getStartup() {
-        return startup;
-    }
+	public String getStartup() {
+		return startup;
+	}
 
-    @Override
-    public String toString() {
-        return "StatusInfo{" +
-                ", uptime='" + uptime + '\'' +
-                ", startup='" + startup + '\'' +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "StatusInfo{" +
+			", uptime='" + uptime + '\'' +
+			", startup='" + startup + '\'' +
+			'}';
+	}
 
 }

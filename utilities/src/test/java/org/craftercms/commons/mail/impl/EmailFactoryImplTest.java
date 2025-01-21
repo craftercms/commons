@@ -18,6 +18,7 @@ package org.craftercms.commons.mail.impl;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Map;
+
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -41,97 +42,97 @@ import static org.junit.Assert.assertNotNull;
  */
 public class EmailFactoryImplTest {
 
-    private static final String FROM = "noreply@example.com";
-    private static final String[] TO = { "user1@example.com" };
-    private static final String[] CC = { "user2@example.com" };
-    private static final String[] BCC = { "user3@example.com" };
-    private static final String REPLY_TO = "admin@example.com";
-    private static final String SUBJECT = "Test";
-    private static final String BODY = "This is a test email";
-    
-    private static final String ENCODING = "UTF-8";
-    private static final String TEMPLATE_NAME = "test";
-    private static final String TEMPLATE_SUFFIX = ".ftl";
+	private static final String FROM = "noreply@example.com";
+	private static final String[] TO = {"user1@example.com"};
+	private static final String[] CC = {"user2@example.com"};
+	private static final String[] BCC = {"user3@example.com"};
+	private static final String REPLY_TO = "admin@example.com";
+	private static final String SUBJECT = "Test";
+	private static final String BODY = "This is a test email";
 
-    private JavaMailSenderImpl mailSender;
-    private Configuration freeMarkerConfig;
-    private EmailFactoryImpl emailFactory;
+	private static final String ENCODING = "UTF-8";
+	private static final String TEMPLATE_NAME = "test";
+	private static final String TEMPLATE_SUFFIX = ".ftl";
 
-    @Before
-    public void setUp() throws Exception {
-        mailSender = createMailSender();
-        freeMarkerConfig = createFreeMarkerConfig();
+	private JavaMailSenderImpl mailSender;
+	private Configuration freeMarkerConfig;
+	private EmailFactoryImpl emailFactory;
 
-        emailFactory = new EmailFactoryImpl(mailSender);
-        emailFactory.setFreeMarkerConfig(freeMarkerConfig);
-        emailFactory.setTemplateSuffix(TEMPLATE_SUFFIX);
-        emailFactory.setTemplateEncoding(ENCODING);
-    }
+	@Before
+	public void setUp() throws Exception {
+		mailSender = createMailSender();
+		freeMarkerConfig = createFreeMarkerConfig();
 
-    @Test
-    public void testGetEmailWithBodyParam() throws Exception {
-        EmailImpl email = (EmailImpl)emailFactory.getEmail(FROM, TO, CC, BCC, REPLY_TO, SUBJECT, BODY, false);
+		emailFactory = new EmailFactoryImpl(mailSender);
+		emailFactory.setFreeMarkerConfig(freeMarkerConfig);
+		emailFactory.setTemplateSuffix(TEMPLATE_SUFFIX);
+		emailFactory.setTemplateEncoding(ENCODING);
+	}
 
-        assertNotNull(email);
+	@Test
+	public void testGetEmailWithBodyParam() throws Exception {
+		EmailImpl email = (EmailImpl) emailFactory.getEmail(FROM, TO, CC, BCC, REPLY_TO, SUBJECT, BODY, false);
 
-        MimeMessage msg = email.message;
+		assertNotNull(email);
 
-        assertArrayEquals(InternetAddress.parse(FROM), msg.getFrom());
-        assertArrayEquals(InternetAddress.parse(StringUtils.join(TO)), msg.getRecipients(Message.RecipientType.TO));
-        assertArrayEquals(InternetAddress.parse(StringUtils.join(CC)), msg.getRecipients(Message.RecipientType.CC));
-        assertArrayEquals(InternetAddress.parse(StringUtils.join(BCC)), msg.getRecipients(Message.RecipientType.BCC));
-        assertArrayEquals(InternetAddress.parse(REPLY_TO), msg.getReplyTo());
-        assertEquals(SUBJECT, msg.getSubject());
-        assertEquals(BODY, msg.getContent());
-    }
+		MimeMessage msg = email.message;
 
-    @Test
-    public void testGetEmailWithBodyTemplate() throws Exception {
-        Map<String, Object> model = Collections.<String, Object>singletonMap("name", "John Doe");
-        String body = processTemplate(TEMPLATE_NAME, model);
+		assertArrayEquals(InternetAddress.parse(FROM), msg.getFrom());
+		assertArrayEquals(InternetAddress.parse(StringUtils.join(TO)), msg.getRecipients(Message.RecipientType.TO));
+		assertArrayEquals(InternetAddress.parse(StringUtils.join(CC)), msg.getRecipients(Message.RecipientType.CC));
+		assertArrayEquals(InternetAddress.parse(StringUtils.join(BCC)), msg.getRecipients(Message.RecipientType.BCC));
+		assertArrayEquals(InternetAddress.parse(REPLY_TO), msg.getReplyTo());
+		assertEquals(SUBJECT, msg.getSubject());
+		assertEquals(BODY, msg.getContent());
+	}
 
-        EmailImpl email = (EmailImpl)emailFactory.getEmail(FROM, TO, CC, BCC, REPLY_TO, SUBJECT, TEMPLATE_NAME,
-                                                           model, false);
+	@Test
+	public void testGetEmailWithBodyTemplate() throws Exception {
+		Map<String, Object> model = Collections.<String, Object>singletonMap("name", "John Doe");
+		String body = processTemplate(TEMPLATE_NAME, model);
 
-        assertNotNull(email);
+		EmailImpl email = (EmailImpl) emailFactory.getEmail(FROM, TO, CC, BCC, REPLY_TO, SUBJECT, TEMPLATE_NAME,
+			model, false);
 
-        MimeMessage msg = email.message;
+		assertNotNull(email);
 
-        assertArrayEquals(InternetAddress.parse(FROM), msg.getFrom());
-        assertArrayEquals(InternetAddress.parse(StringUtils.join(TO)), msg.getRecipients(Message.RecipientType.TO));
-        assertArrayEquals(InternetAddress.parse(StringUtils.join(CC)), msg.getRecipients(Message.RecipientType.CC));
-        assertArrayEquals(InternetAddress.parse(StringUtils.join(BCC)), msg.getRecipients(Message.RecipientType.BCC));
-        assertArrayEquals(InternetAddress.parse(REPLY_TO), msg.getReplyTo());
-        assertEquals(SUBJECT, msg.getSubject());
-        assertEquals(body, msg.getContent());
-    }
+		MimeMessage msg = email.message;
 
-    private JavaMailSenderImpl createMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("localhost");
-        mailSender.setPort(25);
-        mailSender.setProtocol("smtp");
-        mailSender.setDefaultEncoding(ENCODING);
+		assertArrayEquals(InternetAddress.parse(FROM), msg.getFrom());
+		assertArrayEquals(InternetAddress.parse(StringUtils.join(TO)), msg.getRecipients(Message.RecipientType.TO));
+		assertArrayEquals(InternetAddress.parse(StringUtils.join(CC)), msg.getRecipients(Message.RecipientType.CC));
+		assertArrayEquals(InternetAddress.parse(StringUtils.join(BCC)), msg.getRecipients(Message.RecipientType.BCC));
+		assertArrayEquals(InternetAddress.parse(REPLY_TO), msg.getReplyTo());
+		assertEquals(SUBJECT, msg.getSubject());
+		assertEquals(body, msg.getContent());
+	}
 
-        return mailSender;
-    }
+	private JavaMailSenderImpl createMailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("localhost");
+		mailSender.setPort(25);
+		mailSender.setProtocol("smtp");
+		mailSender.setDefaultEncoding(ENCODING);
+
+		return mailSender;
+	}
 
 
-    private Configuration createFreeMarkerConfig() throws Exception {
-        FreeMarkerConfigurationFactory factory = new FreeMarkerConfigurationFactory();
-        factory.setDefaultEncoding(ENCODING);
-        factory.setTemplateLoaderPath("classpath:mail/templates");
+	private Configuration createFreeMarkerConfig() throws Exception {
+		FreeMarkerConfigurationFactory factory = new FreeMarkerConfigurationFactory();
+		factory.setDefaultEncoding(ENCODING);
+		factory.setTemplateLoaderPath("classpath:mail/templates");
 
-        return factory.createConfiguration();
-    }
+		return factory.createConfiguration();
+	}
 
-    protected String processTemplate(String templateName, Object templateModel) throws Exception {
-        Template template = freeMarkerConfig.getTemplate(templateName + TEMPLATE_SUFFIX, ENCODING);
-        StringWriter out = new StringWriter();
+	protected String processTemplate(String templateName, Object templateModel) throws Exception {
+		Template template = freeMarkerConfig.getTemplate(templateName + TEMPLATE_SUFFIX, ENCODING);
+		StringWriter out = new StringWriter();
 
-        template.process(templateModel, out);
+		template.process(templateModel, out);
 
-        return out.toString();
-    }
+		return out.toString();
+	}
 
 }

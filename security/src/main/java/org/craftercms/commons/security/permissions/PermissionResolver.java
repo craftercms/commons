@@ -24,21 +24,21 @@ import org.craftercms.commons.security.exception.PermissionException;
  */
 public interface PermissionResolver<S, R> {
 
-    /**
-     * Returns the global permission (that applies to any or all resources) associated to the given subject.
-     *
-     * @param subject the subject
-     * @return the global permission, or null if no permission found
-     */
-    Permission getGlobalPermission(S subject) throws PermissionException;
+	/**
+	 * Returns the global permission (that applies to any or all resources) associated to the given subject.
+	 *
+	 * @param subject the subject
+	 * @return the global permission, or null if no permission found
+	 */
+	Permission getGlobalPermission(S subject) throws PermissionException;
 
-    /**
-     * Returns the permission associated to the given subject and resource.
-     *
-     * @param subject the subject (not null)
-     * @param resource  the protected resource or ID/IDs of the protected resource (not null).
-     * @return the object/subject permission, or null if no permission found
-     */
-    Permission getPermission(S subject, R resource) throws PermissionException;
+	/**
+	 * Returns the permission associated to the given subject and resource.
+	 *
+	 * @param subject  the subject (not null)
+	 * @param resource the protected resource or ID/IDs of the protected resource (not null).
+	 * @return the object/subject permission, or null if no permission found
+	 */
+	Permission getPermission(S subject, R resource) throws PermissionException;
 
 }

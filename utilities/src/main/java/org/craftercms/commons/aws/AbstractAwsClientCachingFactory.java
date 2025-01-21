@@ -38,86 +38,86 @@ import java.util.concurrent.TimeUnit;
  * used for a while will be evicted from the cache and shutdown.
  *
  * <p>
- *     <strong>WARNING: </strong> the {@link AbstractAwsProfile}s that you pass to
- *     {@link #getClient(AbstractAwsProfile)} should implement equals and hash code methods that take into account
- *     most of the properties, so that the clients are cached correctly.
+ * <strong>WARNING: </strong> the {@link AbstractAwsProfile}s that you pass to
+ * {@link #getClient(AbstractAwsProfile)} should implement equals and hash code methods that take into account
+ * most of the properties, so that the clients are cached correctly.
  * </p>
  *
  * @author avasquez
  */
-public abstract  class AbstractAwsClientCachingFactory<P extends AbstractAwsProfile, C extends AwsClient>
-        implements InitializingBean, DisposableBean, RemovalListener<P, C> {
+public abstract class AbstractAwsClientCachingFactory<P extends AbstractAwsProfile, C extends AwsClient>
+	implements InitializingBean, DisposableBean, RemovalListener<P, C> {
 
-    private static final Logger logger = LoggerFactory.getLogger(S3ClientCachingFactory.class);
+	private static final Logger logger = LoggerFactory.getLogger(S3ClientCachingFactory.class);
 
-    public static final int DEFAULT_SHUTDOWN_CLIENT_AFTER_IDLE_SECS = 900;
+	public static final int DEFAULT_SHUTDOWN_CLIENT_AFTER_IDLE_SECS = 900;
 
-    private int shutdownClientAfterIdleSecs;
-    private Cache<P, C> cache;
-    private ScheduledExecutorService evictionService;
+	private int shutdownClientAfterIdleSecs;
+	private Cache<P, C> cache;
+	private ScheduledExecutorService evictionService;
 
-    public AbstractAwsClientCachingFactory() {
-        shutdownClientAfterIdleSecs = DEFAULT_SHUTDOWN_CLIENT_AFTER_IDLE_SECS;
-        evictionService = Executors.newSingleThreadScheduledExecutor();
-    }
+	public AbstractAwsClientCachingFactory() {
+		shutdownClientAfterIdleSecs = DEFAULT_SHUTDOWN_CLIENT_AFTER_IDLE_SECS;
+		evictionService = Executors.newSingleThreadScheduledExecutor();
+	}
 
-    public void setShutdownClientAfterIdleSecs(int shutdownClientAfterIdleSecs) {
-        this.shutdownClientAfterIdleSecs = shutdownClientAfterIdleSecs;
-    }
+	public void setShutdownClientAfterIdleSecs(int shutdownClientAfterIdleSecs) {
+		this.shutdownClientAfterIdleSecs = shutdownClientAfterIdleSecs;
+	}
 
-    @Override
-    public void onRemoval(RemovalNotification<P, C> notification) {
-        shutdownClient(notification);
-    }
+	@Override
+	public void onRemoval(RemovalNotification<P, C> notification) {
+		shutdownClient(notification);
+	}
 
-    @Override
-    public void destroy() {
-        logger.info("Shutting down {}", getClass().getSimpleName());
+	@Override
+	public void destroy() {
+		logger.info("Shutting down {}", getClass().getSimpleName());
 
-        evictionService.shutdownNow();
+		evictionService.shutdownNow();
 
-        cache.invalidateAll();
-        cache.cleanUp();
-    }
+		cache.invalidateAll();
+		cache.cleanUp();
+	}
 
-    @Override
-    public void afterPropertiesSet() {
-        cache = CacheBuilder.newBuilder()
-                .removalListener(this)
-                .expireAfterAccess(shutdownClientAfterIdleSecs, TimeUnit.SECONDS)
-                .build();
+	@Override
+	public void afterPropertiesSet() {
+		cache = CacheBuilder.newBuilder()
+			.removalListener(this)
+			.expireAfterAccess(shutdownClientAfterIdleSecs, TimeUnit.SECONDS)
+			.build();
 
-        // Schedule eviction of expired items every minute
-        evictionService.scheduleAtFixedRate(cache::cleanUp, 1, 1, TimeUnit.MINUTES);
-    }
+		// Schedule eviction of expired items every minute
+		evictionService.scheduleAtFixedRate(cache::cleanUp, 1, 1, TimeUnit.MINUTES);
+	}
 
-    public C getClient(P profile) {
-        var client = cache.getIfPresent(profile);
-        if (client == null) {
-            synchronized (cache) {
-                // Check again, just in case the element was added by another concurrent thread
-                client = cache.getIfPresent(profile);
-                if (client == null) {
-                    logger.info("Creating client for {}", profile);
+	public C getClient(P profile) {
+		var client = cache.getIfPresent(profile);
+		if (client == null) {
+			synchronized (cache) {
+				// Check again, just in case the element was added by another concurrent thread
+				client = cache.getIfPresent(profile);
+				if (client == null) {
+					logger.info("Creating client for {}", profile);
 
-                    client = createClient(profile);
-                    cache.put(profile, client);
-                }
-            }
-        }
+					client = createClient(profile);
+					cache.put(profile, client);
+				}
+			}
+		}
 
-        return client;
-    }
+		return client;
+	}
 
-    protected void shutdownClient(RemovalNotification<P, C> notification) {
-        if (notification.getValue() instanceof S3Client || notification.getValue() instanceof S3AsyncClient) {
-            logger.info("Shutting down AWS client for {}", notification.getKey());
+	protected void shutdownClient(RemovalNotification<P, C> notification) {
+		if (notification.getValue() instanceof S3Client || notification.getValue() instanceof S3AsyncClient) {
+			logger.info("Shutting down AWS client for {}", notification.getKey());
 
-            C client = (C) notification.getValue();
-            client.close();
-        }
-    }
+			C client = (C) notification.getValue();
+			client.close();
+		}
+	}
 
-    protected abstract C createClient(P profile);
+	protected abstract C createClient(P profile);
 
 }

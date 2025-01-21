@@ -29,9 +29,9 @@ import org.bson.types.ObjectId;
  */
 public class ObjectIdDeserializer extends JsonDeserializer<ObjectId> {
 
-    @Override
-    public ObjectId deserialize(final JsonParser jsonParser, final DeserializationContext context) throws IOException {
-        return new ObjectId(jsonParser.getText());
-    }
+	@Override
+	public ObjectId deserialize(final JsonParser jsonParser, final DeserializationContext context) throws IOException {
+		return new ObjectId(jsonParser.getText());
+	}
 
 }

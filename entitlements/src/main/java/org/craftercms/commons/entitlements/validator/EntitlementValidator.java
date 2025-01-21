@@ -30,75 +30,82 @@ import org.craftercms.commons.monitoring.VersionInfo;
  */
 public interface EntitlementValidator {
 
-    /**
-     * Checks that an entitlement is below the value indicated in the configuration file.
-     * @param entitlementType entitlement to be validated
-     * @param newAmount amount of items to be created
-     * @throws EntitlementException if the validation fails
-     */
-    default void validateEntitlement(EntitlementType entitlementType, int newAmount)
-        throws EntitlementException {
-        // Do nothing by default
-    }
+	/**
+	 * Checks that an entitlement is below the value indicated in the configuration file.
+	 *
+	 * @param entitlementType entitlement to be validated
+	 * @param newAmount       amount of items to be created
+	 * @throws EntitlementException if the validation fails
+	 */
+	default void validateEntitlement(EntitlementType entitlementType, int newAmount)
+		throws EntitlementException {
+		// Do nothing by default
+	}
 
-    /**
-     * Provides the id of the current validator.
-     * @return id of the validator
-     */
-    default long getId() {
-        return -1;
-    }
+	/**
+	 * Provides the id of the current validator.
+	 *
+	 * @return id of the validator
+	 */
+	default long getId() {
+		return -1;
+	}
 
-    /**
-     * Provides the client id of the current validator.
-     * @return if of the client
-     */
-    default long getClientId() {
-        return -1;
-    }
+	/**
+	 * Provides the client id of the current validator.
+	 *
+	 * @return if of the client
+	 */
+	default long getClientId() {
+		return -1;
+	}
 
-    /**
-     * Provides the version of the current validator.
-     * @return the version
-     */
-    default String getVersion() {
-        return null;
-    }
+	/**
+	 * Provides the version of the current validator.
+	 *
+	 * @return the version
+	 */
+	default String getVersion() {
+		return null;
+	}
 
-    /**
-     * Provides a general description of the current validator.
-     * @return validator description
-     */
-    String getDescription();
+	/**
+	 * Provides a general description of the current validator.
+	 *
+	 * @return validator description
+	 */
+	String getDescription();
 
-    /**
-     * Provides the version of the containing JAR file.
-     * @return the version
-     */
-    default String getPackageVersion() {
-        try {
-            VersionInfo versionInfo = VersionInfo.getVersion(
-                new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()))
-                    .getManifest());
-            return versionInfo.getPackageVersion();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+	/**
+	 * Provides the version of the containing JAR file.
+	 *
+	 * @return the version
+	 */
+	default String getPackageVersion() {
+		try {
+			VersionInfo versionInfo = VersionInfo.getVersion(
+				new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()))
+					.getManifest());
+			return versionInfo.getPackageVersion();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
-    /**
-     * Provides the build of the containing JAR file.
-     * @return the build
-     */
-    default String getPackageBuild() {
-        try {
-            VersionInfo versionInfo = VersionInfo.getVersion(
-                new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()))
-                    .getManifest());
-            return versionInfo.getPackageBuild();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+	/**
+	 * Provides the build of the containing JAR file.
+	 *
+	 * @return the build
+	 */
+	default String getPackageBuild() {
+		try {
+			VersionInfo versionInfo = VersionInfo.getVersion(
+				new JarFile(new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()))
+					.getManifest());
+			return versionInfo.getPackageBuild();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 }

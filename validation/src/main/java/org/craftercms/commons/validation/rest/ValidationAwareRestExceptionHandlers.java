@@ -39,55 +39,55 @@ import static org.craftercms.commons.validation.ErrorCodes.*;
 @ControllerAdvice
 public class ValidationAwareRestExceptionHandlers extends BaseRestExceptionHandlers {
 
-    protected ResourceBundle errorMessageBundle;
+	protected ResourceBundle errorMessageBundle;
 
-    public void setErrorMessageBundle(ResourceBundle errorMessageBundle) {
-        this.errorMessageBundle = errorMessageBundle;
-    }
+	public void setErrorMessageBundle(ResourceBundle errorMessageBundle) {
+		this.errorMessageBundle = errorMessageBundle;
+	}
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ex.getResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
+	@ExceptionHandler(ValidationException.class)
+	public ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
+		return handleExceptionInternal(ex, ex.getResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
 
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        Throwable cause = ExceptionUtils.getRootCause(ex);
-        if (cause instanceof UnrecognizedPropertyException) {
-            UnrecognizedPropertyException upe = (UnrecognizedPropertyException)cause;
-            String field = upe.getPropertyName();
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(
+		HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		Throwable cause = ExceptionUtils.getRootCause(ex);
+		if (cause instanceof UnrecognizedPropertyException) {
+			UnrecognizedPropertyException upe = (UnrecognizedPropertyException) cause;
+			String field = upe.getPropertyName();
 
-            ValidationResult result = new ValidationResult();
-            result.addError(field, ValidationUtils.getErrorMessage(errorMessageBundle, FIELD_UNRECOGNIZED_ERROR_CODE));
+			ValidationResult result = new ValidationResult();
+			result.addError(field, ValidationUtils.getErrorMessage(errorMessageBundle, FIELD_UNRECOGNIZED_ERROR_CODE));
 
-            return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-        } else {
-            String message = ValidationUtils.getErrorMessage(errorMessageBundle, INVALID_REQUEST_BODY_ERROR_CODE);
+			return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		} else {
+			String message = ValidationUtils.getErrorMessage(errorMessageBundle, INVALID_REQUEST_BODY_ERROR_CODE);
 
-            return handleExceptionInternal(ex, message, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-        }
-    }
+			return handleExceptionInternal(ex, message, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		}
+	}
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ValidationResult result = new ValidationResult();
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+		MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		ValidationResult result = new ValidationResult();
 
-        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            result.addError(fieldError.getField(), ValidationUtils.getErrorMessage(errorMessageBundle, FIELD_MISSING_ERROR_CODE));
-        }
+		for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+			result.addError(fieldError.getField(), ValidationUtils.getErrorMessage(errorMessageBundle, FIELD_MISSING_ERROR_CODE));
+		}
 
-        return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
+		return handleExceptionInternal(ex, result, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest webRequest) {
-        Throwable cause = ex.getCause();
-        if (cause instanceof ValidationException) {
-            return handleValidationException((ValidationException)cause, webRequest);
-        }
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, webRequest);
-    }
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> handleGeneralException(Exception ex, WebRequest webRequest) {
+		Throwable cause = ex.getCause();
+		if (cause instanceof ValidationException) {
+			return handleValidationException((ValidationException) cause, webRequest);
+		}
+		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, webRequest);
+	}
 
 }

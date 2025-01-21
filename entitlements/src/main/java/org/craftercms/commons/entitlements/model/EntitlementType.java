@@ -20,7 +20,7 @@ package org.craftercms.commons.entitlements.model;
  * Holds the available entitlements when requesting an entitlement validation.
  */
 public enum EntitlementType {
-    USER,
-    SITE,
-    ITEM
+	USER,
+	SITE,
+	ITEM
 }

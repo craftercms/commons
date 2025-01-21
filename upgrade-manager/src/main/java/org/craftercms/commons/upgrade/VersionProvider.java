@@ -28,32 +28,32 @@ import org.craftercms.commons.upgrade.impl.UpgradeContext;
  */
 public interface VersionProvider<T> {
 
-    /**
-     * Keyword used to retrieve the version
-     */
-    String VERSION = "version";
+	/**
+	 * Keyword used to retrieve the version
+	 */
+	String VERSION = "version";
 
-    /**
-     * Value used when a file is missing from the repository
-     */
-    String SKIP = "SKIP";
+	/**
+	 * Value used when a file is missing from the repository
+	 */
+	String SKIP = "SKIP";
 
-    /**
-     * Returns the current version
-     *
-     * @param context the upgrade context
-     * @return version number
-     * @throws UpgradeException if there is any error getting the current version
-     */
-    String getVersion(UpgradeContext<T> context) throws UpgradeException;
+	/**
+	 * Returns the current version
+	 *
+	 * @param context the upgrade context
+	 * @return version number
+	 * @throws UpgradeException if there is any error getting the current version
+	 */
+	String getVersion(UpgradeContext<T> context) throws UpgradeException;
 
-    /**
-     * Updates the current version
-     *
-     * @param context the upgrade context
-     * @param version the new version
-     * @throws UpgradeException if there is any error setting the current version
-     */
-    void setVersion(UpgradeContext<T> context, String version) throws UpgradeException;
+	/**
+	 * Updates the current version
+	 *
+	 * @param context the upgrade context
+	 * @param version the new version
+	 * @throws UpgradeException if there is any error setting the current version
+	 */
+	void setVersion(UpgradeContext<T> context, String version) throws UpgradeException;
 
 }

@@ -30,55 +30,55 @@ import static org.craftercms.commons.lang.RegexUtils.matchesAny;
 
 public class ValidationUtils {
 
-    public static final String DEFAULT_ERROR_MESSAGE_BUNDLE_NAME = "crafter.commons.validation.errors";
+	public static final String DEFAULT_ERROR_MESSAGE_BUNDLE_NAME = "crafter.commons.validation.errors";
 
-    private ValidationUtils() {
-    }
+	private ValidationUtils() {
+	}
 
-    public static ResourceBundle getDefaultErrorMessageBundle() {
-        return ResourceBundle.getBundle(DEFAULT_ERROR_MESSAGE_BUNDLE_NAME);
-    }
+	public static ResourceBundle getDefaultErrorMessageBundle() {
+		return ResourceBundle.getBundle(DEFAULT_ERROR_MESSAGE_BUNDLE_NAME);
+	}
 
-    public static String getErrorMessage(ResourceBundle messageBundle, String errorCode, Object... args) {
-        if (messageBundle == null) {
-            messageBundle = getDefaultErrorMessageBundle();
-        }
+	public static String getErrorMessage(ResourceBundle messageBundle, String errorCode, Object... args) {
+		if (messageBundle == null) {
+			messageBundle = getDefaultErrorMessageBundle();
+		}
 
-        return I10nUtils.getLocalizedMessage(messageBundle, errorCode, args);
-    }
+		return I10nUtils.getLocalizedMessage(messageBundle, errorCode, args);
+	}
 
-    /**
-     * Invokes a {@link Validator} for a given value and return the list or errors
-     *
-     * @param validator {@link Validator} to invoke
-     * @param value     value to validate
-     * @param objectKey the key/name of the value being validated
-     */
-    public static ValidationResult validateValue(@NonNull Validator validator, Object value, String objectKey) {
-        Errors errors = new BeanPropertyBindingResult(value, objectKey);
-        org.springframework.validation.ValidationUtils.invokeValidator(validator, value, errors);
-        return getValidationResult(errors);
-    }
+	/**
+	 * Invokes a {@link Validator} for a given value and return the list or errors
+	 *
+	 * @param validator {@link Validator} to invoke
+	 * @param value     value to validate
+	 * @param objectKey the key/name of the value being validated
+	 */
+	public static ValidationResult validateValue(@NonNull Validator validator, Object value, String objectKey) {
+		Errors errors = new BeanPropertyBindingResult(value, objectKey);
+		org.springframework.validation.ValidationUtils.invokeValidator(validator, value, errors);
+		return getValidationResult(errors);
+	}
 
-    private static ValidationResult getValidationResult(final Errors errors) {
-        ValidationResult result = new ValidationResult(format("Validation failed for '%s'", errors.getObjectName()), getDefaultErrorMessageBundle());
-        errors.getAllErrors().forEach(error ->
-                result.addError(errors.getObjectName(), error.getCode()));
-        return result;
-    }
+	private static ValidationResult getValidationResult(final Errors errors) {
+		ValidationResult result = new ValidationResult(format("Validation failed for '%s'", errors.getObjectName()), getDefaultErrorMessageBundle());
+		errors.getAllErrors().forEach(error ->
+			result.addError(errors.getObjectName(), error.getCode()));
+		return result;
+	}
 
-    /**
-     * Convenience method to validate a String against a list of blacklist regexes and a list of whitelist regexes
-     *
-     * @param value            String to validate
-     * @param blacklistRegexes list of blacklist regexes
-     * @param whitelistRegexes list of whitelist regexes
-     * @param matchFullInput   if the entire string should be matched
-     * @return true if the string matches any of the whitelist regexes and none of the blacklist regexes
-     */
-    public static boolean validateString(final String value, List<String> blacklistRegexes, List<String> whitelistRegexes, final boolean matchFullInput) {
-        return (isEmpty(whitelistRegexes) || matchesAny(value, whitelistRegexes, matchFullInput)) &&
-                (isEmpty(blacklistRegexes) || !matchesAny(value, blacklistRegexes, matchFullInput));
-    }
+	/**
+	 * Convenience method to validate a String against a list of blacklist regexes and a list of whitelist regexes
+	 *
+	 * @param value            String to validate
+	 * @param blacklistRegexes list of blacklist regexes
+	 * @param whitelistRegexes list of whitelist regexes
+	 * @param matchFullInput   if the entire string should be matched
+	 * @return true if the string matches any of the whitelist regexes and none of the blacklist regexes
+	 */
+	public static boolean validateString(final String value, List<String> blacklistRegexes, List<String> whitelistRegexes, final boolean matchFullInput) {
+		return (isEmpty(whitelistRegexes) || matchesAny(value, whitelistRegexes, matchFullInput)) &&
+			(isEmpty(blacklistRegexes) || !matchesAny(value, blacklistRegexes, matchFullInput));
+	}
 
 }

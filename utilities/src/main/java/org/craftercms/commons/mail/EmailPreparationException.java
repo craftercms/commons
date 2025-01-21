@@ -22,10 +22,10 @@ package org.craftercms.commons.mail;
  */
 public class EmailPreparationException extends EmailException {
 
-    public static final String KEY = "mail.preparationError";
+	public static final String KEY = "mail.preparationError";
 
-    public EmailPreparationException(Throwable cause) {
-        super(KEY, cause);
-    }
+	public EmailPreparationException(Throwable cause) {
+		super(KEY, cause);
+	}
 
 }

@@ -23,35 +23,35 @@ import org.springframework.validation.Validator;
 import static org.craftercms.commons.validation.annotations.param.EsapiValidationType.SEARCH_KEYWORDS;
 
 public class SearchKeywordsTest implements ValidatorTest {
-    private Validator validator;
+	private Validator validator;
 
-    @Before
-    public void setUp() {
-        validator = new EsapiValidator(SEARCH_KEYWORDS);
-    }
+	@Before
+	public void setUp() {
+		validator = new EsapiValidator(SEARCH_KEYWORDS);
+	}
 
-    @Test
-    public void testSpecialChars() {
-        assertRejected("<invalid>");
-    }
+	@Test
+	public void testSpecialChars() {
+		assertRejected("<invalid>");
+	}
 
-    @Test
-    public void testUnderscore() {
-        assertValid("_invalid_");
-    }
+	@Test
+	public void testUnderscore() {
+		assertValid("_invalid_");
+	}
 
-    @Test
-    public void testDash() {
-        assertValid("this-is-valid");
-    }
+	@Test
+	public void testDash() {
+		assertValid("this-is-valid");
+	}
 
-    @Test
-    public void testSpaces() {
-        assertValid("also this is valid");
-    }
+	@Test
+	public void testSpaces() {
+		assertValid("also this is valid");
+	}
 
-    @Override
-    public Validator getValidator() {
-        return validator;
-    }
+	@Override
+	public Validator getValidator() {
+		return validator;
+	}
 }

@@ -38,34 +38,34 @@ import org.yaml.snakeyaml.representer.Representer;
  */
 public class YamlFileVersionProvider<T> extends AbstractFileVersionProvider<T> {
 
-    protected final Yaml yaml;
+	protected final Yaml yaml;
 
-    public YamlFileVersionProvider() {
-        DumperOptions options = new DumperOptions();
-        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        options.setPrettyFlow(true);
-        yaml = new Yaml(new DisableClassLoadingConstructor(new LoaderOptions()), new Representer(options), options);
-    }
+	public YamlFileVersionProvider() {
+		DumperOptions options = new DumperOptions();
+		options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+		options.setPrettyFlow(true);
+		yaml = new Yaml(new DisableClassLoadingConstructor(new LoaderOptions()), new Representer(options), options);
+	}
 
-    @SuppressWarnings("unchecked")
-    protected Map<String, Object> loadFile(Path file) throws IOException {
-        try (InputStream is = Files.newInputStream(file)) {
-            return (Map<String, Object>) yaml.load(is);
-        }
-    }
+	@SuppressWarnings("unchecked")
+	protected Map<String, Object> loadFile(Path file) throws IOException {
+		try (InputStream is = Files.newInputStream(file)) {
+			return (Map<String, Object>) yaml.load(is);
+		}
+	}
 
-    @Override
-    protected String readVersionFromFile(final Path file) throws Exception {
-        Map<String, Object> values = loadFile(file);
-        return (String)values.get(VERSION);
-    }
+	@Override
+	protected String readVersionFromFile(final Path file) throws Exception {
+		Map<String, Object> values = loadFile(file);
+		return (String) values.get(VERSION);
+	}
 
-    @Override
-    protected void writeVersionToFile(final Path file, final String version) throws Exception {
-        Map<String, Object> values = loadFile(file);
-        values.put(VERSION, version);
-        try (Writer writer = Files.newBufferedWriter(file)) {
-            yaml.dump(values, writer);
-        }
-    }
+	@Override
+	protected void writeVersionToFile(final Path file, final String version) throws Exception {
+		Map<String, Object> values = loadFile(file);
+		values.put(VERSION, version);
+		try (Writer writer = Files.newBufferedWriter(file)) {
+			yaml.dump(values, writer);
+		}
+	}
 }

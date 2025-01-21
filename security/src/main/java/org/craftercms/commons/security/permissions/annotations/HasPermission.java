@@ -30,20 +30,20 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HasPermission {
 
-    /**
-     * The permission type, which indicates the {@link org.craftercms.commons.security.permissions.PermissionEvaluator}
-     * to use for permission evaluation.
-     */
-    Class<?> type();
+	/**
+	 * The permission type, which indicates the {@link org.craftercms.commons.security.permissions.PermissionEvaluator}
+	 * to use for permission evaluation.
+	 */
+	Class<?> type();
 
-    /**
-     * The action the current subject is trying to execute.
-     */
-    String action();
+	/**
+	 * The action the current subject is trying to execute.
+	 */
+	String action();
 
-    /**
-     * Indicates if the presence of a valid management token should grant access to the protected resource/action
-     */
-    boolean acceptManagementToken() default false;
+	/**
+	 * Indicates if the presence of a valid management token should grant access to the protected resource/action
+	 */
+	boolean acceptManagementToken() default false;
 
 }

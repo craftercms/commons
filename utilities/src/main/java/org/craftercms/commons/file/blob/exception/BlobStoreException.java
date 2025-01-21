@@ -23,15 +23,15 @@ package org.craftercms.commons.file.blob.exception;
  */
 public class BlobStoreException extends RuntimeException {
 
-    public BlobStoreException() {
-    }
+	public BlobStoreException() {
+	}
 
-    public BlobStoreException(String message) {
-        super(message);
-    }
+	public BlobStoreException(String message) {
+		super(message);
+	}
 
-    public BlobStoreException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public BlobStoreException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

@@ -24,21 +24,21 @@ import org.springframework.web.client.RestTemplate;
  */
 public abstract class AbstractRestClientBase {
 
-    protected String baseUrl;
-    protected String extension;
-    protected RestTemplate restTemplate;
+	protected String baseUrl;
+	protected String extension;
+	protected RestTemplate restTemplate;
 
-    public AbstractRestClientBase(String baseUrl, RestTemplate restTemplate) {
-        this.baseUrl = baseUrl;
-        this.restTemplate = restTemplate;
-    }
+	public AbstractRestClientBase(String baseUrl, RestTemplate restTemplate) {
+		this.baseUrl = baseUrl;
+		this.restTemplate = restTemplate;
+	}
 
-    public void setExtension(String extension) {
-        this.extension = extension;
-    }
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
 
-    protected String getAbsoluteUrl(String relativeUrl) {
-        return baseUrl + relativeUrl + (extension != null? extension: "");
-    }
+	protected String getAbsoluteUrl(String relativeUrl) {
+		return baseUrl + relativeUrl + (extension != null ? extension : "");
+	}
 
 }

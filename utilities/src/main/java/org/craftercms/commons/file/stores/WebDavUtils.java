@@ -31,18 +31,19 @@ import java.net.URL;
  */
 public class WebDavUtils {
 
-    /**
-     * Creates a WebDAV client based on the given profile config
-     * @param profile the configuration profile
-     * @return a WebDAV client
-     */
-    public static Sardine createClient(WebDavProfile profile) throws MalformedURLException {
-        Sardine client = SardineFactory.begin(profile.getUsername(), profile.getPassword());
-        if (profile.isPreemptiveAuth()) {
-            client.enablePreemptiveAuthentication(new URL(profile.getBaseUrl()));
-        }
+	/**
+	 * Creates a WebDAV client based on the given profile config
+	 *
+	 * @param profile the configuration profile
+	 * @return a WebDAV client
+	 */
+	public static Sardine createClient(WebDavProfile profile) throws MalformedURLException {
+		Sardine client = SardineFactory.begin(profile.getUsername(), profile.getPassword());
+		if (profile.isPreemptiveAuth()) {
+			client.enablePreemptiveAuthentication(new URL(profile.getBaseUrl()));
+		}
 
-        return client;
-    }
+		return client;
+	}
 
 }

@@ -34,40 +34,40 @@ import static org.apache.commons.lang3.ObjectUtils.isEmpty;
  */
 public class TypeBasedAuthConfiguratorBuilder extends AbstractAuthConfiguratorBuilder {
 
-    /**
-     * The authentication type to use
-     */
-    protected String authType;
+	/**
+	 * The authentication type to use
+	 */
+	protected String authType;
 
-    public TypeBasedAuthConfiguratorBuilder(File sshConfig, String authType) {
-        super(sshConfig);
-        this.authType = authType;
-    }
+	public TypeBasedAuthConfiguratorBuilder(File sshConfig, String authType) {
+		super(sshConfig);
+		this.authType = authType;
+	}
 
-    @Override
-    public GitAuthenticationConfigurator build() {
-        switch (authType) {
-            case AuthenticationType.NONE:
-                logger.debug("No authentication will be used");
-                return new NoopAuthConfigurator();
-            case AuthenticationType.BASIC:
-                if (isEmpty(username) && isEmpty(password)) {
-                    throw new IllegalStateException("basic auth requires a username or password");
-                }
-                logger.debug("Username/password authentication will be used");
-                return new BasicUsernamePasswordAuthConfigurator(username, password);
-            case AuthenticationType.TOKEN:
-                if (isEmpty(username)) {
-                    throw new IllegalStateException("token auth requires a username");
-                }
-                logger.debug("Token authentication will be used");
-                return new BasicUsernamePasswordAuthConfigurator(username, StringUtils.EMPTY);
-            case AuthenticationType.PRIVATE_KEY:
-                logger.debug("SSH private key authentication will be used");
-                return new SshPrivateKeyAuthConfigurator(sshConfig, privateKeyPath, privateKeyPassphrase);
-            default:
-                throw new IllegalStateException("Unsupported auth type " + authType);
-        }
-    }
+	@Override
+	public GitAuthenticationConfigurator build() {
+		switch (authType) {
+			case AuthenticationType.NONE:
+				logger.debug("No authentication will be used");
+				return new NoopAuthConfigurator();
+			case AuthenticationType.BASIC:
+				if (isEmpty(username) && isEmpty(password)) {
+					throw new IllegalStateException("basic auth requires a username or password");
+				}
+				logger.debug("Username/password authentication will be used");
+				return new BasicUsernamePasswordAuthConfigurator(username, password);
+			case AuthenticationType.TOKEN:
+				if (isEmpty(username)) {
+					throw new IllegalStateException("token auth requires a username");
+				}
+				logger.debug("Token authentication will be used");
+				return new BasicUsernamePasswordAuthConfigurator(username, StringUtils.EMPTY);
+			case AuthenticationType.PRIVATE_KEY:
+				logger.debug("SSH private key authentication will be used");
+				return new SshPrivateKeyAuthConfigurator(sshConfig, privateKeyPath, privateKeyPassphrase);
+			default:
+				throw new IllegalStateException("Unsupported auth type " + authType);
+		}
+	}
 
 }

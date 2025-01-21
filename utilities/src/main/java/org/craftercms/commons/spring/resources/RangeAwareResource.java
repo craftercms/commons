@@ -27,16 +27,14 @@ import java.io.InputStream;
  */
 public interface RangeAwareResource extends Resource {
 
-    /**
-     * Returns a range of bytes from the resource's content.
-     *
-     * @param start the start of the range
-     * @param end the end of the range
-     *
-     * @return an input stream with the content range
-     *
-     * @throws IOException if an IO error occurs
-     */
-    InputStream getInputStream(long start, long end) throws IOException;
+	/**
+	 * Returns a range of bytes from the resource's content.
+	 *
+	 * @param start the start of the range
+	 * @param end   the end of the range
+	 * @return an input stream with the content range
+	 * @throws IOException if an IO error occurs
+	 */
+	InputStream getInputStream(long start, long end) throws IOException;
 
 }

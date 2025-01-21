@@ -41,54 +41,54 @@ import static org.owasp.esapi.StringUtilities.isEmpty;
  */
 public class EsapiValidator implements ConstraintValidator<EsapiValidatedParam, String>, org.springframework.validation.Validator {
 
-    private static final Logger logger = LoggerFactory.getLogger(EsapiValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(EsapiValidator.class);
 
-    private final Validator validator;
-    private EsapiValidationType type;
+	private final Validator validator;
+	private EsapiValidationType type;
 
-    public EsapiValidator() {
-        validator = ESAPI.validator();
-    }
+	public EsapiValidator() {
+		validator = ESAPI.validator();
+	}
 
-    public EsapiValidator(final EsapiValidationType type) {
-        this();
-        this.type = type;
-    }
+	public EsapiValidator(final EsapiValidationType type) {
+		this();
+		this.type = type;
+	}
 
-    @Override
-    public void initialize(EsapiValidatedParam annotation) {
-        this.type = annotation.type();
-    }
+	@Override
+	public void initialize(EsapiValidatedParam annotation) {
+		this.type = annotation.type();
+	}
 
-    @Override
-    public boolean isValid(final String value, final ConstraintValidatorContext context) {
-        boolean isValid = false;
-        String esapiType = type.typeKey;
-        try {
-            isValid = validator.isValidInput(esapiType, value, esapiType, Integer.MAX_VALUE, true);
-        } catch (IntrusionException e) {
-            // TODO: JM: Revisit how to get param name
-            logger.warn("Potential attack attempt detected while validating input", e);
-        }
-        String messageTemplate = context.getDefaultConstraintMessageTemplate();
-        if (!isValid && isEmpty(messageTemplate)) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(getErrorMessage(getDefaultErrorMessageBundle(), getEsapiErrorMessageKey(esapiType)))
-                    .addConstraintViolation();
-        }
-        return isValid;
-    }
+	@Override
+	public boolean isValid(final String value, final ConstraintValidatorContext context) {
+		boolean isValid = false;
+		String esapiType = type.typeKey;
+		try {
+			isValid = validator.isValidInput(esapiType, value, esapiType, Integer.MAX_VALUE, true);
+		} catch (IntrusionException e) {
+			// TODO: JM: Revisit how to get param name
+			logger.warn("Potential attack attempt detected while validating input", e);
+		}
+		String messageTemplate = context.getDefaultConstraintMessageTemplate();
+		if (!isValid && isEmpty(messageTemplate)) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(getErrorMessage(getDefaultErrorMessageBundle(), getEsapiErrorMessageKey(esapiType)))
+				.addConstraintViolation();
+		}
+		return isValid;
+	}
 
-    @Override
-    public boolean supports(@NonNull Class<?> clazz) {
-        return String.class.equals(clazz);
-    }
+	@Override
+	public boolean supports(@NonNull Class<?> clazz) {
+		return String.class.equals(clazz);
+	}
 
-    @Override
-    public void validate(@NonNull Object value, @NonNull Errors errors) {
-        String esapiType = type.typeKey;
-        if (!validator.isValidInput(esapiType, (String) value, esapiType, Integer.MAX_VALUE, true)) {
-            errors.reject(getEsapiErrorMessageKey(esapiType));
-        }
-    }
+	@Override
+	public void validate(@NonNull Object value, @NonNull Errors errors) {
+		String esapiType = type.typeKey;
+		if (!validator.isValidInput(esapiType, (String) value, esapiType, Integer.MAX_VALUE, true)) {
+			errors.reject(getEsapiErrorMessageKey(esapiType));
+		}
+	}
 }

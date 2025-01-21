@@ -17,51 +17,52 @@
 package org.craftercms.commons.jackson.mvc.sup;
 
 /**
+ *
  */
 public class Address {
 
-    private String street;
-    private String state;
-    private String city;
-    private String country;
+	private String street;
+	private String state;
+	private String city;
+	private String country;
 
-    public Address() {
-        street = "1800 Alexander Bell Drive";
-        state = "Virginia";
-        city = "Reston";
-        country = "USA";
+	public Address() {
+		street = "1800 Alexander Bell Drive";
+		state = "Virginia";
+		city = "Reston";
+		country = "USA";
 
-    }
+	}
 
-    public String getStreet() {
-        return street;
-    }
+	public String getStreet() {
+		return street;
+	}
 
-    public void setStreet(final String street) {
-        this.street = street;
-    }
+	public void setStreet(final String street) {
+		this.street = street;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public String getState() {
+		return state;
+	}
 
-    public void setState(final String state) {
-        this.state = state;
-    }
+	public void setState(final String state) {
+		this.state = state;
+	}
 
-    public String getCity() {
-        return city;
-    }
+	public String getCity() {
+		return city;
+	}
 
-    public void setCity(final String city) {
-        this.city = city;
-    }
+	public void setCity(final String city) {
+		this.city = city;
+	}
 
-    public String getCountry() {
-        return country;
-    }
+	public String getCountry() {
+		return country;
+	}
 
-    public void setCountry(final String country) {
-        this.country = country;
-    }
+	public void setCountry(final String country) {
+		this.country = country;
+	}
 }

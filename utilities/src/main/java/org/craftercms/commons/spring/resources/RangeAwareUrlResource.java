@@ -31,47 +31,47 @@ import static org.craftercms.commons.lang.UrlUtils.*;
  */
 public class RangeAwareUrlResource extends UrlResource implements RangeAwareResource {
 
-    public RangeAwareUrlResource(URI uri) throws MalformedURLException {
-        super(uri);
-    }
+	public RangeAwareUrlResource(URI uri) throws MalformedURLException {
+		super(uri);
+	}
 
-    public RangeAwareUrlResource(URL url) {
-        super(url);
-    }
+	public RangeAwareUrlResource(URL url) {
+		super(url);
+	}
 
-    public RangeAwareUrlResource(String path) throws MalformedURLException {
-        super(path);
-    }
+	public RangeAwareUrlResource(String path) throws MalformedURLException {
+		super(path);
+	}
 
-    public RangeAwareUrlResource(String protocol, String location) throws MalformedURLException {
-        super(protocol, location);
-    }
+	public RangeAwareUrlResource(String protocol, String location) throws MalformedURLException {
+		super(protocol, location);
+	}
 
-    public RangeAwareUrlResource(String protocol, String location, String fragment) throws MalformedURLException {
-        super(protocol, location, fragment);
-    }
+	public RangeAwareUrlResource(String protocol, String location, String fragment) throws MalformedURLException {
+		super(protocol, location, fragment);
+	}
 
-    @Override
-    public InputStream getInputStream(long start, long end) throws IOException {
-        URLConnection conn = getURL().openConnection();
-        conn.setDefaultUseCaches(false);
+	@Override
+	public InputStream getInputStream(long start, long end) throws IOException {
+		URLConnection conn = getURL().openConnection();
+		conn.setDefaultUseCaches(false);
 
-        if (end > 0) {
-            conn.setRequestProperty(RANGE_HEADER_NAME, String.format(RANGE_HEADER_FORMAT, Long.toString(start),
-                                                                     Long.toString(end)));
-        } else {
-            conn.setRequestProperty(RANGE_HEADER_NAME, String.format(RANGE_NO_END_HEADER_FORMAT, Long.toString(start)));
-        }
+		if (end > 0) {
+			conn.setRequestProperty(RANGE_HEADER_NAME, String.format(RANGE_HEADER_FORMAT, Long.toString(start),
+				Long.toString(end)));
+		} else {
+			conn.setRequestProperty(RANGE_HEADER_NAME, String.format(RANGE_NO_END_HEADER_FORMAT, Long.toString(start)));
+		}
 
-        try {
-            return conn.getInputStream();
-        } catch (IOException ex) {
-            // Close the HTTP connection (if applicable).
-            if (conn instanceof HttpURLConnection) {
-                ((HttpURLConnection) conn).disconnect();
-            }
-            throw ex;
-        }
-    }
+		try {
+			return conn.getInputStream();
+		} catch (IOException ex) {
+			// Close the HTTP connection (if applicable).
+			if (conn instanceof HttpURLConnection) {
+				((HttpURLConnection) conn).disconnect();
+			}
+			throw ex;
+		}
+	}
 
 }

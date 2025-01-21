@@ -35,57 +35,57 @@ import org.springframework.web.client.RestClientException;
  */
 public class HttpMessageConvertingResponseErrorHandler implements ResponseErrorHandler {
 
-    protected List<HttpMessageConverter<?>> messageConverters;
-    protected Class<?> responseType;
+	protected List<HttpMessageConverter<?>> messageConverters;
+	protected Class<?> responseType;
 
-    public HttpMessageConvertingResponseErrorHandler(Class<?> responseType) {
-        this.responseType = responseType;
-    }
+	public HttpMessageConvertingResponseErrorHandler(Class<?> responseType) {
+		this.responseType = responseType;
+	}
 
-    public List<HttpMessageConverter<?>> getMessageConverters() {
-        return messageConverters;
-    }
+	public List<HttpMessageConverter<?>> getMessageConverters() {
+		return messageConverters;
+	}
 
-    public void setMessageConverters(List<HttpMessageConverter<?>> messageConverters) {
-        this.messageConverters = messageConverters;
-    }
+	public void setMessageConverters(List<HttpMessageConverter<?>> messageConverters) {
+		this.messageConverters = messageConverters;
+	}
 
-    public Class<?> getResponseType() {
-        return responseType;
-    }
+	public Class<?> getResponseType() {
+		return responseType;
+	}
 
-    public void setResponseType(Class<?> responseType) {
-        this.responseType = responseType;
-    }
+	public void setResponseType(Class<?> responseType) {
+		this.responseType = responseType;
+	}
 
-    @Override
-    public boolean hasError(ClientHttpResponse response) throws IOException {
-        return hasError(response.getStatusCode());
-    }
+	@Override
+	public boolean hasError(ClientHttpResponse response) throws IOException {
+		return hasError(response.getStatusCode());
+	}
 
-    @Override
-    public void handleError(ClientHttpResponse response) throws IOException {
-        HttpStatusCode status = response.getStatusCode();
-        HttpMessageConverterExtractor<?> responseExtractor = new HttpMessageConverterExtractor<>(responseType,
-            messageConverters);
+	@Override
+	public void handleError(ClientHttpResponse response) throws IOException {
+		HttpStatusCode status = response.getStatusCode();
+		HttpMessageConverterExtractor<?> responseExtractor = new HttpMessageConverterExtractor<>(responseType,
+			messageConverters);
 
-        Object errorDetails;
-        try {
-            errorDetails = responseExtractor.extractData(response);
-        } catch (RestClientException e) {
-            // No message converter to extract the response, so make the error details
-            // the response body as string
-            throw new RestServiceException(status, getResponseBodyAsString(response));
-        }
+		Object errorDetails;
+		try {
+			errorDetails = responseExtractor.extractData(response);
+		} catch (RestClientException e) {
+			// No message converter to extract the response, so make the error details
+			// the response body as string
+			throw new RestServiceException(status, getResponseBodyAsString(response));
+		}
 
-        throw new RestServiceException(status, errorDetails);
-    }
+		throw new RestServiceException(status, errorDetails);
+	}
 
-    protected boolean hasError(HttpStatusCode statusCode) {
-        return (statusCode.is4xxClientError() || statusCode.is5xxServerError());
-    }
+	protected boolean hasError(HttpStatusCode statusCode) {
+		return (statusCode.is4xxClientError() || statusCode.is5xxServerError());
+	}
 
-    protected String getResponseBodyAsString(ClientHttpResponse response) throws IOException {
-        return IOUtils.toString(response.getBody(), response.getHeaders().getContentType().getCharset());
-    }
+	protected String getResponseBodyAsString(ClientHttpResponse response) throws IOException {
+		return IOUtils.toString(response.getBody(), response.getHeaders().getContentType().getCharset());
+	}
 }

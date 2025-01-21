@@ -24,14 +24,13 @@ import org.craftercms.commons.config.ConfigurationException;
  */
 public interface ConfigurationProfileLoader<T extends ConfigurationProfile> {
 
-    /**
-     * Loads the {@link ConfigurationProfile} that corresponds to the given ID.
-     *
-     * @param id the profile ID
-     * @return the configuration profile
-     *
-     * @throws ConfigurationException if an error occurs while trying to load the profile
-     */
-    T loadProfile(String id) throws ConfigurationException;
+	/**
+	 * Loads the {@link ConfigurationProfile} that corresponds to the given ID.
+	 *
+	 * @param id the profile ID
+	 * @return the configuration profile
+	 * @throws ConfigurationException if an error occurs while trying to load the profile
+	 */
+	T loadProfile(String id) throws ConfigurationException;
 
 }

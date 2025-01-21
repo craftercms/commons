@@ -40,74 +40,74 @@ import java.util.Map;
 @Order(-1)
 public class HasPermissionAnnotationHandler extends AbstractPermissionAnnotationHandler {
 
-    private static final String TOKEN_PARAMETER = "token";
+	private static final String TOKEN_PARAMETER = "token";
 
-    private static final I10nLogger logger = new I10nLogger(HasPermissionAnnotationHandler.class,
-                                                            "crafter.security.messages.logging");
+	private static final I10nLogger logger = new I10nLogger(HasPermissionAnnotationHandler.class,
+		"crafter.security.messages.logging");
 
-    private static final String LOG_KEY_METHOD_INT = "security.permission.methodIntercepted";
-    private static final String LOG_KEY_METHOD_INT_NO_SEC_OBJ = "security.permission.methodInterceptedNoSecObject";
+	private static final String LOG_KEY_METHOD_INT = "security.permission.methodIntercepted";
+	private static final String LOG_KEY_METHOD_INT_NO_SEC_OBJ = "security.permission.methodInterceptedNoSecObject";
 
-    /**
-     * Management token to be validated in case a {@link HasPermission} annotation
-     * has been configured to accept a management token.
-     */
-    protected final String managementToken;
+	/**
+	 * Management token to be validated in case a {@link HasPermission} annotation
+	 * has been configured to accept a management token.
+	 */
+	protected final String managementToken;
 
-    @ConstructorProperties({"permissionEvaluators", "managementToken"})
-    public HasPermissionAnnotationHandler(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators, String managementToken) {
-        super(permissionEvaluators);
-        this.managementToken = managementToken;
-    }
+	@ConstructorProperties({"permissionEvaluators", "managementToken"})
+	public HasPermissionAnnotationHandler(Map<Class<?>, PermissionEvaluator<?, ?>> permissionEvaluators, String managementToken) {
+		super(permissionEvaluators);
+		this.managementToken = managementToken;
+	}
 
-    @SuppressWarnings("unchecked") //cortiz, OK permissionEvaluator.isAllowed
-    @Around("@within(org.craftercms.commons.security.permissions.annotations.HasPermission) || " +
-            "@annotation(org.craftercms.commons.security.permissions.annotations.HasPermission)")
-    public Object checkPermissions(ProceedingJoinPoint pjp) throws Throwable {
-        Method method = AopUtils.getActualMethod(pjp);
-        HasPermission hasPermission = getHasPermissionAnnotation(method, pjp, HasPermission.class);
-        Object securedResource = getAnnotatedProtectedResource(method, pjp.getArgs());
-        if (securedResource == null) {
-            securedResource = getAnnotatedProtectedResourceIds(method, pjp.getArgs());
-        }
+	@SuppressWarnings("unchecked") //cortiz, OK permissionEvaluator.isAllowed
+	@Around("@within(org.craftercms.commons.security.permissions.annotations.HasPermission) || " +
+		"@annotation(org.craftercms.commons.security.permissions.annotations.HasPermission)")
+	public Object checkPermissions(ProceedingJoinPoint pjp) throws Throwable {
+		Method method = AopUtils.getActualMethod(pjp);
+		HasPermission hasPermission = getHasPermissionAnnotation(method, pjp, HasPermission.class);
+		Object securedResource = getAnnotatedProtectedResource(method, pjp.getArgs());
+		if (securedResource == null) {
+			securedResource = getAnnotatedProtectedResourceIds(method, pjp.getArgs());
+		}
 
-        if (securedResource != null) {
-            logger.debug(LOG_KEY_METHOD_INT, method, hasPermission, securedResource);
-        } else {
-            logger.debug(LOG_KEY_METHOD_INT_NO_SEC_OBJ, method, hasPermission);
-        }
+		if (securedResource != null) {
+			logger.debug(LOG_KEY_METHOD_INT, method, hasPermission, securedResource);
+		} else {
+			logger.debug(LOG_KEY_METHOD_INT_NO_SEC_OBJ, method, hasPermission);
+		}
 
-        if (checkManagementToken(hasPermission)) {
-            return pjp.proceed();
-        }
-        if (checkPermissions(method, hasPermission, securedResource)) {
-            return pjp.proceed();
-        } else if (securedResource != null) {
-            throw new ActionDeniedException(hasPermission.action(), securedResource);
-        } else {
-            throw new ActionDeniedException(hasPermission.action());
-        }
-    }
+		if (checkManagementToken(hasPermission)) {
+			return pjp.proceed();
+		}
+		if (checkPermissions(method, hasPermission, securedResource)) {
+			return pjp.proceed();
+		} else if (securedResource != null) {
+			throw new ActionDeniedException(hasPermission.action(), securedResource);
+		} else {
+			throw new ActionDeniedException(hasPermission.action());
+		}
+	}
 
-    /**
-     * Checks if there is a valid management token param in the request.
-     * This token must match the configured management token for this handler.
-     *
-     * @param hasPermission the {@link HasPermission} annotation
-     * @return true if and only if a valid management token is present in the request AND the {@link HasPermission}
-     * annotation has been configured to accept the token
-     */
-    protected boolean checkManagementToken(final HasPermission hasPermission) {
-        if (!hasPermission.acceptManagementToken() || StringUtils.isEmpty(managementToken)) {
-            return false;
-        }
-        RequestContext requestContext = RequestContext.getCurrent();
-        if (requestContext == null || requestContext.getRequest() == null) {
-            return false;
-        }
-        String token = requestContext.getRequest().getParameter(TOKEN_PARAMETER);
+	/**
+	 * Checks if there is a valid management token param in the request.
+	 * This token must match the configured management token for this handler.
+	 *
+	 * @param hasPermission the {@link HasPermission} annotation
+	 * @return true if and only if a valid management token is present in the request AND the {@link HasPermission}
+	 * annotation has been configured to accept the token
+	 */
+	protected boolean checkManagementToken(final HasPermission hasPermission) {
+		if (!hasPermission.acceptManagementToken() || StringUtils.isEmpty(managementToken)) {
+			return false;
+		}
+		RequestContext requestContext = RequestContext.getCurrent();
+		if (requestContext == null || requestContext.getRequest() == null) {
+			return false;
+		}
+		String token = requestContext.getRequest().getParameter(TOKEN_PARAMETER);
 
-        return StringUtils.equals(token, managementToken);
-    }
+		return StringUtils.equals(token, managementToken);
+	}
 
 }

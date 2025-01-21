@@ -28,128 +28,128 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Installation {
 
-    /**
-     * The type of the widget to install
-     */
-    protected String type;
+	/**
+	 * The type of the widget to install
+	 */
+	protected String type;
 
-    /**
-     * XPath selector for the parent node
-     */
-    protected String parentXpath = "null";
+	/**
+	 * XPath selector for the parent node
+	 */
+	protected String parentXpath = "null";
 
-    /**
-     * XPath selector to check if the wiring has already been done
-     */
-    protected String elementXpath;
+	/**
+	 * XPath selector to check if the wiring has already been done
+	 */
+	protected String elementXpath;
 
-    /**
-     * The new element to add in the configuration file
-     */
-    protected Element element;
+	/**
+	 * The new element to add in the configuration file
+	 */
+	protected Element element;
 
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public String getParentXpath() {
-        return parentXpath;
-    }
+	public String getParentXpath() {
+		return parentXpath;
+	}
 
-    public void setParentXpath(String parentXpath) {
-        this.parentXpath = parentXpath;
-    }
+	public void setParentXpath(String parentXpath) {
+		this.parentXpath = parentXpath;
+	}
 
-    public String getElementXpath() {
-        return elementXpath;
-    }
+	public String getElementXpath() {
+		return elementXpath;
+	}
 
-    public void setElementXpath(String elementXpath) {
-        this.elementXpath = elementXpath;
-    }
+	public void setElementXpath(String elementXpath) {
+		this.elementXpath = elementXpath;
+	}
 
-    public Element getElement() {
-        return element;
-    }
+	public Element getElement() {
+		return element;
+	}
 
-    public void setElement(Element element) {
-        this.element = element;
-    }
+	public void setElement(Element element) {
+		this.element = element;
+	}
 
-    /**
-     * Represents an XML element
-     */
-    public static class Element {
+	/**
+	 * Represents an XML element
+	 */
+	public static class Element {
 
-        protected String name;
+		protected String name;
 
-        protected String value;
+		protected String value;
 
-        protected List<Attribute> attributes;
+		protected List<Attribute> attributes;
 
-        protected List<Element> children;
+		protected List<Element> children;
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
+		public void setName(String name) {
+			this.name = name;
+		}
 
-        public String getValue() {
-            return value;
-        }
+		public String getValue() {
+			return value;
+		}
 
-        public void setValue(String value) {
-            this.value = value;
-        }
+		public void setValue(String value) {
+			this.value = value;
+		}
 
-        public List<Attribute> getAttributes() {
-            return attributes;
-        }
+		public List<Attribute> getAttributes() {
+			return attributes;
+		}
 
-        public void setAttributes(List<Attribute> attributes) {
-            this.attributes = attributes;
-        }
+		public void setAttributes(List<Attribute> attributes) {
+			this.attributes = attributes;
+		}
 
-        public List<Element> getChildren() {
-            return children;
-        }
+		public List<Element> getChildren() {
+			return children;
+		}
 
-        public void setChildren(List<Element> children) {
-            this.children = children;
-        }
-    }
+		public void setChildren(List<Element> children) {
+			this.children = children;
+		}
+	}
 
-    /**
-     * Represents an XML attribute
-     */
-    public static class Attribute {
+	/**
+	 * Represents an XML attribute
+	 */
+	public static class Attribute {
 
-        protected String name;
+		protected String name;
 
-        protected String value;
+		protected String value;
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
+		public void setName(String name) {
+			this.name = name;
+		}
 
-        public String getValue() {
-            return value;
-        }
+		public String getValue() {
+			return value;
+		}
 
-        public void setValue(String value) {
-            this.value = value;
-        }
-    }
+		public void setValue(String value) {
+			this.value = value;
+		}
+	}
 
 }

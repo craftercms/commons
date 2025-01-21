@@ -24,80 +24,80 @@ import static org.craftercms.commons.validation.annotations.param.EsapiValidatio
 
 public class ConfigurationPathValidatorTest implements ValidatorTest {
 
-    private Validator validator;
+	private Validator validator;
 
-    @Before
-    public void setUp() {
-        validator = new EsapiValidator(CONFIGURATION_PATH);
-    }
+	@Before
+	public void setUp() {
+		validator = new EsapiValidator(CONFIGURATION_PATH);
+	}
 
-    @Test
-    public void testSpaceFolderName() {
-        assertValid("site/website/folder 1/index.xml");
-    }
+	@Test
+	public void testSpaceFolderName() {
+		assertValid("site/website/folder 1/index.xml");
+	}
 
-    @Test
-    public void testSpaceNoSlash() {
-        assertValid("johnny mne.mo nic");
-    }
+	@Test
+	public void testSpaceNoSlash() {
+		assertValid("johnny mne.mo nic");
+	}
 
-    @Test
-    public void testSpaceFileName() {
-        assertValid("site/website/folder1/in dex.xml");
-    }
+	@Test
+	public void testSpaceFileName() {
+		assertValid("site/website/folder1/in dex.xml");
+	}
 
-    @Test
-    public void testStartWithDigit() {
-        assertValid("1st_folder/path/");
-    }
+	@Test
+	public void testStartWithDigit() {
+		assertValid("1st_folder/path/");
+	}
 
-    @Test
-    public void testGroovy() {
-        assertValid("/config/studio/content-types/taxonomy/controller.groovy");
-    }
+	@Test
+	public void testGroovy() {
+		assertValid("/config/studio/content-types/taxonomy/controller.groovy");
+	}
 
-    @Test
-    public void testStartWithDigit2() {
-        assertValid("7s1t3s/and/more");
-    }
+	@Test
+	public void testStartWithDigit2() {
+		assertValid("7s1t3s/and/more");
+	}
 
-    @Test
-    public void testSpecialCharsTags() {
-        assertRejected("<malicious>");
-    }
+	@Test
+	public void testSpecialCharsTags() {
+		assertRejected("<malicious>");
+	}
 
-    @Test
-    public void testSpecialChars() {
-        assertRejected("invalid;");
-    }
+	@Test
+	public void testSpecialChars() {
+		assertRejected("invalid;");
+	}
 
-    @Test
-    public void testUnderscore() {
-        assertValid("/site/website/_articles/folder_1");
-    }
+	@Test
+	public void testUnderscore() {
+		assertValid("/site/website/_articles/folder_1");
+	}
 
-    @Test
-    public void testDot() {
-        assertValid("/site/components/path.to.content");
-    }
+	@Test
+	public void testDot() {
+		assertValid("/site/components/path.to.content");
+	}
 
-    @Test
-    public void testXml() {
-        assertValid("/config/studio/validations/somefile.xml");
-    }
+	@Test
+	public void testXml() {
+		assertValid("/config/studio/validations/somefile.xml");
+	}
 
-    @Test
-    public void testMultiSlash() {
-        assertValid("/site//components/path//to/content/index.xml");
-    }
+	@Test
+	public void testMultiSlash() {
+		assertValid("/site//components/path//to/content/index.xml");
+	}
 
-    @Test
-    public void testMixedCase() {
-        assertValid("/site/website/DOCS/to/content/index.xml");
-    }
+	@Test
+	public void testMixedCase() {
+		assertValid("/site/website/DOCS/to/content/index.xml");
+	}
 
-    @Override
-    public Validator getValidator() {
-        return validator;
-    }
+	@Override
+	public Validator getValidator() {
+		return validator;
+	}
 }

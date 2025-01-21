@@ -18,13 +18,14 @@ package org.craftercms.commons.validation.validators.impl;
 import org.craftercms.commons.validation.annotations.param.ValidateNoTagsParam;
 
 import jakarta.validation.ConstraintValidator;
+
 import java.util.List;
 
 public class NoTagsValidator extends AbstractStringValidator implements ConstraintValidator<ValidateNoTagsParam, String> {
-    public static final String[] DEFAULT_BLACKLISTED_REGEXES = {"<[^>]*>", "&lt;((?!&gt;).)*&gt;"};
+	public static final String[] DEFAULT_BLACKLISTED_REGEXES = {"<[^>]*>", "&lt;((?!&gt;).)*&gt;"};
 
-    public NoTagsValidator() {
-        this.blacklistRegexes = List.of(DEFAULT_BLACKLISTED_REGEXES);
-        matchFullInput = false;
-    }
+	public NoTagsValidator() {
+		this.blacklistRegexes = List.of(DEFAULT_BLACKLISTED_REGEXES);
+		matchFullInput = false;
+	}
 }

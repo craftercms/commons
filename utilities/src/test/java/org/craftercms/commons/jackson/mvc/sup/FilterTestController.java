@@ -26,19 +26,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class FilterTestController {
 
-    public static final String SELECTOR = "/alias";
-    public static final String ALIAS_NESTED_SELECTOR = "/aliasSelector";
+	public static final String SELECTOR = "/alias";
+	public static final String ALIAS_NESTED_SELECTOR = "/aliasSelector";
 
-    @RequestMapping(SELECTOR)
-    @ResponseBody
-    public Person aliasSelector() {
-        return new Person();
-    }
+	@RequestMapping(SELECTOR)
+	@ResponseBody
+	public Person aliasSelector() {
+		return new Person();
+	}
 
 
-    @RequestMapping(ALIAS_NESTED_SELECTOR)
-    @ResponseBody
-    public User alias() {
-        return new User();
-    }
+	@RequestMapping(ALIAS_NESTED_SELECTOR)
+	@ResponseBody
+	public User alias() {
+		return new User();
+	}
 }

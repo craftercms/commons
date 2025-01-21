@@ -25,26 +25,26 @@ import java.util.List;
  */
 public class ProtectedResourceBase<P extends Permission> {
 
-    protected List<P> permissions;
+	protected List<P> permissions;
 
-    public List<P> getPermissions() {
-        if (permissions == null) {
-            permissions = new ArrayList<>();
-        }
+	public List<P> getPermissions() {
+		if (permissions == null) {
+			permissions = new ArrayList<>();
+		}
 
-        return permissions;
-    }
+		return permissions;
+	}
 
-    public void setPermissions(List<P> permissions) {
-        this.permissions = permissions;
-    }
+	public void setPermissions(List<P> permissions) {
+		this.permissions = permissions;
+	}
 
-    public void addPermission(P permission) {
-        getPermissions().add(permission);
-    }
+	public void addPermission(P permission) {
+		getPermissions().add(permission);
+	}
 
-    public void removePermission(P permission) {
-        getPermissions().remove(permission);
-    }
+	public void removePermission(P permission) {
+		getPermissions().remove(permission);
+	}
 
 }

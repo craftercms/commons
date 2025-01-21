@@ -28,19 +28,19 @@ import org.craftercms.commons.upgrade.impl.UpgradeContext;
  */
 public interface UpgradePipeline<T> {
 
-    /**
-     * Executes each {@link UpgradeOperation} for the given target
-     *
-     * @param context the upgrade context
-     * @throws UpgradeException if any of the {@link UpgradeOperation}s fails
-     */
-    void execute(UpgradeContext<T> context) throws UpgradeException;
+	/**
+	 * Executes each {@link UpgradeOperation} for the given target
+	 *
+	 * @param context the upgrade context
+	 * @throws UpgradeException if any of the {@link UpgradeOperation}s fails
+	 */
+	void execute(UpgradeContext<T> context) throws UpgradeException;
 
-    /**
-     * Indicates if the pipeline doesn't contain any operations
-     *
-     * @return true if there are no operations
-     */
-    boolean isEmpty();
+	/**
+	 * Indicates if the pipeline doesn't contain any operations
+	 *
+	 * @return true if there are no operations
+	 */
+	boolean isEmpty();
 
 }

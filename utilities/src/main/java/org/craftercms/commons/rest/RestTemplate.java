@@ -34,34 +34,34 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class RestTemplate extends org.springframework.web.client.RestTemplate implements InitializingBean {
 
-    protected Class<?> errorResponseType;
+	protected Class<?> errorResponseType;
 
-    public RestTemplate(Class<?> errorResponseType) {
-        super(new HttpComponentsClientHttpRequestFactory());
+	public RestTemplate(Class<?> errorResponseType) {
+		super(new HttpComponentsClientHttpRequestFactory());
 
-        this.errorResponseType = errorResponseType;
-        setErrorHandler(new HttpMessageConvertingResponseErrorHandler(errorResponseType));
-    }
+		this.errorResponseType = errorResponseType;
+		setErrorHandler(new HttpMessageConvertingResponseErrorHandler(errorResponseType));
+	}
 
-    public RestTemplate(List<HttpMessageConverter<?>> messageConverters) {
-        super(new HttpComponentsClientHttpRequestFactory());
+	public RestTemplate(List<HttpMessageConverter<?>> messageConverters) {
+		super(new HttpComponentsClientHttpRequestFactory());
 
-        setMessageConverters(messageConverters);
-        setErrorHandler(new HttpMessageConvertingResponseErrorHandler(errorResponseType));
-    }
+		setMessageConverters(messageConverters);
+		setErrorHandler(new HttpMessageConvertingResponseErrorHandler(errorResponseType));
+	}
 
-    public void afterPropertiesSet() {
-        if (getErrorHandler() instanceof HttpMessageConvertingResponseErrorHandler) {
-            HttpMessageConvertingResponseErrorHandler errorHandler = (HttpMessageConvertingResponseErrorHandler)
-                getErrorHandler();
+	public void afterPropertiesSet() {
+		if (getErrorHandler() instanceof HttpMessageConvertingResponseErrorHandler) {
+			HttpMessageConvertingResponseErrorHandler errorHandler = (HttpMessageConvertingResponseErrorHandler)
+				getErrorHandler();
 
-            if (errorHandler.getMessageConverters() == null) {
-                errorHandler.setMessageConverters(getMessageConverters());
-            }
-            if (errorHandler.getResponseType() == null) {
-                errorHandler.setResponseType(errorResponseType);
-            }
-        }
-    }
+			if (errorHandler.getMessageConverters() == null) {
+				errorHandler.setMessageConverters(getMessageConverters());
+			}
+			if (errorHandler.getResponseType() == null) {
+				errorHandler.setResponseType(errorResponseType);
+			}
+		}
+	}
 
 }

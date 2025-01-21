@@ -30,51 +30,51 @@ import org.craftercms.commons.security.permissions.SubjectResolver;
  */
 public class PermissionEvaluatorImpl<S, R> implements PermissionEvaluator<S, R> {
 
-    private static final I10nLogger logger = new I10nLogger(PermissionEvaluatorImpl.class, "crafter.security.messages.logging");
+	private static final I10nLogger logger = new I10nLogger(PermissionEvaluatorImpl.class, "crafter.security.messages.logging");
 
-    private static final String LOG_KEY_RESOLVING_GLOBAL_PERM = "security.permission.resolvingGlobalPermission";
-    private static final String LOG_KEY_RESOLVING_PERM = "security.permission.resolvingPermission";
-    private static final String LOG_KEY_EVALUATING_PERM = "security.permission.evaluatingPermission";
+	private static final String LOG_KEY_RESOLVING_GLOBAL_PERM = "security.permission.resolvingGlobalPermission";
+	private static final String LOG_KEY_RESOLVING_PERM = "security.permission.resolvingPermission";
+	private static final String LOG_KEY_EVALUATING_PERM = "security.permission.evaluatingPermission";
 
-    protected SubjectResolver<S> subjectResolver;
-    protected PermissionResolver<S, R> permissionResolver;
+	protected SubjectResolver<S> subjectResolver;
+	protected PermissionResolver<S, R> permissionResolver;
 
-    public PermissionEvaluatorImpl(SubjectResolver<S> subjectResolver, PermissionResolver<S, R> permissionResolver) {
-        this.subjectResolver = subjectResolver;
-        this.permissionResolver = permissionResolver;
-    }
+	public PermissionEvaluatorImpl(SubjectResolver<S> subjectResolver, PermissionResolver<S, R> permissionResolver) {
+		this.subjectResolver = subjectResolver;
+		this.permissionResolver = permissionResolver;
+	}
 
-    @Override
-    public boolean isAllowed(R resource, String action) throws PermissionException {
-        S subject = subjectResolver.getCurrentSubject();
-        if (subject == null) {
-            throw new SubjectNotFoundException();
-        }
+	@Override
+	public boolean isAllowed(R resource, String action) throws PermissionException {
+		S subject = subjectResolver.getCurrentSubject();
+		if (subject == null) {
+			throw new SubjectNotFoundException();
+		}
 
-        return isAllowed(subject, resource, action);
-    }
+		return isAllowed(subject, resource, action);
+	}
 
-    @Override
-    public boolean isAllowed(S subject, R resource, String action) throws PermissionException {
-        Permission permission;
+	@Override
+	public boolean isAllowed(S subject, R resource, String action) throws PermissionException {
+		Permission permission;
 
-        if (resource == null) {
-            logger.debug(LOG_KEY_RESOLVING_GLOBAL_PERM, subject);
+		if (resource == null) {
+			logger.debug(LOG_KEY_RESOLVING_GLOBAL_PERM, subject);
 
-            permission = permissionResolver.getGlobalPermission(subject);
-        } else {
-            logger.debug(LOG_KEY_RESOLVING_PERM, subject, resource);
+			permission = permissionResolver.getGlobalPermission(subject);
+		} else {
+			logger.debug(LOG_KEY_RESOLVING_PERM, subject, resource);
 
-            permission = permissionResolver.getPermission(subject, resource);
-        }
+			permission = permissionResolver.getPermission(subject, resource);
+		}
 
-        if (permission != null) {
-            logger.debug(LOG_KEY_EVALUATING_PERM, action, subject, resource, permission);
+		if (permission != null) {
+			logger.debug(LOG_KEY_EVALUATING_PERM, action, subject, resource, permission);
 
-            return permission.isAllowed(action);
-        } else {
-            return false;
-        }
-    }
+			return permission.isAllowed(action);
+		} else {
+			return false;
+		}
+	}
 
 }

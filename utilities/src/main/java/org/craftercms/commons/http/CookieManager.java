@@ -29,84 +29,84 @@ import org.craftercms.commons.i10n.I10nUtils;
  */
 public class CookieManager {
 
-    private static final I10nLogger logger = new I10nLogger(CookieManager.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
+	private static final I10nLogger logger = new I10nLogger(CookieManager.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
-    public static final String LOG_KEY_ADDED_COOKIE =   "http.cookie.addedCookie";
-    public static final String LOG_KEY_DELETED_COOKIE = "http.cookie.deletedCookie";
+	public static final String LOG_KEY_ADDED_COOKIE = "http.cookie.addedCookie";
+	public static final String LOG_KEY_DELETED_COOKIE = "http.cookie.deletedCookie";
 
-    private String domain;
-    private String path;
-    private Integer maxAge;
-    private boolean httpOnly;
-    private boolean secure;
+	private String domain;
+	private String path;
+	private Integer maxAge;
+	private boolean httpOnly;
+	private boolean secure;
 
 
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
 
-    public void setPath(String path) {
-        this.path = path;
-    }
+	public void setPath(String path) {
+		this.path = path;
+	}
 
-    public void setMaxAge(Integer maxAge) {
-        this.maxAge = maxAge;
-    }
+	public void setMaxAge(Integer maxAge) {
+		this.maxAge = maxAge;
+	}
 
-    public void setHttpOnly(final boolean httpOnly) {
-        this.httpOnly = httpOnly;
-    }
+	public void setHttpOnly(final boolean httpOnly) {
+		this.httpOnly = httpOnly;
+	}
 
-    public void setSecure(final boolean secure) {
-        this.secure = secure;
-    }
+	public void setSecure(final boolean secure) {
+		this.secure = secure;
+	}
 
-    /**
-     * Add a new cookie, using the configured domain, path and max age, to the response.
-     *
-     * @param name  the name of the cookie
-     * @param value the value of the cookie
-     */
-    public void addCookie(String name, String value, HttpServletResponse response) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setHttpOnly(httpOnly);
-        cookie.setSecure(secure);
-        if (StringUtils.isNotEmpty(domain)) {
-            cookie.setDomain(domain);
-        }
-        if (StringUtils.isNotEmpty(path)) {
-            cookie.setPath(path);
-        }
-        if (maxAge != null) {
-            cookie.setMaxAge(maxAge);
-        }
+	/**
+	 * Add a new cookie, using the configured domain, path and max age, to the response.
+	 *
+	 * @param name  the name of the cookie
+	 * @param value the value of the cookie
+	 */
+	public void addCookie(String name, String value, HttpServletResponse response) {
+		Cookie cookie = new Cookie(name, value);
+		cookie.setHttpOnly(httpOnly);
+		cookie.setSecure(secure);
+		if (StringUtils.isNotEmpty(domain)) {
+			cookie.setDomain(domain);
+		}
+		if (StringUtils.isNotEmpty(path)) {
+			cookie.setPath(path);
+		}
+		if (maxAge != null) {
+			cookie.setMaxAge(maxAge);
+		}
 
-        response.addCookie(cookie);
+		response.addCookie(cookie);
 
-        logger.debug(LOG_KEY_ADDED_COOKIE, name);
-    }
+		logger.debug(LOG_KEY_ADDED_COOKIE, name);
+	}
 
-    /**
-     * Add a "delete" cookie to the response to indicate the that the stored cookie should be deleted.
-     *
-     * @param name the name of the cookie
-     */
-    public void deleteCookie(String name, HttpServletResponse response) {
-        Cookie cookie = new Cookie(name, null);
-        cookie.setHttpOnly(httpOnly);
-        cookie.setSecure(secure);
-        if (StringUtils.isNotEmpty(domain)) {
-            cookie.setDomain(domain);
-        }
-        if (StringUtils.isNotEmpty(path)) {
-            cookie.setPath(path);
-        }
+	/**
+	 * Add a "delete" cookie to the response to indicate the that the stored cookie should be deleted.
+	 *
+	 * @param name the name of the cookie
+	 */
+	public void deleteCookie(String name, HttpServletResponse response) {
+		Cookie cookie = new Cookie(name, null);
+		cookie.setHttpOnly(httpOnly);
+		cookie.setSecure(secure);
+		if (StringUtils.isNotEmpty(domain)) {
+			cookie.setDomain(domain);
+		}
+		if (StringUtils.isNotEmpty(path)) {
+			cookie.setPath(path);
+		}
 
-        cookie.setMaxAge(0);
+		cookie.setMaxAge(0);
 
-        response.addCookie(cookie);
+		response.addCookie(cookie);
 
-        logger.debug(LOG_KEY_DELETED_COOKIE, name);
-    }
+		logger.debug(LOG_KEY_DELETED_COOKIE, name);
+	}
 
 }

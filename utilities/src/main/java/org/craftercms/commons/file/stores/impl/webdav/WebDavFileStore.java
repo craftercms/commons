@@ -40,18 +40,18 @@ import java.nio.charset.StandardCharsets;
  */
 public class WebDavFileStore extends AbstractProfileAwareRemoteFileStore<WebDavProfile> {
 
-    public WebDavFileStore(ConfigurationProfileLoader<WebDavProfile> profileLoader) {
-        super(profileLoader);
-    }
+	public WebDavFileStore(ConfigurationProfileLoader<WebDavProfile> profileLoader) {
+		super(profileLoader);
+	}
 
-    @Override
-    protected RemoteFile doGetFile(final ProfileAwareRemotePath path, final WebDavProfile profile)
-            throws MalformedURLException {
-        String encodedPath = UriUtils.encodePath(path.getPath(), StandardCharsets.UTF_8);
-        String fullUrl = StringUtils.appendIfMissing(profile.getBaseUrl(), "/") + encodedPath;
-        Resource resource = new WebDavResource(WebDavUtils.createClient(profile), fullUrl);
+	@Override
+	protected RemoteFile doGetFile(final ProfileAwareRemotePath path, final WebDavProfile profile)
+		throws MalformedURLException {
+		String encodedPath = UriUtils.encodePath(path.getPath(), StandardCharsets.UTF_8);
+		String fullUrl = StringUtils.appendIfMissing(profile.getBaseUrl(), "/") + encodedPath;
+		Resource resource = new WebDavResource(WebDavUtils.createClient(profile), fullUrl);
 
-        return new ResourceBasedRemoteFile(path, resource);
-    }
+		return new ResourceBasedRemoteFile(path, resource);
+	}
 
 }

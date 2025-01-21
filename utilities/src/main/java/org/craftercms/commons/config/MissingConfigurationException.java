@@ -23,12 +23,12 @@ package org.craftercms.commons.config;
  */
 public class MissingConfigurationException extends ConfigurationException {
 
-    public MissingConfigurationException(String message) {
-        super(message);
-    }
+	public MissingConfigurationException(String message) {
+		super(message);
+	}
 
-    public MissingConfigurationException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public MissingConfigurationException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

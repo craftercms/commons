@@ -22,24 +22,24 @@ import org.aspectj.lang.reflect.MethodSignature;
 
 public class AopUtils {
 
-    private AopUtils() {
-    }
+	private AopUtils() {
+	}
 
 
-    public static Method getActualMethod(JoinPoint jp) {
-        MethodSignature ms = (MethodSignature)jp.getSignature();
-        Method method = ms.getMethod();
+	public static Method getActualMethod(JoinPoint jp) {
+		MethodSignature ms = (MethodSignature) jp.getSignature();
+		Method method = ms.getMethod();
 
-        if (method.getDeclaringClass().isInterface()) {
-            Class<?> targetClass = jp.getTarget().getClass();
-            try {
-                method = targetClass.getMethod(method.getName(), method.getParameterTypes());
-            } catch (NoSuchMethodException e) {
-                throw new IllegalStateException("Couldn't find implementation of method in target class: " + method.toGenericString(), e);
-            }
-        }
+		if (method.getDeclaringClass().isInterface()) {
+			Class<?> targetClass = jp.getTarget().getClass();
+			try {
+				method = targetClass.getMethod(method.getName(), method.getParameterTypes());
+			} catch (NoSuchMethodException e) {
+				throw new IllegalStateException("Couldn't find implementation of method in target class: " + method.toGenericString(), e);
+			}
+		}
 
-        return method;
-    }
+		return method;
+	}
 
 }

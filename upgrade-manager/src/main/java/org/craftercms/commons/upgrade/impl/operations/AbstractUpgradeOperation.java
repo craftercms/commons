@@ -41,71 +41,71 @@ import org.springframework.core.io.Resource;
  */
 public abstract class AbstractUpgradeOperation<T> implements UpgradeOperation<T>, ApplicationContextAware {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    /**
-     * The current version.
-     */
-    protected String currentVersion;
+	/**
+	 * The current version.
+	 */
+	protected String currentVersion;
 
-    /**
-     * The next version.
-     */
-    protected String nextVersion;
+	/**
+	 * The next version.
+	 */
+	protected String nextVersion;
 
-    /**
-     * Indicates if the operation should be executed, true by default
-     */
-    protected boolean enabled = true;
+	/**
+	 * Indicates if the operation should be executed, true by default
+	 */
+	protected boolean enabled = true;
 
-    /**
-     * The application context
-     */
-    protected ApplicationContext applicationContext;
+	/**
+	 * The application context
+	 */
+	protected ApplicationContext applicationContext;
 
-    @Override
-    public void setApplicationContext(final ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+	@Override
+	public void setApplicationContext(final ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    @Override
-    public void init(final String currentVersion, final String nextVersion, final HierarchicalConfiguration<?> config)
-            throws ConfigurationException {
-        this.currentVersion = currentVersion;
-        this.nextVersion = nextVersion;
+	@Override
+	public void init(final String currentVersion, final String nextVersion, final HierarchicalConfiguration<?> config)
+		throws ConfigurationException {
+		this.currentVersion = currentVersion;
+		this.nextVersion = nextVersion;
 
-        doInit(config);
-    }
+		doInit(config);
+	}
 
-    protected void doInit(final HierarchicalConfiguration<?> config) throws ConfigurationException {
-        // do nothing by default
-    }
+	protected void doInit(final HierarchicalConfiguration<?> config) throws ConfigurationException {
+		// do nothing by default
+	}
 
-    @Override
-    public void execute(final UpgradeContext<T> context) throws UpgradeException {
-        if (!enabled) {
-            logger.info("This operation is disabled, skipping execution");
-            return;
-        }
-        logger.debug("Starting execution for target {}", context);
-        try {
-            doExecute(context);
-        } catch (Exception e) {
-            throw new UpgradeException("Error executing upgrade operation " + getClass(), e);
-        } finally {
-            logger.debug("Execution completed for target {}", context);
-        }
-    }
+	@Override
+	public void execute(final UpgradeContext<T> context) throws UpgradeException {
+		if (!enabled) {
+			logger.info("This operation is disabled, skipping execution");
+			return;
+		}
+		logger.debug("Starting execution for target {}", context);
+		try {
+			doExecute(context);
+		} catch (Exception e) {
+			throw new UpgradeException("Error executing upgrade operation " + getClass(), e);
+		} finally {
+			logger.debug("Execution completed for target {}", context);
+		}
+	}
 
-    protected abstract void doExecute(UpgradeContext<T> context) throws Exception;
+	protected abstract void doExecute(UpgradeContext<T> context) throws Exception;
 
-    protected Resource loadResource(String path) {
-        return applicationContext.getResource(path);
-    }
+	protected Resource loadResource(String path) {
+		return applicationContext.getResource(path);
+	}
 
 }
 

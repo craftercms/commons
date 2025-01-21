@@ -28,26 +28,26 @@ import java.util.List;
  */
 public class ApacheCommonsConfiguration2PropertySource extends EnumerablePropertySource<Configuration> {
 
-    public ApacheCommonsConfiguration2PropertySource(String name, Configuration source) {
-        super(name, source);
-    }
+	public ApacheCommonsConfiguration2PropertySource(String name, Configuration source) {
+		super(name, source);
+	}
 
-    @Override
-    public String[] getPropertyNames() {
-        return IteratorUtils.toArray(source.getKeys(), String.class);
-    }
+	@Override
+	public String[] getPropertyNames() {
+		return IteratorUtils.toArray(source.getKeys(), String.class);
+	}
 
-    @Override
-    public Object getProperty(String name) {
-        Object value = source.getProperty(name);
-        // Call the appropriate getters to resolve ${placeholder}s
-        if (value instanceof String) {
-            return source.getString(name);
-        } else if (value instanceof List) {
-            return source.getList(name);
-        } else {
-            return value;
-        }
-    }
+	@Override
+	public Object getProperty(String name) {
+		Object value = source.getProperty(name);
+		// Call the appropriate getters to resolve ${placeholder}s
+		if (value instanceof String) {
+			return source.getString(name);
+		} else if (value instanceof List) {
+			return source.getList(name);
+		} else {
+			return value;
+		}
+	}
 
 }

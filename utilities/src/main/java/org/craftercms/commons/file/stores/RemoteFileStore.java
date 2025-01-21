@@ -24,14 +24,13 @@ import java.io.IOException;
  */
 public interface RemoteFileStore {
 
-    /**
-     * Resolves the given {@link RemotePath} as a {@link RemoteFile}.
-     *
-     * @param path the path to the file in the remote store
-     *
-     * @return the remote file
-     * @throws IOException if an IO error occurs while trying to resolve the remote file
-     */
-    RemoteFile getFile(RemotePath path) throws IOException;
+	/**
+	 * Resolves the given {@link RemotePath} as a {@link RemoteFile}.
+	 *
+	 * @param path the path to the file in the remote store
+	 * @return the remote file
+	 * @throws IOException if an IO error occurs while trying to resolve the remote file
+	 */
+	RemoteFile getFile(RemotePath path) throws IOException;
 
 }

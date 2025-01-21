@@ -27,45 +27,45 @@ import org.apache.commons.lang3.ArrayUtils;
  * @author avasquez
  */
 public class I10nUtils {
-    
-    public static final String DEFAULT_ERROR_MESSAGE_BUNDLE_NAME = "crafter.commons.messages.errors";
-    public static final String DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME = "crafter.commons.messages.logging";
 
-    private I10nUtils() {
-    }
+	public static final String DEFAULT_ERROR_MESSAGE_BUNDLE_NAME = "crafter.commons.messages.errors";
+	public static final String DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME = "crafter.commons.messages.logging";
 
-    /**
-     * Returns a formatted, localized message according to the specified resource bundle and key.
-     *
-     * @param bundleName    the name of the resource bundle where the message format should be
-     * @param key           the key of the message format
-     * @param args          the args of the message format
-     * @return the formatted, localized message
-     */
-    public static String getLocalizedMessage(String bundleName, String key, Object... args) {
-        return getLocalizedMessage(ResourceBundle.getBundle(bundleName), key, args);
-    }
+	private I10nUtils() {
+	}
 
-    /**
-     * Returns a formatted, localized message according to the specified resource bundle and key.
-     *
-     * @param bundle the resource bundle where the message format should be
-     * @param key    the key of the message format
-     * @param args   the args of the message format
-     * @return the formatted, localized message
-     */
-    public static String getLocalizedMessage(ResourceBundle bundle, String key, Object... args) {
-        String pattern;
-        try {
-            pattern = bundle.getString(key);
-        } catch (MissingResourceException e) {
-            pattern = key;
-        }
+	/**
+	 * Returns a formatted, localized message according to the specified resource bundle and key.
+	 *
+	 * @param bundleName the name of the resource bundle where the message format should be
+	 * @param key        the key of the message format
+	 * @param args       the args of the message format
+	 * @return the formatted, localized message
+	 */
+	public static String getLocalizedMessage(String bundleName, String key, Object... args) {
+		return getLocalizedMessage(ResourceBundle.getBundle(bundleName), key, args);
+	}
 
-        if (ArrayUtils.isNotEmpty(args)) {
-            return MessageFormat.format(pattern, args);
-        } else {
-            return pattern;
-        }
-    }
+	/**
+	 * Returns a formatted, localized message according to the specified resource bundle and key.
+	 *
+	 * @param bundle the resource bundle where the message format should be
+	 * @param key    the key of the message format
+	 * @param args   the args of the message format
+	 * @return the formatted, localized message
+	 */
+	public static String getLocalizedMessage(ResourceBundle bundle, String key, Object... args) {
+		String pattern;
+		try {
+			pattern = bundle.getString(key);
+		} catch (MissingResourceException e) {
+			pattern = key;
+		}
+
+		if (ArrayUtils.isNotEmpty(args)) {
+			return MessageFormat.format(pattern, args);
+		} else {
+			return pattern;
+		}
+	}
 }

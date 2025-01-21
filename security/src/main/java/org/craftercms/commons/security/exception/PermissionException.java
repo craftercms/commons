@@ -22,19 +22,19 @@ package org.craftercms.commons.security.exception;
  */
 public class PermissionException extends SecurityException {
 
-    public PermissionException() {
-    }
+	public PermissionException() {
+	}
 
-    public PermissionException(String key, Object... args) {
-        super(key, args);
-    }
+	public PermissionException(String key, Object... args) {
+		super(key, args);
+	}
 
-    public PermissionException(String key, Throwable cause, Object... args) {
-        super(key, cause, args);
-    }
+	public PermissionException(String key, Throwable cause, Object... args) {
+		super(key, cause, args);
+	}
 
-    public PermissionException(Throwable cause) {
-        super(cause);
-    }
+	public PermissionException(Throwable cause) {
+		super(cause);
+	}
 
 }

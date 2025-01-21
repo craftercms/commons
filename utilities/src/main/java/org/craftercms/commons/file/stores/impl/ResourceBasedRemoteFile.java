@@ -29,32 +29,32 @@ import java.io.InputStream;
  */
 public class ResourceBasedRemoteFile implements RemoteFile {
 
-    private RemotePath path;
-    private Resource resource;
+	private RemotePath path;
+	private Resource resource;
 
-    public ResourceBasedRemoteFile(RemotePath path, Resource resource) {
-        this.path = path;
-        this.resource = resource;
-    }
+	public ResourceBasedRemoteFile(RemotePath path, Resource resource) {
+		this.path = path;
+		this.resource = resource;
+	}
 
-    @Override
-    public RemotePath getPath() {
-        return path;
-    }
+	@Override
+	public RemotePath getPath() {
+		return path;
+	}
 
-    @Override
-    public InputStream getInputStream() throws IOException {
-        return resource.getInputStream();
-    }
+	@Override
+	public InputStream getInputStream() throws IOException {
+		return resource.getInputStream();
+	}
 
-    @Override
-    public long getContentLength() throws IOException {
-        return resource.contentLength();
-    }
+	@Override
+	public long getContentLength() throws IOException {
+		return resource.contentLength();
+	}
 
-    @Override
-    public Resource toResource() throws IOException {
-        return resource;
-    }
+	@Override
+	public Resource toResource() throws IOException {
+		return resource;
+	}
 
 }

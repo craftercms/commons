@@ -24,11 +24,11 @@ import org.craftercms.commons.upgrade.exception.UpgradeException;
  * @since 4.1.2
  */
 public interface UpgradeConfigurationProvider<T> {
-    /**
-     * Gets the configuration for the upgrade process
-     *
-     * @return the configuration
-     * @throws UpgradeException if there is any error getting the configuration. e.g.: a {@link java.io.IOException} while loading a file
-     */
-    T getConfiguration() throws UpgradeException;
+	/**
+	 * Gets the configuration for the upgrade process
+	 *
+	 * @return the configuration
+	 * @throws UpgradeException if there is any error getting the configuration. e.g.: a {@link java.io.IOException} while loading a file
+	 */
+	T getConfiguration() throws UpgradeException;
 }

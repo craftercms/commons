@@ -29,15 +29,15 @@ import java.util.Map;
  */
 public class CrafterFreeMarkerView extends FreeMarkerView {
 
-    public static final String KEY_REQUEST_PARAMS = "RequestParameters";
+	public static final String KEY_REQUEST_PARAMS = "RequestParameters";
 
-    @Override
-    protected SimpleHash buildTemplateModel(final Map<String, Object> model, final HttpServletRequest request,
-                                            final HttpServletResponse response) {
-        SimpleHash templateModel = super.buildTemplateModel(model, request, response);
-        HttpRequestParametersHashModel requestParamsModel = new HttpRequestParametersHashModel(request);
-        templateModel.put(KEY_REQUEST_PARAMS, requestParamsModel);
+	@Override
+	protected SimpleHash buildTemplateModel(final Map<String, Object> model, final HttpServletRequest request,
+						final HttpServletResponse response) {
+		SimpleHash templateModel = super.buildTemplateModel(model, request, response);
+		HttpRequestParametersHashModel requestParamsModel = new HttpRequestParametersHashModel(request);
+		templateModel.put(KEY_REQUEST_PARAMS, requestParamsModel);
 
-        return templateModel;
-    }
+		return templateModel;
+	}
 }

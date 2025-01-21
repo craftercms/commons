@@ -23,6 +23,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.beans.ConstructorProperties;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -37,68 +38,68 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
- *  Filter to provide support for AWS Cloudfront specific request headers.
- *  This class will copy the value of the headers using the standard name to integrate with all Spring classes.
+ * Filter to provide support for AWS Cloudfront specific request headers.
+ * This class will copy the value of the headers using the standard name to integrate with all Spring classes.
  *
  * @author joseross
  * @since 3.1.9
  */
 public class CloudfrontForwardedHeaderFilter extends OncePerRequestFilter {
 
-    public static final String CLOUDFRONT_PROTO_HEADER_NAME = "CloudFront-Forwarded-Proto";
-    public static final String STANDARD_PROTO_HEADER_NAME = "X-Forwarded-Proto";
+	public static final String CLOUDFRONT_PROTO_HEADER_NAME = "CloudFront-Forwarded-Proto";
+	public static final String STANDARD_PROTO_HEADER_NAME = "X-Forwarded-Proto";
 
-    protected boolean enabled;
+	protected boolean enabled;
 
-    @ConstructorProperties({"enabled"})
-    public CloudfrontForwardedHeaderFilter(boolean enabled) {
-        this.enabled = enabled;
-    }
+	@ConstructorProperties({"enabled"})
+	public CloudfrontForwardedHeaderFilter(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !enabled || isEmpty(request.getHeader(CLOUDFRONT_PROTO_HEADER_NAME));
-    }
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) {
+		return !enabled || isEmpty(request.getHeader(CLOUDFRONT_PROTO_HEADER_NAME));
+	}
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        filterChain.doFilter(new CloudfrontHttpServletRequestWrapper(request), response);
-    }
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+		throws ServletException, IOException {
+		filterChain.doFilter(new CloudfrontHttpServletRequestWrapper(request), response);
+	}
 
-    private static class CloudfrontHttpServletRequestWrapper extends HttpServletRequestWrapper {
+	private static class CloudfrontHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
-        protected Map<String, List<String>> headers = new LinkedCaseInsensitiveMap<>();
+		protected Map<String, List<String>> headers = new LinkedCaseInsensitiveMap<>();
 
-        public CloudfrontHttpServletRequestWrapper(HttpServletRequest request) {
-            super(request);
+		public CloudfrontHttpServletRequestWrapper(HttpServletRequest request) {
+			super(request);
 
-            Enumeration<String> headerNames = request.getHeaderNames();
-            while (headerNames.hasMoreElements()) {
-                String headerName = headerNames.nextElement();
-                if (equalsIgnoreCase(headerName, CLOUDFRONT_PROTO_HEADER_NAME)) {
-                    headers.put(STANDARD_PROTO_HEADER_NAME, list(request.getHeaders(CLOUDFRONT_PROTO_HEADER_NAME)));
-                } else {
-                    headers.put(headerName, list(request.getHeaders(headerName)));
-                }
-            }
-        }
+			Enumeration<String> headerNames = request.getHeaderNames();
+			while (headerNames.hasMoreElements()) {
+				String headerName = headerNames.nextElement();
+				if (equalsIgnoreCase(headerName, CLOUDFRONT_PROTO_HEADER_NAME)) {
+					headers.put(STANDARD_PROTO_HEADER_NAME, list(request.getHeaders(CLOUDFRONT_PROTO_HEADER_NAME)));
+				} else {
+					headers.put(headerName, list(request.getHeaders(headerName)));
+				}
+			}
+		}
 
-        @Override
-        public String getHeader(String name) {
-            return headers.getOrDefault(name, singletonList(null)).get(0);
-        }
+		@Override
+		public String getHeader(String name) {
+			return headers.getOrDefault(name, singletonList(null)).get(0);
+		}
 
-        @Override
-        public Enumeration<String> getHeaders(String name) {
-            return enumeration(headers.getOrDefault(name, emptyList()));
-        }
+		@Override
+		public Enumeration<String> getHeaders(String name) {
+			return enumeration(headers.getOrDefault(name, emptyList()));
+		}
 
-        @Override
-        public Enumeration<String> getHeaderNames() {
-            return enumeration(headers.keySet());
-        }
+		@Override
+		public Enumeration<String> getHeaderNames() {
+			return enumeration(headers.keySet());
+		}
 
-    }
+	}
 
 }

@@ -31,80 +31,80 @@ import java.util.Objects;
  */
 public abstract class AbstractAwsProfile extends ConfigurationProfile {
 
-    /**
-     * Region to use in AWS services.
-     */
-    protected String region;
+	/**
+	 * Region to use in AWS services.
+	 */
+	protected String region;
 
-    /**
-     * Endpoint to connect to compatible services (eg. Openstack Swift)
-     */
-    protected String endpoint;
+	/**
+	 * Endpoint to connect to compatible services (eg. Openstack Swift)
+	 */
+	protected String endpoint;
 
-    /**
-     * The AWS access key (if using static credentials)
-     */
-    protected String accessKey;
+	/**
+	 * The AWS access key (if using static credentials)
+	 */
+	protected String accessKey;
 
-    /**
-     * The AWS secret key (if using static credentials)
-     */
-    protected String secretKey;
+	/**
+	 * The AWS secret key (if using static credentials)
+	 */
+	protected String secretKey;
 
-    public String getRegion() {
-        return region;
-    }
+	public String getRegion() {
+		return region;
+	}
 
-    public void setRegion(String region) {
-        this.region = region;
-    }
+	public void setRegion(String region) {
+		this.region = region;
+	}
 
-    public String getEndpoint() {
-        return endpoint;
-    }
+	public String getEndpoint() {
+		return endpoint;
+	}
 
-    public void setEndpoint(final String endpoint) {
-        this.endpoint = endpoint;
-    }
+	public void setEndpoint(final String endpoint) {
+		this.endpoint = endpoint;
+	}
 
-    public String getAccessKey() {
-        return accessKey;
-    }
+	public String getAccessKey() {
+		return accessKey;
+	}
 
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
+	public void setAccessKey(String accessKey) {
+		this.accessKey = accessKey;
+	}
 
-    public String getSecretKey() {
-        return secretKey;
-    }
+	public String getSecretKey() {
+		return secretKey;
+	}
 
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
 
-    public AwsCredentialsProvider getCredentialsProvider() {
-        if (StringUtils.isNotEmpty(accessKey) && StringUtils.isNotEmpty(secretKey)) {
-            return StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey));
-        }
-        return DefaultCredentialsProvider.builder().build();
-    }
+	public AwsCredentialsProvider getCredentialsProvider() {
+		if (StringUtils.isNotEmpty(accessKey) && StringUtils.isNotEmpty(secretKey)) {
+			return StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey));
+		}
+		return DefaultCredentialsProvider.builder().build();
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        AbstractAwsProfile that = (AbstractAwsProfile) o;
-        return Objects.equals(region, that.region) &&
-               Objects.equals(endpoint, that.endpoint) &&
-               Objects.equals(accessKey, that.accessKey) &&
-               Objects.equals(secretKey, that.secretKey);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		AbstractAwsProfile that = (AbstractAwsProfile) o;
+		return Objects.equals(region, that.region) &&
+			Objects.equals(endpoint, that.endpoint) &&
+			Objects.equals(accessKey, that.accessKey) &&
+			Objects.equals(secretKey, that.secretKey);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), region, endpoint, accessKey, secretKey);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), region, endpoint, accessKey, secretKey);
+	}
 
 }

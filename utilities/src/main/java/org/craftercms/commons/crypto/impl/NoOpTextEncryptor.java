@@ -30,22 +30,22 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public class NoOpTextEncryptor implements TextEncryptor, InitializingBean {
 
-    private static final I10nLogger logger = new I10nLogger(NoOpTextEncryptor.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
+	private static final I10nLogger logger = new I10nLogger(NoOpTextEncryptor.class, I10nUtils.DEFAULT_LOGGING_MESSAGE_BUNDLE_NAME);
 
-    public static final String LOG_KEY_NOOP_USED = "crypto.textEncryptor.noOpUsed";
+	public static final String LOG_KEY_NOOP_USED = "crypto.textEncryptor.noOpUsed";
 
-    public void afterPropertiesSet() {
-        logger.warn(LOG_KEY_NOOP_USED);
-    }
+	public void afterPropertiesSet() {
+		logger.warn(LOG_KEY_NOOP_USED);
+	}
 
-    @Override
-    public String encrypt(final String clear) throws CryptoException {
-        return clear;
-    }
+	@Override
+	public String encrypt(final String clear) throws CryptoException {
+		return clear;
+	}
 
-    @Override
-    public String decrypt(final String encrypted) throws CryptoException {
-        return encrypted;
-    }
+	@Override
+	public String decrypt(final String encrypted) throws CryptoException {
+		return encrypted;
+	}
 
 }

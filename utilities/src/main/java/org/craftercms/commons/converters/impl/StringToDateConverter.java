@@ -33,43 +33,43 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  */
 public class StringToDateConverter implements Converter<String, Date>, InitializingBean {
 
-    protected String datePattern;
-    protected TimeZone timeZone;
-    protected FastDateFormat dateFormat;
+	protected String datePattern;
+	protected TimeZone timeZone;
+	protected FastDateFormat dateFormat;
 
-    public StringToDateConverter(String datePattern) {
-        this.datePattern = datePattern;
-    }
+	public StringToDateConverter(String datePattern) {
+		this.datePattern = datePattern;
+	}
 
-    public void setTimeZone(String timeZone) {
-        this.timeZone = TimeZone.getTimeZone(timeZone);
-    }
+	public void setTimeZone(String timeZone) {
+		this.timeZone = TimeZone.getTimeZone(timeZone);
+	}
 
-    public void afterPropertiesSet() {
-        dateFormat = FastDateFormat.getInstance(datePattern, timeZone);
-    }
+	public void afterPropertiesSet() {
+		dateFormat = FastDateFormat.getInstance(datePattern, timeZone);
+	}
 
-    @Override
-    public Class<?> getSourceClass() {
-        return String.class;
-    }
+	@Override
+	public Class<?> getSourceClass() {
+		return String.class;
+	}
 
-    @Override
-    public Class<?> getTargetClass() {
-        return Date.class;
-    }
+	@Override
+	public Class<?> getTargetClass() {
+		return Date.class;
+	}
 
-    @Override
-    public Date convert(String source) {
-        if (isEmpty(source)) {
-            return null;
-        }
-        try {
-            return dateFormat.parse(source);
-        } catch (ParseException e) {
-            throw new DateParseException(source, datePattern, e);
-        }
-    }
+	@Override
+	public Date convert(String source) {
+		if (isEmpty(source)) {
+			return null;
+		}
+		try {
+			return dateFormat.parse(source);
+		} catch (ParseException e) {
+			throw new DateParseException(source, datePattern, e);
+		}
+	}
 
 }
 

@@ -22,75 +22,76 @@ import com.sun.management.OperatingSystemMXBean;
 
 /**
  * Holds basic JVM memory.
+ *
  * @author Carlos Ortiz
  * @since 3.0
  */
 public final class MemoryInfo {
 
-    private long totalJvmMemory;
-    private long freeJvmMemory;
-    private long maxJvmMemory;
-    private long totalOsMemory;
-    private long freeOsMemory;
-    private long totalSwapMemory;
-    private long freeSwapMemory;
+	private long totalJvmMemory;
+	private long freeJvmMemory;
+	private long maxJvmMemory;
+	private long totalOsMemory;
+	private long freeOsMemory;
+	private long totalSwapMemory;
+	private long freeSwapMemory;
 
-    /**
-     * Private Constructor of the MemoryInfo POJO
-     */
-    private MemoryInfo() {
-        Runtime runtime = Runtime.getRuntime();
-        OperatingSystemMXBean os = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        totalJvmMemory = runtime.totalMemory();
-        freeJvmMemory = runtime.freeMemory();
-        maxJvmMemory = runtime.maxMemory();
-        totalOsMemory = os.getTotalPhysicalMemorySize();
-        freeOsMemory = os.getFreePhysicalMemorySize();
-        totalSwapMemory = os.getTotalSwapSpaceSize();
-        freeSwapMemory = os.getFreeSwapSpaceSize();
-    }
+	/**
+	 * Private Constructor of the MemoryInfo POJO
+	 */
+	private MemoryInfo() {
+		Runtime runtime = Runtime.getRuntime();
+		OperatingSystemMXBean os = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+		totalJvmMemory = runtime.totalMemory();
+		freeJvmMemory = runtime.freeMemory();
+		maxJvmMemory = runtime.maxMemory();
+		totalOsMemory = os.getTotalPhysicalMemorySize();
+		freeOsMemory = os.getFreePhysicalMemorySize();
+		totalSwapMemory = os.getTotalSwapSpaceSize();
+		freeSwapMemory = os.getFreeSwapSpaceSize();
+	}
 
-    public static MemoryInfo getCurrentMemory() {
-        return new MemoryInfo();
-    }
+	public static MemoryInfo getCurrentMemory() {
+		return new MemoryInfo();
+	}
 
-    public long getTotalJvmMemory() {
-        return totalJvmMemory;
-    }
+	public long getTotalJvmMemory() {
+		return totalJvmMemory;
+	}
 
-    public long getFreeJvmMemory() {
-        return freeJvmMemory;
-    }
+	public long getFreeJvmMemory() {
+		return freeJvmMemory;
+	}
 
-    public long getMaxJvmMemory() {
-        return maxJvmMemory;
-    }
+	public long getMaxJvmMemory() {
+		return maxJvmMemory;
+	}
 
-    public long getTotalOsMemory() {
-        return totalOsMemory;
-    }
+	public long getTotalOsMemory() {
+		return totalOsMemory;
+	}
 
-    public long getFreeOsMemory() {
-        return freeOsMemory;
-    }
+	public long getFreeOsMemory() {
+		return freeOsMemory;
+	}
 
-    public long getTotalSwapMemory() {
-        return totalSwapMemory;
-    }
+	public long getTotalSwapMemory() {
+		return totalSwapMemory;
+	}
 
-    public long getFreeSwapMemory() {
-        return freeSwapMemory;
-    }
+	public long getFreeSwapMemory() {
+		return freeSwapMemory;
+	}
 
-    @Override
-    public String toString() {
-        return "MemoryInfo{" +
-            "totalJvmMemory=" + totalJvmMemory +
-            ", freeJvmMemory=" + freeJvmMemory +
-            ", totalOsMemory=" + totalOsMemory +
-            ", freeOsMemory=" + freeOsMemory +
-            ", totalSwapMemory=" + totalSwapMemory +
-            ", freeSwapMemory=" + freeSwapMemory +
-            '}';
-    }
+	@Override
+	public String toString() {
+		return "MemoryInfo{" +
+			"totalJvmMemory=" + totalJvmMemory +
+			", freeJvmMemory=" + freeJvmMemory +
+			", totalOsMemory=" + totalOsMemory +
+			", freeOsMemory=" + freeOsMemory +
+			", totalSwapMemory=" + totalSwapMemory +
+			", freeSwapMemory=" + freeSwapMemory +
+			'}';
+	}
 }

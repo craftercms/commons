@@ -26,9 +26,9 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class WeakKeyBasedReentrantLockFactory extends AbstractWeakKeyBasedLockFactory<ReentrantLock> {
 
-    @Override
-    protected ReentrantLock newLock() {
-        return new ReentrantLock();
-    }
+	@Override
+	protected ReentrantLock newLock() {
+		return new ReentrantLock();
+	}
 
 }

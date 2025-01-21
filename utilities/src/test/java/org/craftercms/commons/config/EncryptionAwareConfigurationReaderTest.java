@@ -33,52 +33,52 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EncryptionAwareConfigurationReaderTest extends TestCase {
-    private static final String CONFIG_CONTENT = "<configuration>" +
-            "<header>This is the site: ${siteName}</header>" +
-            "<java-version>${sys:java.version}</java-version>" +
-            "<env-var>${env:TEST_ENV_PROPERTY1}</env-var>" +
-            "<secret>${enc:ENCRYPTED_VALUE}</secret>" +
-            "</configuration>";
-    private static final String SITE_NAME = "test-site";
-    private static final String SITE_NAME_VARIABLE = "siteName";
-    private static final String CONFIGURATION_PROPERTY_KEY = "header";
-    private static final String ENV_VARIABLE_PROPERTY_KEY = "env-var";
-    private static final String ENV_VARIABLE_VALUE = "CUSTOM_VALUE";
-    public static final String SECRET_PROPERTY_KEY = "secret";
-    private static final String DECRYPTED_SECRET_VALUE = "this is the secret";
-    private static final String ENCRYPTED_VALUE = "ENCRYPTED_VALUE";
-    private Map<String, String> lookupVariables;
+	private static final String CONFIG_CONTENT = "<configuration>" +
+		"<header>This is the site: ${siteName}</header>" +
+		"<java-version>${sys:java.version}</java-version>" +
+		"<env-var>${env:TEST_ENV_PROPERTY1}</env-var>" +
+		"<secret>${enc:ENCRYPTED_VALUE}</secret>" +
+		"</configuration>";
+	private static final String SITE_NAME = "test-site";
+	private static final String SITE_NAME_VARIABLE = "siteName";
+	private static final String CONFIGURATION_PROPERTY_KEY = "header";
+	private static final String ENV_VARIABLE_PROPERTY_KEY = "env-var";
+	private static final String ENV_VARIABLE_VALUE = "CUSTOM_VALUE";
+	public static final String SECRET_PROPERTY_KEY = "secret";
+	private static final String DECRYPTED_SECRET_VALUE = "this is the secret";
+	private static final String ENCRYPTED_VALUE = "ENCRYPTED_VALUE";
+	private Map<String, String> lookupVariables;
 
-    @Mock
-    protected TextEncryptor textEncryptor;
-    protected EncryptionAwareConfigurationReader encryptionAwareConfigurationReader;
+	@Mock
+	protected TextEncryptor textEncryptor;
+	protected EncryptionAwareConfigurationReader encryptionAwareConfigurationReader;
 
-    @Override
-    @Before
-    public void setUp() throws Exception {
-        when(textEncryptor.decrypt(ENCRYPTED_VALUE)).thenReturn(DECRYPTED_SECRET_VALUE);
-        encryptionAwareConfigurationReader = new EncryptionAwareConfigurationReader(textEncryptor);
-        lookupVariables = Map.of(SITE_NAME_VARIABLE, SITE_NAME);
-    }
+	@Override
+	@Before
+	public void setUp() throws Exception {
+		when(textEncryptor.decrypt(ENCRYPTED_VALUE)).thenReturn(DECRYPTED_SECRET_VALUE);
+		encryptionAwareConfigurationReader = new EncryptionAwareConfigurationReader(textEncryptor);
+		lookupVariables = Map.of(SITE_NAME_VARIABLE, SITE_NAME);
+	}
 
-    @Test
-    public void testReadXmlLookupVariable() throws UnsupportedEncodingException, ConfigurationException {
-        HierarchicalConfiguration<?> xmlConfiguration = encryptionAwareConfigurationReader
-                .readXmlConfiguration(new ByteArrayInputStream(CONFIG_CONTENT.getBytes(StandardCharsets.UTF_8)), lookupVariables);
-        assertEquals("This is the site: " + SITE_NAME, xmlConfiguration.getString(CONFIGURATION_PROPERTY_KEY));
-    }
+	@Test
+	public void testReadXmlLookupVariable() throws UnsupportedEncodingException, ConfigurationException {
+		HierarchicalConfiguration<?> xmlConfiguration = encryptionAwareConfigurationReader
+			.readXmlConfiguration(new ByteArrayInputStream(CONFIG_CONTENT.getBytes(StandardCharsets.UTF_8)), lookupVariables);
+		assertEquals("This is the site: " + SITE_NAME, xmlConfiguration.getString(CONFIGURATION_PROPERTY_KEY));
+	}
 
-    @Test
-    public void testReadXmlEnvVariable() throws UnsupportedEncodingException, ConfigurationException {
-        HierarchicalConfiguration<?> xmlConfiguration = encryptionAwareConfigurationReader
-                .readXmlConfiguration(new ByteArrayInputStream(CONFIG_CONTENT.getBytes(StandardCharsets.UTF_8)), lookupVariables);
-        assertEquals(ENV_VARIABLE_VALUE, xmlConfiguration.getString(ENV_VARIABLE_PROPERTY_KEY));
-    }
+	@Test
+	public void testReadXmlEnvVariable() throws UnsupportedEncodingException, ConfigurationException {
+		HierarchicalConfiguration<?> xmlConfiguration = encryptionAwareConfigurationReader
+			.readXmlConfiguration(new ByteArrayInputStream(CONFIG_CONTENT.getBytes(StandardCharsets.UTF_8)), lookupVariables);
+		assertEquals(ENV_VARIABLE_VALUE, xmlConfiguration.getString(ENV_VARIABLE_PROPERTY_KEY));
+	}
 
-    @Test
-    public void testReadXmlEncryptedValue() throws UnsupportedEncodingException, ConfigurationException {
-        HierarchicalConfiguration<?> xmlConfiguration = encryptionAwareConfigurationReader
-                .readXmlConfiguration(new ByteArrayInputStream(CONFIG_CONTENT.getBytes(StandardCharsets.UTF_8)), lookupVariables);
-        assertEquals(DECRYPTED_SECRET_VALUE, xmlConfiguration.getString(SECRET_PROPERTY_KEY));
-    }
+	@Test
+	public void testReadXmlEncryptedValue() throws UnsupportedEncodingException, ConfigurationException {
+		HierarchicalConfiguration<?> xmlConfiguration = encryptionAwareConfigurationReader
+			.readXmlConfiguration(new ByteArrayInputStream(CONFIG_CONTENT.getBytes(StandardCharsets.UTF_8)), lookupVariables);
+		assertEquals(DECRYPTED_SECRET_VALUE, xmlConfiguration.getString(SECRET_PROPERTY_KEY));
+	}
 }

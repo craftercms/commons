@@ -26,38 +26,38 @@ import org.apache.commons.lang3.StringUtils;
  */
 public abstract class AbstractI10nException extends Exception {
 
-    private static final long serialVersionUID = 5633541877690995389L;
-    protected String key;
-    protected Object[] args;
+	private static final long serialVersionUID = 5633541877690995389L;
+	protected String key;
+	protected Object[] args;
 
-    public AbstractI10nException() {
-    }
+	public AbstractI10nException() {
+	}
 
-    public AbstractI10nException(String key, Object... args) {
-        this.key = key;
-        this.args = args;
-    }
+	public AbstractI10nException(String key, Object... args) {
+		this.key = key;
+		this.args = args;
+	}
 
-    public AbstractI10nException(String key, Throwable cause, Object... args) {
-        super(cause);
+	public AbstractI10nException(String key, Throwable cause, Object... args) {
+		super(cause);
 
-        this.key = key;
-        this.args = args;
-    }
+		this.key = key;
+		this.args = args;
+	}
 
-    public AbstractI10nException(Throwable cause) {
-        super(cause);
-    }
+	public AbstractI10nException(Throwable cause) {
+		super(cause);
+	}
 
-    @Override
-    public String getMessage() {
-        if (StringUtils.isNotEmpty(key)) {
-            return I10nUtils.getLocalizedMessage(getResourceBundle(), key, args);
-        } else {
-            return null;
-        }
-    }
+	@Override
+	public String getMessage() {
+		if (StringUtils.isNotEmpty(key)) {
+			return I10nUtils.getLocalizedMessage(getResourceBundle(), key, args);
+		} else {
+			return null;
+		}
+	}
 
-    protected abstract ResourceBundle getResourceBundle();
+	protected abstract ResourceBundle getResourceBundle();
 
 }

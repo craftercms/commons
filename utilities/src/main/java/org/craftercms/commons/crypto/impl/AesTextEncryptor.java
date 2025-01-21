@@ -33,42 +33,42 @@ import org.craftercms.commons.crypto.TextEncryptor;
  */
 public class AesTextEncryptor implements TextEncryptor {
 
-    private Key key;
+	private Key key;
 
-    public AesTextEncryptor(final Key key) {
-        this.key = key;
-    }
+	public AesTextEncryptor(final Key key) {
+		this.key = key;
+	}
 
-    @Override
-    public String encrypt(final String clear) throws CryptoException {
-        return doEncrypt(clear, key);
-    }
+	@Override
+	public String encrypt(final String clear) throws CryptoException {
+		return doEncrypt(clear, key);
+	}
 
-    protected String doEncrypt(String clear, Key key) throws CryptoException {
-        SimpleCipher cipher = new SimpleCipher();
-        cipher.setKey(key != null? key : this.key);
+	protected String doEncrypt(String clear, Key key) throws CryptoException {
+		SimpleCipher cipher = new SimpleCipher();
+		cipher.setKey(key != null ? key : this.key);
 
-        byte[] encrypted = cipher.encrypt(StringUtils.getBytesUtf8(clear));
-        byte[] iv = cipher.getIv();
+		byte[] encrypted = cipher.encrypt(StringUtils.getBytesUtf8(clear));
+		byte[] iv = cipher.getIv();
 
-        return Base64.encodeBase64String(ArrayUtils.addAll(iv, encrypted));
-    }
+		return Base64.encodeBase64String(ArrayUtils.addAll(iv, encrypted));
+	}
 
-    @Override
-    public String decrypt(final String encrypted) throws CryptoException {
-        return doDecrypt(encrypted, key);
-    }
+	@Override
+	public String decrypt(final String encrypted) throws CryptoException {
+		return doDecrypt(encrypted, key);
+	}
 
-    protected String doDecrypt(String encrypted, Key key) throws CryptoException {
-        byte[] decoded = Base64.decodeBase64(encrypted);
-        byte[] iv = ArrayUtils.subarray(decoded, 0, CryptoUtils.AES_KEY_BYTE_SIZE);
-        byte[] encryptedBytes = ArrayUtils.subarray(decoded, CryptoUtils.AES_KEY_BYTE_SIZE, decoded.length);
+	protected String doDecrypt(String encrypted, Key key) throws CryptoException {
+		byte[] decoded = Base64.decodeBase64(encrypted);
+		byte[] iv = ArrayUtils.subarray(decoded, 0, CryptoUtils.AES_KEY_BYTE_SIZE);
+		byte[] encryptedBytes = ArrayUtils.subarray(decoded, CryptoUtils.AES_KEY_BYTE_SIZE, decoded.length);
 
-        SimpleCipher cipher = new SimpleCipher();
-        cipher.setKey(key != null? key : this.key);
-        cipher.setIv(iv);
+		SimpleCipher cipher = new SimpleCipher();
+		cipher.setKey(key != null ? key : this.key);
+		cipher.setIv(iv);
 
-        return StringUtils.newStringUtf8(cipher.decrypt(encryptedBytes));
-    }
+		return StringUtils.newStringUtf8(cipher.decrypt(encryptedBytes));
+	}
 
 }

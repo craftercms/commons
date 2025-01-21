@@ -24,22 +24,22 @@ package org.craftercms.commons.upgrade.impl;
  */
 public abstract class UpgradeContext<T> {
 
-    /**
-     * The target of the upgrade.
-     */
-    protected T target;
+	/**
+	 * The target of the upgrade.
+	 */
+	protected T target;
 
-    public UpgradeContext(T target) {
-        this.target = target;
-    }
+	public UpgradeContext(T target) {
+		this.target = target;
+	}
 
-    public T getTarget() {
-        return target;
-    }
+	public T getTarget() {
+		return target;
+	}
 
-    @Override
-    public String toString() {
-        return target.toString();
-    }
+	@Override
+	public String toString() {
+		return target.toString();
+	}
 
 }

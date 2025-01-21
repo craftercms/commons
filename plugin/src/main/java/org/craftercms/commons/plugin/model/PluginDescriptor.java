@@ -31,78 +31,79 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PluginDescriptor {
 
-    /**
-     * The version of the descriptor
-     */
-    protected String descriptorVersion = "2";
+	/**
+	 * The version of the descriptor
+	 */
+	protected String descriptorVersion = "2";
 
-    /**
-     * The actual metadata of the plugin
-     */
-    protected Plugin plugin;
+	/**
+	 * The actual metadata of the plugin
+	 */
+	protected Plugin plugin;
 
-    /**
-     * Used by a previous version, kept for backwards compatibility
-     */
-    protected BlueprintDescriptor.Blueprint blueprint;
+	/**
+	 * Used by a previous version, kept for backwards compatibility
+	 */
+	protected BlueprintDescriptor.Blueprint blueprint;
 
-    public String getDescriptorVersion() {
-        return descriptorVersion;
-    }
+	public String getDescriptorVersion() {
+		return descriptorVersion;
+	}
 
-    public void setDescriptorVersion(String descriptorVersion) {
-        this.descriptorVersion = descriptorVersion;
-    }
+	public void setDescriptorVersion(String descriptorVersion) {
+		this.descriptorVersion = descriptorVersion;
+	}
 
-    public Plugin getPlugin() {
-        return plugin;
-    }
+	public Plugin getPlugin() {
+		return plugin;
+	}
 
-    public void setPlugin(final Plugin plugin) {
-        this.plugin = plugin;
-    }
+	public void setPlugin(final Plugin plugin) {
+		this.plugin = plugin;
+	}
 
-    @Deprecated
-    @JsonIgnore
-    public BlueprintDescriptor.Blueprint getBlueprint() {
-        return blueprint;
-    }
+	@Deprecated
+	@JsonIgnore
+	public BlueprintDescriptor.Blueprint getBlueprint() {
+		return blueprint;
+	}
 
-    public void setBlueprint(BlueprintDescriptor.Blueprint plugin) {
-        this.blueprint = plugin;
-    }
+	public void setBlueprint(BlueprintDescriptor.Blueprint plugin) {
+		this.blueprint = plugin;
+	}
 
-    /**
-     * Wraps the plugin metadata in a descriptor object
-     * @param plugin the plugin to wrap
-     * @return the plugin descriptor
-     */
-    public static PluginDescriptor of(Plugin plugin) {
-        PluginDescriptor descriptor = new PluginDescriptor();
-        descriptor.setPlugin(plugin);
-        return descriptor;
-    }
+	/**
+	 * Wraps the plugin metadata in a descriptor object
+	 *
+	 * @param plugin the plugin to wrap
+	 * @return the plugin descriptor
+	 */
+	public static PluginDescriptor of(Plugin plugin) {
+		PluginDescriptor descriptor = new PluginDescriptor();
+		descriptor.setPlugin(plugin);
+		return descriptor;
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof PluginDescriptor)) {
-            return false;
-        }
-        final PluginDescriptor that = (PluginDescriptor)o;
-        return Objects.equals(descriptorVersion, that.descriptorVersion) && Objects.equals(plugin, that.plugin);
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof PluginDescriptor)) {
+			return false;
+		}
+		final PluginDescriptor that = (PluginDescriptor) o;
+		return Objects.equals(descriptorVersion, that.descriptorVersion) && Objects.equals(plugin, that.plugin);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(descriptorVersion, plugin);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(descriptorVersion, plugin);
+	}
 
-    @Override
-    public String toString() {
-        return "PluginDescriptor{" + "descriptorVersion='" + descriptorVersion + '\'' + ", plugin=" + plugin + '}';
-    }
+	@Override
+	public String toString() {
+		return "PluginDescriptor{" + "descriptorVersion='" + descriptorVersion + '\'' + ", plugin=" + plugin + '}';
+	}
 
 }

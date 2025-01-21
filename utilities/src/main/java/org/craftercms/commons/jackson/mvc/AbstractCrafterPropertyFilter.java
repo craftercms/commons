@@ -29,12 +29,12 @@ import org.apache.commons.lang3.ClassUtils;
  */
 public abstract class AbstractCrafterPropertyFilter extends SimpleBeanPropertyFilter {
 
-    public abstract String getFilterName();
+	public abstract String getFilterName();
 
 
-    protected boolean isPrimitive(final Class<?> clazz) {
-        return Date.class.isAssignableFrom(clazz) || ClassUtils.isPrimitiveOrWrapper(clazz) || List.class
-            .isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz);
-    }
+	protected boolean isPrimitive(final Class<?> clazz) {
+		return Date.class.isAssignableFrom(clazz) || ClassUtils.isPrimitiveOrWrapper(clazz) || List.class
+			.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz);
+	}
 
 }

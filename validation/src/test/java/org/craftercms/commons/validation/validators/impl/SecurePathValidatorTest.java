@@ -29,32 +29,32 @@ import static org.junit.Assert.assertTrue;
 @RunWith(MockitoJUnitRunner.class)
 public class SecurePathValidatorTest {
 
-    private static final String[] VALID_PATHS = {"/site/website", "/site/website/index.xml", "/site/website/.folder/index.xml",
-            "/site/website/..folder/index.xml", "/site/website/~folder/index.xml", "/site/website/folder:/index.xml"};
-    private static final String[] INVALID_PATHS = {".", "..", "...", "./folder", "folder/.", "../folder", "folder/..",
-            "folder/./folder", "folder/../folder", "~/folder", "folder/~", "folder/~/folder", "C:/Program Files"};
+	private static final String[] VALID_PATHS = {"/site/website", "/site/website/index.xml", "/site/website/.folder/index.xml",
+		"/site/website/..folder/index.xml", "/site/website/~folder/index.xml", "/site/website/folder:/index.xml"};
+	private static final String[] INVALID_PATHS = {".", "..", "...", "./folder", "folder/.", "../folder", "folder/..",
+		"folder/./folder", "folder/../folder", "~/folder", "folder/~", "folder/~/folder", "C:/Program Files"};
 
-    private Validator validator;
+	private Validator validator;
 
-    @Before
-    public void setUp() {
-        validator = new SecurePathValidator();
-    }
+	@Before
+	public void setUp() {
+		validator = new SecurePathValidator();
+	}
 
-    @Test
-    public void testValidPaths() {
-        for (String path : VALID_PATHS) {
-            ValidationResult errors = ValidationUtils.validateValue(validator, path, "path");
-            assertFalse("Validation of " + path, errors.hasErrors());
-        }
-    }
+	@Test
+	public void testValidPaths() {
+		for (String path : VALID_PATHS) {
+			ValidationResult errors = ValidationUtils.validateValue(validator, path, "path");
+			assertFalse("Validation of " + path, errors.hasErrors());
+		}
+	}
 
-    @Test
-    public void testInvalidPaths() {
-        for (String path : INVALID_PATHS) {
-            ValidationResult errors = ValidationUtils.validateValue(validator, path, path);
-            assertTrue("Validation of " + path, errors.hasErrors());
-        }
-    }
+	@Test
+	public void testInvalidPaths() {
+		for (String path : INVALID_PATHS) {
+			ValidationResult errors = ValidationUtils.validateValue(validator, path, path);
+			assertTrue("Validation of " + path, errors.hasErrors());
+		}
+	}
 
 }

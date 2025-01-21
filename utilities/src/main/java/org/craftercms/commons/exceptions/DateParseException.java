@@ -27,15 +27,15 @@ import org.craftercms.commons.i10n.I10nUtils;
  */
 public class DateParseException extends AbstractI10nRuntimeException {
 
-    public static final String KEY = "converters.stringToDate.parseFailed";
+	public static final String KEY = "converters.stringToDate.parseFailed";
 
-    public DateParseException(String dateStr, String pattern, Throwable cause) {
-        super(KEY, cause, dateStr, pattern);
-    }
+	public DateParseException(String dateStr, String pattern, Throwable cause) {
+		super(KEY, cause, dateStr, pattern);
+	}
 
-    @Override
-    protected ResourceBundle getResourceBundle() {
-        return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME);
-    }
+	@Override
+	protected ResourceBundle getResourceBundle() {
+		return ResourceBundle.getBundle(I10nUtils.DEFAULT_ERROR_MESSAGE_BUNDLE_NAME);
+	}
 
 }

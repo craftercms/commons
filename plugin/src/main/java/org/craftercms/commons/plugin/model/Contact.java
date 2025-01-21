@@ -29,65 +29,65 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact {
 
-    /**
-     * The name of the contact
-     */
-    protected String name;
+	/**
+	 * The name of the contact
+	 */
+	protected String name;
 
-    /**
-     * The email of the contact
-     */
-    protected String email;
+	/**
+	 * The email of the contact
+	 */
+	protected String email;
 
-    /**
-     * The URL of the contact
-     */
-    private String url;
+	/**
+	 * The URL of the contact
+	 */
+	private String url;
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Contact)) {
-            return false;
-        }
-        final Contact contact = (Contact)o;
-        return name.equals(contact.name) && email.equals(contact.email) && url.equals(contact.url);
-    }
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Contact)) {
+			return false;
+		}
+		final Contact contact = (Contact) o;
+		return name.equals(contact.name) && email.equals(contact.email) && url.equals(contact.url);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, email, url);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, email, url);
+	}
 
-    @Override
-    public String toString() {
-        return "Contact{" + "name='" + name + '\'' + ", email='" + email + '\'' + ", url='" + url + '\'' + '}';
-    }
+	@Override
+	public String toString() {
+		return "Contact{" + "name='" + name + '\'' + ", email='" + email + '\'' + ", url='" + url + '\'' + '}';
+	}
 
 }

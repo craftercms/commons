@@ -24,16 +24,14 @@ import java.io.IOException;
  */
 public interface RemoteFileResolver {
 
-    /**
-     * Given the specified path, returns a {@link RemoteFile} associated to the path.
-     *
-     * @param path the path to the remote file
-     *
-     * @return the remote file
-     *
-     * @throws IOException if an IO error occurs while trying to resolve the file
-     * @throws IllegalArgumentException if the path can't be recognized as a remote path
-     */
-    RemoteFile resolve(String path) throws IOException, IllegalArgumentException;
+	/**
+	 * Given the specified path, returns a {@link RemoteFile} associated to the path.
+	 *
+	 * @param path the path to the remote file
+	 * @return the remote file
+	 * @throws IOException              if an IO error occurs while trying to resolve the file
+	 * @throws IllegalArgumentException if the path can't be recognized as a remote path
+	 */
+	RemoteFile resolve(String path) throws IOException, IllegalArgumentException;
 
 }

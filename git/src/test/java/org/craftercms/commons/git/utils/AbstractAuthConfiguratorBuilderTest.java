@@ -25,15 +25,15 @@ import static org.junit.Assert.assertTrue;
  */
 public class AbstractAuthConfiguratorBuilderTest {
 
-    protected void verify(AuthConfiguratorBuilder builder,
-                          Class<? extends GitAuthenticationConfigurator> expectedType) {
-        assertNotNull("the builder should not be null", builder);
-        assertNotNull("the expected type should not be null", expectedType);
+	protected void verify(AuthConfiguratorBuilder builder,
+			      Class<? extends GitAuthenticationConfigurator> expectedType) {
+		assertNotNull("the builder should not be null", builder);
+		assertNotNull("the expected type should not be null", expectedType);
 
-        GitAuthenticationConfigurator configurator = builder.build();
-        assertNotNull("the configurator should not be null", configurator);
-        assertTrue("the configurator should be an instance of the expected type",
-                expectedType.isInstance(configurator));
-    }
+		GitAuthenticationConfigurator configurator = builder.build();
+		assertNotNull("the configurator should not be null", configurator);
+		assertTrue("the configurator should be an instance of the expected type",
+			expectedType.isInstance(configurator));
+	}
 
 }

@@ -29,27 +29,27 @@ import org.craftercms.commons.upgrade.exception.UpgradeException;
  */
 public interface UpgradeManager<T> {
 
-    /**
-     * Executes all required upgrades for the system
-     *
-     * @throws UpgradeException if any of the upgrades fails
-     */
-    void upgrade() throws UpgradeException;
+	/**
+	 * Executes all required upgrades for the system
+	 *
+	 * @throws UpgradeException if any of the upgrades fails
+	 */
+	void upgrade() throws UpgradeException;
 
-    /**
-     * Executes all required upgrades for the given target
-     *
-     * @param target the target
-     * @throws UpgradeException if any of the upgrades fails
-     */
-    void upgrade(T target) throws UpgradeException;
+	/**
+	 * Executes all required upgrades for the given target
+	 *
+	 * @param target the target
+	 * @throws UpgradeException if any of the upgrades fails
+	 */
+	void upgrade(T target) throws UpgradeException;
 
-    /**
-     * Returns all targets to be upgraded
-     *
-     * @return the list of targets
-     * @throws UpgradeException if there is any error finding the targets
-     */
-    List<T> getTargets() throws UpgradeException;
+	/**
+	 * Returns all targets to be upgraded
+	 *
+	 * @return the list of targets
+	 * @throws UpgradeException if there is any error finding the targets
+	 */
+	List<T> getTargets() throws UpgradeException;
 
 }
