@@ -1,7 +1,7 @@
 Commons
 =======
 
-Crafter Commons. Learn more about CrafterCMS at http://craftercms.com/docs.
+Crafter Commons. Learn more about CrafterCMS at https://craftercms.com/docs.
 
 # Community
 ## Contributors
