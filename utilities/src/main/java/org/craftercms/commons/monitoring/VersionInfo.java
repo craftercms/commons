@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2025 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -77,7 +77,7 @@ public final class VersionInfo {
 	/**
 	 * The path for classes loaded from a Spring Boot JAR file
 	 */
-	public static final String SPRING_PATH = "!/BOOT-INF/classes!/";
+	public static final String SPRING_PATH = "!BOOT-INF/classes/!/";
 
 	private String packageName;
 	private String packageVersion;
@@ -148,7 +148,8 @@ public final class VersionInfo {
 				return getVersion(new Manifest(is));
 			}
 		} else if (StringUtils.contains(path, SPRING_PATH)) {
-			path = StringUtils.removeStart(path, "file:");
+			path = StringUtils.removeStart(path, "file:");		// filesystem case
+			path = StringUtils.removeStart(path, "nested:"); 	// Spring Boot nested jars case
 			path = StringUtils.removeEnd(path, SPRING_PATH);
 			JarFile jarFile = new JarFile(path);
 			return VersionInfo.getVersion(jarFile.getManifest());
