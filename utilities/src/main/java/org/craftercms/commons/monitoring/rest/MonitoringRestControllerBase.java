@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2023 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2025 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -62,10 +62,10 @@ public abstract class MonitoringRestControllerBase {
     }
 
     @GetMapping(ROOT_URL + VERSION_URL)
-    public VersionInfo getCurrentVersion(@RequestParam(name = "token", required = true) String token)
+    public ResponseEntity getCurrentVersion(@RequestParam(name = "token", required = true) String token)
             throws InvalidManagementTokenException, IOException {
         validateToken(token);
-        return VersionInfo.getVersion(this.getClass());
+        return ResponseEntity.ok().body(VersionInfo.getVersion(this.getClass()));
     }
 
     protected final void validateToken(final String requestToken) throws InvalidManagementTokenException {
