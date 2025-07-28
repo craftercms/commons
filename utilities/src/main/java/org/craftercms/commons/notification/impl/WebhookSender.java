@@ -27,11 +27,13 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.notification.NotificationException;
 import org.craftercms.commons.notification.NotificationSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatusCode;
 
 import java.beans.ConstructorProperties;
 import java.io.IOException;
@@ -140,7 +142,12 @@ public class WebhookSender extends NotificationSender<NotificationSender<?>.Noti
 		try {
 			HttpUriRequest request = createRequest(message);
 			try (CloseableHttpResponse response = httpClient.execute(request)) {
-				logger.info("Webhook notification sent with status {}", response.getStatusLine());
+				int statusCode = response.getStatusLine().getStatusCode();
+				if (HttpStatusCode.valueOf(statusCode).is2xxSuccessful()) {
+					logger.info("Webhook notification sent successfully to {}", url);
+				} else {
+					logger.error("Webhook failed with status '{}'. Response: '{}'", response.getStatusLine(), EntityUtils.toString(response.getEntity()));
+				}
 			}
 		} catch (Exception e) {
 			logger.error("Failed to send webhook notification", e);
