@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 import static org.craftercms.commons.config.ConfigUtils.DEFAULT_ENCODING;
@@ -181,13 +182,12 @@ public abstract class NotificationSender<M extends NotificationSender<?>.Notific
 	 *
 	 * @param templateModel the model to use for processing the template
 	 * @return the template output
-	 * @throws Exception if an error occurs while loading or processing the template
+	 * @throws NotificationException if an error occurs while loading or processing the template
 	 */
-	protected String processTemplate(String templateName, Map<String, Object> templateModel) throws Exception {
+	protected String processTemplate(String templateName, Map<String, Object> templateModel) throws NotificationException {
 		logger.debug("Processing notification template '{}'", templateName);
 		if (isEmpty(templateName)) {
-			// TODO: figure out the exceptions
-			throw new Exception("Template name cannot be empty");
+			throw new NotificationException("Template name cannot be empty");
 		}
 		try {
 			String fullTemplateName = templatePrefix + templateName + templateSuffix;
@@ -198,7 +198,7 @@ public abstract class NotificationSender<M extends NotificationSender<?>.Notific
 
 			return out.toString();
 		} catch (IOException | TemplateException e) {
-			throw new Exception(e);
+			throw new NotificationException(format("Failed to process template '%s'", templateModel), e);
 		}
 	}
 

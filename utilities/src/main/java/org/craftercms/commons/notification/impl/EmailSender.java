@@ -137,6 +137,14 @@ public class EmailSender extends NotificationSender<EmailSender.EmailMessage> {
 		return tempFilePayload;
 	}
 
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public void setTo(String[] to) {
+		this.to = to;
+	}
+
 	/**
 	 * {@link NotificationMessage} extension that includes a file attachment.
 	 */
