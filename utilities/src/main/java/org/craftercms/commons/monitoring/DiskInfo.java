@@ -16,8 +16,11 @@
 package org.craftercms.commons.monitoring;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.File;
+
+import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 
 /**
  * Holds basic disk information for a given path.
@@ -60,12 +63,27 @@ public class DiskInfo {
 		return freeSpace;
 	}
 
+	@JsonProperty("freeSpaceDisplaySize")
+	public String getFreeSpaceDisplaySize() {
+		return byteCountToDisplaySize(freeSpace);
+	}
+
 	public long getTotalSpace() {
 		return totalSpace;
 	}
 
+	@JsonProperty("totalSpaceDisplaySize")
+	public String getTotalSpaceDisplaySize() {
+		return byteCountToDisplaySize(totalSpace);
+	}
+
 	public long getUsedSpace() {
 		return usedSpace;
+	}
+
+	@JsonProperty("usedSpaceDisplaySize")
+	public String getUsedSpaceDisplaySize() {
+		return byteCountToDisplaySize(usedSpace);
 	}
 
 	@JsonIgnore
