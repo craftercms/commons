@@ -79,10 +79,7 @@ public class WebhookSender extends NotificationSender<NotificationSender<?>.Noti
 						 String dateTimePattern, String durationPattern) {
 		super(freeMarkerConfig, objectMapper, dateTimePattern, durationPattern);
 		httpClient = HttpClients.createDefault();
-		requestConfig = RequestConfig.custom()
-				.setConnectTimeout(timeout)
-				.setSocketTimeout(timeout)
-				.build();
+		requestConfig = RequestConfig.custom().build();
 	}
 
 	@Override
