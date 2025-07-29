@@ -38,21 +38,20 @@ public class DiskInfo {
 	/**
 	 * Creates a DiskInfo object for the specified root path.
 	 *
-	 * @param rootPath the root path to check disk information for
+	 * @param rootFile the root to check disk information for
 	 */
-	public DiskInfo(String rootPath) {
-		File f = new File(rootPath);
-		if (!f.exists()) {
-			throw new IllegalArgumentException("The provided path does not exist: " + rootPath);
+	public DiskInfo(File rootFile) {
+		if (rootFile == null || !rootFile.exists()) {
+			throw new IllegalArgumentException("The provided path does not exist: " + rootFile);
 		}
-		this.rootPath = rootPath;
-		totalSpace = f.getTotalSpace();
-		freeSpace = f.getFreeSpace();
+		this.rootPath = rootFile.getPath();
+		totalSpace = rootFile.getTotalSpace();
+		freeSpace = rootFile.getFreeSpace();
 		usedSpace = totalSpace - freeSpace;
 		if (totalSpace == 0) {
 			throw new IllegalArgumentException("The provided path does not have a valid total space: " + rootPath);
 		}
-		diskUsage = (int) ((usedSpace * 100) / totalSpace);
+		diskUsage = (int) ((double) usedSpace / totalSpace * 100);
 	}
 
 	public int getDiskUsage() {
