@@ -145,6 +145,7 @@ public class WebhookSender extends NotificationSender<NotificationSender<?>.Noti
 					logger.info("Webhook notification sent successfully to {}", url);
 				} else {
 					logger.error("Webhook failed with status '{}'. Response: '{}'", response.getStatusLine(), EntityUtils.toString(response.getEntity()));
+					throw new NotificationException("Webhook notification failed with status: " + response.getStatusLine());
 				}
 			}
 		} catch (Exception e) {
