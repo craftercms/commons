@@ -159,11 +159,16 @@ public class WebhookSender extends NotificationSender<NotificationSender<?>.Noti
 	 * @param message The notification message.
 	 */
 	private HttpUriRequest createRequest(NotificationSender<?>.NotificationMessage message) throws Exception {
+		ContentType ct = ContentType.getByMimeType(contentType);
+		if (ct == null) {
+			logger.warn("Invalid content type '{}', using application/json", contentType);
+			ct = ContentType.APPLICATION_JSON;
+		}
 		return RequestBuilder
 				.create(method)
 				.setUri(url)
 				.setConfig(requestConfig)
-				.setEntity(new StringEntity(message.getBody(), ContentType.getByMimeType(contentType)))
+				.setEntity(new StringEntity(message.getBody(), ct))
 				.build();
 	}
 
