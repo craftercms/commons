@@ -125,14 +125,16 @@ public class EmailSender extends NotificationSender<EmailSender.EmailMessage> {
 	 * @return The temporary file
 	 */
 	private File getAttachment(Object payload) {
+		if (payload == null) {
+			return null;
+		}
 		File tempFilePayload = null;
-
 		try {
 			File attachment = File.createTempFile("payload", ".json");
 			objectMapper.writeValue(attachment, payload);
 			tempFilePayload = attachment;
 		} catch (IOException e) {
-			logger.error("Failed to write payload to JSON", e);
+			logger.error("Failed to write payload of type {} to JSON", payload.getClass().getName(), e);
 		}
 		return tempFilePayload;
 	}

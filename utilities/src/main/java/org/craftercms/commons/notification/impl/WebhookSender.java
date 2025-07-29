@@ -17,6 +17,7 @@ package org.craftercms.commons.notification.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.activation.MimetypesFileTypeMap;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.config.RequestConfig;
@@ -39,6 +40,7 @@ import java.beans.ConstructorProperties;
 import java.io.IOException;
 import java.util.Set;
 
+import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 import static org.springframework.http.HttpMethod.POST;
 
 /**
@@ -65,12 +67,11 @@ public class WebhookSender extends NotificationSender<NotificationSender<?>.Noti
 
 	private final CloseableHttpClient httpClient;
 
-	private int timeout;
 	private RequestConfig requestConfig;
 
 	private String method = POST.name();
 	private String url;
-	private String contentType;
+	private String contentType = APPLICATION_JSON.getMimeType();
 
 	@SuppressWarnings("unused")
 	@ConstructorProperties({"freeMarkerConfig", "objectMapper",
@@ -185,7 +186,6 @@ public class WebhookSender extends NotificationSender<NotificationSender<?>.Noti
 
 	@SuppressWarnings("unused")
 	public void setTimeout(int timeout) {
-		this.timeout = timeout;
 		requestConfig = RequestConfig.custom()
 				.setConnectTimeout(timeout)
 				.setSocketTimeout(timeout)
