@@ -120,10 +120,10 @@ public abstract class NotificationSender<M extends NotificationSender<?>.Notific
 	 * @param templateName the name of the template to use for the notification
 	 * @param payload      the payload to include in the notification
 	 * @param model        additional model data to include in the notification
-	 * @throws Exception if an error occurs while sending the notification
+	 * @throws NotificationException if an error occurs while sending the notification
 	 */
 	@SuppressWarnings("unused")
-	public void sendMessage(String templateName, Object payload, Map<String, Object> model) throws Exception {
+	public void sendMessage(String templateName, Object payload, Map<String, Object> model) throws NotificationException {
 		doNotify(createMessage(templateName, payload, model));
 	}
 
