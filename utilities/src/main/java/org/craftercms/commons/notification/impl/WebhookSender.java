@@ -17,7 +17,6 @@ package org.craftercms.commons.notification.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.activation.MimetypesFileTypeMap;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.config.RequestConfig;
