@@ -198,7 +198,7 @@ public abstract class NotificationSender<M extends NotificationSender<?>.Notific
 
 			return out.toString();
 		} catch (IOException | TemplateException e) {
-			throw new NotificationException(format("Failed to process template '%s'", templateModel), e);
+			throw new NotificationException(format("Failed to process template '%s'", templateName), e);
 		}
 	}
 
