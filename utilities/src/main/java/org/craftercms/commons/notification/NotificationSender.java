@@ -218,7 +218,7 @@ public abstract class NotificationSender<M extends NotificationSender<?>.Notific
 			return model;
 		}
 
-		public String getBody() throws Exception {
+		public String getBody() throws NotificationException {
 			return processTemplate(templateName, getModel());
 		}
 	}

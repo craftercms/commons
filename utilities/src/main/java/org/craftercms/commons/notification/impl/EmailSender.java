@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.configuration2.Configuration;
 import org.craftercms.commons.config.ConfigurationException;
 import org.craftercms.commons.mail.Email;
+import org.craftercms.commons.mail.EmailException;
 import org.craftercms.commons.mail.EmailFactory;
 import org.craftercms.commons.notification.NotificationException;
 import org.craftercms.commons.notification.NotificationSender;
@@ -103,7 +104,7 @@ public class EmailSender extends NotificationSender<EmailSender.EmailMessage> {
 
 			email.send();
 			logger.info("Email notification successfully sent to {}", Arrays.toString(to));
-		} catch (Exception e) {
+		} catch (EmailException e) {
 			throw new NotificationException("Error while sending email notification", e);
 		} finally {
 			deleteQuietly(attachment);
