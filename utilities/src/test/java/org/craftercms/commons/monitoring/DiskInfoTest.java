@@ -15,7 +15,7 @@
  */
 package org.craftercms.commons.monitoring;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -23,11 +23,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.File;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DiskInfoTest extends TestCase {
+public class DiskInfoTest {
 
 	@Mock
 	protected File theRootFile;
