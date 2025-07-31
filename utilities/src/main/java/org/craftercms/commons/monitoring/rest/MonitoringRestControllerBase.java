@@ -39,6 +39,7 @@ public abstract class MonitoringRestControllerBase {
     public final static String MEMORY_URL = "/memory";
     public final static String STATUS_URL = "/status";
     public final static String VERSION_URL = "/version";
+    public final static String DISK_URL = "/disk";
 
     private final String configuredToken;
 
