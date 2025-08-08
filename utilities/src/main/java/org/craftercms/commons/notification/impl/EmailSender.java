@@ -129,15 +129,16 @@ public class EmailSender extends NotificationSender<EmailSender.EmailMessage> {
 		if (payload == null) {
 			return null;
 		}
-		File tempFilePayload = null;
+		File attachmentTmpFile = null;
 		try {
-			File attachment = File.createTempFile("payload", ".json");
-			objectMapper.writeValue(attachment, payload);
-			tempFilePayload = attachment;
+			attachmentTmpFile = File.createTempFile("payload", ".json");
+			objectMapper.writeValue(attachmentTmpFile, payload);
+			return attachmentTmpFile;
 		} catch (IOException e) {
+			deleteQuietly(attachmentTmpFile);
 			logger.error("Failed to write payload of type {} to JSON", payload.getClass().getName(), e);
+			return null;
 		}
-		return tempFilePayload;
 	}
 
 	public void setFrom(String from) {
