@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.File;
 
+import static java.lang.String.format;
 import static org.apache.commons.io.FileUtils.byteCountToDisplaySize;
 
 /**
@@ -47,10 +48,11 @@ public class DiskInfo {
 		this.rootPath = rootFile.getPath();
 		totalSpace = rootFile.getTotalSpace();
 		freeSpace = rootFile.getFreeSpace();
-		usedSpace = totalSpace - freeSpace;
-		if (totalSpace == 0) {
-			throw new IllegalArgumentException("The provided path does not have a valid total space: " + rootPath);
+		if (totalSpace < freeSpace || totalSpace == 0) {
+			throw new IllegalArgumentException(format("Invalid disk space values for path: %s. Total space: %d, Free space: %d",
+					rootPath, totalSpace, freeSpace));
 		}
+		usedSpace = totalSpace - freeSpace;
 		diskUsage = (int) ((double) usedSpace / totalSpace * 100);
 	}
 
