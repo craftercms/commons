@@ -103,7 +103,10 @@ public class EmailSender extends NotificationSender<EmailSender.EmailMessage> {
 			}
 
 			email.send();
-			logger.info("Email notification successfully sent to {}", Arrays.toString(to));
+			logger.info("Email notification successfully sent to {} recipients", to.length);
+			if (logger.isDebugEnabled()) {
+				logger.debug("Recipients: {}", Arrays.toString(to));
+			}
 		} catch (EmailException e) {
 			throw new NotificationException("Error while sending email notification", e);
 		} finally {
