@@ -141,7 +141,9 @@ public abstract class NotificationSender<M extends NotificationSender<?>.Notific
 		templateModel.put(DATETIME_FORMATTER_MODEL_KEY, dateTimeFormatter);
 		templateModel.put(DURATION_FORMATTER_MODEL_KEY, durationFormatter);
 		templateModel.put(PAYLOAD_MODEL_KEY, payload);
-		templateModel.putAll(model);
+		if (model != null) {
+			templateModel.putAll(model);
+		}
 		return message;
 	}
 
