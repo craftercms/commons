@@ -87,7 +87,13 @@ public class SandboxInterceptorFactory extends AbstractFactoryBean<SandboxInterc
 		this.blacklist = blacklist;
 		this.whitelistEnabled = whitelistEnabled;
 		this.whitelist = whitelist;
-		this.whitelistGetEnvRegex = Arrays.stream(whitelistGetEnvRegex).toList();
+		if (blacklistEnabled && blacklist == null) {
+			throw new IllegalArgumentException("blacklistEnabled=true but 'blacklist' resource is null");
+		}
+		if (whitelistEnabled && whitelist == null) {
+			throw new IllegalArgumentException("whitelistEnabled=true but 'whitelist' resource is null");
+		}
+		this.whitelistGetEnvRegex = (whitelistGetEnvRegex == null) ? List.of() : Arrays.asList(whitelistGetEnvRegex);
 		this.extensions = emptyIfNull(extensions);
 	}
 
