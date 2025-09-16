@@ -50,6 +50,11 @@ public class SearchKeywordsTest implements ValidatorTest {
         assertValid("also this is valid");
     }
 
+    @Test
+    public void testSquareBrackets() {
+        assertValid("[valid]");
+    }
+
     @Override
     public Validator getValidator() {
         return validator;
