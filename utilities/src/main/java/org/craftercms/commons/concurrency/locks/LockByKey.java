@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -178,24 +177,35 @@ public class LockByKey<K> implements InitializingBean, DisposableBean {
 
 	/**
 	 * Releases the lock associated with the given key.
+	 * <p>
+	 * This method is implemented using {@link ConcurrentHashMap#compute(Object, java.util.function.BiFunction)},
+	 * so that the decrement of the reference count and the possible removal of the lock
+	 * happen atomically under the CHM bin lock. This avoids a race where another thread
+	 * could acquire the same key between decrement and remove, leading to premature removal.
+	 * </p>
+	 *
+	 * @param key the key identifying the lock
+	 * @throws IllegalMonitorStateException if no lock exists for the key
+	 *         (e.g., if {@code unlock(key)} is called without a matching
+	 *         {@code lock(key)}).
 	 */
 	public void unlock(K key) {
-		LockWrapper lock = locks.get(key);
-		if (lock == null) {
-			logger.warn("Unlock attempted for unknown key: {}", key);
-			throw new IllegalMonitorStateException("Unlock attempted for unknown key: " + key);
-		}
-		try {
-			lock.unlock();
-		} finally {
-			int refCount = lock.decrementRefCount();
-			logger.debug("Released lock for key: {} (refCount={})", key, refCount);
-			if (refCount == 0) {
-				if (locks.remove(key, lock)) {
-					logger.trace("Removed lock for key: {}", key); // was debug → now trace
+		locks.compute(key, (k, lockWrapper) -> {
+			if (lockWrapper == null) {
+				throw new IllegalMonitorStateException("Unlock attempted for unknown key: " + key);
+			}
+			try {
+				lockWrapper.unlock(); // safe: unlock() never blocks
+			} finally {
+				int refCount = lockWrapper.decrementRefCount();
+				logger.debug("Released lock for key: {} (refCount={})", key, refCount);
+				if (refCount == 0) {
+					logger.trace("Removing lock for key: {}", key);
+					return null; // causes CHM to remove the entry
 				}
 			}
-		}
+			return lockWrapper;
+		});
 	}
 
 	/**
@@ -206,19 +216,22 @@ public class LockByKey<K> implements InitializingBean, DisposableBean {
 		logger.debug("Running lock cleanup");
 
 		long now = System.currentTimeMillis();
-		for (Map.Entry<K, LockWrapper> entry : locks.entrySet()) {
-			K key = entry.getKey();
-			LockWrapper wrapper = entry.getValue();
-			int count = wrapper.refCount.get();
-			long idle = now - wrapper.lastUsedMillis;
-
-			if (count == 0) {
-				if (locks.remove(key, wrapper)) {
-					logger.warn("Background cleanup removed unused lock for key {}", key);
+		for (K key : locks.keySet()) {
+			locks.compute(key, (k, lockWrapper) -> {
+				if (lockWrapper == null) {
+					return null; // already removed
 				}
-			} else if (idle > warnIdleMillis) {
-				logger.warn("Lock for key {} may be leaked: refCount={}, idleFor={} ms", key, count, idle);
-			}
+
+				int count = lockWrapper.refCount.get();
+				long idle = now - lockWrapper.lastUsedMillis;
+				if (count == 0) {
+					logger.warn("Background cleanup removed unused lock for key {}", key);
+					return null; // atomically remove
+				} else if (idle > warnIdleMillis) {
+					logger.warn("Lock for key {} may be leaked: refCount={}, idleFor={} ms", key, count, idle);
+				}
+				return lockWrapper;
+			});
 		}
 	}
 }
