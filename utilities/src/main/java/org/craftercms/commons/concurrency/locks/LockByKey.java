@@ -194,15 +194,17 @@ public class LockByKey<K> implements InitializingBean, DisposableBean {
 			if (lockWrapper == null) {
 				throw new IllegalMonitorStateException("Unlock attempted for unknown key: " + key);
 			}
-			try {
-				lockWrapper.unlock(); // safe: unlock() never blocks
-			} finally {
-				int refCount = lockWrapper.decrementRefCount();
-				logger.debug("Released lock for key: {} (refCount={})", key, refCount);
-				if (refCount == 0) {
-					logger.trace("Removing lock for key: {}", key);
-					return null; // causes CHM to remove the entry
-				}
+
+			// Let ReentrantLock enforce correctness of ownership
+			lockWrapper.unlock(); // may throw IllegalMonitorStateException
+
+			// Only decrement if unlock succeeded
+			int refCount = lockWrapper.decrementRefCount();
+			logger.debug("Released lock for key: {} (refCount={})", key, refCount);
+
+			if (refCount == 0) {
+				logger.trace("Removing lock for key: {}", key);
+				return null; // safely remove
 			}
 			return lockWrapper;
 		});
@@ -214,24 +216,27 @@ public class LockByKey<K> implements InitializingBean, DisposableBean {
 	 */
 	private void cleanup() {
 		logger.debug("Running lock cleanup");
+		try {
+			long now = System.currentTimeMillis();
+			for (K key : locks.keySet()) {
+				locks.compute(key, (k, lockWrapper) -> {
+					if (lockWrapper == null) {
+						return null; // already removed
+					}
 
-		long now = System.currentTimeMillis();
-		for (K key : locks.keySet()) {
-			locks.compute(key, (k, lockWrapper) -> {
-				if (lockWrapper == null) {
-					return null; // already removed
-				}
-
-				int count = lockWrapper.refCount.get();
-				long idle = now - lockWrapper.lastUsedMillis;
-				if (count == 0) {
-					logger.warn("Background cleanup removed unused lock for key {}", key);
-					return null; // atomically remove
-				} else if (idle > warnIdleMillis) {
-					logger.warn("Lock for key {} may be leaked: refCount={}, idleFor={} ms", key, count, idle);
-				}
-				return lockWrapper;
-			});
+					int count = lockWrapper.refCount.get();
+					long idle = now - lockWrapper.lastUsedMillis;
+					if (count == 0) {
+						logger.warn("Background cleanup removed unused lock for key {}", key);
+						return null; // atomically remove
+					} else if (idle > warnIdleMillis) {
+						logger.warn("Lock for key {} may be leaked: refCount={}, idleFor={} ms", key, count, idle);
+					}
+					return lockWrapper;
+				});
+			}
+		} catch (Exception e) {
+			logger.error("Error during lock cleanup", e);
 		}
 	}
 }
