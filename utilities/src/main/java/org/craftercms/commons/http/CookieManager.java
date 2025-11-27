@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2025 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -17,7 +17,6 @@ package org.craftercms.commons.http;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.craftercms.commons.i10n.I10nLogger;
 import org.craftercms.commons.i10n.I10nUtils;
@@ -40,7 +39,6 @@ public class CookieManager {
 	private boolean httpOnly;
 	private boolean secure;
 
-
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}
@@ -59,6 +57,26 @@ public class CookieManager {
 
 	public void setSecure(final boolean secure) {
 		this.secure = secure;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public boolean isHttpOnly() {
+		return httpOnly;
+	}
+
+	public Integer getMaxAge() {
+		return maxAge;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public boolean isSecure() {
+		return secure;
 	}
 
 	/**
