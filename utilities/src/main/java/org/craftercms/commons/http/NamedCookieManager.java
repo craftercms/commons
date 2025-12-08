@@ -32,12 +32,20 @@ public class NamedCookieManager {
 	public NamedCookieManager(String name, Integer maxAge,
 							  String path, boolean secure,
 							  boolean httpOnly, String domain) {
+		this(name, maxAge, path, secure, httpOnly, domain, null);
+	}
+
+	public NamedCookieManager(String name, Integer maxAge,
+							  String path, boolean secure,
+							  boolean httpOnly, String domain,
+							  String sameSite) {
 		this.cookieManager = new CookieManager();
 		cookieManager.setMaxAge(maxAge);
 		cookieManager.setPath(path);
 		cookieManager.setSecure(secure);
 		cookieManager.setHttpOnly(httpOnly);
 		cookieManager.setDomain(domain);
+		cookieManager.setSameSite(sameSite);
 		this.name = name;
 	}
 

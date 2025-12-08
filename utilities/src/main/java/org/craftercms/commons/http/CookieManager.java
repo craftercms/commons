@@ -38,6 +38,7 @@ public class CookieManager {
 	private Integer maxAge;
 	private boolean httpOnly;
 	private boolean secure;
+	private String sameSite;
 
 	public void setDomain(String domain) {
 		this.domain = domain;
@@ -57,6 +58,10 @@ public class CookieManager {
 
 	public void setSecure(final boolean secure) {
 		this.secure = secure;
+	}
+
+	public void setSameSite(final String sameSite) {
+		this.sameSite = sameSite;
 	}
 
 	public String getDomain() {
@@ -98,7 +103,9 @@ public class CookieManager {
 		if (maxAge != null) {
 			cookie.setMaxAge(maxAge);
 		}
-
+		if (StringUtils.isNotEmpty(sameSite)) {
+			cookie.setAttribute("SameSite", sameSite);
+		}
 		response.addCookie(cookie);
 
 		logger.debug(LOG_KEY_ADDED_COOKIE, name);
