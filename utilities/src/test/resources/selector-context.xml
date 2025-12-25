@@ -84,11 +84,9 @@
 
 	<beans:bean id="contentNegotiationManager"
 		    class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-		<beans:property name="favorPathExtension" value="true"/>
 		<beans:property name="favorParameter" value="false"/>
 		<beans:property name="ignoreAcceptHeader" value="true"/>
 		<beans:property name="defaultContentType" value="application/json"/>
-		<beans:property name="useJaf" value="false"/>
 		<beans:property name="mediaTypes">
 			<beans:value>
 				json=application/json
