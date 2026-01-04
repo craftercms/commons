@@ -77,7 +77,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class LockByKey<K> implements InitializingBean, DisposableBean {
 
 	private static final long DEFAULT_CLEANUP_INTERVAL_SECS = 60 * 60; // 1 hour
-	private static final long DEFAULT_WARN_IDLE_MILLIS = 10 * 60 * 1000; // 5 minutes
+	private static final long DEFAULT_WARN_IDLE_MILLIS = 10 * 60 * 1000; // 10 minutes
 
 	private static final Logger logger = LoggerFactory.getLogger(LockByKey.class);
 
