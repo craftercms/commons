@@ -165,7 +165,7 @@ public class LockByKey<K> implements InitializingBean, DisposableBean {
 	public void lock(K key) {
 		LockWrapper lockWrapper = locks.compute(key, (k, v) -> {
 			if (v == null) {
-				logger.trace("Creating new lock for key: {}", k); // was debug → now trace
+				logger.trace("Creating new lock for key: {}", k);
 				v = new LockWrapper();
 			}
 			v.incrementRefCount();
