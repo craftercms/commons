@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+ * Copyright (C) 2007-2026 Crafter Software Corporation. All Rights Reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as published by
@@ -16,19 +16,24 @@
 package org.craftercms.commons.git.utils;
 
 /**
- * Constants for git authentication types
+ * Git authentication types
  *
  * @author joseross
  * @since 4.0.0
  */
-public interface AuthenticationType {
+public enum AuthenticationType {
+	NONE("none"),
+	BASIC("basic"),
+	TOKEN("token"),
+	PRIVATE_KEY("key");
 
-	String NONE = "none";
+	private final String value;
 
-	String BASIC = "basic";
+	AuthenticationType(String value) {
+		this.value = value;
+	}
 
-	String TOKEN = "token";
-
-	String PRIVATE_KEY = "key";
-
+	public String getValue() {
+		return value;
+	}
 }
