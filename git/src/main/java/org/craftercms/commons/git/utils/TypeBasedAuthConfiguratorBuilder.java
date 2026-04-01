@@ -47,22 +47,22 @@ public class TypeBasedAuthConfiguratorBuilder extends AbstractAuthConfiguratorBu
 	@Override
 	public GitAuthenticationConfigurator build() {
 		switch (authType) {
-			case AuthenticationType.NONE:
+			case AuthenticationType.none:
 				logger.debug("No authentication will be used");
 				return new NoopAuthConfigurator();
-			case AuthenticationType.BASIC:
+			case AuthenticationType.basic:
 				if (isEmpty(username) && isEmpty(password)) {
 					throw new IllegalStateException("basic auth requires a username or password");
 				}
 				logger.debug("Username/password authentication will be used");
 				return new BasicUsernamePasswordAuthConfigurator(username, password);
-			case AuthenticationType.TOKEN:
+			case AuthenticationType.token:
 				if (isEmpty(username)) {
 					throw new IllegalStateException("token auth requires a username");
 				}
 				logger.debug("Token authentication will be used");
 				return new BasicUsernamePasswordAuthConfigurator(username, StringUtils.EMPTY);
-			case AuthenticationType.PRIVATE_KEY:
+			case AuthenticationType.private_key:
 				logger.debug("SSH private key authentication will be used");
 				return new SshPrivateKeyAuthConfigurator(sshConfig, privateKeyPath, privateKeyPassphrase);
 			default:

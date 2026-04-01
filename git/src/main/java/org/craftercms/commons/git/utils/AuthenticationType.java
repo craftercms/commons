@@ -22,18 +22,8 @@ package org.craftercms.commons.git.utils;
  * @since 4.0.0
  */
 public enum AuthenticationType {
-	NONE("none"),
-	BASIC("basic"),
-	TOKEN("token"),
-	PRIVATE_KEY("key");
-
-	private final String value;
-
-	AuthenticationType(String value) {
-		this.value = value;
-	}
-
-	public String getValue() {
-		return value;
-	}
+	none,
+	basic,
+	token,
+	private_key
 }

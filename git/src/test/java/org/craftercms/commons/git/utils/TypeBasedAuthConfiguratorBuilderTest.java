@@ -34,31 +34,31 @@ public class TypeBasedAuthConfiguratorBuilderTest extends AbstractAuthConfigurat
 
 	@Test
 	public void testNoAuth() {
-		verify(createBuilder(AuthenticationType.NONE), NoopAuthConfigurator.class);
+		verify(createBuilder(AuthenticationType.none), NoopAuthConfigurator.class);
 	}
 
 	@Test
 	public void testBasicAuth() {
-		verify(createBuilder(AuthenticationType.BASIC)
+		verify(createBuilder(AuthenticationType.basic)
 			.withUsername("joe")
 			.withPassword("secret"), BasicUsernamePasswordAuthConfigurator.class);
 	}
 
 	@Test
 	public void testTokenAuth() {
-		verify(createBuilder(AuthenticationType.TOKEN)
+		verify(createBuilder(AuthenticationType.token)
 			.withUsername("token"), BasicUsernamePasswordAuthConfigurator.class);
 	}
 
 	@Test
 	public void testPrivateKeyAuth() {
-		verify(createBuilder(AuthenticationType.PRIVATE_KEY)
+		verify(createBuilder(AuthenticationType.private_key)
 			.withPrivateKeyPath("/some/key"), SshPrivateKeyAuthConfigurator.class);
 	}
 
 	@Test
 	public void testPrivateKeyAuthWithPass() {
-		verify(createBuilder(AuthenticationType.PRIVATE_KEY)
+		verify(createBuilder(AuthenticationType.private_key)
 			.withPrivateKeyPath("/some/key")
 			.withPrivateKeyPassphrase("secret"), SshPrivateKeyAuthConfigurator.class);
 	}
