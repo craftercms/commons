@@ -127,8 +127,9 @@ public class VersionInfo {
 			path = CS.removeStart(path, "file:");        // filesystem case
 			path = CS.removeStart(path, "nested:");    // Spring Boot nested jars case
 			path = CS.removeEnd(path, SPRING_PATH);
-			JarFile jarFile = new JarFile(path);
-			return jarFile.getManifest();
+			try (JarFile jarFile = new JarFile(path)) {
+				return jarFile.getManifest();
+			}
 		}
 		return null;
 	}
@@ -144,6 +145,16 @@ public class VersionInfo {
 		packageName = mainAttrs.getValue(KEY_IMPLEMENTATION_TITLE);
 		packageVersion = mainAttrs.getValue(KEY_IMPLEMENTATION_VERSION);
 		packageBuild = mainAttrs.getValue(KEY_IMPLEMENTATION_BUILD);
+	}
+
+	@Override
+	public String toString() {
+		return "VersionInfo{" +
+				"packageName='" + packageName + '\'' +
+				", packageVersion='" + packageVersion + '\'' +
+				", packageBuild='" + packageBuild + '\'' +
+				", packageBuildDate='" + packageBuildDate + '\'' +
+				'}';
 	}
 
 	public String getPackageName() {

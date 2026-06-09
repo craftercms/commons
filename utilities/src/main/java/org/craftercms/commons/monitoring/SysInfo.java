@@ -91,7 +91,7 @@ public final class SysInfo extends VersionInfo {
 	@Override
 	public String toString() {
 		return "SysInfo{" +
-				", packageName='" + getPackageName() + '\'' +
+				"packageName='" + getPackageName() + '\'' +
 				", packageVersion='" + getPackageVersion() + '\'' +
 				", packageBuild='" + getPackageBuild() + '\'' +
 				", packageBuildDate='" + getPackageBuildDate() + '\'' +
